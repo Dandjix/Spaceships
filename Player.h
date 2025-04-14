@@ -9,7 +9,7 @@ private:
 
 public:
     Player(float x, float y, float speed)
-        : RoundEntity(x, y, 200.0f), speed(speed) {}
+        : RoundEntity(x, y, 20.0f), speed(speed) {}
 
     void update(float deltaTime) override {
         const bool * state = SDL_GetKeyboardState(NULL);
@@ -28,14 +28,13 @@ public:
             deltaX += 1;
         }
 
-        Vector2* delta = new Vector2(deltaX, deltaY);
+        Vector2 delta = Vector2(deltaX, deltaY);
 
-        delta->normalize();
+        delta.normalize();
 
-        *delta = (*delta) *(speed * deltaTime);
+        delta = delta *(speed * deltaTime);
 
-        x += delta->x;
-        y += delta->y;
+        position = position + delta;
     }
 
     void render(SDL_Renderer* renderer) override {
@@ -45,7 +44,7 @@ public:
                 float dx = radius - w;
                 float dy = radius - h;
                 if (dx * dx + dy * dy <= radius * radius) {
-                    SDL_RenderPoint(renderer, (x + dx), (y + dy));
+                    SDL_RenderPoint(renderer, (position.x + dx), (position.y + dy));
                 }
             }
         }

@@ -7,7 +7,10 @@ protected:
 
 public:
     RoundEntity(float x, float y, float radius)
-        : Entity(x, y), radius(radius) {}
+        : Entity(x, y), radius(radius) {}  // Calling Entity(float x, float y)
+
+    RoundEntity(Vector2 position, float radius)
+        : Entity(position), radius(radius) {}  // Calling Entity(Vector2 position)
 
     virtual ~RoundEntity() {}
 

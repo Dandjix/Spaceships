@@ -1,3 +1,4 @@
+#pragma once
 #include <SDL3/SDL.h>
 #include <iostream>
 #include <cmath> // for sqrt
@@ -30,5 +31,9 @@ struct Vector2 {
 
     float operator*(Vector2& other) const {
         return x * other.x + y * other.y;
+    }
+
+    Vector2 operator+(Vector2& other) const {
+        return Vector2(x + other.x, y + other.y);
     }
 };

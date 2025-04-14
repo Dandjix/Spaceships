@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoxEntity.h" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Spaceships.cpp" />
     <ClCompile Include="Vector2.cpp" />
