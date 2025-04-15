@@ -15,26 +15,31 @@ public:
     }
 
     void render(SDL_Renderer* renderer) override {
-        Vector2Float pos = toVector2Float(position);
-        Vector2Float size = toVector2Float(scale);
+        Vector2Float center = toVector2Float(position);
+        Vector2Float halfSize = toVector2Float(scale) * 0.5f;
 
         SDL_SetRenderDrawColor(renderer, 150, 75, 0, 255); // Brown-ish color
 
         float cosA = std::cos(angle);
         float sinA = std::sin(angle);
 
-        // Render rectangle manually with rotation
-        for (int x = -scale.x / 2; x < scale.x / 2; ++x) {
-            for (int y = -scale.y / 2; y < scale.y / 2; ++y) {
-                // Apply rotation
-                float rotatedX = x * cosA - y * sinA;
-                float rotatedY = x * sinA + y * cosA;
+        // Compute bounding box of rotated rectangle
+        float maxX = std::ceil(std::abs(halfSize.x * cosA) + std::abs(halfSize.y * sinA));
+        float maxY = std::ceil(std::abs(halfSize.x * sinA) + std::abs(halfSize.y * cosA));
 
-                SDL_RenderPoint(renderer,
-                    pos.x + rotatedX,
-                    pos.y + rotatedY
-                );
+        // Scan the bounding box
+        for (int x = -maxX; x <= maxX; ++x) {
+            for (int y = -maxY; y <= maxY; ++y) {
+                // Unrotate point back into local space
+                float localX = x * cosA + y * sinA;
+                float localY = -x * sinA + y * cosA;
+
+                // Check if the point is within the unrotated box
+                if (std::abs(localX) <= halfSize.x && std::abs(localY) <= halfSize.y) {
+                    SDL_RenderPoint(renderer, center.x + x, center.y + y);
+                }
             }
         }
     }
+
 };
