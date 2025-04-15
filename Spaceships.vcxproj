@@ -137,7 +137,9 @@
     <ClCompile Include="BoxEntity.h" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Spaceships.cpp" />
-    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector2Float.h" />
+    <ClCompile Include="Vector2Int.h" />
+    <ClCompile Include="Vectors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />

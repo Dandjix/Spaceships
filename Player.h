@@ -1,15 +1,17 @@
 #pragma once
 #include "RoundEntity.h"
 #include <SDL3/SDL.h>
-#include "Vector2.cpp"
+#include "Vector2Int.h"
+#include "Vector2Float.h"
+#include "Vectors.h"
 
 class Player : public RoundEntity {
 private:
     float speed;
 
 public:
-    Player(float x, float y, float speed)
-        : RoundEntity(x, y, 20.0f), speed(speed) {}
+    Player(int x, int y, float speed)
+        : RoundEntity(x, y, 20), speed(speed) {}
 
     void update(float deltaTime) override {
         const bool * state = SDL_GetKeyboardState(NULL);
@@ -28,23 +30,24 @@ public:
             deltaX += 1;
         }
 
-        Vector2 delta = Vector2(deltaX, deltaY);
+        Vector2Float delta = Vector2Float(deltaX, deltaY);
 
         delta.normalize();
 
         delta = delta *(speed * deltaTime);
 
-        position = position + delta;
+        position = toVector2Int(toVector2Float(position) + delta);
     }
 
     void render(SDL_Renderer* renderer) override {
+        Vector2Float cameraPosition = toVector2Float(position);
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red
         for (int w = 0; w < radius * 2; w++) {
             for (int h = 0; h < radius * 2; h++) {
-                float dx = radius - w;
-                float dy = radius - h;
+                int dx = radius - w;
+                int dy = radius - h;
                 if (dx * dx + dy * dy <= radius * radius) {
-                    SDL_RenderPoint(renderer, (position.x + dx), (position.y + dy));
+                    SDL_RenderPoint(renderer, (cameraPosition.x + dx), (cameraPosition.y + dy));
                 }
             }
         }

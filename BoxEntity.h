@@ -3,14 +3,12 @@
 //
 //class BoxEntity : public Entity {
 //protected:
-//    float w,h;
+//    Vector2Int scale;
+//    float angle;
 //
-//public:
-//    BoxEntity(float x, float y, float w, float h)
-//        : Entity(x, y), w(w),h(h) {}
+//    public:
+//    BoxEntity(float x, float y, float w, float h, float angle)
+//        : Entity(Vector2Int(x,y)), scale(Vector2Int(w,h)) {}
 //
-//    virtual ~BoxEntity() {}
-//
-//    float getRadius() const { return radius; }
-//    void setRadius(float r) { radius = r; }
+//    BoxEntity()
 //};

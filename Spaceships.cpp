@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     }
 
     bool running = true;
-    Player player(320, 240, 200.0f); // Start at center, 200 pixels/sec
+    Player player(320, 240, 200); // Start at center, 200 pixels/sec
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
     float deltaTime = 0.0f;

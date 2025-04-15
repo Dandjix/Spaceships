@@ -33,11 +33,17 @@
     <ClCompile Include="SpaceShip.cpp">
       <Filter>Source Files\Spaceships</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2.cpp">
+    <ClCompile Include="Vector2Int.h">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="BoxEntity.h">
       <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2Float.h">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vectors.h">
+      <Filter>Source Files\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
