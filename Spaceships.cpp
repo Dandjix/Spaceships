@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
     bool running = true;
     Player player(320, 240, 200); // Start at center, 200 pixels/sec
-    CargoContainer container(10000,10000,200,75,0);
+    CargoContainer container(1000,1000,200,75,0);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
     float deltaTime = 0.0f;
