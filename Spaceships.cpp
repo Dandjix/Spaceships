@@ -52,11 +52,10 @@ int main(int argc, char* argv[]) {
 
 
         // update
-        camera.update(deltaTime);
         player.update(deltaTime);
         container.update(deltaTime);
         grid.update(deltaTime);
-
+        camera.update(deltaTime);
         //render variable calculation
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
