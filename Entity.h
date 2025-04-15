@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include "Vector2Int.h"  // Assuming the Vector2 header is correctly included
+#include "Vector2Float.h"
 
 class Entity {
 protected:
@@ -16,7 +17,11 @@ public:
     virtual ~Entity() {}
 
     virtual void update(float deltaTime) = 0;
-    virtual void render(SDL_Renderer* renderer) = 0;
+    virtual void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) = 0;
+
+    Vector2Int getPosition() {
+        return position;
+    }
 
     // Position accessors
     int getX() const { return position.x; }

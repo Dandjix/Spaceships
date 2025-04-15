@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Player.h"
 #include "CargoContainer.h"
+#include "DebugGrid.h"
 
 
 
@@ -28,31 +29,39 @@ int main(int argc, char* argv[]) {
 
     bool running = true;
     Player player(320, 240, 200); // Start at center, 200 pixels/sec
-    CargoContainer container(1000,1000,640,230,90);
+    CargoContainer container(1000,1000,90);
+    DebugGrid grid(0,0,16);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
     float deltaTime = 0.0f;
 
     while (running) {
-        last = now;
-        now = SDL_GetTicks();
-        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
-
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 running = false;
             }
         }
+        last = now;
+        now = SDL_GetTicks();
+        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
-        player.update(deltaTime);
-        container.update(deltaTime);
+        int screenWidth, screenHeight;
+        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+        Vector2Float cameraPos = toVector2Float(player.getPosition());
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
-        player.render(renderer);
-        container.render(renderer);
+        player.update(deltaTime);
+        container.update(deltaTime);
+
+        player.render(renderer, cameraPos, screenWidth, screenHeight);
+        container.render(renderer, cameraPos, screenWidth, screenHeight);
+
+        grid.render(renderer, cameraPos, screenWidth, screenHeight);
+
+
 
         SDL_RenderPresent(renderer);
     }

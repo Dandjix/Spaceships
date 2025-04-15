@@ -42,9 +42,9 @@ public:
         position = newPos;
     }
 
-    void render(SDL_Renderer* renderer) override {
+    void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) {
         Vector2Float cameraPosition = toVector2Float(position);
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
         for (int w = 0; w < radius * 2; w++) {
             for (int h = 0; h < radius * 2; h++) {
                 int dx = radius - w;

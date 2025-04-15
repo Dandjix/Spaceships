@@ -24,5 +24,5 @@ public:
 
     // These are still abstract unless you implement them here or in derived classes
     virtual void update(float deltaTime) override = 0;
-    virtual void render(SDL_Renderer* renderer) override = 0;
+    virtual void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) override = 0;
 };
