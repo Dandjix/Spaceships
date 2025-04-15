@@ -36,7 +36,10 @@ public:
 
         delta = delta *(speed * deltaTime);
 
-        position = toVector2Int(toVector2Float(position) + delta);
+        Vector2Float newPosFloat = toVector2Float(position) + delta;
+        Vector2Int newPos = toVector2Int(newPosFloat);
+
+        position = newPos;
     }
 
     void render(SDL_Renderer* renderer) override {

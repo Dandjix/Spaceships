@@ -1,7 +1,8 @@
+#pragma once
 #include "Vector2Float.h"
 #include "Vector2Int.h"
 
-constexpr float factor = 1;
+constexpr float factor = 32;
 // un facteur de 1 -> 1px = 1 unité de distance
 // facteur 1024 -> 1px = 1024 unités de distance
 

@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <iostream>
 #include "Player.h"
+#include "CargoContainer.h"
 
 
 
@@ -27,6 +28,7 @@ int main(int argc, char* argv[]) {
 
     bool running = true;
     Player player(320, 240, 200); // Start at center, 200 pixels/sec
+    CargoContainer container(10000,10000,200,75,0);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
     float deltaTime = 0.0f;
@@ -44,11 +46,13 @@ int main(int argc, char* argv[]) {
         }
 
         player.update(deltaTime);
+        container.update(deltaTime);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
         player.render(renderer);
+        container.render(renderer);
 
         SDL_RenderPresent(renderer);
     }
