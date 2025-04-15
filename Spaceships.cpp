@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <iostream>
 #include "Player.h"
+#include "Camera.h"
 #include "CargoContainer.h"
 #include "DebugGrid.h"
 
@@ -28,11 +29,14 @@ int main(int argc, char* argv[]) {
     }
 
     bool running = true;
+
     Player player(320, 240, 200); // Start at center, 200 pixels/sec
+    Camera camera(&player);
     CargoContainer container(1000,1000,90);
     DebugGrid grid(0,0,16);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
+
     float deltaTime = 0.0f;
 
     while (running) {
@@ -46,19 +50,25 @@ int main(int argc, char* argv[]) {
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
+
+        // update
+        camera.update(deltaTime);
+        player.update(deltaTime);
+        container.update(deltaTime);
+        grid.update(deltaTime);
+
+        //render variable calculation
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
-        Vector2Float cameraPos = toVector2Float(player.getPosition());
+        Vector2Float cameraPos = toVector2Float(camera.getOffsetPosition(screenWidth,screenHeight));
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
-        player.update(deltaTime);
-        container.update(deltaTime);
-
+        //render
+        camera.render(renderer, cameraPos, screenWidth, screenHeight);
         player.render(renderer, cameraPos, screenWidth, screenHeight);
         container.render(renderer, cameraPos, screenWidth, screenHeight);
-
         grid.render(renderer, cameraPos, screenWidth, screenHeight);
 
 

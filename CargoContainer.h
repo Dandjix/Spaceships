@@ -15,7 +15,7 @@ public:
     }
 
     void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) {
-        Vector2Float center = toVector2Float(position);
+        Vector2Float center = toVector2Float(position) - cameraPos;
         Vector2Float halfSize = toVector2Float(scale,true) * 0.5f;
 
         SDL_SetRenderDrawColor(renderer, 150, 75, 0, 255); // Brown-ish color

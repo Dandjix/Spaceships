@@ -35,4 +35,8 @@ struct Vector2Float {
     Vector2Float operator+(const Vector2Float& other) const {
         return Vector2Float(x + other.x, y + other.y);
     }
+
+    Vector2Float operator-(const Vector2Float& other) const {
+        return Vector2Float(x - other.x, y - other.y);
+    }
 };

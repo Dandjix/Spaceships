@@ -142,6 +142,7 @@
     <ClCompile Include="Vectors.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CargoContainer.h" />
     <ClInclude Include="DebugGrid.h" />
     <ClInclude Include="Entity.h" />

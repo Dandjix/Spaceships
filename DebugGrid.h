@@ -19,28 +19,24 @@ class DebugGrid : public Entity {
     void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White
 
-        // Convert screen size to world units
-        float worldWidth = screenWidth / factor;
-        float worldHeight = screenHeight / factor;
-
         // Calculate top-left corner of the visible area in world units
-        float startX = cameraPos.x - worldWidth / 2;
-        float startY = cameraPos.y - worldHeight / 2;
+        float startX = cameraPos.x - screenWidth / 2;
+        float startY = cameraPos.y - screenHeight / 2;
 
         // Round down to nearest grid line
         float firstLineX = std::floor(startX / step) * step;
         float firstLineY = std::floor(startY / step) * step;
 
         // Draw vertical lines
-        for (float x = firstLineX; x < startX + worldWidth; x += step) {
-            int screenX = static_cast<int>((x - startX) * factor);
-            SDL_RenderLine(renderer, static_cast<int>(screenX), 0, static_cast<int>(screenX), static_cast<int>(screenHeight));
+        for (float x = firstLineX; x < startX + screenWidth; x += step) {
+            float screenX = ((x - startX));
+            SDL_RenderLine(renderer, screenX, 0, screenX, static_cast<float>(screenHeight));
         }
 
         // Draw horizontal lines
-        for (float y = firstLineY; y < startY + worldHeight; y += step) {
-            int screenY = static_cast<int>((y - startY) * factor);
-            SDL_RenderLine(renderer, 0, static_cast<int>(screenY), screenWidth, static_cast<int>(screenY));
+        for (float y = firstLineY; y < startY + screenHeight; y += step) {
+            float screenY = ((y - startY));
+            SDL_RenderLine(renderer, 0, screenY, static_cast<float>(screenWidth),screenY);
         }
     }
 

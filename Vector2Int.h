@@ -35,4 +35,8 @@ struct Vector2Int {
     Vector2Int operator+(Vector2Int& other) const {
         return Vector2Int(x + other.x, y + other.y);
     }
+
+    Vector2Int operator-(Vector2Int& other) const {
+        return Vector2Int(x - other.x, y - other.y);
+    }
 };
