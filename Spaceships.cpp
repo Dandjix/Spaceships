@@ -30,9 +30,16 @@ int main(int argc, char* argv[]) {
 
     bool running = true;
 
+    CargoContainer::LoadTextures(renderer);
+
+    std::cout << "textures loaded";
+
     Player player(320, 240, 200); // Start at center, 200 pixels/sec
     Camera camera(&player);
-    CargoContainer container(1000,1000,90);
+    CargoContainer container1(0,0,45,CargoContainer::Variation::EMA);
+    CargoContainer container2(100, 0, 270, CargoContainer::Variation::SL);
+    CargoContainer container3(0, 100, 0, CargoContainer::Variation::SN);
+    CargoContainer container4(100, 100, 12, CargoContainer::Variation::blank);
     DebugGrid grid(0,0,16);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -53,7 +60,12 @@ int main(int argc, char* argv[]) {
 
         // update
         player.update(deltaTime);
-        container.update(deltaTime);
+
+        container1.update(deltaTime);
+        container2.update(deltaTime);
+        container3.update(deltaTime);
+        container4.update(deltaTime);
+
         grid.update(deltaTime);
         camera.update(deltaTime);
         //render variable calculation
@@ -67,7 +79,11 @@ int main(int argc, char* argv[]) {
         //render
         camera.render(renderer, cameraPos, screenWidth, screenHeight);
         player.render(renderer, cameraPos, screenWidth, screenHeight);
-        container.render(renderer, cameraPos, screenWidth, screenHeight);
+        
+        container1.render(renderer, cameraPos, screenWidth, screenHeight);
+        container2.render(renderer, cameraPos, screenWidth, screenHeight);
+        container3.render(renderer, cameraPos, screenWidth, screenHeight);
+        container4.render(renderer, cameraPos, screenWidth, screenHeight);
         grid.render(renderer, cameraPos, screenWidth, screenHeight);
 
 
