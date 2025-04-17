@@ -3,8 +3,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include "Vectors.h"
-#include "Vector2Float.h"
-#include "Vector2Int.h"
 
 class CargoContainer : public BoxEntity {
 public :
@@ -41,8 +39,8 @@ public:
         texturesLoaded = true;
     }
 
-    CargoContainer(int x, int y, float angle = 0.0f, Variation variation = Variation::blank)
-        : BoxEntity(x, y, 61, 24, angle),variation(variation) {
+    CargoContainer(Vector2Int position, float angle = 0.0f, Variation variation = Variation::blank)
+        : BoxEntity(position, Vector2Int(61, 24), angle),variation(variation) {
         color = getRandomColor();
     }
 
@@ -60,8 +58,8 @@ public:
         // Apply per-instance tint
         SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 
-        Vector2Float center = toVector2Float(position) - cameraPos;
-        Vector2Float halfSize = toVector2Float(scale, true) * 0.5f;
+        Vector2Float center = Vectors::toVector2Float(position) - cameraPos;
+        Vector2Float halfSize = Vectors::toVector2Float(scale, true) * 0.5f;
 
         SDL_FRect destRect = {
             center.x - halfSize.x,
@@ -70,7 +68,7 @@ public:
             halfSize.y * 2.0f
         };
 
-        SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, angle, nullptr, SDL_FLIP_NONE);
+        SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, getAngle(), nullptr, SDL_FLIP_NONE);
     }
 private :
     SDL_Color getRandomColor()

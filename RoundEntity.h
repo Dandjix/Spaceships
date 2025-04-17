@@ -6,11 +6,8 @@ protected:
     int radius;
 
 public:
-    RoundEntity(int x, int y, int radius)
-        : Entity(x, y), radius(radius) {}  // Calling Entity(float x, float y)
-
-    RoundEntity(Vector2Int position, int radius)
-        : Entity(position), radius(radius) {}  // Calling Entity(Vector2 position)
+    RoundEntity(Vector2Int position,float angle, int radius)
+        : Entity(position,angle), radius(radius) {}  // Calling Entity(Vector2 position)
 
     virtual ~RoundEntity() {}
 

@@ -1,7 +1,5 @@
 #pragma once
 #include "Entity.h"
-#include "Vector2Float.h"
-#include "Vector2Int.h"
 #include "Vectors.h"
 
 class Camera : public Entity {  // Inherit from Entity
@@ -13,7 +11,7 @@ public:
     /// Creates a Camera that follows the player.
     /// </summary>
     /// <param name="p">Pointer to the player entity</param>
-    Camera(Entity* p) : player(p) {
+    Camera(Vector2Int position, float angle, Entity* p) : Entity(position,angle),player(p) {
         setPosition(p->getPosition());  // Set the camera's position to follow the player initially
     }
 

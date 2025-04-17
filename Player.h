@@ -1,8 +1,6 @@
 #pragma once
 #include "RoundEntity.h"
 #include <SDL3/SDL.h>
-#include "Vector2Int.h"
-#include "Vector2Float.h"
 #include "Vectors.h"
 
 class Player : public RoundEntity {
@@ -10,8 +8,8 @@ private:
     float speed;
 
 public:
-    Player(int x, int y, float speed)
-        : RoundEntity(x, y, 20), speed(speed) {}
+    Player(Vector2Int position,float angle, float speed)
+        : RoundEntity(position,angle, 20), speed(speed) {}
 
     void update(float deltaTime) override {
         const bool * state = SDL_GetKeyboardState(NULL);
@@ -36,14 +34,14 @@ public:
 
         delta = delta *(speed * deltaTime);
 
-        Vector2Float newPosFloat = toVector2Float(position) + delta;
-        Vector2Int newPos = toVector2Int(newPosFloat);
+        Vector2Float newPosFloat = Vectors::toVector2Float(position) + delta;
+        Vector2Int newPos = Vectors::toVector2Int(newPosFloat);
 
         position = newPos;
     }
 
     void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) {
-        Vector2Float cameraPosition = toVector2Float(position) - cameraPos;
+        Vector2Float cameraPosition = Vectors::toVector2Float(position) - cameraPos;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         for (int w = 0; w < radius * 2; w++) {
             for (int h = 0; h < radius * 2; h++) {

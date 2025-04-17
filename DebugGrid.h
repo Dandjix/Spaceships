@@ -1,7 +1,5 @@
 #pragma once
 #include "Entity.h"
-#include "Vector2Float.h"
-#include "Vector2Int.h"
 #include "Vectors.h"
 
 class DebugGrid : public Entity {
@@ -9,8 +7,8 @@ class DebugGrid : public Entity {
 		float step;
 
 	public :
-	DebugGrid(int x, int y, float step) 
-		: Entity(x,y), step(step) {}
+	DebugGrid(Vector2Int position, float angle, float step) 
+		: Entity(position,angle), step(step) {}
 
     void update(float deltaTime) override {
         // CargoContainer might not need to move, so just leave it empty.
