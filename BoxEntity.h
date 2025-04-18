@@ -20,7 +20,7 @@ public:
 
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override {
         // Get center on screen (same as in render)
-        Vector2Float center = Vectors::toVector2Float(Vectors::toScreenPosition(position - context.cameraPos/context.cameraScale));
+        Vector2Float center = Vectors::toVector2Float(Vectors::toScreenPosition(position - context.cameraPos)) / context.cameraScale;
         Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
 
         // Local-space corners relative to the center

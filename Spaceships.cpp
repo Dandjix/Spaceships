@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {
     Player player(Vector2Int(0,0),0, 2000); // Start at center, 2000 units/sec
     Camera camera(Vector2Int(0,0),0,1, &player);
     CargoContainer container1(Vector2Int(0,0),45,CargoContainer::Variation::EMA);
+    CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
     DebugGrid grid(0,0,16);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -58,11 +59,9 @@ int main(int argc, char* argv[]) {
 
         // update
         player.update(deltaTime);
-
         container1.update(deltaTime);
-
+        container2.update(deltaTime);
         grid.update(deltaTime);
-
         camera.update(deltaTime);
         //render variable calculation
         int screenWidth, screenHeight;
@@ -78,14 +77,13 @@ int main(int argc, char* argv[]) {
         //render
         camera.render(renderer, renderingContext);
         player.render(renderer, renderingContext);
-
         container1.render(renderer, renderingContext);
-
+        container2.render(renderer, renderingContext);
         grid.render(renderer, renderingContext);
 
         //render debug
         container1.debugRender(renderer, renderingContext);
-
+        container2.debugRender(renderer, renderingContext);
         SDL_RenderPresent(renderer);
     }
 
