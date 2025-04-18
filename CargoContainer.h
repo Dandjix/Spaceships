@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include "Vectors.h"
+#include "Rendering.h"
 
 class CargoContainer : public BoxEntity {
 public :
@@ -48,7 +49,7 @@ public:
         // CargoContainer might not need to move, so just leave it empty.
     }
 
-    void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) override {
+    void render(SDL_Renderer* renderer, const RenderingContext context) override {
         SDL_Texture* texture = textures[static_cast<int>(variation)];
         if (!texture) {
             //std::cout << "could not find textures : " << textures;
@@ -58,8 +59,8 @@ public:
         // Apply per-instance tint
         SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 
-        Vector2Float center = Vectors::toVector2Float(position) - cameraPos;
-        Vector2Float halfSize = Vectors::toVector2Float(scale, true) * 0.5f;
+        Vector2Float center = Vectors::toVector2Float(Vectors::toScreenPosition(position - context.cameraPos));
+        Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f;
 
         SDL_FRect destRect = {
             center.x - halfSize.x,

@@ -63,37 +63,25 @@ inline const int factor = 8;
 class Vectors
 {
 public:
-    static Vector2Float toVector2Float(const Vector2Int& vec, bool preserveScale = false)
+    static Vector2Float toVector2Float(const Vector2Int& vec)
     {
-        if (preserveScale)
-        {
-            return Vector2Float(static_cast<float>(vec.x), static_cast<float>(vec.y));
-        }
-        return Vector2Float(static_cast<float>(vec.x) / factor, static_cast<float>(vec.y) / factor);
+        return Vector2Float(static_cast<float>(vec.x), static_cast<float>(vec.y));
     }
 
-    static Vector2Int toVector2Int(const Vector2Float& vec, bool preserveScale = false)
+    static Vector2Int toVector2Int(const Vector2Float& vec)
     {
-        if (preserveScale)
-        {
-            return Vector2Int(static_cast<int>(vec.x), static_cast<int>(vec.y));
-        }
-        return Vector2Int(static_cast<int>(vec.x * factor), static_cast<int>(vec.y * factor));
+        return Vector2Int(static_cast<int>(roundf(vec.x)), static_cast<int>(roundf(vec.y)));
     }
 
-    static Vector2Int scaleToInt(float x, float y)
+
+    static Vector2Int toWorldPosition(Vector2Int screenPosition)
     {
-        return Vector2Int(static_cast<int>(x * factor), static_cast<int>(y * factor));
+        return Vector2Int(screenPosition.x * factor, screenPosition.y * factor);
     }
 
-    static Vector2Int scaleIntVector(int x, int y)
+    static Vector2Int toScreenPosition(Vector2Int worldPosition)
     {
-        return Vector2Int(x * factor, y * factor);
-    }
-
-    static Vector2Int scaleIntVector(Vector2Int position)
-    {
-        return Vector2Int(position.x * factor, position.y * factor);
+        return Vector2Int(static_cast<int>(roundf(worldPosition.x / factor)),static_cast<int>(roundf(worldPosition.y / factor)));
     }
 
 };

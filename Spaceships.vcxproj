@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BoxEntity.h" />
+    <ClCompile Include="Rendering.h" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Spaceships.cpp" />
     <ClCompile Include="Vectors.h">

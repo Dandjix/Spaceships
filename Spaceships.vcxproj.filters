@@ -25,6 +25,15 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{1d358f22-fd1b-416a-964a-f71caafee296}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{71995a9d-0b3b-47ab-a781-ebfba087d6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Objects">
+      <UniqueIdentifier>{b58fdedf-8c67-4d4a-9e93-151ec500870b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Debug">
+      <UniqueIdentifier>{c95fb945-0497-4ca9-8e2a-f91df1331c08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
@@ -39,6 +48,9 @@
     <ClCompile Include="Vectors.h">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Rendering.h">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -51,13 +63,13 @@
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="CargoContainer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Entities\Objects</Filter>
     </ClInclude>
     <ClInclude Include="DebugGrid.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Entities\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

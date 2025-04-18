@@ -2,6 +2,7 @@
 #include "RoundEntity.h"
 #include <SDL3/SDL.h>
 #include "Vectors.h"
+#include "Rendering.h"
 
 class Player : public RoundEntity {
 private:
@@ -40,8 +41,8 @@ public:
         position = newPos;
     }
 
-    void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) {
-        Vector2Float cameraPosition = Vectors::toVector2Float(position) - cameraPos;
+    void render(SDL_Renderer* renderer, const RenderingContext context) {
+        Vector2Int cameraPosition = Vectors::toScreenPosition(position - context.cameraPos);
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         for (int w = 0; w < radius * 2; w++) {
             for (int h = 0; h < radius * 2; h++) {

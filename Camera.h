@@ -30,7 +30,7 @@ public:
     /// <param name="cameraPos">Camera's position as a float vector</param>
     /// <param name="screenWidth">Screen width</param>
     /// <param name="screenHeight">Screen height</param>
-    void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) {}
+    void render(SDL_Renderer* renderer, RenderingContext context) {}
 
     /// <summary>
     /// Update the camera's position to follow the player.
@@ -46,10 +46,10 @@ public:
     /// <param name="screenWidth">Screen width</param>
     /// <param name="screenHeight">Screen height</param>
     /// <returns>Offset position as Vector2Int</returns>
-    Vector2Int getOffsetPosition(int screenWidth, int screenHeight) {
+    Vector2Int getOffsetPosition(Vector2Int screenDimensions) {
         Vector2Int position = getPosition();
-        int x = position.x - (screenWidth / 2)*8;  // Offset X to center the camera
-        int y = position.y - (screenHeight / 2)*8;  // Offset Y to center the camera
+        int x = position.x - (screenDimensions.x / 2)*8;  // Offset X to center the camera
+        int y = position.y - (screenDimensions.y / 2)*8;  // Offset Y to center the camera
         return Vector2Int(x, y);
     }
 };

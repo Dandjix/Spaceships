@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 #include <optional>
 #include "Vectors.h"
+#include "Rendering.h"
 
 
 class Entity {
@@ -14,12 +15,13 @@ public:
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
     Entity(Vector2Int position, std::optional<float> angle)
-        : position(Vectors::scaleIntVector(position)), angle(angle){}  // Constructor using Vector2
+        : position(Vectors::toWorldPosition(position)), angle(angle){}  // Constructor using Vector2
 
     virtual ~Entity() {}
 
     virtual void update(float deltaTime) = 0;
-    virtual void render(SDL_Renderer* renderer, const Vector2Float cameraPos, int screenWidth, int screenHeight) = 0;
+    virtual void render(SDL_Renderer* renderer, const RenderingContext context) = 0;
+    virtual void debugRender(SDL_Renderer* renderer, const RenderingContext context){}
 
     Vector2Int getPosition() {
         return position;

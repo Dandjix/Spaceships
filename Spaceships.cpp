@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << "textures loaded";
 
-    Player player(Vector2Int(320, 240),0, 200); // Start at center, 200 pixels/sec
+    Player player(Vector2Int(320, 240),0, 2000); // Start at center, 2000 units/sec
     Camera camera(Vector2Int(0,0),0, &player);
     CargoContainer container1(Vector2Int(0,0),45,CargoContainer::Variation::EMA);
     DebugGrid grid(0,0,16);
@@ -65,18 +65,21 @@ int main(int argc, char* argv[]) {
         //render variable calculation
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
-        Vector2Float cameraPos = Vectors::toVector2Float(camera.getOffsetPosition(screenWidth,screenHeight));
+        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
+        Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
+
+        RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, 1);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
         //render
-        camera.render(renderer, cameraPos, screenWidth, screenHeight);
-        player.render(renderer, cameraPos, screenWidth, screenHeight);
-        
-        container1.render(renderer, cameraPos, screenWidth, screenHeight);
+        camera.render(renderer, renderingContext);
+        player.render(renderer, renderingContext);
 
-        grid.render(renderer, cameraPos, screenWidth, screenHeight);
+        container1.render(renderer, renderingContext);
+
+        grid.render(renderer, renderingContext);
 
 
 
