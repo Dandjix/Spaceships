@@ -20,8 +20,8 @@ public:
     virtual ~Entity() {}
 
     virtual void update(float deltaTime) = 0;
-    virtual void render(SDL_Renderer* renderer, const RenderingContext context) = 0;
-    virtual void debugRender(SDL_Renderer* renderer, const RenderingContext context){}
+    virtual void render(SDL_Renderer* renderer, const RenderingContext& context) = 0;
+    virtual void debugRender(SDL_Renderer* renderer, const RenderingContext& context){}
 
     Vector2Int getPosition() {
         return position;

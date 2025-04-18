@@ -15,7 +15,7 @@ class DebugGrid : public Entity {
         // CargoContainer might not need to move, so just leave it empty.
     }
 
-    void render(SDL_Renderer* renderer, const RenderingContext context) {
+    void render(SDL_Renderer* renderer, const RenderingContext& context) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White
 
         Vector2Int cameraScreenPosition = Vectors::toScreenPosition(context.cameraPos);

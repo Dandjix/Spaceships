@@ -49,7 +49,7 @@ public:
         // CargoContainer might not need to move, so just leave it empty.
     }
 
-    void render(SDL_Renderer* renderer, const RenderingContext context) override {
+    void render(SDL_Renderer* renderer, const RenderingContext& context) override {
         SDL_Texture* texture = textures[static_cast<int>(variation)];
         if (!texture) {
             //std::cout << "could not find textures : " << textures;

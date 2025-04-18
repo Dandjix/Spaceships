@@ -41,7 +41,7 @@ public:
         position = newPos;
     }
 
-    void render(SDL_Renderer* renderer, const RenderingContext context) {
+    void render(SDL_Renderer* renderer, const RenderingContext& context) {
         Vector2Int cameraPosition = Vectors::toScreenPosition(position - context.cameraPos);
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         for (int w = 0; w < radius * 2; w++) {

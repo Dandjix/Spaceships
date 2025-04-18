@@ -26,11 +26,7 @@ public:
     /// <summary>
     /// A camera renders nothing.
     /// </summary>
-    /// <param name="renderer">SDL_Renderer for rendering</param>
-    /// <param name="cameraPos">Camera's position as a float vector</param>
-    /// <param name="screenWidth">Screen width</param>
-    /// <param name="screenHeight">Screen height</param>
-    void render(SDL_Renderer* renderer, RenderingContext context) {}
+    void render(SDL_Renderer* renderer,const RenderingContext& context) override {}
 
     /// <summary>
     /// Update the camera's position to follow the player.
