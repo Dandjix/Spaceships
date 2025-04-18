@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
 
     std::cout << "textures loaded";
 
-    Player player(Vector2Int(320, 240),0, 2000); // Start at center, 2000 units/sec
-    Camera camera(Vector2Int(0,0),0, &player);
+    Player player(Vector2Int(0,0),0, 2000); // Start at center, 2000 units/sec
+    Camera camera(Vector2Int(0,0),0,1, &player);
     CargoContainer container1(Vector2Int(0,0),45,CargoContainer::Variation::EMA);
     DebugGrid grid(0,0,16);
     Uint64 now = SDL_GetTicks();
@@ -49,6 +49,7 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_EVENT_QUIT) {
                 running = false;
             }
+            camera.handleEvent(event);
         }
         last = now;
         now = SDL_GetTicks();
@@ -61,6 +62,7 @@ int main(int argc, char* argv[]) {
         container1.update(deltaTime);
 
         grid.update(deltaTime);
+
         camera.update(deltaTime);
         //render variable calculation
         int screenWidth, screenHeight;
@@ -68,7 +70,7 @@ int main(int argc, char* argv[]) {
         Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
         Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
 
-        RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, 1);
+        RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, camera.getScale());
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
@@ -81,7 +83,8 @@ int main(int argc, char* argv[]) {
 
         grid.render(renderer, renderingContext);
 
-
+        //render debug
+        container1.debugRender(renderer, renderingContext);
 
         SDL_RenderPresent(renderer);
     }

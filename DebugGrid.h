@@ -21,8 +21,8 @@ class DebugGrid : public Entity {
         Vector2Int cameraScreenPosition = Vectors::toScreenPosition(context.cameraPos);
 
         // Calculate top-left corner of the visible area in world units
-        float startX = cameraScreenPosition.x - context.screenDimensions.x / 2;
-        float startY = cameraScreenPosition.y - context.screenDimensions.y / 2;
+        int startX = cameraScreenPosition.x - context.screenDimensions.x / 2;
+        int startY = cameraScreenPosition.y - context.screenDimensions.y / 2;
 
         // Round down to nearest grid line
         float firstLineX = std::floor(startX / step) * step;

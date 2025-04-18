@@ -39,6 +39,7 @@ public:
         {
             throw std::invalid_argument("this entity was instantiated without an angle, it is not possible to assign it one now.");
         }
-        angle = a; 
+        float new_angle = static_cast<float>(fmod(a + 360, 360));
+        angle = new_angle;
     }
 };

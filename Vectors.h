@@ -81,7 +81,7 @@ public:
 
     static Vector2Int toScreenPosition(Vector2Int worldPosition)
     {
-        return Vector2Int(static_cast<int>(roundf(worldPosition.x / factor)),static_cast<int>(roundf(worldPosition.y / factor)));
+        return Vector2Int(worldPosition.x / factor,worldPosition.y / factor);
     }
 
 };

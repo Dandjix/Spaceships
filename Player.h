@@ -49,7 +49,7 @@ public:
                 int dx = radius - w;
                 int dy = radius - h;
                 if (dx * dx + dy * dy <= radius * radius) {
-                    SDL_RenderPoint(renderer, (cameraPosition.x + dx), (cameraPosition.y + dy));
+                    SDL_RenderPoint(renderer, static_cast<float>(cameraPosition.x + dx), static_cast<float>(cameraPosition.y + dy));
                 }
             }
         }
