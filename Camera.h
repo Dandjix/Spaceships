@@ -20,11 +20,21 @@ public:
     void handleEvent(const SDL_Event& event) {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
             float zoomFactor = 0.1f; // Adjust zoom speed
-            scale += event.wheel.y * zoomFactor;
+            float scale = getScale() + event.wheel.y * zoomFactor;
 
             // Clamp scale
-            if (scale < 0.1f) scale = 0.1f;
+            if (scale < 0.5f) scale = 0.5f;
             if (scale > 5.0f) scale = 5.0f;
+
+            setScale(scale);
+        }
+    }
+    
+    void setScale(float s)
+    {
+        if (s != scale)
+        {
+            scale = s;
         }
     }
 
@@ -72,8 +82,8 @@ public:
     /// <returns>Offset position as Vector2Int</returns>
     Vector2Int getOffsetPosition(Vector2Int screenDimensions) {
         Vector2Int position = getPosition();
-        int x = position.x - (screenDimensions.x / 2)*8;  // Offset X to center the camera
-        int y = position.y - (screenDimensions.y / 2)*8;  // Offset Y to center the camera
+        int x = position.x - (screenDimensions.x / 2)*Vectors::getFactor()*getScale();  // Offset X to center the camera
+        int y = position.y - (screenDimensions.y / 2)*Vectors::getFactor()*getScale();  // Offset Y to center the camera
         return Vector2Int(x, y);
     }
 };

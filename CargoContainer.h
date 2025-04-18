@@ -59,8 +59,8 @@ public:
         // Apply per-instance tint
         SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 
-        Vector2Float center = Vectors::toVector2Float(Vectors::toScreenPosition(position - context.cameraPos));
-        Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f;
+        Vector2Float center = Vectors::toVector2Float(Vectors::toScreenPosition(position - context.cameraPos))/context.cameraScale;
+        Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
 
         SDL_FRect destRect = {
             center.x - halfSize.x,

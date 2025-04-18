@@ -20,6 +20,9 @@ class DebugGrid : public Entity {
 
         Vector2Int cameraScreenPosition = Vectors::toScreenPosition(context.cameraPos);
 
+        float cameraAngle = context.cameraAngle;
+        float cameraScale = context.cameraScale;
+
         // Calculate top-left corner of the visible area in world units
         int startX = cameraScreenPosition.x - context.screenDimensions.x / 2;
         int startY = cameraScreenPosition.y - context.screenDimensions.y / 2;

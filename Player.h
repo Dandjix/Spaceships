@@ -42,14 +42,15 @@ public:
     }
 
     void render(SDL_Renderer* renderer, const RenderingContext& context) {
-        Vector2Int cameraPosition = Vectors::toScreenPosition(position - context.cameraPos);
+        Vector2Int cameraPosition = Vectors::toScreenPosition(position - context.cameraPos)/context.cameraScale;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        for (int w = 0; w < radius * 2; w++) {
-            for (int h = 0; h < radius * 2; h++) {
-                int dx = radius - w;
-                int dy = radius - h;
-                if (dx * dx + dy * dy <= radius * radius) {
-                    SDL_RenderPoint(renderer, static_cast<float>(cameraPosition.x + dx), static_cast<float>(cameraPosition.y + dy));
+        float scaledRadius = radius / context.cameraScale;
+        for (int w = 0; w < scaledRadius * 2; w++) {
+            for (int h = 0; h < scaledRadius * 2; h++) {
+                float dx = scaledRadius - w;
+                float dy = scaledRadius - h;
+                if (dx * dx + dy * dy <= scaledRadius * scaledRadius) {
+                    SDL_RenderPoint(renderer, static_cast<float>(cameraPosition.x) + dx, static_cast<float>(cameraPosition.y) + dy);
                 }
             }
         }

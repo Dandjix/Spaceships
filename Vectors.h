@@ -29,6 +29,10 @@ struct Vector2 {
         return Vector2<T>(static_cast<T>(x * scalar), static_cast<T>(y * scalar));
     }
 
+    Vector2<T> operator/(float divider) const {
+        return Vector2<T>(static_cast<T>(x / divider), static_cast<T>(y / divider));
+    }
+
     T operator*(const Vector2<T>& other) const {
         return x * other.x + y * other.y;
     }
@@ -63,6 +67,11 @@ inline const int factor = 8;
 class Vectors
 {
 public:
+    static int getFactor()
+    {
+        return factor;
+    }
+
     static Vector2Float toVector2Float(const Vector2Int& vec)
     {
         return Vector2Float(static_cast<float>(vec.x), static_cast<float>(vec.y));
