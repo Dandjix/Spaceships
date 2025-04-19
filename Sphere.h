@@ -51,8 +51,18 @@ public:
             halfSize.x * 2.0f,
             halfSize.y * 2.0f
         };
+        float angle;
+        if (hasAngle())
+        {
+            angle = getAngle()*context.cameraAngle;
+        }
+        else
+        {
+            angle = 0;
+        }
 
         SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, getAngle(), nullptr, SDL_FLIP_NONE);
+
 
     /*    SDL_SetRenderDrawColorFloat(renderer, 255, 0, 0, 255);
         DebugRendering::drawCross(renderer, (Vectors::toVector2Int(center)));*/

@@ -32,6 +32,7 @@ public:
     // accessors
     int getX() const { return position.x; }
     int getY() const { return position.y; }
+    bool hasAngle() const { return angle.has_value(); }
     float getAngle() const { return angle.value_or(0); }
     void setPosition(Vector2Int newPosition) { position = newPosition; }
     void setAngle(float a) {
