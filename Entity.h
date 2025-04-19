@@ -12,22 +12,7 @@ protected:
 
     void renderTexture(SDL_Renderer* renderer, const RenderingContext& context, SDL_Texture* texture, Vector2Float destSize) const
     {
-        Vector2Float floatPosition = Vectors::toVector2Float(position);
-
-
-
-        Vector2Float floatCameraPosition = Vectors::toVector2Float(context.cameraPos);
-        Vector2Float worldCenter = floatPosition - floatCameraPosition;
-        Vector2Float center = (worldCenter) / context.cameraScale;
-        center = Vector2Float::toScreenPosition(center);
-
-        Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2;
-        Vector2Float diff = (screenCenter - center).rotate(context.cameraAngle);
-        //center = center - diff;
-        center = screenCenter - diff;
-
-        //Vector2Float halfSize = Vector2Float(static_cast<float>(radius), static_cast<float>(radius)) / context.cameraScale;
-
+        Vector2Float center = context.toScreenPoint(position);
 
         SDL_FRect destRect = {
             center.x - destSize.x,
@@ -53,7 +38,7 @@ public:
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
     Entity(Vector2Int position, std::optional<float> angle)
-        : position(Vector2<int>::toWorldPosition(position)), angle(angle){}  // Constructor using Vector2
+        : position(position.scaleToWorldPosition()), angle(angle){}  // Constructor using Vector2
 
     virtual ~Entity() {}
 

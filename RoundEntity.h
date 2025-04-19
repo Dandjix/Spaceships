@@ -22,7 +22,7 @@ public:
         // Convert world position to screen space
         Vector2Float worldCenter = floatPosition - floatCameraPosition;
         Vector2Float center = worldCenter / context.cameraScale;
-        center = Vector2Float::toScreenPosition(center);
+        center = center.scaleToScreenPosition();
 
         // Adjust for camera rotation
         Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2.0f;

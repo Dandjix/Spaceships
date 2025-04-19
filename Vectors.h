@@ -66,15 +66,22 @@ struct Vector2 {
             static_assert(std::is_same_v<T, float>, "rotate() is only defined for floats");
         }
     }
-
-    static Vector2<T> toWorldPosition(Vector2<T> screenPosition)
+    /// <summary>
+    /// scales the screen position up to a world position.
+    /// </summary>
+    /// <param name="screenPosition"></param>
+    /// <returns></returns>
+    Vector2<T> scaleToWorldPosition() const
     {
-        return Vector2<T>(screenPosition.x * factor, screenPosition.y * factor);
+        return Vector2<T>(x * factor, y * factor);
     }
-
-    static Vector2<T> toScreenPosition(Vector2<T> worldPosition)
+    /// <summary>
+    /// scales the world position down to a screen position
+    /// </summary>
+    /// <returns></returns>
+    Vector2<T> scaleToScreenPosition() const
     {
-        return Vector2<T>(worldPosition.x / factor, worldPosition.y / factor);
+        return Vector2<T>(x / factor, y / factor);
     }
 
 

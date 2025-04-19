@@ -94,6 +94,7 @@ int main(int argc, char* argv[]) {
         container2.debugRender(renderer, renderingContext);
         sphere.debugRender(renderer, renderingContext);
         SDL_RenderPresent(renderer);
+        //return 0;
     }
 
     SDL_DestroyRenderer(renderer);

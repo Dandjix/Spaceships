@@ -42,7 +42,7 @@ public:
     }
 
     void render(SDL_Renderer* renderer, const RenderingContext& context) {
-        Vector2Int cameraPosition = Vector2Int::toScreenPosition(position - context.cameraPos)/context.cameraScale;
+        Vector2Int cameraPosition = (position - context.cameraPos).scaleToScreenPosition()/context.cameraScale;
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         float scaledRadius = radius / context.cameraScale;
         for (int w = 0; w < scaledRadius * 2; w++) {

@@ -56,7 +56,7 @@ public:
             return;
         }
         SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
-        Vector2Float center = Vectors::toVector2Float(Vector2Int::toScreenPosition(position - context.cameraPos))/context.cameraScale;
+        Vector2Float center = Vectors::toVector2Float((position - context.cameraPos).scaleToScreenPosition()/context.cameraScale);
         Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
 
         renderTexture(renderer, context, texture, halfSize);

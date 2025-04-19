@@ -1,14 +1,32 @@
-#pragma once
+﻿#pragma once
 #include "Entity.h"
 #include "Vectors.h"
 #include "Rendering.h"
 
 class DebugGrid : public Entity {
-	protected :
-		float step;
+private :
+    Vector2Int snap(Vector2Int worldPosition, bool ceil = false) const
+    {
+        Vector2Int result = worldPosition.scaleToScreenPosition();
+        int x, y;
+        if (ceil)
+        {
+            x = static_cast<int>(ceilf(static_cast<float>(result.x) / step)) * step;
+            y = static_cast<int>(ceilf(static_cast<float>(result.y) / step)) * step;
+            return Vector2Int(x, y);
+        }
+        x = static_cast<int>(roundf(static_cast<float>(result.x) / step)) * step;
+        y = static_cast<int>(roundf(static_cast<float>(result.y) / step)) * step;
+        return Vector2Int(x, y);
+    }
+protected :
+	/// <summary>
+	/// in screen pixels, not in world units
+	/// </summary>
+	int step;
 
-	public :
-	DebugGrid(Vector2Int position, float angle, float step) 
+public :
+	DebugGrid(Vector2Int position, float angle, int step) 
 		: Entity(position,angle), step(step) {}
 
     void update(float deltaTime) override {
@@ -16,78 +34,48 @@ class DebugGrid : public Entity {
     }
 
     void render(SDL_Renderer* renderer, const RenderingContext& context) {
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White grid
+        Vector2Int center = context.cameraPos + context.screenDimensions.scaleToWorldPosition()*0.5f*context.cameraScale;
 
-        float cameraScale = context.cameraScale;
-        float cameraAngle = -context.cameraAngle;
-
-        Vector2Float camPos = Vectors::toVector2Float(Vector2Int::toScreenPosition(context.cameraPos));
-        Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2.0f;
-        Vector2Float bounds;
-        if (context.screenDimensions.x > context.screenDimensions.y)
-        {
-            bounds = Vector2Float(context.screenDimensions.x, context.screenDimensions.x);
-        }
+        int diameter;
+        if (context.screenDimensions.y > context.screenDimensions.x)
+            diameter = context.screenDimensions.y*2;
         else
+            diameter = context.screenDimensions.x * 2;
+
+        diameter *= static_cast<int>(ceilf(context.cameraScale*1.42f * Vectors::getFactor()));
+
+        Vector2Int topLeft = snap(Vector2Int(center.x - diameter, center.y - diameter));
+        Vector2Int bottomRight = snap(Vector2Int(center.x + diameter, center.y + diameter),true);
+
+        //std::cout << "tl : " << topLeft.x << " : " << topLeft.y << "\n";
+        //std::cout << "br : " << bottomRight.x << " : " << bottomRight.y << "\n";
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+        for (int x = topLeft.x; x <= bottomRight.x; x+=step)
         {
-            bounds = Vector2Float(context.screenDimensions.y, context.screenDimensions.y);
+            Vector2Float pos1, pos2;
+            pos1 = context.toScreenPoint(Vector2Int(x, topLeft.y).scaleToWorldPosition());
+            pos2 = context.toScreenPoint(Vector2Int(x, bottomRight.y).scaleToWorldPosition());
+
+            SDL_RenderLine(renderer, pos1.x,pos1.y,pos2.x,pos2.y);
         }
-        // Determine visible world area (rough bounds)
-        Vector2Float screenSize = bounds * cameraScale;
-        Vector2Float topLeftWorld = camPos - screenSize / 2.0f;
-        Vector2Float bottomRightWorld = camPos + screenSize / 2.0f;
+        for (int y = topLeft.y; y <= bottomRight.y; y += step)
+        {
+            Vector2Float pos1, pos2;
+            pos1 = context.toScreenPoint(Vector2Int(topLeft.x, y).scaleToWorldPosition());
+            pos2 = context.toScreenPoint(Vector2Int(bottomRight.x, y).scaleToWorldPosition());
 
-        // Align to grid step
-        float startX = std::floor(topLeftWorld.x / step) * step;
-        float endX = std::ceil(bottomRightWorld.x / step) * step;
-        float startY = std::floor(topLeftWorld.y / step) * step;
-        float endY = std::ceil(bottomRightWorld.y / step) * step;
 
-        // Draw vertical grid lines
-        for (float x = startX; x <= endX; x += step) {
-            Vector2Float worldStart(x, startY);
-            Vector2Float worldEnd(x, endY);
-
-            // Transform to screen space
-            Vector2Float screenStart = (worldStart - camPos) / cameraScale;
-            Vector2Float screenEnd = (worldEnd - camPos) / cameraScale;
-
-            screenStart = screenStart.rotate(-cameraAngle);
-            screenEnd = screenEnd.rotate(-cameraAngle);
-
-            screenStart = screenStart + screenCenter;
-            screenEnd = screenEnd + screenCenter;
-
-            SDL_RenderLine(renderer, screenStart.x, screenStart.y, screenEnd.x, screenEnd.y);
+            SDL_RenderLine(renderer, pos1.x, pos1.y, pos2.x, pos2.y);
         }
 
-        // Draw horizontal grid lines
-        for (float y = startY; y <= endY; y += step) {
-            Vector2Float worldStart(startX, y);
-            Vector2Float worldEnd(endX, y);
-
-            Vector2Float screenStart = (worldStart - camPos) / cameraScale;
-            Vector2Float screenEnd = (worldEnd - camPos) / cameraScale;
-
-            screenStart = screenStart.rotate(-cameraAngle);
-            screenEnd = screenEnd.rotate(-cameraAngle);
-
-            screenStart = screenStart + screenCenter;
-            screenEnd = screenEnd + screenCenter;
-
-            SDL_RenderLine(renderer, screenStart.x, screenStart.y, screenEnd.x, screenEnd.y);
-        }
     }
 
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override
     {
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        Vector2Int zero = Vector2Int(0, 0) - Vector2Int::toScreenPosition(context.cameraPos)/context.cameraScale; //scale zero
-
-        Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2; //rotate zero
-        Vector2Float diff = (screenCenter - Vectors::toVector2Float(zero)).rotate(context.cameraAngle);
-        zero = Vectors::toVector2Int( screenCenter - diff );
-
+        Vector2Int zero = Rendering::get_zero(context);
 
         DebugRendering::drawCross(renderer, zero);
     }

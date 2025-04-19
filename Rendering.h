@@ -1,9 +1,12 @@
 #pragma once
 #include "Vectors.h"
 #include <SDL3/SDL.h>
-
+///
 struct RenderingContext
 {
+	/// <summary>
+	/// camera position in world units
+	/// </summary>
 	const Vector2Int cameraPos;
 	const float cameraAngle;
 
@@ -11,8 +14,38 @@ struct RenderingContext
 
 	const float cameraScale;
 
+	const Vector2Float toScreenPoint(Vector2Int worldPosition) const
+	{
+		Vector2Float floatPosition = Vectors::toVector2Float(worldPosition);
+
+		Vector2Float floatCameraPosition = Vectors::toVector2Float(cameraPos);
+		Vector2Float worldCenter = floatPosition - floatCameraPosition;
+		Vector2Float center = (worldCenter) / cameraScale;
+		center = center.scaleToScreenPosition();
+
+		Vector2Float screenCenter = Vectors::toVector2Float(screenDimensions) / 2;
+		Vector2Float diff = (screenCenter - center).rotate(cameraAngle);
+		center = screenCenter - diff;
+
+		return center;
+	}
+
 	RenderingContext(Vector2Int cameraPos, float cameraAngle, Vector2Int screenDimensions, float cameraScale)
 		: cameraPos(cameraPos), cameraAngle(cameraAngle), screenDimensions(screenDimensions),cameraScale(cameraScale){}
+};
+
+class Rendering
+{
+public :
+	static Vector2Int get_zero(const RenderingContext& context)
+	{
+		Vector2Int zero = Vector2Int(0, 0) - (context.cameraPos).scaleToScreenPosition() / context.cameraScale; //scale zero
+
+		Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2;
+		Vector2Float diff = (screenCenter - Vectors::toVector2Float(zero)).rotate(context.cameraAngle); //rotate zero
+		zero = Vectors::toVector2Int(screenCenter - diff);
+		return zero;
+	}
 };
 
 class DebugRendering
