@@ -59,7 +59,7 @@ public:
         Vector2Float center = Vectors::toVector2Float(Vector2Int::toScreenPosition(position - context.cameraPos))/context.cameraScale;
         Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
 
-        render_texture(renderer, context, texture, halfSize);
+        renderTexture(renderer, context, texture, halfSize);
     }
 private :
     SDL_Color getRandomColor()

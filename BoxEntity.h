@@ -19,11 +19,22 @@ public:
     void setScale(const Vector2Int& s) { scale = s; }
 
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override {
-        // Get center on screen (same as in render)
-        Vector2Float center = Vectors::toVector2Float(Vector2<int>::toScreenPosition(position - context.cameraPos)) / context.cameraScale;
+        // Convert object position and camera to float
+        Vector2Float floatPosition = Vectors::toVector2Float(position);
+        Vector2Float floatCameraPosition = Vectors::toVector2Float(context.cameraPos);
+        Vector2Float worldCenter = floatPosition - floatCameraPosition;
+        Vector2Float center = worldCenter / context.cameraScale;
+        center = Vector2Float::toScreenPosition(center);
+
+        // Apply camera rotation
+        Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2.0f;
+        Vector2Float diff = (screenCenter - center).rotate(context.cameraAngle);
+        center = screenCenter - diff;
+
+        // Calculate half size with camera scale
         Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
 
-        // Local-space corners relative to the center
+        // Define corners in local space
         Vector2Float corners[4] = {
             {-halfSize.x, -halfSize.y},
             { halfSize.x, -halfSize.y},
@@ -31,11 +42,13 @@ public:
             {-halfSize.x,  halfSize.y}
         };
 
-        // Rotate each corner around center
-        float angleRad = getAngle() * (3.14159265f / 180.0f);
+        // Total rotation = object angle + camera angle
+        float totalAngleDeg = getAngle() + context.cameraAngle;
+        float angleRad = totalAngleDeg * (3.14159265f / 180.0f);
         float cosA = cos(angleRad);
         float sinA = sin(angleRad);
 
+        // Rotate corners around center
         for (int i = 0; i < 4; ++i) {
             float x = corners[i].x;
             float y = corners[i].y;
@@ -43,10 +56,10 @@ public:
             corners[i].y = x * sinA + y * cosA + center.y;
         }
 
-        // Set debug color (white, or use something like red if you prefer)
+        // Set debug color (blue)
         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 
-        // Draw lines between corners
+        // Draw rectangle from corners
         for (int i = 0; i < 4; ++i) {
             int next = (i + 1) % 4;
             SDL_RenderLine(renderer,
@@ -54,5 +67,6 @@ public:
                 corners[next].x, corners[next].y);
         }
     }
+
 
 };

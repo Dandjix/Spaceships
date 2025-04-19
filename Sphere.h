@@ -29,7 +29,7 @@ public:
 
     void render(SDL_Renderer* renderer, const RenderingContext& context) override {
        Vector2Float halfSize = Vector2Float(static_cast<float>(radius), static_cast<float>(radius)) / context.cameraScale;
-       render_texture(renderer, context, texture, halfSize);
+       renderTexture(renderer, context, texture, halfSize);
     }
 
     void update(float deltaTime)
