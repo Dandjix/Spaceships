@@ -9,6 +9,44 @@ class Entity {
 protected:
     Vector2Int position;  // Using Vector2 to represent position
     std::optional<float> angle; //if an angle is null, the object will always face towards the camera
+
+    void render_texture(SDL_Renderer* renderer, const RenderingContext& context, SDL_Texture* texture, Vector2Float destSize) const
+    {
+        Vector2Float floatPosition = Vectors::toVector2Float(position);
+
+
+
+        Vector2Float floatCameraPosition = Vectors::toVector2Float(context.cameraPos);
+        Vector2Float worldCenter = floatPosition - floatCameraPosition;
+        Vector2Float center = (worldCenter) / context.cameraScale;
+        center = Vector2Float::toScreenPosition(center);
+
+        Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2;
+        Vector2Float diff = (screenCenter - center).rotate(context.cameraAngle);
+        //center = center - diff;
+        center = screenCenter - diff;
+
+        //Vector2Float halfSize = Vector2Float(static_cast<float>(radius), static_cast<float>(radius)) / context.cameraScale;
+
+
+        SDL_FRect destRect = {
+            center.x - destSize.x,
+            center.y - destSize.y,
+            destSize.x * 2.0f,
+            destSize.y * 2.0f
+        };
+        float angle;
+        if (hasAngle())
+        {
+            angle = getAngle() + context.cameraAngle;
+        }
+        else
+        {
+            angle = 0;
+        }
+
+        SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, angle, nullptr, SDL_FLIP_NONE);
+    }
 public:
     /// <summary>
     /// creates an entity

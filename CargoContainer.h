@@ -55,21 +55,11 @@ public:
             //std::cout << "could not find textures : " << textures;
             return;
         }
-
-        // Apply per-instance tint
         SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
-
         Vector2Float center = Vectors::toVector2Float(Vector2Int::toScreenPosition(position - context.cameraPos))/context.cameraScale;
         Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
 
-        SDL_FRect destRect = {
-            center.x - halfSize.x,
-            center.y - halfSize.y,
-            halfSize.x * 2.0f,
-            halfSize.y * 2.0f
-        };
-
-        SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, getAngle(), nullptr, SDL_FLIP_NONE);
+        render_texture(renderer, context, texture, halfSize);
     }
 private :
     SDL_Color getRandomColor()
