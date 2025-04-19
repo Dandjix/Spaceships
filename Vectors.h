@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 
-inline const int factor = 8;
+inline const int factor = 64;
 // sous division des pixels
 // un facteur de 1 -> 1px = 1 unité de distance
 // facteur 1024 -> 1px = 1024 unités de distance

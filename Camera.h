@@ -4,7 +4,7 @@
 
 class Camera : public Entity {  // Inherit from Entity
 protected:
-    Entity* player;  // Pointer to the player entity
+    Entity* player = nullptr;  // Pointer to the player entity
 
 private :
     float scale;
@@ -13,7 +13,15 @@ public:
     /// Creates a Camera that follows the player.
     /// </summary>
     /// <param name="p">Pointer to the player entity</param>
-    Camera(Vector2Int position, float angle, float scale, Entity* p) : Entity(position,angle),player(p),scale(scale) {
+    Camera(Vector2Int position, float angle, float scale) : Entity(position,angle),scale(scale) {}
+    
+    /// <summary>
+    /// Set the player entity that the camera follows.
+    /// </summary>
+    /// <param name="p">Pointer to the new player entity</param>
+    void setPlayer(Entity* p)
+    {
+        player = p;
         setPosition(p->getPosition());  // Set the camera's position to follow the player initially
     }
 
@@ -43,13 +51,7 @@ public:
         return scale;
     }
 
-    /// <summary>
-    /// Set the player entity that the camera follows.
-    /// </summary>
-    /// <param name="p">Pointer to the new player entity</param>
-    void setPlayer(Entity* p) {
-        player = p;
-    }
+
 
     /// <summary>
     /// A camera renders nothing.

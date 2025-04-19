@@ -37,8 +37,10 @@ int main(int argc, char* argv[]) {
     
     std::cout << "textures loaded";
 
-    Player player(Vector2Int(0,0),0, 2000); // Start at center, 2000 units/sec
-    Camera camera(Vector2Int(0,0),0,1, &player);
+    Camera camera(Vector2Int(0, 0), 0, 1);
+    Player player(Vector2Int(0,0),0, 200,&camera); // Start at center, 200 px/sec
+    camera.setPlayer(&player);
+
     CargoContainer container1(Vector2Int(0,0),45,CargoContainer::Variation::EMA);
     CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
     Sphere sphere(Vector2Int(-5,-5),32);

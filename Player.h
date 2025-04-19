@@ -8,9 +8,16 @@ class Player : public RoundEntity {
 private:
     float speed;
 
+    Camera* camera = nullptr;
+
 public:
-    Player(Vector2Int position,float angle, float speed)
-        : RoundEntity(position,angle, 20), speed(speed) {}
+    Player(Vector2Int position,float angle, float speed, Camera * camera)
+        : RoundEntity(position,angle, 20), speed(speed), camera(camera) {}
+
+    void setCamera(Camera* c)
+    {
+        camera = c;
+    }
 
     void update(float deltaTime) override {
         const bool * state = SDL_GetKeyboardState(NULL);
@@ -33,7 +40,7 @@ public:
 
         delta.normalize();
 
-        delta = delta *(speed * deltaTime);
+        delta = (delta *(speed * deltaTime * Vectors::getFactor())).rotate(-camera->getAngle());
 
         Vector2Float newPosFloat = Vectors::toVector2Float(position) + delta;
         Vector2Int newPos = Vectors::toVector2Int(newPosFloat);
