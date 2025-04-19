@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     Camera camera(Vector2Int(0,0),0,1, &player);
     CargoContainer container1(Vector2Int(0,0),45,CargoContainer::Variation::EMA);
     CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
-    Sphere sphere(Vector2Int(-100,-100),32);
+    Sphere sphere(Vector2Int(-5,-5),32);
     DebugGrid grid(0,0,16);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;

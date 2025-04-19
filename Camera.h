@@ -70,8 +70,12 @@ public:
         if (state[SDL_SCANCODE_PAGEDOWN]) {
             deltaAngle += 180*deltaTime;
         }
-
-        setAngle(getAngle() + deltaAngle);
+        float newAngle = getAngle() + deltaAngle;
+        setAngle(newAngle);
+        //if (getAngle() != newAngle)
+        //{
+        //    std::cout << "angle is " << newAngle <<"\n";
+        //}
     }
 
     /// <summary>

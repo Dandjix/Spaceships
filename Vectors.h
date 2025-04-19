@@ -2,6 +2,10 @@
 #include <cmath>
 #include <iostream>
 
+inline const int factor = 8;
+// sous division des pixels
+// un facteur de 1 -> 1px = 1 unité de distance
+// facteur 1024 -> 1px = 1024 unités de distance
 
 template <typename T>
 struct Vector2 {
@@ -63,6 +67,17 @@ struct Vector2 {
         }
     }
 
+    static Vector2<T> toWorldPosition(Vector2<T> screenPosition)
+    {
+        return Vector2<T>(screenPosition.x * factor, screenPosition.y * factor);
+    }
+
+    static Vector2<T> toScreenPosition(Vector2<T> worldPosition)
+    {
+        return Vector2<T>(worldPosition.x / factor, worldPosition.y / factor);
+    }
+
+
     friend std::ostream& operator<<(std::ostream& os, const Vector2<T>& v) {
         os << "(" << v.x << ", " << v.y << ")";
         return os;
@@ -73,10 +88,18 @@ struct Vector2 {
 using Vector2Int = Vector2<int>;
 using Vector2Float = Vector2<float>;
 
-inline const int factor = 8;
-// sous division des pixels
-// un facteur de 1 -> 1px = 1 unité de distance
-// facteur 1024 -> 1px = 1024 unités de distance
+template<typename Tin, typename Tout>
+class Vector2Translations
+{
+public:
+    static Vector2<Tout> convert(Vector2<Tin> source)
+    {
+        return Vector2<Tout>(
+            static_cast<Tout>(source.x),
+            static_cast<Tout>(source.y)
+        );
+    }
+};
 
 class Vectors
 {
@@ -88,24 +111,11 @@ public:
 
     static Vector2Float toVector2Float(const Vector2Int& vec)
     {
-        return Vector2Float(static_cast<float>(vec.x), static_cast<float>(vec.y));
+        return Vector2Translations<int, float>::convert(vec);
     }
 
     static Vector2Int toVector2Int(const Vector2Float& vec)
     {
-        return Vector2Int(static_cast<int>(roundf(vec.x)), static_cast<int>(roundf(vec.y)));
+        return Vector2Translations<float, int>::convert(vec);
     }
-
-
-    static Vector2Int toWorldPosition(Vector2Int screenPosition)
-    {
-        return Vector2Int(screenPosition.x * factor, screenPosition.y * factor);
-    }
-
-    static Vector2Int toScreenPosition(Vector2Int worldPosition)
-    {
-        return Vector2Int(worldPosition.x / factor,worldPosition.y / factor);
-    }
-
 };
-

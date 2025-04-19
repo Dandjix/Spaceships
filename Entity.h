@@ -15,7 +15,7 @@ public:
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
     Entity(Vector2Int position, std::optional<float> angle)
-        : position(Vectors::toWorldPosition(position)), angle(angle){}  // Constructor using Vector2
+        : position(Vector2<int>::toWorldPosition(position)), angle(angle){}  // Constructor using Vector2
 
     virtual ~Entity() {}
 

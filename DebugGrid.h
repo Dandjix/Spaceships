@@ -18,7 +18,7 @@ class DebugGrid : public Entity {
     void render(SDL_Renderer* renderer, const RenderingContext& context) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White
 
-        Vector2Int cameraScreenPosition = Vectors::toScreenPosition(context.cameraPos);
+        Vector2Int cameraScreenPosition = Vector2Int::toScreenPosition(context.cameraPos);
 
         float cameraAngle = context.cameraAngle;
         float cameraScale = context.cameraScale;
