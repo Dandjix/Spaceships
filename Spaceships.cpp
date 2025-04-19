@@ -1,8 +1,10 @@
 #include <SDL3/SDL.h>
 #include <iostream>
-#include "Player.h"
 #include "Camera.h"
+#include "Player.h"
+
 #include "CargoContainer.h"
+#include "Sphere.h"
 #include "DebugGrid.h"
 
 
@@ -31,13 +33,15 @@ int main(int argc, char* argv[]) {
     bool running = true;
 
     CargoContainer::LoadTextures(renderer);
-
+    Sphere::LoadTextures(renderer);
+    
     std::cout << "textures loaded";
 
     Player player(Vector2Int(0,0),0, 2000); // Start at center, 2000 units/sec
     Camera camera(Vector2Int(0,0),0,1, &player);
     CargoContainer container1(Vector2Int(0,0),45,CargoContainer::Variation::EMA);
     CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
+    Sphere sphere(Vector2Int(-100,-100),32);
     DebugGrid grid(0,0,16);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -63,6 +67,8 @@ int main(int argc, char* argv[]) {
         container2.update(deltaTime);
         grid.update(deltaTime);
         camera.update(deltaTime);
+        sphere.update(deltaTime);
+
         //render variable calculation
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
@@ -75,15 +81,17 @@ int main(int argc, char* argv[]) {
         SDL_RenderClear(renderer);
 
         //render
+        grid.render(renderer, renderingContext);
         camera.render(renderer, renderingContext);
         player.render(renderer, renderingContext);
         container1.render(renderer, renderingContext);
         container2.render(renderer, renderingContext);
-        grid.render(renderer, renderingContext);
+        sphere.render(renderer, renderingContext);
 
         //render debug
         container1.debugRender(renderer, renderingContext);
         container2.debugRender(renderer, renderingContext);
+        sphere.debugRender(renderer, renderingContext);
         SDL_RenderPresent(renderer);
     }
 

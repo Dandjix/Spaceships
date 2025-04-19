@@ -82,8 +82,8 @@ public:
     /// <returns>Offset position as Vector2Int</returns>
     Vector2Int getOffsetPosition(Vector2Int screenDimensions) {
         Vector2Int position = getPosition();
-        int x = position.x - (screenDimensions.x / 2)*Vectors::getFactor()*getScale();  // Offset X to center the camera
-        int y = position.y - (screenDimensions.y / 2)*Vectors::getFactor()*getScale();  // Offset Y to center the camera
+        int x = static_cast<int>( position.x - (screenDimensions.x / 2)*Vectors::getFactor()*getScale());  // Offset X to center the camera
+        int y = static_cast<int>( position.y - (screenDimensions.y / 2)*Vectors::getFactor()*getScale());  // Offset Y to center the camera
         return Vector2Int(x, y);
     }
 };

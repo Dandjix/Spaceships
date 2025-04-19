@@ -49,6 +49,20 @@ struct Vector2 {
         return x == other.x && y == other.y;
     }
 
+    Vector2<T> rotate(T degrees) const {
+        if constexpr (std::is_same_v<T, float>) {
+            T radians = degrees * (3.14159265f / 180.0f);
+            T cosB = cosf(radians);
+            T sinB = sinf(radians);
+            T x2 = cosB * x - sinB * y;
+            T y2 = sinB * x + cosB * y;
+            return Vector2<T>(x2, y2);
+        }
+        else {
+            static_assert(std::is_same_v<T, float>, "rotate() is only defined for floats");
+        }
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Vector2<T>& v) {
         os << "(" << v.x << ", " << v.y << ")";
         return os;
