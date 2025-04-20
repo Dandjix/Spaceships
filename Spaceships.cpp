@@ -1,15 +1,28 @@
 #include <SDL3/SDL.h>
 #include <iostream>
-#include "Camera.h"
-#include "Player.h"
 
-#include "CargoContainer.h"
-#include "Sphere.h"
-#include "DebugGrid.h"
+#include "Game.h"
+#include "MainMenu.h"
 
+void main_menu()
+{
 
+}
 
 int main(int argc, char* argv[]) {
+
+    if (!TTF_Init()) {
+        std::cout << "Failed to initialize SDL_ttf";
+        // handle error
+    }
+
+    TTF_Font* font = TTF_OpenFont("assets/fonts/square-deal/square-deal.ttf", 24);  // 24 pt size
+
+    if (!font) {
+        std::cout << "Failed to load font";
+        // handle error
+    }
+
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;
@@ -30,75 +43,26 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    bool running = true;
+    MenuNavigation navigation = MainMenu;
 
-    CargoContainer::LoadTextures(renderer);
-    Sphere::LoadTextures(renderer);
-    
-    std::cout << "textures loaded";
-
-    Camera camera(Vector2Int(0, 0), 0, 1);
-    Player player(Vector2Int(0,0),0, 200,&camera); // Start at center, 200 px/sec
-    camera.setPlayer(&player);
-
-    CargoContainer container1(Vector2Int(0,0),45,CargoContainer::Variation::EMA);
-    CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
-    Sphere sphere(Vector2Int(-5,-5),32);
-    DebugGrid grid(0,0,64);
-    Uint64 now = SDL_GetTicks();
-    Uint64 last = 0;
-
-    float deltaTime = 0.0f;
-
-    while (running) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                running = false;
-            }
-            camera.handleEvent(event);
+    while (navigation != Quit)
+    {
+        switch (navigation)
+        {
+        case Game:
+            navigation = RunGame(renderer, window);
+        case MainMenu:
+            navigation = RunMainMenu(renderer, font);
+        case ShipEditor:
+            break;
+        case Settings:
+            break;
+        case Quit:
+            break;
+        default:
+            break;
         }
-        last = now;
-        now = SDL_GetTicks();
-        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
-
-
-        // update
-        player.update(deltaTime);
-        container1.update(deltaTime);
-        container2.update(deltaTime);
-        grid.update(deltaTime);
-        camera.update(deltaTime);
-        sphere.update(deltaTime);
-
-        //render variable calculation
-        int screenWidth, screenHeight;
-        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
-        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
-        Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
-
-        RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, camera.getScale());
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
-        SDL_RenderClear(renderer);
-
-        //render
-        grid.render(renderer, renderingContext);
-        camera.render(renderer, renderingContext);
-        player.render(renderer, renderingContext);
-        container1.render(renderer, renderingContext);
-        container2.render(renderer, renderingContext);
-        sphere.render(renderer, renderingContext);
-
-        //render debug
-        grid.debugRender(renderer, renderingContext);
-        container1.debugRender(renderer, renderingContext);
-        container2.debugRender(renderer, renderingContext);
-        sphere.debugRender(renderer, renderingContext);
-        SDL_RenderPresent(renderer);
-        //return 0;
     }
-
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

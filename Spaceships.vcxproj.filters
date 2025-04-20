@@ -13,60 +13,93 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Debug">
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{3fa850d1-86b5-4b06-a693-263f40703d30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Debug">
       <UniqueIdentifier>{c95fb945-0497-4ca9-8e2a-f91df1331c08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entities">
+    <Filter Include="Source Files\Game\Entities">
       <UniqueIdentifier>{8223b471-0934-4597-b0f2-693bbb8acab6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Math">
+    <Filter Include="Source Files\Game\Math">
       <UniqueIdentifier>{1d358f22-fd1b-416a-964a-f71caafee296}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Objects">
+    <Filter Include="Source Files\Game\Objects">
       <UniqueIdentifier>{b58fdedf-8c67-4d4a-9e93-151ec500870b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Player">
+    <Filter Include="Source Files\Game\Player">
       <UniqueIdentifier>{001b0345-a2ef-489d-8483-45cf0940127f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Rendering">
+    <Filter Include="Source Files\Game\Rendering">
       <UniqueIdentifier>{71995a9d-0b3b-47ab-a781-ebfba087d6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MainMenu">
+      <UniqueIdentifier>{33c80f7c-142e-403a-a179-2c3a462fc0d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CargoContainer.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h">
-      <Filter>Source Files\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Source Files\Player</Filter>
-    </ClInclude>
     <ClInclude Include="CargoContainer.h">
-      <Filter>Source Files\Objects</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="DebugGrid.h">
-      <Filter>Source Files\Debug</Filter>
+      <Filter>Source Files\Game\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
-      <Filter>Source Files\Objects</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="RoundEntity.h">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Game\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Game\Entities</Filter>
     </ClInclude>
     <ClInclude Include="BoxEntity.h">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Game\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Vectors.h">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\Game\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Rendering.h">
-      <Filter>Source Files\Rendering</Filter>
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShip.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Source Files\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuNavigation.h">
+      <Filter>Source Files\MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

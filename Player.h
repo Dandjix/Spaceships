@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 #include "Vectors.h"
 #include "Rendering.h"
+#include "Camera.h"
 
 class Player : public RoundEntity {
 private:

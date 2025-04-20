@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>ClangCL</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\libs\SDL3-3.2.10\;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\libs\SDL3-3.2.10\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\libs\SDL3-3.2.10\include;C:\libs\SDL_ttf-install\include;C:\libs\vcpkg\installed\x64-windows\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\libs\SDL3-3.2.10\lib\x64;C:\libs\SDL_ttf-install\lib;C:\libs\vcpkg\installed\x64-windows\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,16 +108,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\libs\SDL3-3.2.10\include\;C:\libs\SDL3_image-3.2.4\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\libs\SDL3-3.2.10\include;C:\libs\SDL3_image-3.2.4\include;C:\libs\SDL_ttf-install\include;C:\libs\vcpkg\installed\x64-windows\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\libs\SDL3-3.2.10\lib\;C:\libs\SDL3_image-3.2.4\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\libs\SDL3-3.2.10\lib\;C:\libs\SDL3_image-3.2.4\Release;C:\libs\SDL_ttf-install\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL3.lib;SDL3_image.lib;SDL3_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,10 +137,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sphere.cpp" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="MenuNavigation.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="Rendering.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClCompile Include="CargoContainer.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Spaceships.cpp" />
+    <ClInclude Include="SpaceShip.h" />
     <ClInclude Include="Vectors.h">
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
