@@ -26,10 +26,33 @@ MenuNavigation RunMainMenu(SDL_Renderer* renderer, TTF_Font* font) {
                 SDL_Keycode key = e.key.key;
 
                 switch (key) {
-                case SDLK_UP:    /* do stuff */ break;
-                case SDLK_DOWN:  /* do stuff */ break;
+                case SDLK_UP:
+                    // Move up the menu
+                    if (selected > 0) {
+                        --selected;
+                    }
+                    break;
+
+                case SDLK_DOWN:
+                    // Move down the menu
+                    if (selected < options.size() - 1) {
+                        ++selected;
+                    }
+                    break;
                 case SDLK_RETURN:
-                case SDLK_KP_ENTER: /* do stuff */ break;
+                case SDLK_KP_ENTER:
+                    // Enter the selected option
+                    switch (selected) {
+                    case 0:  // "Game"
+                        return Game;
+                    case 1:  // "Settings"
+                        return Settings;
+                    case 2:  // "Ship Editor"
+                        return ShipEditor;
+                    case 3:  // "Quit"
+                        return Quit;
+                    }
+                    break;
                 }
             }
 
