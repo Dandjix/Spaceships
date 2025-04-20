@@ -13,63 +13,60 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Debug">
+      <UniqueIdentifier>{c95fb945-0497-4ca9-8e2a-f91df1331c08}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Entities">
       <UniqueIdentifier>{8223b471-0934-4597-b0f2-693bbb8acab6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Player">
-      <UniqueIdentifier>{001b0345-a2ef-489d-8483-45cf0940127f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Spaceships">
-      <UniqueIdentifier>{7d26be43-c253-4421-8331-f7b27b8e099b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{1d358f22-fd1b-416a-964a-f71caafee296}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Rendering">
-      <UniqueIdentifier>{71995a9d-0b3b-47ab-a781-ebfba087d6b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Entities\Objects">
+    <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{b58fdedf-8c67-4d4a-9e93-151ec500870b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entities\Debug">
-      <UniqueIdentifier>{c95fb945-0497-4ca9-8e2a-f91df1331c08}</UniqueIdentifier>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{001b0345-a2ef-489d-8483-45cf0940127f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{71995a9d-0b3b-47ab-a781-ebfba087d6b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpaceShip.cpp">
-      <Filter>Source Files\Spaceships</Filter>
-    </ClCompile>
-    <ClCompile Include="BoxEntity.h">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Vectors.h">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering.h">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h">
-      <Filter>Source Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Source Files\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="RoundEntity.h">
-      <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Source Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="CargoContainer.h">
-      <Filter>Source Files\Entities\Objects</Filter>
+      <Filter>Source Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="DebugGrid.h">
-      <Filter>Source Files\Entities\Debug</Filter>
+      <Filter>Source Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundEntity.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxEntity.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Vectors.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering.h">
+      <Filter>Source Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

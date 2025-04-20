@@ -62,7 +62,7 @@ public:
     /// Update the camera's position to follow the player.
     /// </summary>
     /// <param name="deltaTime">Delta time for smooth movement</param>
-    void update(float deltaTime) {
+    void update(float deltaTime) override {
         setPosition(player->getPosition());  // Update camera's position based on the player's position
         const bool* state = SDL_GetKeyboardState(NULL);
         float deltaAngle = 0;

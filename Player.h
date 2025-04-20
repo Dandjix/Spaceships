@@ -48,9 +48,9 @@ public:
         position = newPos;
     }
 
-    void render(SDL_Renderer* renderer, const RenderingContext& context) {
+    void render(SDL_Renderer* renderer, const RenderingContext& context) override {
         Vector2Int cameraPosition = (position - context.cameraPos).scaleToScreenPosition()/context.cameraScale;
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
         float scaledRadius = radius / context.cameraScale;
         for (int w = 0; w < scaledRadius * 2; w++) {
             for (int h = 0; h < scaledRadius * 2; h++) {

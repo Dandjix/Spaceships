@@ -33,7 +33,7 @@ public :
         // CargoContainer might not need to move, so just leave it empty.
     }
 
-    void render(SDL_Renderer* renderer, const RenderingContext& context) {
+    void render(SDL_Renderer* renderer, const RenderingContext& context) override {
         Vector2Int center = context.cameraPos + context.screenDimensions.scaleToWorldPosition()*0.5f*context.cameraScale;
 
         int diameter;

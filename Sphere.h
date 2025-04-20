@@ -32,7 +32,7 @@ public:
        renderTexture(renderer, context, texture, halfSize);
     }
 
-    void update(float deltaTime)
+    void update(float deltaTime) override
     {
 
     }
