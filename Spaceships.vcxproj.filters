@@ -37,6 +37,9 @@
     <Filter Include="Source Files\MainMenu">
       <UniqueIdentifier>{33c80f7c-142e-403a-a179-2c3a462fc0d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ShipEditor">
+      <UniqueIdentifier>{2a20e599-f54b-440c-9b9b-da86b1fb1420}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
