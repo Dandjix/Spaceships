@@ -1,5 +1,7 @@
 #include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
+
 #include "MenuNavigation.h"
 
 #include "Camera.h"
@@ -9,7 +11,8 @@
 #include "Sphere.h"
 #include "DebugGrid.h"
 
-MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
+
+MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, TTF_Font* font)
 {
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);

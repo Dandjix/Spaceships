@@ -57,6 +57,9 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="ShipEditor.cpp">
+      <Filter>Source Files\ShipEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CargoContainer.h">
@@ -103,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="MenuNavigation.h">
       <Filter>Source Files\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipEditor.h">
+      <Filter>Source Files\ShipEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeCamera.h">
+      <Filter>Source Files\ShipEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

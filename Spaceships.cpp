@@ -1,8 +1,9 @@
 #include <SDL3/SDL.h>
 #include <iostream>
 
-#include "Game.h"
 #include "MainMenu.h"
+#include "Game.h"
+#include "ShipEditor.h"
 
 void main_menu()
 {
@@ -50,13 +51,14 @@ int main(int argc, char* argv[]) {
         switch (navigation)
         {
         case Game:
-            navigation = RunGame(renderer, window);
+            navigation = RunGame(renderer, window, font);
             std::cout << "navigation : " << navigation <<"\n";
             break;
         case MainMenu:
-            navigation = RunMainMenu(renderer, font);
+            navigation = RunMainMenu(renderer, window, font);
             break;
         case ShipEditor:
+            navigation = RunShipEditor(renderer, window, font);
             break;
         case Settings:
             break;

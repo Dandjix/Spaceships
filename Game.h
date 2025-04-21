@@ -7,4 +7,4 @@
 #include "Vectors.h"
 #include "MenuNavigation.h"
 
-MenuNavigation RunGame(SDL_Renderer* renderer, SDL_Window* window);
+MenuNavigation RunGame(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font);

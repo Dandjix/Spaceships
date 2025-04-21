@@ -7,7 +7,7 @@
 
 
 
-MenuNavigation RunMainMenu(SDL_Renderer* renderer, TTF_Font* font) {
+MenuNavigation RunMainMenu(SDL_Renderer* renderer,SDL_Window * window, TTF_Font* font) {
     std::vector<std::string> options = { "Game", "Settings", "Ship Editor", "Quit" };
     int selected = 0;
 
