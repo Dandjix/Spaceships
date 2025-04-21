@@ -6,6 +6,7 @@
 #include "Vectors.h"
 #include "FreeCamera.h"
 #include "DebugGrid.h"
+#include "SaveAndLoadShips.h"
 
 void RenderSidebar(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font, std::vector<SDL_FRect>& buttonRects)
 {
@@ -99,10 +100,12 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
                             SDL_Log("Floor");
                             break;
                         case 5:
-                            SDL_Log("Save");
+                            //SDL_Log("Save");
+                            SaveShip("123");
                             break;
                         case 6:
-                            SDL_Log("Load");
+                            std::string blueprint = LoadShip();
+                            std::cout << "bp : " << blueprint;
                             break;
                         }
                         

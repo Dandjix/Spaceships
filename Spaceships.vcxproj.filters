@@ -60,6 +60,12 @@
     <ClCompile Include="ShipEditor.cpp">
       <Filter>Source Files\ShipEditor</Filter>
     </ClCompile>
+    <ClCompile Include="SaveAndLoadShips.cpp">
+      <Filter>Source Files\ShipEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyfiledialogs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CargoContainer.h">
@@ -112,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="FreeCamera.h">
       <Filter>Source Files\ShipEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveAndLoadShips.h">
+      <Filter>Source Files\ShipEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyfiledialogs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -137,8 +137,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SaveAndLoadShips.cpp" />
     <ClCompile Include="ShipEditor.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="tinyfiledialogs.cpp" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="MainMenu.h" />
@@ -151,8 +153,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Spaceships.cpp" />
+    <ClInclude Include="SaveAndLoadShips.h" />
     <ClInclude Include="ShipEditor.h" />
     <ClInclude Include="SpaceShip.h" />
+    <ClInclude Include="tinyfiledialogs.h" />
     <ClInclude Include="Vectors.h">
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
