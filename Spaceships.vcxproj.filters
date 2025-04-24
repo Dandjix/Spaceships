@@ -37,8 +37,14 @@
     <Filter Include="Source Files\MainMenu">
       <UniqueIdentifier>{33c80f7c-142e-403a-a179-2c3a462fc0d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\SpaceShips">
+      <UniqueIdentifier>{8697e410-dd45-44a2-9064-595931f35014}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\ShipEditor">
       <UniqueIdentifier>{2a20e599-f54b-440c-9b9b-da86b1fb1420}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Imported">
+      <UniqueIdentifier>{c6f9646f-dd78-4ea1-b1de-f6698a3a270c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,8 +69,17 @@
     <ClCompile Include="SaveAndLoadShips.cpp">
       <Filter>Source Files\ShipEditor</Filter>
     </ClCompile>
+    <ClCompile Include="SpaceShip.cpp">
+      <Filter>Source Files\Game\SpaceShips</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceShipBlueprint.cpp">
+      <Filter>Source Files\Game\SpaceShips</Filter>
+    </ClCompile>
     <ClCompile Include="tinyfiledialogs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Imported</Filter>
+    </ClCompile>
+    <ClCompile Include="ShipBuildingGrid.cpp">
+      <Filter>Source Files\ShipEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,21 +104,6 @@
     <ClInclude Include="Vectors.h">
       <Filter>Source Files\Game\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Room.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceShip.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Source Files\MainMenu</Filter>
     </ClInclude>
@@ -122,8 +122,32 @@
     <ClInclude Include="SaveAndLoadShips.h">
       <Filter>Source Files\ShipEditor</Filter>
     </ClInclude>
+    <ClInclude Include="SpaceShip.h">
+      <Filter>Source Files\Game\SpaceShips</Filter>
+    </ClInclude>
     <ClInclude Include="tinyfiledialogs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Imported</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShipBlueprint.h">
+      <Filter>Source Files\Game\SpaceShips</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Imported</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipBuildingGrid.h">
+      <Filter>Source Files\ShipEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering.h">
+      <Filter>Source Files\Game\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Source Files\Game\SpaceShips</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source Files\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Game\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

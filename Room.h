@@ -6,10 +6,10 @@ class Room
 {
 protected:
 	std::unordered_set<Entity*> entities = {};
-	Spaceship* spaceship;
+	SpaceShip* spaceship;
 public :
 
-	Room(Spaceship* s)
+	Room(SpaceShip* s)
 	{
 		spaceship = s;
 	}

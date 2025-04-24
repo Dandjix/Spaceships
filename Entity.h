@@ -46,7 +46,7 @@ public:
     virtual void render(SDL_Renderer* renderer, const RenderingContext& context) = 0;
     virtual void debugRender(SDL_Renderer* renderer, const RenderingContext& context){}
 
-    Vector2Int getPosition() {
+    Vector2Int getPosition() const {
         return position;
     }
 

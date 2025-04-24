@@ -5,8 +5,15 @@
 #include <vector>
 #include "Vectors.h"
 #include "FreeCamera.h"
-#include "DebugGrid.h"
+#include "ShipEditor.h"
+#include "ShipBuildingGrid.h"
 #include "SaveAndLoadShips.h"
+#include "SpaceShipBlueprint.h"
+
+const int gridSize = 64;
+
+
+
 
 void RenderSidebar(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font, std::vector<SDL_FRect>& buttonRects)
 {
@@ -16,7 +23,7 @@ void RenderSidebar(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font, s
     const SDL_Color backgroundColor = { 30, 30, 30, 255 }; // Dark gray
     const SDL_Color textColor = { 255, 255, 255, 255 }; // White
     const int optionHeight = 30;
-    const std::vector<std::string> options = {"Void","Wall","HDoor","VDoor","Floor","Save","Load"};
+    const std::vector<std::string> options = {"Void","Wall","HDoor","VDoor","Floor","Resize","Save","Load"};
 
     int screenWidth, screenHeight;
 
@@ -50,6 +57,11 @@ void RenderSidebar(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font, s
     }
 }
 
+void ResizeGrid(Vector2Int newSize)
+{
+    std::cout << "resizing to " << newSize.x << newSize.y << "\n";
+}
+
 
 MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_Font* font)
 {
@@ -57,7 +69,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
 
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
 
-    DebugGrid grid(0, 0, 64);
+    ShipBuildingGrid grid(64);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
 
@@ -65,6 +77,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
 
     MenuNavigation destination = ShipEditor;
     std::vector<SDL_FRect> buttonRects;
+
+    SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
 
     while (destination == ShipEditor) {
 
@@ -77,6 +91,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
                 float mouseX = event.button.x;
                 float mouseY = event.button.y;
 
+
+
                 for (int i = 0; i < buttonRects.size(); ++i) {
                     SDL_FRect& rect = buttonRects[i];
                     if (mouseX >= rect.x && mouseX <= rect.x + rect.w &&
@@ -84,26 +100,29 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
 
                         switch (i)
                         {
-                        case 0:
+                        case static_cast<int>(SidebarButtons::Void):
                             SDL_Log("Void");
                             break;
-                        case 1:
+                        case static_cast<int>(SidebarButtons::Wall):
                             SDL_Log("Wall");
                             break;
-                        case 2:
+                        case static_cast<int>(SidebarButtons::HDoor):
                             SDL_Log("HDoor");
                             break;
-                        case 3:
+                        case static_cast<int>(SidebarButtons::VdDoor):
                             SDL_Log("VDoor");
                             break;
-                        case 4:
+                        case static_cast<int>(SidebarButtons::Floor):
                             SDL_Log("Floor");
                             break;
-                        case 5:
+                        case static_cast<int>(SidebarButtons::Resize):
+
+                            break;
+                        case static_cast<int>(SidebarButtons::Save):
                             //SDL_Log("Save");
                             SaveShip("123");
                             break;
-                        case 6:
+                        case static_cast<int>(SidebarButtons::Load):
                             std::string blueprint = LoadShip();
                             std::cout << "bp : " << blueprint;
                             break;

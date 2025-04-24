@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Vectors.h"
+#include "Rendering.h"
 
 class Camera : public Entity {  // Inherit from Entity
 protected:
@@ -46,7 +47,7 @@ public:
         }
     }
 
-    float getScale()
+    float getScale() const
     {
         return scale;
     }
@@ -86,7 +87,7 @@ public:
     /// <param name="screenWidth">Screen width</param>
     /// <param name="screenHeight">Screen height</param>
     /// <returns>Offset position as Vector2Int</returns>
-    Vector2Int getOffsetPosition(Vector2Int screenDimensions) {
+    Vector2Int getOffsetPosition(Vector2Int screenDimensions) const {
         Vector2Int position = getPosition();
         int x = static_cast<int>( position.x - (screenDimensions.x / 2)*Vectors::getFactor()*getScale());  // Offset X to center the camera
         int y = static_cast<int>( position.y - (screenDimensions.y / 2)*Vectors::getFactor()*getScale());  // Offset Y to center the camera

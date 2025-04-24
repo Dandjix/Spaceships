@@ -138,11 +138,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SaveAndLoadShips.cpp" />
+    <ClCompile Include="ShipBuildingGrid.cpp" />
     <ClCompile Include="ShipEditor.cpp" />
+    <ClCompile Include="SpaceShip.cpp" />
+    <ClCompile Include="SpaceShipBlueprint.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="tinyfiledialogs.cpp" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MenuNavigation.h" />
     <ClInclude Include="Room.h" />
@@ -154,8 +158,10 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Spaceships.cpp" />
     <ClInclude Include="SaveAndLoadShips.h" />
+    <ClInclude Include="ShipBuildingGrid.h" />
     <ClInclude Include="ShipEditor.h" />
     <ClInclude Include="SpaceShip.h" />
+    <ClInclude Include="SpaceShipBlueprint.h" />
     <ClInclude Include="tinyfiledialogs.h" />
     <ClInclude Include="Vectors.h">
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
