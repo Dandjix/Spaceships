@@ -9,53 +9,9 @@
 #include "ShipBuildingGrid.h"
 #include "SaveAndLoadShips.h"
 #include "SpaceShipBlueprint.h"
+#include "GUIList.h"
 
 const int gridSize = 64;
-
-
-
-
-void RenderSidebar(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font, std::vector<SDL_FRect>& buttonRects)
-{
-    buttonRects.clear();
-
-    const int sidebarWidth = 200;
-    const SDL_Color backgroundColor = { 30, 30, 30, 255 }; // Dark gray
-    const SDL_Color textColor = { 255, 255, 255, 255 }; // White
-    const int optionHeight = 30;
-    const std::vector<std::string> options = {"Void","Wall","HDoor","VDoor","Floor","Resize","Save","Load"};
-
-    int screenWidth, screenHeight;
-
-    SDL_GetWindowSize(window, &screenWidth, &screenHeight);
-
-    // Draw sidebar background
-    SDL_FRect sidebarRect = { 0, 0, (float)sidebarWidth, (float)screenHeight };
-    SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
-    SDL_RenderFillRect(renderer, &sidebarRect);
-
-    // Draw each option
-    for (int i = 0; i < options.size(); ++i) {
-        SDL_FRect optionRect = { 10, (float)(10 + i * (optionHeight + 10)), sidebarWidth - 20, (float)optionHeight };
-        buttonRects.push_back(optionRect);
-        SDL_SetRenderDrawColor(renderer, 60, 60, 60, 255); // Lighter gray for button
-        SDL_RenderFillRect(renderer, &optionRect);
-
-        // Render label
-        SDL_Surface* textSurface = TTF_RenderText_Solid(font, options[i].c_str(), options[i].size(), textColor);
-        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-        int textW = textSurface->w, textH = textSurface->h;
-        SDL_FRect textRect = {
-            optionRect.x + (optionRect.w - textW) / 2.0f,
-            optionRect.y + (optionRect.h - textH) / 2.0f,
-            (float)textW, (float)textH
-        };
-        SDL_RenderTexture(renderer, textTexture, NULL, &textRect);
-
-        SDL_DestroyTexture(textTexture);
-        SDL_DestroySurface(textSurface);
-    }
-}
 
 void ResizeGrid(Vector2Int newSize)
 {
@@ -76,7 +32,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
     float deltaTime = 0.0f;
 
     MenuNavigation destination = ShipEditor;
-    std::vector<SDL_FRect> buttonRects;
+
+    GUIList list(Anchor::TL, Vector2Int(0, 0), 200, GUI_Fill);
 
     SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
 
@@ -87,51 +44,6 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
             if (event.type == SDL_EVENT_QUIT) {
                 destination = Quit;
             }
-            else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-                float mouseX = event.button.x;
-                float mouseY = event.button.y;
-
-
-
-                for (int i = 0; i < buttonRects.size(); ++i) {
-                    SDL_FRect& rect = buttonRects[i];
-                    if (mouseX >= rect.x && mouseX <= rect.x + rect.w &&
-                        mouseY >= rect.y && mouseY <= rect.y + rect.h) {
-
-                        switch (i)
-                        {
-                        case static_cast<int>(SidebarButtons::Void):
-                            SDL_Log("Void");
-                            break;
-                        case static_cast<int>(SidebarButtons::Wall):
-                            SDL_Log("Wall");
-                            break;
-                        case static_cast<int>(SidebarButtons::HDoor):
-                            SDL_Log("HDoor");
-                            break;
-                        case static_cast<int>(SidebarButtons::VdDoor):
-                            SDL_Log("VDoor");
-                            break;
-                        case static_cast<int>(SidebarButtons::Floor):
-                            SDL_Log("Floor");
-                            break;
-                        case static_cast<int>(SidebarButtons::Resize):
-
-                            break;
-                        case static_cast<int>(SidebarButtons::Save):
-                            //SDL_Log("Save");
-                            SaveShip("123");
-                            break;
-                        case static_cast<int>(SidebarButtons::Load):
-                            std::string blueprint = LoadShip();
-                            std::cout << "bp : " << blueprint;
-                            break;
-                        }
-                        
-                    }
-                }
-            }
-
             camera.handleEvent(event);
         }
         last = now;
@@ -160,7 +72,14 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
 
         //render debug
         grid.debugRender(renderer, renderingContext);
-        RenderSidebar(renderer, window, font, buttonRects);
+
+        float mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
+        GUI_RenderingContext GUI_renderingContext(screenDimensions, Vector2Int(static_cast<int>(mouseX), static_cast<int>(mouseY)));
+
+        //GUI render
+        list.render(renderer, GUI_renderingContext);
 
         SDL_RenderPresent(renderer);
 

@@ -46,6 +46,12 @@
     <Filter Include="Imported">
       <UniqueIdentifier>{c6f9646f-dd78-4ea1-b1de-f6698a3a270c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{d98990cd-c8e0-44f3-89da-36e58991a3cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI\Components">
+      <UniqueIdentifier>{f11b1e37-6987-4d1e-aff0-cd94f8f2656d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
@@ -80,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="ShipBuildingGrid.cpp">
       <Filter>Source Files\ShipEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIRect.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="BindableProperty.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIList.cpp">
+      <Filter>Source Files\GUI\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +163,15 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Source Files\Game\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>Source Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIRect.h">
+      <Filter>Source Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIList.h">
+      <Filter>Source Files\GUI\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -137,6 +137,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BindableProperty.cpp" />
+    <ClCompile Include="GUIList.cpp" />
+    <ClCompile Include="GUIRect.cpp" />
     <ClCompile Include="SaveAndLoadShips.cpp" />
     <ClCompile Include="ShipBuildingGrid.cpp" />
     <ClCompile Include="ShipEditor.cpp" />
@@ -146,6 +149,9 @@
     <ClCompile Include="tinyfiledialogs.cpp" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GUI.h" />
+    <ClInclude Include="GUIList.h" />
+    <ClInclude Include="GUIRect.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MenuNavigation.h" />
