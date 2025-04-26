@@ -15,7 +15,7 @@ private:
     int outerPadding = 10;
     int marginY = 5; //margin between buttons
     int buttonHeight = 25;
-    int buttonWidth;
+    int buttonWidth = 0;
 
 protected:
     std::vector <std::string> options;
