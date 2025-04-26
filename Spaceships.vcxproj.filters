@@ -52,6 +52,12 @@
     <Filter Include="Source Files\GUI\Components">
       <UniqueIdentifier>{f11b1e37-6987-4d1e-aff0-cd94f8f2656d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GUI\Fonts">
+      <UniqueIdentifier>{837aa871-6f3a-4a54-a85d-e44a03443fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Update">
+      <UniqueIdentifier>{cfb979de-f92b-49c2-ba85-0f3b75f0e545}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
@@ -95,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="GUIList.cpp">
       <Filter>Source Files\GUI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="fonts.cpp">
+      <Filter>Source Files\GUI\Fonts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="GUIList.h">
       <Filter>Source Files\GUI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="fonts.h">
+      <Filter>Source Files\GUI\Fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="Update.h">
+      <Filter>Source Files\Update</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

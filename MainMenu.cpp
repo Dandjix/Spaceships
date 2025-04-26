@@ -4,12 +4,15 @@
 #include <vector>
 #include <string>
 #include "MenuNavigation.h"
+#include "fonts.h"
 
 
 
-MenuNavigation RunMainMenu(SDL_Renderer* renderer,SDL_Window * window, TTF_Font* font) {
+MenuNavigation RunMainMenu(SDL_Renderer* renderer,SDL_Window * window) {
     std::vector<std::string> options = { "Game", "Settings", "Ship Editor", "Quit" };
     int selected = 0;
+
+    TTF_Font* font = fonts["lg"];
 
     bool running = true;
     SDL_Event e;

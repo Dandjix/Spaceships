@@ -6,4 +6,4 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include "MenuNavigation.h"
 
-MenuNavigation RunMainMenu(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font);
+MenuNavigation RunMainMenu(SDL_Renderer* renderer, SDL_Window* window);

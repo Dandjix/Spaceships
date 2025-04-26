@@ -12,7 +12,7 @@
 #include "DebugGrid.h"
 
 
-MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, TTF_Font* font)
+MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 {
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);

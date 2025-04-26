@@ -2,7 +2,9 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_image/SDL_image.h>
+#include <functional>
 #include <vector>
+#include <string>
 #include "Vectors.h"
 #include "FreeCamera.h"
 #include "ShipEditor.h"
@@ -18,8 +20,20 @@ void ResizeGrid(Vector2Int newSize)
     std::cout << "resizing to " << newSize.x << newSize.y << "\n";
 }
 
+//inputs
 
-MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_Font* font)
+//pré physique
+//décisions IA
+
+//physique
+//mouvements, détection de collision, gravité
+
+//post physique
+//réponse des collisions, MAJ position camera
+
+//render
+
+MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
 
 
@@ -33,32 +47,59 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
 
     MenuNavigation destination = ShipEditor;
 
-    GUIList list(Anchor::TL, Vector2Int(0, 0), 200, GUI_Fill);
+    std::vector<std::string>options =
+    {
+        "Add","Remove"
+    };
+
+    GUIList list(
+        Anchor::TL,
+        Vector2Int(0, 0),
+        200,
+        GUI_Fill,
+        options,
+        [](std::string option) {
+            std::cout << "selected " << option << std::endl;
+        }
+    );
+
 
     SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
 
     while (destination == ShipEditor) {
+        
+        //render variable calculation
+        int screenWidth, screenHeight;
+        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
 
+        //handling events
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 destination = Quit;
             }
             camera.handleEvent(event);
+            list.handleEvent(event);
         }
+
+        //creating update context
         last = now;
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
+        float mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+        Vector2Float mousePosition(mouseX, mouseY);
+
+        UpdateContext updateContext(deltaTime, mousePosition, screenDimensions);
 
         // update
         grid.update(deltaTime);
         camera.update(deltaTime);
+        list.update(updateContext);
 
-        //render variable calculation
-        int screenWidth, screenHeight;
-        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
-        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
+
         Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
 
         RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, camera.getScale());
@@ -73,10 +114,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window, TTF_F
         //render debug
         grid.debugRender(renderer, renderingContext);
 
-        float mouseX, mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-
-        GUI_RenderingContext GUI_renderingContext(screenDimensions, Vector2Int(static_cast<int>(mouseX), static_cast<int>(mouseY)));
+        GUI_RenderingContext GUI_renderingContext(screenDimensions);
 
         //GUI render
         list.render(renderer, GUI_renderingContext);

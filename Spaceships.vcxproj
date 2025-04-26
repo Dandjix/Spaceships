@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BindableProperty.cpp" />
+    <ClCompile Include="fonts.cpp" />
     <ClCompile Include="GUIList.cpp" />
     <ClCompile Include="GUIRect.cpp" />
     <ClCompile Include="SaveAndLoadShips.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="SpaceShipBlueprint.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="tinyfiledialogs.cpp" />
+    <ClInclude Include="fonts.h" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="SpaceShip.h" />
     <ClInclude Include="SpaceShipBlueprint.h" />
     <ClInclude Include="tinyfiledialogs.h" />
+    <ClInclude Include="Update.h" />
     <ClInclude Include="Vectors.h">
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

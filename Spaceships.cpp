@@ -4,6 +4,7 @@
 #include "MainMenu.h"
 #include "Game.h"
 #include "ShipEditor.h"
+#include "fonts.h"
 
 void main_menu()
 {
@@ -17,15 +18,14 @@ int main(int argc, char* argv[]) {
         // handle error
     }
 
-    TTF_Font* font = TTF_OpenFont("assets/fonts/square-deal/square-deal.ttf", 24);  // 24 pt size
-
-    if (!font) {
-        std::cout << "Failed to load font";
-        // handle error
-    }
-
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return 1;
+    }
+
+    if (!LoadFonts())
+    {
+        std::cout << "could not load fonts";
         return 1;
     }
 
@@ -51,14 +51,14 @@ int main(int argc, char* argv[]) {
         switch (navigation)
         {
         case Game:
-            navigation = RunGame(renderer, window, font);
+            navigation = RunGame(renderer, window);
             std::cout << "navigation : " << navigation <<"\n";
             break;
         case MainMenu:
-            navigation = RunMainMenu(renderer, window, font);
+            navigation = RunMainMenu(renderer, window);
             break;
         case ShipEditor:
-            navigation = RunShipEditor(renderer, window, font);
+            navigation = RunShipEditor(renderer, window);
             break;
         case Settings:
             break;

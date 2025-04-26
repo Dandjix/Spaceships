@@ -6,4 +6,4 @@
 #include <SDL3_image/SDL_image.h>
 
 
-MenuNavigation RunShipEditor(SDL_Renderer* renderer, SDL_Window* window, TTF_Font* font);
+MenuNavigation RunShipEditor(SDL_Renderer* renderer, SDL_Window* window);

@@ -18,8 +18,7 @@ enum Fill
 
 struct GUI_RenderingContext {
 	const Vector2Int screenDimensions;
-	const Vector2Int mousePosition;
 
-	GUI_RenderingContext(Vector2Int screenDimensions, Vector2Int mousePosition) : 
-		screenDimensions(screenDimensions),mousePosition(mousePosition){}
+	GUI_RenderingContext(Vector2Int screenDimensions) : 
+		screenDimensions(screenDimensions){}
 };
