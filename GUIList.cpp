@@ -85,10 +85,10 @@ void GUIList::render(SDL_Renderer * renderer, const GUI_RenderingContext& contex
 void GUIList::update(const UpdateContext& context) {
     GUIRect::update(context);
 
+    buttonWidth = dimensions.x - outerPadding * 2;
+
     float mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
-
-    buttonWidth = dimensions.x - outerPadding * 2;
     for (int i = 0; i < options.size(); i++)
     {
         SDL_FRect rect = buttonRect(i);
@@ -105,7 +105,7 @@ void GUIList::update(const UpdateContext& context) {
 
 void GUIList::handleEvent(const SDL_Event event)
 {
-    if (event.type == SDL_EVENT_KEY_DOWN)
+    if (keyboardNavigation && event.type == SDL_EVENT_KEY_DOWN)
     {
         SDL_Keycode key = event.key.key;
 

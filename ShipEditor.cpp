@@ -47,20 +47,41 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     MenuNavigation destination = ShipEditor;
 
-    std::vector<std::string>options =
+    std::vector<std::string>actionOptions =
     {
-        "Add","Remove"
+        "Save",
+        "Load",
+        "Exit"
     };
+    GUIList actionsList(
+        Anchor::TL,
+        Vector2Int(100, 0),
+        100,
+        100,
+        actionOptions,
+        [](std::string option) {
+            std::cout << "pressed " << option << std::endl;
+        }
+       );
 
-    GUIList list(
+    std::vector<std::string>tileOptions =
+    {
+        "Void",
+        "Wall",
+        "DoorH",
+        "DoorV",
+        "Floor"
+    };
+    GUIList tilesList(
         Anchor::TL,
         Vector2Int(0, 0),
-        200,
+        100,
         GUI_Fill,
-        options,
+        tileOptions,
         [](std::string option) {
             std::cout << "selected " << option << std::endl;
-        }
+        },
+        true
     );
 
 
@@ -80,7 +101,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
                 destination = Quit;
             }
             camera.handleEvent(event);
-            list.handleEvent(event);
+            tilesList.handleEvent(event);
+            actionsList.handleEvent(event);
         }
 
         //creating update context
@@ -93,7 +115,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         // update
         grid.update(deltaTime);
         camera.update(deltaTime);
-        list.update(updateContext);
+        tilesList.update(updateContext);
+        actionsList.update(updateContext);
 
 
         Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
@@ -113,7 +136,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         GUI_RenderingContext GUI_renderingContext(screenDimensions);
 
         //GUI render
-        list.render(renderer, GUI_renderingContext);
+        tilesList.render(renderer, GUI_renderingContext);
+        actionsList.render(renderer, GUI_renderingContext);
 
         SDL_RenderPresent(renderer);
 

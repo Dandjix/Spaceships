@@ -16,6 +16,7 @@ private:
     int marginY = 5; //margin between buttons
     int buttonHeight = 25;
     int buttonWidth = 0;
+    bool keyboardNavigation;
 
 protected:
     std::vector <std::string> options;
@@ -23,8 +24,16 @@ protected:
     int highlighted_index = 0;
     int selected_index = -1;
 public:
-    GUIList(Anchor anchor, Vector2Int offset, int width, int height, std::vector<std::string> options, std::function<void(std::string)> onSelect)
-        : GUIRect(anchor, offset, width, height), options(options), onSelect(onSelect){
+    GUIList(
+        Anchor anchor,
+        Vector2Int offset,
+        int width,
+        int height,
+        std::vector<std::string> options,
+        std::function<void(std::string)> onSelect,
+        bool keyboardNavigation = false
+    )
+        : GUIRect(anchor, offset, width, height), options(options), onSelect(onSelect), keyboardNavigation(keyboardNavigation){
     }
 
     void handleEvent(const SDL_Event event);
