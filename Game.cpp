@@ -25,8 +25,6 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     Player player(Vector2Int(0, 0), 0, 2000, &camera); // Start at center, 200 px/sec
     camera.setPlayer(&player);
 
-    Cursor cursor(&camera);
-
     CargoContainer container1(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
     CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
     Sphere sphere(Vector2Int(-5, -5), 32);
@@ -69,7 +67,6 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         container2.update(updateContext);
         grid.update(updateContext);
         sphere.update(updateContext);
-        cursor.update(updateContext);
 
 
         Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
@@ -87,7 +84,6 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         container1.render(renderer, renderingContext);
         container2.render(renderer, renderingContext);
         sphere.render(renderer, renderingContext);
-        cursor.render(renderer, renderingContext);
 
         //render debug
         grid.debugRender(renderer, renderingContext);
