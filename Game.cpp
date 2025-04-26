@@ -46,14 +46,19 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
+        const UpdateContext context =
+        {
+            deltaTime,
+            Vector2Int(0,0)
+        };
 
         // update
-        player.update(deltaTime);
-        container1.update(deltaTime);
-        container2.update(deltaTime);
-        grid.update(deltaTime);
-        camera.update(deltaTime);
-        sphere.update(deltaTime);
+        player.update(context);
+        container1.update(context);
+        container2.update(context);
+        grid.update(context);
+        camera.update(context);
+        sphere.update(context);
 
         //render variable calculation
         int screenWidth, screenHeight;

@@ -1,12 +1,14 @@
 #pragma once
 #include "Entity.h"
 #include "Rendering.h"
+#include <SDL3/SDL.h>
 
 class ShipBuildingGrid : public Entity
 {
 protected :
 	int sizePx;
 	Vector2Int dimensions;
+	bool resizing = false;
 
 	void renderFixed(SDL_Renderer* renderer, const RenderingContext& context)
 	{
@@ -42,13 +44,22 @@ public:
 		renderFixed(renderer, context);
 	}
 
+	void startResizing()
+	{
+		resizing = true;
+	}
+
 	void setDimensions(Vector2Int dimensions)
 	{
 		this->dimensions = dimensions;
 	}
 
-	void update(float deltaTime) override
+	void update(const UpdateContext & context) override
 	{
-
+		if (resizing)
+		{
+			float mouseX, mouseY;
+			SDL_GetMouseState(&mouseX, &mouseY);
+		}
 	}
 };

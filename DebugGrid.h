@@ -29,9 +29,7 @@ public :
 	DebugGrid(Vector2Int position, float angle, int step) 
 		: Entity(position,angle), step(step) {}
 
-    void update(float deltaTime) override {
-        // CargoContainer might not need to move, so just leave it empty.
-    }
+    void update(const UpdateContext & context) override { }
 
     void render(SDL_Renderer* renderer, const RenderingContext& context) override {
         Vector2Int center = context.cameraPos + context.screenDimensions.scaleToWorldPosition()*0.5f*context.cameraScale;

@@ -18,7 +18,9 @@ enum Fill
 
 struct GUI_RenderingContext {
 	const Vector2Int screenDimensions;
+};
 
-	GUI_RenderingContext(Vector2Int screenDimensions) : 
-		screenDimensions(screenDimensions){}
+struct GUI_UpdateContext {
+	const Vector2Int screenDimensions;
+	const float deltaTime;
 };

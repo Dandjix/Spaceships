@@ -38,7 +38,7 @@ public:
 
     void handleEvent(const SDL_Event event);
 
-    void update(const UpdateContext& context) override;
+    void update(const GUI_UpdateContext& context) override;
 
     void render(SDL_Renderer* renderer, const GUI_RenderingContext& context) const override;
 };

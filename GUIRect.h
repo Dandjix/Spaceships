@@ -24,7 +24,7 @@ public:
 
 	virtual void render(SDL_Renderer* renderer, const GUI_RenderingContext& context) const = 0;
 
-	virtual void update(const UpdateContext& context)
+	virtual void update(const GUI_UpdateContext& context)
 	{
 		int h, w;
 		if (width == GUI_Fill)

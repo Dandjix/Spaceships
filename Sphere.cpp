@@ -38,6 +38,6 @@ void Sphere::render(SDL_Renderer* renderer, const RenderingContext& context) {
 }
 
 // Override update function (currently empty, but could be used to handle animations or interactions)
-void Sphere::update(float deltaTime) {
+void Sphere::update(const UpdateContext & context) {
     // Add update logic if needed
 }

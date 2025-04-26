@@ -27,7 +27,7 @@ CargoContainer::CargoContainer(Vector2Int position, float angle, Variation varia
     color = getRandomColor();
 }
 
-void CargoContainer::update(float deltaTime) {
+void CargoContainer::update(const UpdateContext & context) {
     // CargoContainer might not need to move, so leave it empty.
 }
 

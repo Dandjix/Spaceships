@@ -3,6 +3,7 @@
 #include <optional>
 #include "Vectors.h"
 #include "Rendering.h"
+#include "Update.h"
 
 
 class Entity {
@@ -42,7 +43,7 @@ public:
 
     virtual ~Entity() {}
 
-    virtual void update(float deltaTime) = 0;
+    virtual void update(const UpdateContext & context) = 0;
     virtual void render(SDL_Renderer* renderer, const RenderingContext& context) = 0;
     virtual void debugRender(SDL_Renderer* renderer, const RenderingContext& context){}
 

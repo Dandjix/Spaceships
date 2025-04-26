@@ -30,7 +30,7 @@ public:
     static void LoadTextures(SDL_Renderer* renderer);
 
     // Override update method (may not be necessary for CargoContainer)
-    void update(float deltaTime) override;
+    void update(const UpdateContext & context) override;
 
     // Override render method
     void render(SDL_Renderer* renderer, const RenderingContext& context) override;

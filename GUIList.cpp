@@ -82,7 +82,7 @@ void GUIList::render(SDL_Renderer * renderer, const GUI_RenderingContext& contex
     }
 }
 
-void GUIList::update(const UpdateContext& context) {
+void GUIList::update(const GUI_UpdateContext& context) {
     GUIRect::update(context);
 
     buttonWidth = dimensions.x - outerPadding * 2;

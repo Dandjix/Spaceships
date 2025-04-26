@@ -21,5 +21,5 @@ public:
     void render(SDL_Renderer* renderer, const RenderingContext& context) override;
 
     // Override update function (currently does nothing)
-    void update(float deltaTime) override;
+    void update(const UpdateContext & context) override;
 };

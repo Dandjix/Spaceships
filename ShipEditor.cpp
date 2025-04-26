@@ -49,6 +49,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     std::vector<std::string>actionOptions =
     {
+        "Resize",
         "Save",
         "Load",
         "Exit"
@@ -57,10 +58,25 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         Anchor::TL,
         Vector2Int(100, 0),
         100,
-        100,
+        150,
         actionOptions,
-        [](std::string option) {
-            std::cout << "pressed " << option << std::endl;
+        [&destination,&grid](std::string option) {
+            if (option == "Resize")
+            {
+                grid.startResizing();
+            }
+            else if (option == "Save")
+            {
+
+            }
+            else if (option == "Load")
+            {
+
+            }
+            else if (option == "Exit")
+            {
+                destination = MainMenu;
+            }
         }
        );
 
@@ -113,15 +129,28 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         UpdateContext updateContext(deltaTime, screenDimensions);
 
         // update
-        grid.update(deltaTime);
-        camera.update(deltaTime);
-        tilesList.update(updateContext);
-        actionsList.update(updateContext);
+        grid.update(updateContext);
+        camera.update(updateContext);
+
+
+        GUI_UpdateContext gui_updateContext = {
+            screenDimensions,
+            deltaTime
+        };
+
+        //GUI update
+        tilesList.update(gui_updateContext);
+        actionsList.update(gui_updateContext);
 
 
         Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
 
-        RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, camera.getScale());
+        RenderingContext renderingContext = {
+            cameraPos,
+            camera.getAngle(),
+            screenDimensions,
+            camera.getScale()
+        };
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);

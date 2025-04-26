@@ -170,9 +170,6 @@
     <ClInclude Include="Player.h">
       <Filter>Source Files\Game\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Source Files\Game\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="GUI.h">
       <Filter>Source Files\GUI</Filter>
     </ClInclude>
@@ -187,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="Update.h">
       <Filter>Source Files\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Game\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

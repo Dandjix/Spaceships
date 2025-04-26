@@ -4,4 +4,5 @@
 struct UpdateContext {
 	float deltaTime;
 	Vector2Int screenDimensions;
+	Vector2Int mouseWorldPosition;
 };

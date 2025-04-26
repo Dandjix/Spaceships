@@ -63,15 +63,15 @@ public:
     /// Update the camera's position to follow the player.
     /// </summary>
     /// <param name="deltaTime">Delta time for smooth movement</param>
-    void update(float deltaTime) override {
+    void update(const UpdateContext & context) override {
         setPosition(player->getPosition());  // Update camera's position based on the player's position
         const bool* state = SDL_GetKeyboardState(NULL);
         float deltaAngle = 0;
         if (state[SDL_SCANCODE_PAGEUP]) {
-            deltaAngle -= 180*deltaTime;
+            deltaAngle -= 180* context.deltaTime;
         }
         if (state[SDL_SCANCODE_PAGEDOWN]) {
-            deltaAngle += 180*deltaTime;
+            deltaAngle += 180 * context.deltaTime;
         }
         float newAngle = getAngle() + deltaAngle;
         setAngle(newAngle);

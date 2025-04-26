@@ -20,7 +20,7 @@ public:
         camera = c;
     }
 
-    void update(float deltaTime) override {
+    void update(const UpdateContext & context) override {
         const bool * state = SDL_GetKeyboardState(NULL);
         float deltaX = 0;
         float deltaY = 0;
@@ -41,7 +41,7 @@ public:
 
         delta.normalize();
 
-        delta = (delta *(speed * deltaTime * Vectors::getFactor())).rotate(-camera->getAngle());
+        delta = (delta *(speed * context.deltaTime * Vectors::getFactor())).rotate(-camera->getAngle());
 
         Vector2Float newPosFloat = Vectors::toVector2Float(position) + delta;
         Vector2Int newPos = Vectors::toVector2Int(newPosFloat);
