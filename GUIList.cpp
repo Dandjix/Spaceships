@@ -10,11 +10,11 @@ const SDL_Color selectedColor = { 0, 125, 255, 255 };
 const SDL_Color selectedHighlightedColor = { 0, 0, 255, 255 };
 
 
-SDL_FRect GUIList::buttonRect(int i,Vector2Int TLCorner, int buttonWidth, int buttonHeight) const
+SDL_FRect GUIList::buttonRect(int i) const
 {
     return {
-        static_cast<float>(TLCorner.x + outerPadding),
-            static_cast<float>(TLCorner.y + outerPadding + (buttonHeight + marginY) * i),
+        static_cast<float>(screenPosition.x + outerPadding),
+            static_cast<float>(screenPosition.y + outerPadding + (buttonHeight + marginY) * i),
             static_cast<float>(buttonWidth),
             static_cast<float>(buttonHeight)
     };
@@ -37,7 +37,7 @@ void GUIList::render(SDL_Renderer * renderer, const GUI_RenderingContext& contex
     SDL_RenderRect(renderer, &bgRect);
 
     //rendering elements
-    int buttonWidth = dimensions.x - outerPadding * 2;
+
     TTF_Font* font = fonts["sm"];
     SDL_Color tc;
 
@@ -45,7 +45,7 @@ void GUIList::render(SDL_Renderer * renderer, const GUI_RenderingContext& contex
     {
         SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
 
-        SDL_FRect rect = buttonRect(i, screenPosition, buttonWidth, buttonHeight);
+        SDL_FRect rect = buttonRect(i);
 
         SDL_RenderFillRect(renderer, &rect);
 
@@ -84,11 +84,23 @@ void GUIList::render(SDL_Renderer * renderer, const GUI_RenderingContext& contex
 
 void GUIList::update(const UpdateContext& context) {
     GUIRect::update(context);
-    //for (int i = 0; i < options.size(); i++)
-    //{
-    //    SDL_FRect rect = buttonRect(i,)
-    //    if(context.mousePosition)
-    //}
+
+    float mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    buttonWidth = dimensions.x - outerPadding * 2;
+    for (int i = 0; i < options.size(); i++)
+    {
+        SDL_FRect rect = buttonRect(i);
+        Vector2Int tl(rect.x, rect.y);
+        Vector2Int br(rect.x + rect.w, rect.y + rect.h);
+
+        if (mouseX >= tl.x && mouseX <= br.x && mouseY >= tl.y && mouseY <= br.y)
+        {
+            highlighted_index = i;
+            break;
+        }
+    }
 }
 
 void GUIList::handleEvent(const SDL_Event event)
@@ -116,9 +128,21 @@ void GUIList::handleEvent(const SDL_Event event)
     }
     else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
+        float mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
         for (int i = 0; i < options.size(); i++)
         {
-            //buttonRect(i,TLC)
+            SDL_FRect rect = buttonRect(i);
+            Vector2Int tl(rect.x, rect.y);
+            Vector2Int br(rect.x + rect.w, rect.y + rect.h);
+
+            if (mouseX >= tl.x && mouseX <= br.x && mouseY >= tl.y && mouseY <= br.y)
+            {
+                onSelect(options.at(highlighted_index));
+                selected_index = highlighted_index;
+                break;
+            }
         }
     }
 

@@ -88,11 +88,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
-        float mouseX, mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-        Vector2Float mousePosition(mouseX, mouseY);
-
-        UpdateContext updateContext(deltaTime, mousePosition, screenDimensions);
+        UpdateContext updateContext(deltaTime, screenDimensions);
 
         // update
         grid.update(deltaTime);

@@ -10,11 +10,12 @@
 class GUIList : public GUIRect
 {
 private:
-    SDL_FRect buttonRect(int i, Vector2Int TLCorner, int buttonWidth, int buttonHeight) const;
+    SDL_FRect buttonRect(int i) const;
 
     int outerPadding = 10;
     int marginY = 5; //margin between buttons
     int buttonHeight = 25;
+    int buttonWidth;
 
 protected:
     std::vector <std::string> options;
