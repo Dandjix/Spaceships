@@ -148,6 +148,7 @@
     <ClCompile Include="SpaceShipBlueprint.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="tinyfiledialogs.cpp" />
+    <ClInclude Include="Cursor.h" />
     <ClInclude Include="fonts.h" />
     <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="Game.h" />

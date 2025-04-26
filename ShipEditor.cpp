@@ -39,7 +39,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
 
-    ShipBuildingGrid grid(64);
+    ShipBuildingGrid grid(64,&camera);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
 
@@ -121,12 +121,17 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             actionsList.handleEvent(event);
         }
 
+        camera.setScreenDimensions(screenDimensions);
+
         //creating update context
         last = now;
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
-        UpdateContext updateContext(deltaTime, screenDimensions);
+        UpdateContext updateContext = { 
+            deltaTime, 
+            screenDimensions,
+        };
 
         // update
         grid.update(updateContext);
@@ -156,8 +161,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         SDL_RenderClear(renderer);
 
         //render
-        grid.render(renderer, renderingContext);
         camera.render(renderer, renderingContext);
+        grid.render(renderer, renderingContext);
 
         //render debug
         grid.debugRender(renderer, renderingContext);

@@ -7,6 +7,8 @@
 #include "Camera.h"
 #include "Player.h"
 
+#include "Cursor.h"
+
 #include "CargoContainer.h"
 #include "Sphere.h"
 #include "DebugGrid.h"
@@ -22,6 +24,8 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     Camera camera(Vector2Int(0, 0), 0, 1);
     Player player(Vector2Int(0, 0), 0, 2000, &camera); // Start at center, 200 px/sec
     camera.setPlayer(&player);
+
+    Cursor cursor(&camera);
 
     CargoContainer container1(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
     CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
@@ -46,24 +50,28 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
-        const UpdateContext context =
+        const UpdateContext updateContext =
         {
             deltaTime,
             Vector2Int(0,0)
         };
 
-        // update
-        player.update(context);
-        container1.update(context);
-        container2.update(context);
-        grid.update(context);
-        camera.update(context);
-        sphere.update(context);
-
         //render variable calculation
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
         Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
+        camera.setScreenDimensions(screenDimensions);
+
+        // update
+        camera.update(updateContext);
+        player.update(updateContext);
+        container1.update(updateContext);
+        container2.update(updateContext);
+        grid.update(updateContext);
+        sphere.update(updateContext);
+        cursor.update(updateContext);
+
+
         Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
 
         RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, camera.getScale());
@@ -72,12 +80,14 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         SDL_RenderClear(renderer);
 
         //render
-        grid.render(renderer, renderingContext);
+
         camera.render(renderer, renderingContext);
+        grid.render(renderer, renderingContext);
         player.render(renderer, renderingContext);
         container1.render(renderer, renderingContext);
         container2.render(renderer, renderingContext);
         sphere.render(renderer, renderingContext);
+        cursor.render(renderer, renderingContext);
 
         //render debug
         grid.debugRender(renderer, renderingContext);

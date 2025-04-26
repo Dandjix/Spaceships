@@ -6,7 +6,7 @@
 class Camera : public Entity {  // Inherit from Entity
 protected:
     Entity* player = nullptr;  // Pointer to the player entity
-
+    Vector2Int screenDimensions = Vector2Int(0, 0);
 private :
     float scale;
 public:
@@ -52,6 +52,10 @@ public:
         return scale;
     }
 
+    void setScreenDimensions(Vector2Int screenDimensions)
+    {
+        this->screenDimensions = screenDimensions;
+    }
 
 
     /// <summary>
@@ -93,4 +97,16 @@ public:
         int y = static_cast<int>( position.y - (screenDimensions.y / 2)*Vectors::getFactor()*getScale());  // Offset Y to center the camera
         return Vector2Int(x, y);
     }
+
+    Vector2Int screenToWorldPoint(Vector2Float screenPosition) const {
+        screenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
+        Vector2Float rotated = screenPosition.rotate(-getAngle());
+        Vector2Float scaled = rotated * getScale();
+        Vector2Int worldPoint = Vectors::toVector2Int(scaled).scaleToWorldPosition() + getPosition();
+        return worldPoint;
+    }
+
+    //Vector2Float worldToScreenPoint(Vector2Int worldPosition) const {
+    //use the context method for that. If you are sad that this method does not exist, just stop being sad. It's that simple folks.
+    //}
 };

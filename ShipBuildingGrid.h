@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Rendering.h"
 #include <SDL3/SDL.h>
+#include "Camera.h"
 
 class ShipBuildingGrid : public Entity
 {
@@ -9,6 +10,7 @@ protected :
 	int sizePx;
 	Vector2Int dimensions;
 	bool resizing = false;
+	Camera * camera;
 
 	void renderFixed(SDL_Renderer* renderer, const RenderingContext& context)
 	{
@@ -37,8 +39,9 @@ protected :
 		}
 	}
 
+
 public:
-	ShipBuildingGrid(int sizePx) :Entity(Vector2Int(0, 0), 0),sizePx(sizePx),dimensions(Vector2Int(8,16)) {}
+	ShipBuildingGrid(int sizePx, Camera * camera) :Entity(Vector2Int(0, 0), 0.0f),sizePx(sizePx),dimensions(Vector2Int(8,16)), camera(camera) {}
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
 		renderFixed(renderer, context);
