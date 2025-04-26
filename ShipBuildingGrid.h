@@ -6,7 +6,7 @@
 
 class ShipBuildingGrid : public Entity
 {
-private :
+private:
 	Vector2Int getNewDimensions()
 	{
 		float mouseX, mouseY;
@@ -51,6 +51,8 @@ private :
 		}
 	}
 
+	std::function<void(Vector2Int dimensions)> onResize;
+
 protected :
 	int sizePx;
 	Vector2Int dimensions;
@@ -71,7 +73,9 @@ protected :
 	}
 
 public:
-	ShipBuildingGrid(int sizePx, Camera * camera) :Entity(Vector2Int(0, 0), 0.0f),sizePx(sizePx),dimensions(Vector2Int(8,16)), camera(camera) {}
+	ShipBuildingGrid(int sizePx, Camera * camera, std::function<void(Vector2Int dimensions)> onResize) 
+		:Entity(Vector2Int(0, 0), 0.0f)
+		,sizePx(sizePx),dimensions(Vector2Int(8,16)), camera(camera), onResize(onResize) {}
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
 		if (!resizing)
@@ -100,6 +104,7 @@ public:
 		{
 			if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
 			{
+				onResize(dimensions);
 				dimensions = getNewDimensions();
 				resizing = false;
 			}

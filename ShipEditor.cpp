@@ -39,7 +39,14 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
 
-    ShipBuildingGrid grid(64,&camera);
+    ShipBuildingGrid grid(
+        64,
+        &camera,
+        [](Vector2Int newDimensions)
+        {
+            std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
+        }
+    );
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
 
