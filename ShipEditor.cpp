@@ -35,24 +35,25 @@ void ResizeGrid(Vector2Int newSize)
 
 MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
-
-
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
 
-    ShipBuildingGrid grid(
-        64,
-        &camera,
-        [](Vector2Int newDimensions)
-        {
-            std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
-        }
-    );
+
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
 
     float deltaTime = 0.0f;
 
     MenuNavigation destination = ShipEditor;
+
+    ShipBuildingGrid grid(
+        64,
+        &camera,
+        Vector2Int(16, 16),
+        [](Vector2Int newDimensions)
+        {
+            std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
+        }
+    );
 
     std::vector<std::string>actionOptions =
     {

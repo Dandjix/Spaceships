@@ -73,9 +73,9 @@ protected :
 	}
 
 public:
-	ShipBuildingGrid(int sizePx, Camera * camera, std::function<void(Vector2Int dimensions)> onResize) 
+	ShipBuildingGrid(int sizePx, Camera * camera, Vector2Int dimensions, std::function<void(Vector2Int dimensions)> onResize) 
 		:Entity(Vector2Int(0, 0), 0.0f)
-		,sizePx(sizePx),dimensions(Vector2Int(8,16)), camera(camera), onResize(onResize) {}
+		,sizePx(sizePx),dimensions(dimensions), camera(camera), onResize(onResize) {}
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
 		if (!resizing)
@@ -104,8 +104,9 @@ public:
 		{
 			if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
 			{
-				onResize(dimensions);
-				dimensions = getNewDimensions();
+				Vector2Int newDimensions = getNewDimensions();
+				onResize(newDimensions);
+				dimensions = newDimensions;
 				resizing = false;
 			}
 		}
