@@ -6,17 +6,29 @@
 
 class ShipBuildingGrid : public Entity
 {
-protected :
-	int sizePx;
-	Vector2Int dimensions;
-	bool resizing = false;
-	Camera * camera;
+private :
+	Vector2Int getNewDimensions()
+	{
+		float mouseX, mouseY;
+		SDL_GetMouseState(&mouseX, &mouseY);
+		Vector2Int worldCursorPoint = camera->screenToWorldPoint(Vector2Float(mouseX, mouseY));
 
-	void renderFixed(SDL_Renderer* renderer, const RenderingContext& context)
+		int factor = Vectors::getFactor() * sizePx;
+
+		Vector2Int newDimensions = worldCursorPoint / factor;
+
+		newDimensions = Vector2Int(newDimensions.x + 1, newDimensions.y + 1);
+
+		if (newDimensions.x <= 0 || newDimensions.y <= 0)
+			newDimensions = Vector2Int(1, 1);
+
+		return newDimensions;
+	}
+
+	void drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context)
 	{
 		int hLength = sizePx * dimensions.x * Vectors::getFactor();
 		int vLength = sizePx * dimensions.y * Vectors::getFactor();
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		for (int x = 0; x <= dimensions.x; x++)
 		{
 			int x_coord = sizePx * x * Vectors::getFactor();
@@ -39,12 +51,37 @@ protected :
 		}
 	}
 
+protected :
+	int sizePx;
+	Vector2Int dimensions;
+	bool resizing = false;
+	Camera * camera;
+
+
+
+	void renderFixed(SDL_Renderer* renderer, const RenderingContext& context)
+	{
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		drawLines(dimensions, renderer, context);
+	}
+
+	void renderFluid(SDL_Renderer* renderer, const RenderingContext& context) {
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		drawLines(getNewDimensions(), renderer, context);
+	}
 
 public:
 	ShipBuildingGrid(int sizePx, Camera * camera) :Entity(Vector2Int(0, 0), 0.0f),sizePx(sizePx),dimensions(Vector2Int(8,16)), camera(camera) {}
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
-		renderFixed(renderer, context);
+		if (!resizing)
+		{
+			renderFixed(renderer, context);
+		}
+		else
+		{
+			renderFluid(renderer, context);
+		}
 	}
 
 	void startResizing()
@@ -57,12 +94,20 @@ public:
 		this->dimensions = dimensions;
 	}
 
-	void update(const UpdateContext & context) override
+	void handleEvent(const SDL_Event event) override
 	{
 		if (resizing)
 		{
-			float mouseX, mouseY;
-			SDL_GetMouseState(&mouseX, &mouseY);
+			if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+			{
+				dimensions = getNewDimensions();
+				resizing = false;
+			}
 		}
+	}
+
+	void update(const UpdateContext & context) override
+	{
+
 	}
 };

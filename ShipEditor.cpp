@@ -116,6 +116,9 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             if (event.type == SDL_EVENT_QUIT) {
                 destination = Quit;
             }
+            //important : grid must be registered before actions or resize will end instantly
+            grid.handleEvent(event);
+
             camera.handleEvent(event);
             tilesList.handleEvent(event);
             actionsList.handleEvent(event);

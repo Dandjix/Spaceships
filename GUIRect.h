@@ -58,4 +58,6 @@ public:
 		screenPosition = topLeftCorner + offset;
 		dimensions = Vector2Int(w, h);
 	}
+
+	virtual void handleEvent(const SDL_Event event){}
 };
