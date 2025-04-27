@@ -58,6 +58,18 @@
     <Filter Include="Source Files\Rendering">
       <UniqueIdentifier>{71995a9d-0b3b-47ab-a781-ebfba087d6b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ShipEditor\Blueprint">
+      <UniqueIdentifier>{8a5da6df-bac7-40d6-be8c-49ed081ba8c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShipEditor\NewFilter1">
+      <UniqueIdentifier>{3171f879-f602-4a79-a675-37327743df78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShipEditor\Util">
+      <UniqueIdentifier>{b9216238-e2c9-4174-8e22-2af70f7dced7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShipEditor\Entities">
+      <UniqueIdentifier>{7a322a67-9d33-4377-b63f-267025a2bee8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
@@ -78,20 +90,11 @@
     <ClCompile Include="ShipEditor.cpp">
       <Filter>Source Files\ShipEditor</Filter>
     </ClCompile>
-    <ClCompile Include="SaveAndLoadShips.cpp">
-      <Filter>Source Files\ShipEditor</Filter>
-    </ClCompile>
     <ClCompile Include="SpaceShip.cpp">
-      <Filter>Source Files\Game\SpaceShips</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceShipBlueprint.cpp">
       <Filter>Source Files\Game\SpaceShips</Filter>
     </ClCompile>
     <ClCompile Include="tinyfiledialogs.cpp">
       <Filter>Imported</Filter>
-    </ClCompile>
-    <ClCompile Include="ShipBuildingGrid.cpp">
-      <Filter>Source Files\ShipEditor</Filter>
     </ClCompile>
     <ClCompile Include="GUIRect.cpp">
       <Filter>Source Files\GUI</Filter>
@@ -104,6 +107,18 @@
     </ClCompile>
     <ClCompile Include="fonts.cpp">
       <Filter>Source Files\GUI\Fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceShipBlueprint.cpp">
+      <Filter>Source Files\ShipEditor\Blueprint</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveAndLoadShips.cpp">
+      <Filter>Source Files\ShipEditor\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ShipBuildingGrid.cpp">
+      <Filter>Source Files\ShipEditor\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="BlueprintTilePainter.cpp">
+      <Filter>Source Files\ShipEditor\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,26 +155,14 @@
     <ClInclude Include="ShipEditor.h">
       <Filter>Source Files\ShipEditor</Filter>
     </ClInclude>
-    <ClInclude Include="FreeCamera.h">
-      <Filter>Source Files\ShipEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="SaveAndLoadShips.h">
-      <Filter>Source Files\ShipEditor</Filter>
-    </ClInclude>
     <ClInclude Include="SpaceShip.h">
       <Filter>Source Files\Game\SpaceShips</Filter>
     </ClInclude>
     <ClInclude Include="tinyfiledialogs.h">
       <Filter>Imported</Filter>
     </ClInclude>
-    <ClInclude Include="SpaceShipBlueprint.h">
-      <Filter>Source Files\Game\SpaceShips</Filter>
-    </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Imported</Filter>
-    </ClInclude>
-    <ClInclude Include="ShipBuildingGrid.h">
-      <Filter>Source Files\ShipEditor</Filter>
     </ClInclude>
     <ClInclude Include="Rendering.h">
       <Filter>Source Files\Rendering</Filter>
@@ -190,6 +193,21 @@
     </ClInclude>
     <ClInclude Include="Cursor.h">
       <Filter>Source Files\Game\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShipBlueprint.h">
+      <Filter>Source Files\ShipEditor\Blueprint</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveAndLoadShips.h">
+      <Filter>Source Files\ShipEditor\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeCamera.h">
+      <Filter>Source Files\ShipEditor\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipBuildingGrid.h">
+      <Filter>Source Files\ShipEditor\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BlueprintTilePainter.h">
+      <Filter>Source Files\ShipEditor\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

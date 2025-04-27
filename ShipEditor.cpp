@@ -11,6 +11,7 @@
 #include "ShipBuildingGrid.h"
 #include "SaveAndLoadShips.h"
 #include "SpaceShipBlueprint.h"
+#include "BlueprintTilePainter.h"
 #include "GUIList.h"
 
 const int gridSize = 64;
@@ -47,8 +48,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     ShipBuildingGrid grid(
         64,
-        &camera,
         Vector2Int(16, 16),
+		&camera,
         [](Vector2Int newDimensions)
         {
             std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
@@ -111,6 +112,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
 
+    BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
+
     while (destination == ShipEditor) {
         
         //render variable calculation
@@ -130,6 +133,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             camera.handleEvent(event);
             tilesList.handleEvent(event);
             actionsList.handleEvent(event);
+            painter.handleEvent(event);
         }
 
         camera.setScreenDimensions(screenDimensions);
@@ -147,6 +151,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         // update
         grid.update(updateContext);
         camera.update(updateContext);
+        painter.update(updateContext);
 
 
         GUI_UpdateContext gui_updateContext = {
@@ -174,6 +179,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         //render
         camera.render(renderer, renderingContext);
         grid.render(renderer, renderingContext);
+        painter.render(renderer, renderingContext);
 
         //render debug
         grid.debugRender(renderer, renderingContext);

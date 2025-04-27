@@ -1,6 +1,8 @@
 #include "SpaceShipBlueprint.h"
 #include <fstream>
 #include <sstream>
+#include <string>
+#include "Vectors.h"
 
 using json = nlohmann::json;
 
@@ -24,7 +26,33 @@ SpaceShipBlueprint SpaceShipBlueprint::loads(std::string from, std::string name)
 	json dict = json::parse(from);
 	std::string pathToExterior = dict["pathToExterior"];
 	std::vector<std::vector<Tile>> tiles = dict["tiles"];
-	return SpaceShipBlueprint(name, pathToExterior, tiles);
+	return { name, pathToExterior, tiles };
+}
+
+void SpaceShipBlueprint::resize(Vector2Int newDimensions)
+{
+	std::vector<std::vector<Tile>> newTiles = std::vector<std::vector<Tile>>(newDimensions.x);
+	for (int x = 0; x < newDimensions.x; x++)
+	{
+		newTiles[x] = std::vector<Tile>(newDimensions.y);
+		for (int y = 0; y < newDimensions.y; y++)
+		{
+			if (x < tiles.size() && y < tiles[0].size())
+			{
+				newTiles[x][y] = tiles[x][y];
+			}
+			else
+			{
+				newTiles[x][y] = Tile::Void;
+			}
+		}
+	}
+	tiles = newTiles;
+}
+
+void SpaceShipBlueprint::paint(int x, int y, Tile tileToPaint)
+{
+	tiles[x][y] = tileToPaint;
 }
 
 SpaceShipBlueprint SpaceShipBlueprint::load(std::string path)

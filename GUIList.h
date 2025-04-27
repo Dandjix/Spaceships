@@ -24,6 +24,8 @@ protected:
     int highlighted_index = 0;
     int selected_index = -1;
 public:
+    std::string getSelectedOption();
+
     GUIList(
         Anchor anchor,
         Vector2Int offset,

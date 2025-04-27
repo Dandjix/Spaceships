@@ -7,25 +7,7 @@
 class ShipBuildingGrid : public Entity
 {
 private:
-	Vector2Int getNewDimensions()
-	{
-		float mouseX, mouseY;
-		SDL_GetMouseState(&mouseX, &mouseY);
-		Vector2Int worldCursorPoint = camera->screenToWorldPoint(Vector2Float(mouseX, mouseY));
-
-		int factor = Vectors::getFactor() * sizePx;
-
-		Vector2Int newDimensions = worldCursorPoint / factor;
-
-		newDimensions = Vector2Int(newDimensions.x + 1, newDimensions.y + 1);
-
-		if (newDimensions.x <= 0 || newDimensions.y <= 0)
-			newDimensions = Vector2Int(1, 1);
-
-		return newDimensions;
-	}
-
-	void drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context)
+	void drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context) const
 	{
 		int hLength = sizePx * dimensions.x * Vectors::getFactor();
 		int vLength = sizePx * dimensions.y * Vectors::getFactor();
@@ -69,13 +51,14 @@ protected :
 
 	void renderFluid(SDL_Renderer* renderer, const RenderingContext& context) {
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		drawLines(getNewDimensions(), renderer, context);
+		Vector2Int newDimensions = getMouseCoordinates() + Vector2Int(1,1);
+		drawLines(newDimensions, renderer, context);
 	}
 
 public:
-	ShipBuildingGrid(int sizePx, Camera * camera, Vector2Int dimensions, std::function<void(Vector2Int dimensions)> onResize) 
-		:Entity(Vector2Int(0, 0), 0.0f)
-		,sizePx(sizePx),dimensions(dimensions), camera(camera), onResize(onResize) {}
+	ShipBuildingGrid(int sizePx, Vector2Int dimensions, Camera * camera, std::function<void(Vector2Int dimensions)> onResize) 
+		:Entity(Vector2Int(0, 0), std::nullopt)
+		,sizePx(sizePx),dimensions(dimensions), resizing(false), camera(camera), onResize(onResize) {}
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
 		if (!resizing)
@@ -86,6 +69,29 @@ public:
 		{
 			renderFluid(renderer, context);
 		}
+	}
+
+	int getSizePx() const
+	{
+		return sizePx;
+	}
+
+	Vector2Int getMouseCoordinates() const
+	{
+		float mouseX, mouseY;
+		SDL_GetMouseState(&mouseX, &mouseY);
+		Vector2Int worldCursorPoint = camera->screenToWorldPoint(Vector2Float(mouseX, mouseY));
+
+		int factor = Vectors::getFactor() * sizePx;
+
+		Vector2Int newDimensions = worldCursorPoint / factor;
+
+		newDimensions = Vector2Int(newDimensions.x, newDimensions.y);
+
+		if (newDimensions.x <= 0 || newDimensions.y <= 0)
+			newDimensions = Vector2Int(0, 0);
+
+		return newDimensions;
 	}
 
 	void startResizing()
@@ -104,7 +110,7 @@ public:
 		{
 			if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
 			{
-				Vector2Int newDimensions = getNewDimensions();
+				Vector2Int newDimensions = getMouseCoordinates() + Vector2Int(1,1);
 				onResize(newDimensions);
 				dimensions = newDimensions;
 				resizing = false;
