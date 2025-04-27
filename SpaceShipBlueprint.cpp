@@ -4,6 +4,7 @@
 #include <string>
 #include "Vectors.h"
 #include <SDL3/SDL.h>
+#include "Tile.h"
 
 using json = nlohmann::json;
 

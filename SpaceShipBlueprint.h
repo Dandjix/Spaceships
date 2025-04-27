@@ -5,14 +5,8 @@
 #include "json.hpp"
 #include <iostream>
 #include "Vectors.h"
-enum class Tile
-{
-	Void,
-	Floor,
-	Wall,
-	DoorH,
-	DoorV,
-};
+#include "Tile.h"
+
 
 
 /// <summary>

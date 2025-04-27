@@ -6,6 +6,7 @@
 #include "SpaceShipBlueprint.h"
 #include "Camera.h"
 #include "ShipBuildingGrid.h"
+#include "Tile.h"
 class BlueprintTilePainter : public Entity {
 protected :
 	bool enabled = true;
