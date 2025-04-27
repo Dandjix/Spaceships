@@ -2,7 +2,10 @@
 #include <SDL3/SDL.h>
 #include "Vectors.h"
 
-BlueprintTilePainter::BlueprintTilePainter(SpaceShipBlueprint* blueprint, ShipBuildingGrid* grid, Tile tileToPaint) : Entity(Vector2Int(0, 0), std::nullopt), blueprint(blueprint),grid(grid),tileToPaint(tileToPaint) {}
+BlueprintTilePainter::BlueprintTilePainter(SpaceShipBlueprint* blueprint, ShipBuildingGrid* grid, Tile tileToPaint) : Entity(Vector2Int(0, 0), std::nullopt), blueprint(blueprint), grid(grid), tileToPaint(tileToPaint)
+{
+
+}
 
 void BlueprintTilePainter::setTileToPaint(Tile tileToPaint)
 {
@@ -28,12 +31,11 @@ void BlueprintTilePainter::handleEvent(const SDL_Event event)
 {
 	if (enabled && event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
 	{
-		float mouseX, mouseY;
-		SDL_GetMouseState(&mouseX, &mouseY);
-		Vector2Int worldPosition = camera->screenToWorldPoint(Vector2Float(mouseX, mouseY));
 		Vector2Int coords = grid->getMouseCoordinates();
-		blueprint->paint(coords.x,coords.y,tileToPaint);
+		if (coords == Vector2Int(-1, -1))
+			return;
 
+		blueprint->paint(coords.x, coords.y, tileToPaint);
 	}
 }
 
@@ -41,6 +43,8 @@ void BlueprintTilePainter::handleEvent(const SDL_Event event)
 void BlueprintTilePainter::render(SDL_Renderer* renderer, const RenderingContext& context)
 {
 	Vector2Int coords = grid->getMouseCoordinates();
+	if (coords == Vector2Int(-1, -1))
+		return;
 
 	int pxGridSize = grid->getSizePx();
 

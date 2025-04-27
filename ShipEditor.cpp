@@ -42,17 +42,24 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
 
+    Vector2Int initialDimensions = Vector2Int(16, 16);
+
     float deltaTime = 0.0f;
 
     MenuNavigation destination = ShipEditor;
 
+	//SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
+	std::vector<std::vector<Tile>> blueprintTiles(initialDimensions.x, std::vector<Tile>(initialDimensions.y, Tile::Void));
+	SpaceShipBlueprint blueprint = SpaceShipBlueprint("Untitled", "", blueprintTiles);
+
     ShipBuildingGrid grid(
         64,
-        Vector2Int(16, 16),
+        initialDimensions,
 		&camera,
-        [](Vector2Int newDimensions)
+        [&blueprint](Vector2Int newDimensions)
         {
-            std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
+            //std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
+            blueprint.resize(newDimensions);
         }
     );
 
@@ -109,9 +116,6 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         true
     );
 
-
-    SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
-
     BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
 
     while (destination == ShipEditor) {
@@ -127,13 +131,12 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             if (event.type == SDL_EVENT_QUIT) {
                 destination = Quit;
             }
-            //important : grid must be registered before actions or resize will end instantly
+			painter.handleEvent(event);
+			//important : grid must be registered before actions or resize will end instantly
             grid.handleEvent(event);
-
             camera.handleEvent(event);
             tilesList.handleEvent(event);
             actionsList.handleEvent(event);
-            painter.handleEvent(event);
         }
 
         camera.setScreenDimensions(screenDimensions);

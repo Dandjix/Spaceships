@@ -99,10 +99,17 @@ public:
     }
 
     Vector2Int screenToWorldPoint(Vector2Float screenPosition) const {
-        screenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
-        Vector2Float rotated = screenPosition.rotate(-getAngle());
+        //SDL_Log("in function");
+		//SDL_Log("has angle : %b", hasAngle());
+
+        //SDL_Log("angle : %f", getAngle());
+        Vector2Float offsetScreenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
+
+        Vector2Float rotated = offsetScreenPosition.rotate(-getAngle());
         Vector2Float scaled = rotated * getScale();
+
         Vector2Int worldPoint = Vectors::toVector2Int(scaled).scaleToWorldPosition() + getPosition();
+
         return worldPoint;
     }
 

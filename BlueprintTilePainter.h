@@ -11,10 +11,10 @@ protected :
 	bool enabled = true;
 	SpaceShipBlueprint * blueprint;
 	ShipBuildingGrid* grid;
-	Camera* camera;
 	Tile tileToPaint;
 public:
-	BlueprintTilePainter(SpaceShipBlueprint* blueprint,ShipBuildingGrid * grid, Tile tileToPaint);
+
+	BlueprintTilePainter(SpaceShipBlueprint* blueprint, ShipBuildingGrid* grid, Tile tileToPaint);
 
 	void setTileToPaint(Tile tileToPaint);
 

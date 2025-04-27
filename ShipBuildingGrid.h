@@ -3,35 +3,12 @@
 #include "Rendering.h"
 #include <SDL3/SDL.h>
 #include "Camera.h"
+#include <functional>
 
 class ShipBuildingGrid : public Entity
 {
 private:
-	void drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context) const
-	{
-		int hLength = sizePx * dimensions.x * Vectors::getFactor();
-		int vLength = sizePx * dimensions.y * Vectors::getFactor();
-		for (int x = 0; x <= dimensions.x; x++)
-		{
-			int x_coord = sizePx * x * Vectors::getFactor();
-			Vector2Int start(x_coord, 0);
-			Vector2Int end(x_coord, vLength);
-			Vector2Float startS, endS;
-			startS = context.toScreenPoint(start);
-			endS = context.toScreenPoint(end);
-			SDL_RenderLine(renderer, startS.x, startS.y, endS.x, endS.y);
-		}
-		for (int y = 0; y <= dimensions.y; y++)
-		{
-			int y_coord = sizePx * y * Vectors::getFactor();
-			Vector2Int start(0, y_coord);
-			Vector2Int end(hLength, y_coord);
-			Vector2Float startS, endS;
-			startS = context.toScreenPoint(start);
-			endS = context.toScreenPoint(end);
-			SDL_RenderLine(renderer, startS.x, startS.y, endS.x, endS.y);
-		}
-	}
+	void drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context) const;
 
 	std::function<void(Vector2Int dimensions)> onResize;
 
@@ -43,83 +20,26 @@ protected :
 
 
 
-	void renderFixed(SDL_Renderer* renderer, const RenderingContext& context)
-	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		drawLines(dimensions, renderer, context);
-	}
+	void renderFixed(SDL_Renderer* renderer, const RenderingContext& context);
 
-	void renderFluid(SDL_Renderer* renderer, const RenderingContext& context) {
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		Vector2Int newDimensions = getMouseCoordinates() + Vector2Int(1,1);
-		drawLines(newDimensions, renderer, context);
-	}
+	void renderFluid(SDL_Renderer* renderer, const RenderingContext& context);
 
 public:
-	ShipBuildingGrid(int sizePx, Vector2Int dimensions, Camera * camera, std::function<void(Vector2Int dimensions)> onResize) 
-		:Entity(Vector2Int(0, 0), std::nullopt)
-		,sizePx(sizePx),dimensions(dimensions), resizing(false), camera(camera), onResize(onResize) {}
+	ShipBuildingGrid(int sizePx, Vector2Int dimensions, Camera * camera, std::function<void(Vector2Int dimensions)> onResize);
 
-	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
-		if (!resizing)
-		{
-			renderFixed(renderer, context);
-		}
-		else
-		{
-			renderFluid(renderer, context);
-		}
-	}
+	void render(SDL_Renderer* renderer, const RenderingContext& context) override;
 
-	int getSizePx() const
-	{
-		return sizePx;
-	}
+	int getSizePx() const;
 
-	Vector2Int getMouseCoordinates() const
-	{
-		float mouseX, mouseY;
-		SDL_GetMouseState(&mouseX, &mouseY);
-		Vector2Int worldCursorPoint = camera->screenToWorldPoint(Vector2Float(mouseX, mouseY));
+	Vector2Int getMouseCoordinates(bool strict = true) const;
 
-		int factor = Vectors::getFactor() * sizePx;
+	void startResizing();
 
-		Vector2Int newDimensions = worldCursorPoint / factor;
+	Camera* getCamera();
 
-		newDimensions = Vector2Int(newDimensions.x, newDimensions.y);
+	void setDimensions(Vector2Int dimensions);
 
-		if (newDimensions.x <= 0 || newDimensions.y <= 0)
-			newDimensions = Vector2Int(0, 0);
+	void handleEvent(const SDL_Event event) override;
 
-		return newDimensions;
-	}
-
-	void startResizing()
-	{
-		resizing = true;
-	}
-
-	void setDimensions(Vector2Int dimensions)
-	{
-		this->dimensions = dimensions;
-	}
-
-	void handleEvent(const SDL_Event event) override
-	{
-		if (resizing)
-		{
-			if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
-			{
-				Vector2Int newDimensions = getMouseCoordinates() + Vector2Int(1,1);
-				onResize(newDimensions);
-				dimensions = newDimensions;
-				resizing = false;
-			}
-		}
-	}
-
-	void update(const UpdateContext & context) override
-	{
-
-	}
+	void update(const UpdateContext & context) override;
 };
