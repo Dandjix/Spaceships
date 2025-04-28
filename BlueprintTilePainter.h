@@ -25,8 +25,6 @@ public:
 
 	void update(const UpdateContext& context) override;
 
-	void handleEvent(const SDL_Event event) override;
-
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override;
 
 	void setBlueprint(SpaceShipBlueprint* blueprint);

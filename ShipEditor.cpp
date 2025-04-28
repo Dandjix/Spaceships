@@ -13,6 +13,8 @@
 #include "SpaceShipBlueprint.h"
 #include "BlueprintTilePainter.h"
 #include "GUIList.h"
+#include "Tile.h"
+#include "BlueprintEditorAppearance.h"
 
 const int gridSize = 64;
 
@@ -36,6 +38,8 @@ void ResizeGrid(Vector2Int newSize)
 
 MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
+    Tiles::loadAll(renderer);
+
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
 
 
@@ -53,7 +57,6 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 	SpaceShipBlueprint blueprint = SpaceShipBlueprint("Untitled", "", blueprintTiles);
 
     ShipBuildingGrid grid(
-        64,
         initialDimensions,
 		&camera,
         [&blueprint](Vector2Int newDimensions)
@@ -96,6 +99,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         }
        );
 
+	BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
+
     std::vector<std::string>tileOptions =
     {
         "Void",
@@ -110,13 +115,13 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         100,
         GUI_Fill,
         tileOptions,
-        [](std::string option) {
-            std::cout << "selected " << option << std::endl;
+        [&painter](std::string option) {
+            painter.setTileToPaint(Tiles::tileFromName(option));
         },
         true
     );
 
-    BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
+    BlueprintEditorAppearance appearance(&blueprint);
 
     while (destination == ShipEditor) {
         
@@ -137,6 +142,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             camera.handleEvent(event);
             tilesList.handleEvent(event);
             actionsList.handleEvent(event);
+            appearance.handleEvent(event);
         }
 
         camera.setScreenDimensions(screenDimensions);
@@ -155,6 +161,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         grid.update(updateContext);
         camera.update(updateContext);
         painter.update(updateContext);
+        appearance.update(updateContext);
 
 
         GUI_UpdateContext gui_updateContext = {
@@ -181,6 +188,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
         //render
         camera.render(renderer, renderingContext);
+        appearance.render(renderer, renderingContext);
         grid.render(renderer, renderingContext);
         painter.render(renderer, renderingContext);
 

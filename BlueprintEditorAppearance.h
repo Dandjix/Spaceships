@@ -5,6 +5,9 @@ class BlueprintEditorAppearance : public Entity
 {
 protected:
 	SpaceShipBlueprint* blueprint;
+
+	void renderTile(SDL_Renderer* renderer, const RenderingContext& context,Tile tile, int x, int y);
+
 public:
 	BlueprintEditorAppearance(SpaceShipBlueprint * blueprint);
 

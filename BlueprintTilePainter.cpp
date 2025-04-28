@@ -25,12 +25,7 @@ void BlueprintTilePainter::setEnabled(bool enabled)
 
 void BlueprintTilePainter::update(const UpdateContext& context)
 {
-
-}
-
-void BlueprintTilePainter::handleEvent(const SDL_Event event)
-{
-	if (enabled && event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+	if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_LMASK)
 	{
 		Vector2Int coords = grid->getMouseCoordinates();
 		if (coords == Vector2Int(-1, -1))

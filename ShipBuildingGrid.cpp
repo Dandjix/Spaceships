@@ -1,5 +1,6 @@
 #include "ShipBuildingGrid.h"
 #include "Vectors.h"
+#include "Tile.h"
 
 void ShipBuildingGrid::drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context) const
 {
@@ -40,8 +41,8 @@ void ShipBuildingGrid::renderFluid(SDL_Renderer* renderer, const RenderingContex
 	drawLines(newDimensions, renderer, context);
 }
 
-ShipBuildingGrid::ShipBuildingGrid(int sizePx, Vector2Int dimensions, Camera* camera, std::function<void(Vector2Int dimensions)> onResize) :Entity(Vector2Int(0, 0), std::nullopt)
-, sizePx(sizePx), dimensions(dimensions), resizing(false), camera(camera), onResize(onResize)
+ShipBuildingGrid::ShipBuildingGrid(Vector2Int dimensions, Camera* camera, std::function<void(Vector2Int dimensions)> onResize) :Entity(Vector2Int(0, 0), std::nullopt)
+, sizePx(Tiles::tileSizePx), dimensions(dimensions), resizing(false), camera(camera), onResize(onResize)
 {
 
 }
