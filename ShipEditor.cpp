@@ -79,18 +79,23 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         100,
         150,
         actionOptions,
-        [&destination,&grid](std::string option) {
+        [&destination,&grid,&blueprint](std::string option) {
             if (option == "Resize")
             {
                 grid.startResizing();
             }
             else if (option == "Save")
             {
-
+				SaveShip(blueprint.dumps());
             }
             else if (option == "Load")
             {
-
+				std::string name;
+				std::string content = LoadShip(&name);
+				blueprint = SpaceShipBlueprint::loads(content, name);
+                Vector2Int dimensions = Vector2Int(blueprint.tiles.size(), blueprint.tiles[0].size());
+                grid.setDimensions(dimensions);
+                
             }
             else if (option == "Exit")
             {

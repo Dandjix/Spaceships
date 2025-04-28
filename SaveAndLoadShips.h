@@ -4,4 +4,4 @@
 
 void SaveShip(std::string blueprint);
 
-std::string LoadShip();
+std::string LoadShip(std::string * name = nullptr);

@@ -21,7 +21,7 @@ class SpaceShipBlueprint
 
 		SpaceShipBlueprint(std::string name,std::string pathToExterior,std::vector<std::vector<Tile>> tiles);
 
-		std::string dumps();
+		std::string dumps() const;
 
 		void resize(Vector2Int newDimensions);
 

@@ -15,7 +15,7 @@ SpaceShipBlueprint::SpaceShipBlueprint(std::string name, std::string pathToExter
 	this->tiles = tiles;
 }
 
-std::string SpaceShipBlueprint::dumps()
+std::string SpaceShipBlueprint::dumps() const
 {
 	json dict;
 	dict["pathToExterior"] = pathToExterior;

@@ -29,7 +29,7 @@ std::string readFileToString(const char* filePath)
     return fileContents;  // Return the string containing file contents
 }
 
-void SaveShip(const std::string bluePrint)
+void SaveShip(const std::string blueprint)
 {
     const char* filePath = tinyfd_saveFileDialog(
         "Save Ship File",            // Title of the dialog
@@ -43,7 +43,7 @@ void SaveShip(const std::string bluePrint)
     {
         std::ofstream ShipFile(filePath);
 
-        ShipFile << bluePrint;
+        ShipFile << blueprint;
 
         ShipFile.close();
     }
@@ -53,7 +53,7 @@ void SaveShip(const std::string bluePrint)
     }
 }
 
-std::string LoadShip()
+std::string LoadShip(std::string * name)
 {
     const char* filePath = tinyfd_openFileDialog(
         "Open Ship File",            // Title of the dialog
@@ -67,6 +67,17 @@ std::string LoadShip()
     if (filePath) // Check if a file was selected
     {
         std::cout << "File selected: " << filePath << std::endl;
+
+		char drive[_MAX_DRIVE];
+		char dir[_MAX_DIR];
+		char fname[_MAX_FNAME];
+		char ext[_MAX_EXT];
+
+        _splitpath_s(filePath, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
+
+        if(name != nullptr)
+            *name = std::string(fname);
+
         std::ifstream shipFile(filePath);
         if (!shipFile) {
             std::cout << "Failed to open file: " << filePath << std::endl;
