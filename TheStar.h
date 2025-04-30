@@ -1,5 +1,6 @@
 #pragma once
 #include "TarotCard.h"
+#include <string>
 
 class TheStar : public TarotCard
 {

@@ -12,6 +12,8 @@
 #include "CargoContainer.h"
 #include "Sphere.h"
 #include "DebugGrid.h"
+#include "SpaceShipBlueprint.h"
+#include "SpaceShip.h"
 
 
 MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
@@ -31,6 +33,9 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     DebugGrid grid(0, 0, 64);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
+
+    SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/battleship.json");
+    SpaceShip ship = SpaceShip(&blueprint);
 
     float deltaTime = 0.0f;
 

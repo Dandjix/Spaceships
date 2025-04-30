@@ -22,9 +22,6 @@
     <Filter Include="Source Files\Game\Entities">
       <UniqueIdentifier>{8223b471-0934-4597-b0f2-693bbb8acab6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Math">
-      <UniqueIdentifier>{1d358f22-fd1b-416a-964a-f71caafee296}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Objects">
       <UniqueIdentifier>{b58fdedf-8c67-4d4a-9e93-151ec500870b}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,15 @@
     </Filter>
     <Filter Include="Source Files\ShipEditor\Entities">
       <UniqueIdentifier>{7a322a67-9d33-4377-b63f-267025a2bee8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tarot">
+      <UniqueIdentifier>{cbc766eb-e503-45f8-840c-87a0cfefa185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tarot\Cards">
+      <UniqueIdentifier>{f9927c66-a2a1-4399-89b1-8d20a4495620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{1d358f22-fd1b-416a-964a-f71caafee296}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +132,12 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="AdjacencyListGraph.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="TarotCard.cpp">
+      <Filter>Source Files\Tarot</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CargoContainer.h">
@@ -147,7 +159,7 @@
       <Filter>Source Files\Game\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Vectors.h">
-      <Filter>Source Files\Game\Math</Filter>
+      <Filter>Source Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Source Files\MainMenu</Filter>
@@ -220,6 +232,18 @@
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Source Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="CardinalDirections.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="AdjacencyListGraph.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="TarotCard.h">
+      <Filter>Source Files\Tarot</Filter>
+    </ClInclude>
+    <ClInclude Include="TheStar.h">
+      <Filter>Source Files\Tarot\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
