@@ -4,6 +4,7 @@
 
 class TheStar : public TarotCard
 {
+public:
 	std::string getDescription() override
 	{
 		return "- My Amy, what is this, some kind of hotline ? - All entities take 10x damage, weapons always drop loaded from enemies. You cannot store weapons in the inventory. You cannot reload weapons.";

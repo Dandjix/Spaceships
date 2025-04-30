@@ -9,6 +9,7 @@
 /// </summary>
 class TarotCard
 {
+public:
 	virtual std::string getDescription() = 0;
 	virtual std::string getTitle() = 0;
 	virtual int getIndex() = 0;
