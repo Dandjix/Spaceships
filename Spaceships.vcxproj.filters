@@ -132,9 +132,6 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="AdjacencyListGraph.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
     <ClCompile Include="TarotCard.cpp">
       <Filter>Source Files\Tarot</Filter>
     </ClCompile>

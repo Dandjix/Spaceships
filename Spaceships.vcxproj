@@ -137,9 +137,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AdjacencyListGraph.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="BindableProperty.cpp" />
     <ClCompile Include="BlueprintEditorAppearance.cpp" />
     <ClCompile Include="BlueprintTilePainter.cpp" />
