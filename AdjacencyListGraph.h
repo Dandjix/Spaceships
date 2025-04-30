@@ -22,7 +22,7 @@ public:
 	{
 		adjacencyListMap.erase(vertex);
 	}
-	const bool hasVertex(T vertex)
+	bool hasVertex(T vertex) const
 	{
 		return adjacencyListMap.find(vertex) != adjacencyListMap.end();
 	}
@@ -48,9 +48,15 @@ public:
 			});
 
 	}
-	const bool hasEdge(T vertex1, T vertex2)
+	bool hasEdge(T vertex1, T vertex2) const
 	{
-		auto& adj_list = adjacencyListMap[vertex1];
+		auto it = adjacencyListMap.find(vertex1);
+		if (it == adjacencyListMap.end())          // If not found, return false
+		{
+			return false;
+		}
+
+		const auto& adj_list = it->second;
 		for (auto pair : adj_list)
 		{
 			if (pair.first == vertex2)
@@ -59,18 +65,33 @@ public:
 		return false;
 	}
 
-	const std:: list<T> connected(T vertex)
+	std::vector<T> connected(T vertex) const
 	{
-		std::list<std::pair<T, int>>& it = adjacencyListMap[vertex];
+		const std::list<std::pair<T, int>>& it = adjacencyListMap.at(vertex);
 		std::list<T> adjacentEdges;
 		for (const std::pair<T, int>& pair : it)
 		{
 			adjacentEdges.push_back(pair.first);
 		}
-		return adjacentEdges;
+		std::vector<T> v
+		{ 
+			std::make_move_iterator(std::begin(adjacentEdges)),
+			std::make_move_iterator(std::end(adjacentEdges))
+		};
+		return v;
+	}
+	std::vector<T> getVertices() const
+	{
+		std::vector<T> vertices;
+		vertices.reserve(adjacencyListMap.size());
+		for (auto it = adjacencyListMap.begin(); it != adjacencyListMap.end(); it++)
+		{
+			vertices.push_back(it->first);
+		}
+		return vertices;
 	}
 
-	//const int pixelDistance(T vertex1, T vertex2)
+	//int pixelDistance(T vertex1, T vertex2) const
 	//{
 	//	return -1;
 	//}
@@ -84,7 +105,7 @@ public:
 	///// <param name="from"></param>
 	///// <param name="to"></param>
 	///// <returns></returns>
-	//const std::list<T> shortestPath(T from, T to)
+	//std::list<T> shortestPath(T from, T to) const
 	//{
 	//	return std::list<T>();
 	//}

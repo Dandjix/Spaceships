@@ -31,9 +31,6 @@
     <Filter Include="Source Files\MainMenu">
       <UniqueIdentifier>{33c80f7c-142e-403a-a179-2c3a462fc0d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\SpaceShips">
-      <UniqueIdentifier>{8697e410-dd45-44a2-9064-595931f35014}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\ShipEditor">
       <UniqueIdentifier>{2a20e599-f54b-440c-9b9b-da86b1fb1420}</UniqueIdentifier>
     </Filter>
@@ -76,6 +73,12 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{1d358f22-fd1b-416a-964a-f71caafee296}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SpaceShips">
+      <UniqueIdentifier>{8697e410-dd45-44a2-9064-595931f35014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SpaceShips\DataTiles">
+      <UniqueIdentifier>{5518d5bc-22c9-4d2d-a291-7e2240c3d195}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
@@ -97,7 +100,7 @@
       <Filter>Source Files\ShipEditor</Filter>
     </ClCompile>
     <ClCompile Include="SpaceShip.cpp">
-      <Filter>Source Files\Game\SpaceShips</Filter>
+      <Filter>Source Files\SpaceShips</Filter>
     </ClCompile>
     <ClCompile Include="tinyfiledialogs.cpp">
       <Filter>Imported</Filter>
@@ -171,7 +174,7 @@
       <Filter>Source Files\ShipEditor</Filter>
     </ClInclude>
     <ClInclude Include="SpaceShip.h">
-      <Filter>Source Files\Game\SpaceShips</Filter>
+      <Filter>Source Files\SpaceShips</Filter>
     </ClInclude>
     <ClInclude Include="tinyfiledialogs.h">
       <Filter>Imported</Filter>
@@ -183,7 +186,7 @@
       <Filter>Source Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
-      <Filter>Source Files\Game\SpaceShips</Filter>
+      <Filter>Source Files\SpaceShips</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Source Files\Game\Player</Filter>

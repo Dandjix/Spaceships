@@ -1,15 +1,42 @@
 #include "SpaceShip.h"
 #include "Entity.h"
 
-SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint)
+void SpaceShip::populateRooms()
 {
 
 }
 
+bool SpaceShip::roomsAreDone()
+{
+	int x = 0;
+	int y = 0;
+	for (std::vector<Tile> & column : blueprint->tiles)
+	{
+		for (Tile tile : column)
+		{
+			if(tile == Tile::Void || tile == Tile::Wall)
+				continue;
+			for (Room * room : rooms.getVertices())
+			{
+				if (!room->IncludesTilePosition(x, y))
+					return false;
+			}
+			y++;
+		}
+		y=0;
+		x++;
+	}
+	return true;
+}
+
+SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint)
+{
+	this->blueprint = blueprint;
+}
+
 const std::unordered_set<Entity*>& SpaceShip::getEntities() const
 {
-	std::unordered_set<Entity*> set = std::unordered_set<Entity*>();
-	return set;
+	return entities;
 }
 
 void SpaceShip::Dock(SpaceShip other)

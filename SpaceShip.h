@@ -3,11 +3,18 @@
 #include <unordered_set>
 #include <initializer_list>
 #include "Entity.h"
+#include "Room.h"
+#include "AdjacencyListGraph.h"
 
 class SpaceShip
 {
+private:
+	void populateRooms();
+	bool roomsAreDone();
 protected:
 	std::unordered_set<Entity*> entities;
+	AdjacencyListGraph<Room*> rooms;
+	SpaceShipBlueprint* blueprint;
 public:
 	SpaceShip(SpaceShipBlueprint * blueprint);
 
