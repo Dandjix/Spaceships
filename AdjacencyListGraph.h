@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <map>
 #include <utility>
+#include <unordered_set>
 
 template <typename T>
 /// <summary>
@@ -10,6 +11,35 @@ template <typename T>
 /// </summary>
 class AdjacencyListGraph
 {
+private:
+	std::unordered_set<T> connected_recursive(const std::unordered_set<T>& vertices, int graphDistance) const
+	{
+		if (graphDistance == 1)
+		{
+			std::unordered_set<T> adjacentVertices;
+			for (auto vertex : vertices)
+			{
+				const std::list<std::pair<T, int>>& it = adjacencyListMap.at(vertex);
+				for (const std::pair<T, int>& pair : it)
+				{
+					adjacentVertices.insert(pair.first);
+				}
+			}
+			return adjacentVertices;
+		}
+		std::unordered_set<T> next = connected_recursive(vertices, graphDistance - 1);
+		std::unordered_set<T> adjacentVertices = next;
+		for (auto& vertex : next)
+		{
+			const auto& neighbors = adjacencyListMap.at(vertex);
+			for (const auto& pair : neighbors)
+			{
+				adjacentVertices.insert(pair.first);
+			}
+		}
+		return adjacentVertices;
+	}
+
 protected:
 	std::unordered_map<T, std::list<std::pair<T,int>>> adjacencyListMap;
 
@@ -65,20 +95,19 @@ public:
 		return false;
 	}
 
-	std::vector<T> connected(T vertex) const
+	std::unordered_set<T> connected(T vertex,int graphDistance = 1) const
 	{
-		const std::list<std::pair<T, int>>& it = adjacencyListMap.at(vertex);
-		std::list<T> adjacentEdges;
-		for (const std::pair<T, int>& pair : it)
+		if (graphDistance < 1)
 		{
-			adjacentEdges.push_back(pair.first);
+			throw std::invalid_argument("graphDistance must be at least 1");
 		}
-		std::vector<T> v
-		{ 
-			std::make_move_iterator(std::begin(adjacentEdges)),
-			std::make_move_iterator(std::end(adjacentEdges))
-		};
-		return v;
+
+		std::unordered_set<T> vertices = { vertex };
+
+		auto result = connected_recursive(vertices, graphDistance);
+		result.erase(vertex);
+		return result;
+
 	}
 	std::vector<T> getVertices() const
 	{
