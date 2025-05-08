@@ -85,8 +85,6 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         SDL_RenderClear(renderer);
 
         //render
-        SDL_Log("there are %d entities immediate", ship->getEntities(EntityPriorityQueue::Immediate).size());
-
         for (Entity* entity : ship->getEntities(EntityPriorityQueue::Immediate))
         {
             entity->render(renderer, renderingContext);
