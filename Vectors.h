@@ -1,11 +1,19 @@
 #pragma once
 #include <cmath>
 #include <iostream>
+#include <functional> 
 
 inline const int factor = 64;
-// sous division des pixels
-// un facteur de 1 -> 1px = 1 unité de distance
-// facteur 1024 -> 1px = 1024 unités de distance
+// pixels subdivision
+// factor 1 : 1px = 1 distance unit
+// factor 1024 -> 1px = 1024 distance units
+
+template <class T>
+inline void hash_combine(std::size_t& s, const T& v)
+{
+	std::hash<T> h;
+	s ^= h(v) + 0x9e3779b9 + (s << 6) + (s >> 2);
+}
 
 template <typename T>
 struct Vector2 {
@@ -126,3 +134,15 @@ public:
         return Vector2Translations<float, int>::convert(vec);
     }
 };
+
+namespace std {
+	template <>
+	struct hash<Vector2Int> {
+		std::size_t operator()(const Vector2Int& v) const noexcept {
+			std::size_t seed = 0;
+			hash_combine(seed, v.x);
+			hash_combine(seed, v.y);
+			return seed;
+		}
+	};
+}

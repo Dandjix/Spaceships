@@ -23,19 +23,21 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 
     std::cout << "textures loaded";
 
-    Camera camera(Vector2Int(0, 0), 0, 1);
-    Player player(Vector2Int(0, 0), 0, 2000, &camera); // Start at center, 200 px/sec
-    camera.setPlayer(&player);
+    Camera * camera = new Camera(Vector2Int(0, 0), 0, 1);
+    Player * player = new Player(Vector2Int(0, 0), 0, 2000, camera); // Start at center, 200 pixels/sec
+    camera->setPlayer(player);
 
-    CargoContainer container1(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
-    CargoContainer container2(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
-    Sphere sphere(Vector2Int(-5, -5), 32);
-    DebugGrid grid(0, 0, 64);
+    CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
+    CargoContainer * container2 = new CargoContainer(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
+    Sphere * sphere = new Sphere(Vector2Int(-5, -5), 32);
+    DebugGrid * grid = new DebugGrid(0, 0, 64);
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
 
     SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/battleship.json");
-    SpaceShip ship = SpaceShip(&blueprint);
+    SpaceShip * ship = new SpaceShip(&blueprint);
+
+    ship->registerEntities({ camera, player, container1, container2, sphere, grid });
 
     float deltaTime = 0.0f;
 
@@ -47,7 +49,10 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
             if (event.type == SDL_EVENT_QUIT) {
                 destination = Quit;
             }
-            camera.handleEvent(event);
+            for (Entity * entity : ship->getEntities(EntityPriorityQueue::All))
+            {
+                entity->handleEvent(event);
+            }
         }
         last = now;
         now = SDL_GetTicks();
@@ -63,38 +68,35 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
         Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
-        camera.setScreenDimensions(screenDimensions);
+        camera->setScreenDimensions(screenDimensions);
 
         // update
-        camera.update(updateContext);
-        player.update(updateContext);
-        container1.update(updateContext);
-        container2.update(updateContext);
-        grid.update(updateContext);
-        sphere.update(updateContext);
+        for (Entity * entity : ship->getEntities(EntityPriorityQueue::All))
+        {
+            entity->update(updateContext);
+        }
 
 
-        Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
+        Vector2Int cameraPos = camera->getOffsetPosition(screenDimensions);
 
-        RenderingContext renderingContext(cameraPos, camera.getAngle(), screenDimensions, camera.getScale());
+        RenderingContext renderingContext(cameraPos, camera->getAngle(), screenDimensions, camera->getScale());
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
         //render
+        SDL_Log("there are %d entities immediate", ship->getEntities(EntityPriorityQueue::Immediate).size());
 
-        camera.render(renderer, renderingContext);
-        grid.render(renderer, renderingContext);
-        player.render(renderer, renderingContext);
-        container1.render(renderer, renderingContext);
-        container2.render(renderer, renderingContext);
-        sphere.render(renderer, renderingContext);
-
+        for (Entity* entity : ship->getEntities(EntityPriorityQueue::Immediate))
+        {
+            entity->render(renderer, renderingContext);
+        }
         //render debug
-        grid.debugRender(renderer, renderingContext);
-        container1.debugRender(renderer, renderingContext);
-        container2.debugRender(renderer, renderingContext);
-        sphere.debugRender(renderer, renderingContext);
+		for (Entity* entity : ship->getEntities(EntityPriorityQueue::Immediate))
+		{
+			entity->debugRender(renderer, renderingContext);
+		}
+
         SDL_RenderPresent(renderer);
     }
     return destination;

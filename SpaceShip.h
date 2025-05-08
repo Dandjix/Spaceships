@@ -1,16 +1,31 @@
 #pragma once
 #include "SpaceShipBlueprint.h"
+#include <queue>
 #include <unordered_set>
 #include <initializer_list>
 #include "Entity.h"
 #include "Room.h"
 #include "AdjacencyListGraph.h"
 
+enum class EntityPriorityQueue{
+	All,
+	Immediate,
+	Close,
+	Far,
+};
+
 class SpaceShip
 {
 private:
 	void populateRooms();
 	bool roomsAreDone();
+
+	bool shouldSkipTile(int x, int y, const std::vector<std::vector<bool>>& visited) const;
+	std::unordered_set<Vector2Int> collectConnectedFloorTiles(int startX, int startY, std::vector<std::vector<bool>>& visited) const;
+
+	Room* createRoomFromTiles(const std::unordered_set<Vector2Int>& tiles) const;
+
+	Vector2Int nextNonRoomCoords(int startX = 0, int startY = 0);
 protected:
 	std::unordered_set<Entity*> entities;
 	AdjacencyListGraph<Room*> rooms;
@@ -19,10 +34,10 @@ public:
 	SpaceShip(SpaceShipBlueprint * blueprint);
 
 	/// <summary>
-	/// returns the entities (readonly)
+	/// returns the entities (read only)
 	/// </summary>
 	/// <returns></returns>
-	const std::unordered_set<Entity*>& getEntities() const;
+	const std::unordered_set<Entity*>& getEntities(EntityPriorityQueue queue) const;
 
 	/// <summary>
 	/// docks an other ship to this ship. You will want to align them relatively well since this will snap the other ship. Undocking is future me's problem
@@ -40,6 +55,6 @@ public:
 	/// </summary>
 	/// <param name="entity"></param>
 	/// <returns></returns>
-	const void unregisterEntities(std::initializer_list<Entity*> entities);
+	void unregisterEntities(std::initializer_list<Entity*> entities);
 
 };
