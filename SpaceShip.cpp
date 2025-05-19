@@ -185,6 +185,12 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 	SDL_SetRenderDrawColor(renderer,255, 100, 100, 255);
 	for (Room * room : rooms.getVertices())
 	{
+		for (Vector2Int tile : room->tiles)
+		{
+			Vector2Int screenPos = (tile * Tiles::tileSizePx + Vector2Int(Tiles::tileSizePx,Tiles::tileSizePx)*0.5f - context.cameraPos.scaleToScreenPosition()) / context.cameraScale;
+			DebugRendering::drawCross(renderer, screenPos);
+		}
+
 		std::vector<std::pair<Vector2Int,Vector2Int>> boxes = room->getBoundingBoxes();
 		for (const std::pair<Vector2Int, Vector2Int>& bb : boxes)
 		{

@@ -6,25 +6,27 @@ class Room
 {
 protected:
 	std::unordered_set<Entity*> entities = {};
-
 	/// <summary>
 	/// first : TL position of the bounding box
 	/// second : dimensions of the bounding box
 	/// </summary>
 	std::vector<std::pair<Vector2Int,Vector2Int>> boundingBoxes;
 public :
+	std::vector<Vector2Int> tiles;
+
 	const std::vector<std::pair<Vector2Int, Vector2Int>> getBoundingBoxes() const
 	{
 		return boundingBoxes;
 	}
 
-	Room(std::vector<std::pair<Vector2Int, Vector2Int>> boundingBoxes)
-	{
-		this->boundingBoxes = boundingBoxes;
-	}
+ 	//Room(std::vector<std::pair<Vector2Int, Vector2Int>> boundingBoxes)
+ 	//{
+ 	//	this->boundingBoxes = boundingBoxes;
+ 	//}
 
 	Room(const std::unordered_set<Vector2Int>& tiles)
 	{
+		this->tiles = std::vector<Vector2Int>(tiles.begin(), tiles.end());
 		// Simple bounding box from all tiles
 		int minX = INT_MAX, minY = INT_MAX;
 		int maxX = INT_MIN, maxY = INT_MIN;
@@ -36,8 +38,12 @@ public :
 			maxX = std::max(maxX, tile.x);
 			maxY = std::max(maxY, tile.y);
 		}
+		
+		Vector2Int TL,BR;
+		TL = Vector2Int(minY, minY);
+		BR = Vector2Int(maxX, maxY);
 
-		boundingBoxes.push_back({ Vector2Int(minX, minY), Vector2Int(maxX + 1, maxY + 1) });
+		boundingBoxes.push_back({ TL, BR - TL});
 	}
 
 	void Add(Entity* entity)
