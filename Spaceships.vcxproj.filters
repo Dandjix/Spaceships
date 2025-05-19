@@ -138,6 +138,9 @@
     <ClCompile Include="TarotCard.cpp">
       <Filter>Source Files\Tarot</Filter>
     </ClCompile>
+    <ClCompile Include="TileRendering.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CargoContainer.h">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="TheStar.h">
       <Filter>Source Files\Tarot\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="TileRendering.h">
+      <Filter>Source Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

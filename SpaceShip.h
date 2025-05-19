@@ -6,8 +6,9 @@
 #include "Entity.h"
 #include "Room.h"
 #include "AdjacencyListGraph.h"
+#include "Rendering.h"
 
-enum class EntityPriorityQueue{
+enum class RoomDistance{
 	All,
 	Immediate,
 	Close,
@@ -26,6 +27,15 @@ private:
 	Room* createRoomFromTiles(const std::unordered_set<Vector2Int>& tiles) const;
 
 	Vector2Int nextNonRoomCoords(int startX = 0, int startY = 0);
+
+	/// <summary>
+	/// the room which has focus. Generally the room the player is in.
+	/// </summary>
+	Room * focusRoom = nullptr;
+	Entity* focusEntity = nullptr;
+
+	void renderRooms(SDL_Renderer* renderer, const RenderingContext& context, const std::vector<Room*>& rooms);
+
 protected:
 	std::unordered_set<Entity*> entities;
 	AdjacencyListGraph<Room*> rooms;
@@ -34,10 +44,20 @@ public:
 	SpaceShip(SpaceShipBlueprint * blueprint);
 
 	/// <summary>
+	/// renders the hull of the ship
+	/// </summary>
+	void renderExterior(SDL_Renderer* renderer, const RenderingContext & context);
+
+	/// <summary>
+	/// renders the visible rooms of the ship
+	/// </summary>
+	void renderInterior(SDL_Renderer* renderer, const RenderingContext & context);
+
+	/// <summary>
 	/// returns the entities (read only)
 	/// </summary>
 	/// <returns></returns>
-	const std::unordered_set<Entity*>& getEntities(EntityPriorityQueue queue) const;
+	const std::unordered_set<Entity*>& getEntities(RoomDistance queue) const;
 
 	/// <summary>
 	/// docks an other ship to this ship. You will want to align them relatively well since this will snap the other ship. Undocking is future me's problem
@@ -57,4 +77,7 @@ public:
 	/// <returns></returns>
 	void unregisterEntities(std::initializer_list<Entity*> entities);
 
+	void update(const UpdateContext& context);
+
+	void setFocusEntity(Entity* entity);
 };

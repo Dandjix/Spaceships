@@ -151,6 +151,7 @@
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TarotCard.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileRendering.cpp" />
     <ClCompile Include="tinyfiledialogs.cpp" />
     <ClInclude Include="AdjacencyListGraph.h" />
     <ClInclude Include="BlueprintEditorAppearance.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MenuNavigation.h" />
+    <ClInclude Include="TileRendering.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="Rendering.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

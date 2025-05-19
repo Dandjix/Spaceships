@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include <queue>
 #include <unordered_set>
+#include "TileRendering.h"
 
 void SpaceShip::populateRooms()
 {
@@ -129,9 +130,69 @@ bool SpaceShip::roomsAreDone()
 SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint)
 {
 	this->blueprint = blueprint;
+	populateRooms();
+	//SDL_Log("number of rooms : %d", rooms.getVertices().size());
 }
 
-const std::unordered_set<Entity*>& SpaceShip::getEntities(EntityPriorityQueue queue) const
+void SpaceShip::renderExterior(SDL_Renderer* renderer, const RenderingContext& context)
+{
+	//TODO : do dis
+}
+
+void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& context, const std::vector<Room*> & rooms)
+{
+	for (const Room * room : rooms)
+	{
+		Vector2Int TL, BR;
+		room->Encompassing(TL, BR);
+		for (int x = TL.x; x++; x<=BR.x)
+		{
+			for (int y= TL.y; y++; y<=BR.y)
+			{
+				if (!room->IncludesTilePosition(x, y))
+					continue;
+
+				Tile tile = blueprint->tiles[x][y];
+
+				if (tile == Tile::Void)
+					continue;
+				
+				//SDL_Log("tile : %s",Tiles::nameFromTile(tile));
+
+				TileRendering::renderTile(renderer, context, tile, x, y);
+			}
+		}
+	}
+}
+
+void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& context)
+{
+	SDL_SetRenderDrawColor(renderer,255, 100, 100, 255);
+	for (Room * room : rooms.getVertices())
+	{
+		std::vector<std::pair<Vector2Int,Vector2Int>> boxes = room->getBoundingBoxes();
+		for (std::pair<Vector2Int, Vector2Int> bb : boxes)
+		{
+			Vector2Int pos, scale;
+			pos = bb.first * Tiles::tileSizePx;
+			scale = bb.second * Tiles::tileSizePx;
+
+			DebugRendering::drawWorldRect(renderer, context, pos, scale, 0);
+		}
+	}
+
+	if (!focusRoom)
+		return;
+	
+	//auto visible = rooms.connected(focusRoom, 2);
+	//std::vector<Room*> visibleRoomsVector(visible.begin(), visible.end());
+
+	std::vector<Room*> visibleRoomsVector = this->rooms.getVertices();
+
+	renderRooms(renderer, context, visibleRoomsVector);
+}
+
+const std::unordered_set<Entity*>& SpaceShip::getEntities(RoomDistance queue) const
 {
 	return entities;
 }
@@ -157,3 +218,29 @@ void SpaceShip::unregisterEntities(std::initializer_list<Entity*> entities)
 	}
 }
 
+void SpaceShip::update(const UpdateContext& context)
+{
+	if (!focusEntity)
+	{
+		//SDL_Log("no focus entity");
+		focusRoom = nullptr;
+		return;
+	}
+
+	for (Room * room : rooms.getVertices())
+	{
+		if (room->IncludesWorldPosition(focusEntity->getPosition()))
+		{
+			//SDL_Log("There is a room !");
+			focusRoom = room;
+			return;
+		}
+	}
+	//SDL_Log("There is no room.");
+	focusRoom = nullptr;
+}
+
+void SpaceShip::setFocusEntity(Entity* focusEntity)
+{
+	this->focusEntity = focusEntity;
+}
