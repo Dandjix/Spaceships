@@ -19,6 +19,10 @@ private:
 			std::unordered_set<T> adjacentVertices;
 			for (auto vertex : vertices)
 			{
+				//if (adjacencyListMap.find(vertex) == adjacencyListMap.end())
+				//{
+				//	continue;
+				//}
 				const std::list<std::pair<T, int>>& it = adjacencyListMap.at(vertex);
 				for (const std::pair<T, int>& pair : it)
 				{

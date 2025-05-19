@@ -8,11 +8,10 @@ protected:
 	std::unordered_set<Entity*> entities = {};
 	/// <summary>
 	/// first : TL position of the bounding box
-	/// second : dimensions of the bounding box
+	/// second : BR position of the bounding box
 	/// </summary>
 	std::vector<std::pair<Vector2Int,Vector2Int>> boundingBoxes;
 public :
-	std::vector<Vector2Int> tiles;
 
 	const std::vector<std::pair<Vector2Int, Vector2Int>> getBoundingBoxes() const
 	{
@@ -26,7 +25,6 @@ public :
 
 	Room(const std::unordered_set<Vector2Int>& tiles)
 	{
-		this->tiles = std::vector<Vector2Int>(tiles.begin(), tiles.end());
 		// Simple bounding box from all tiles
 		int minX = INT_MAX, minY = INT_MAX;
 		int maxX = INT_MIN, maxY = INT_MIN;
@@ -40,8 +38,8 @@ public :
 		}
 		
 		Vector2Int TL,BR;
-		TL = Vector2Int(minY, minY);
-		BR = Vector2Int(maxX, maxY);
+		TL = Vector2Int(minX-1, minY-1);
+		BR = Vector2Int(maxX+2, maxY+2);
 
 		boundingBoxes.push_back({ TL, BR - TL});
 	}
@@ -58,9 +56,10 @@ public :
 
 	bool IncludesTilePosition(int x, int y) const
 	{
-		for (auto [topLeft, bottomRight] : boundingBoxes)
+		for (auto [topLeft, dimensions] : boundingBoxes)
 		{
-			if (x >= topLeft.x && x < bottomRight.x && y >= topLeft.y && y < topLeft.y)
+			Vector2Int bottomRight = topLeft + dimensions;
+			if (x >= topLeft.x && x < bottomRight.x && y >= topLeft.y && y < bottomRight.y)
 				return true;
 		}
 		return false;

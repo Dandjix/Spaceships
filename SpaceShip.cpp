@@ -147,17 +147,14 @@ void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& con
 		Vector2Int TL, BR;
 		room->Encompassing(TL, BR);
 
-		int maxX = blueprint->tiles.size();
-		int maxY = blueprint->tiles[0].size();
 
-		for (int x = TL.x; x<BR.x && x<maxX; x++)
+		for (int x = TL.x; x <= BR.x; x++)
 		{
-			for (int y= TL.y; y<BR.y && y < maxY; y++)
+			for (int y= TL.y; y <= BR.y; y++)
 			{
-				//if (!room->IncludesTilePosition(x, y)) {
-				//	continue;
-				//}
-				//SDL_Log("r %d:%d", x, y);
+				if (!room->IncludesTilePosition(x, y)) {
+					continue;
+				}
 
 				Tile tile = blueprint->tiles[x][y];
 
@@ -174,15 +171,18 @@ void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& con
 
 void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& context)
 {
-	//if (!focusRoom)
-	//	return;
-
-	//auto visible = rooms.connected(focusRoom, 2);
-	//std::vector<Room*> visibleRoomsVector(visible.begin(), visible.end());
-	std::vector<Room*> visibleRoomsVector = this->rooms.getVertices();
-	renderRooms(renderer, context, visibleRoomsVector);
-
-
+	if (focusRoom)
+	{
+		auto visible = rooms.connected(focusRoom, 2);
+		std::vector<Room*> visibleRoomsVector(visible.begin(), visible.end());
+		visibleRoomsVector.push_back(focusRoom);
+		//std::vector<Room*> visibleRoomsVector = this->rooms.getVertices();
+		//SDL_Log("rendering %d rooms (%d)",visibleRoomsVector.size(), visible.size());
+		renderRooms(renderer, context, visibleRoomsVector);
+	}
+	else
+	{
+	}
 
 	for (Room * room : rooms.getVertices())
 	{
@@ -193,14 +193,6 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 			Hash::getRandomColor(bb.first.x, bb.first.y, &r, &g, &b);
 			SDL_SetRenderDrawColor(renderer, r, g, b, 255);
 		}
-
-
-		for (Vector2Int tile : room->tiles)
-		{
-			Vector2Int screenPos = (tile * Tiles::tileSizePx + Vector2Int(Tiles::tileSizePx,Tiles::tileSizePx)*0.5f - context.cameraPos.scaleToScreenPosition()) / context.cameraScale;
-			DebugRendering::drawCross(renderer, screenPos);
-		}
-
 		std::vector<std::pair<Vector2Int,Vector2Int>> boxes = room->getBoundingBoxes();
 		for (const std::pair<Vector2Int, Vector2Int>& bb : boxes)
 		{
@@ -208,7 +200,6 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 			DebugRendering::drawWorldRoomBoundingBox(renderer,context,bb.first,bb.second);
 		}
 	}
-	//SDL_Log("\n");
 }
 
 const std::unordered_set<Entity*>& SpaceShip::getEntities(RoomDistance queue) const
