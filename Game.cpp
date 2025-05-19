@@ -20,6 +20,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 {
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);
+    Tiles::loadAll(renderer);
 
     std::cout << "textures loaded";
 

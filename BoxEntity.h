@@ -21,6 +21,6 @@ public:
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override {
 		// Set debug color (blue)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-        DebugRendering::drawWorldObjectBoundingBox(renderer, context, position, scale, getAngle());
+        DebugRendering::drawWorldRect(renderer, context, position, scale, getAngle());
     }
 };

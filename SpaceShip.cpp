@@ -145,20 +145,26 @@ void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& con
 	{
 		Vector2Int TL, BR;
 		room->Encompassing(TL, BR);
-		for (int x = TL.x; x++; x<=BR.x)
+
+		int maxX = blueprint->tiles.size();
+		int maxY = blueprint->tiles[0].size();
+
+		for (int x = TL.x; x<BR.x && x<maxX; x++)
 		{
-			for (int y= TL.y; y++; y<=BR.y)
+			for (int y= TL.y; y<BR.y && y < maxY; y++)
 			{
-				if (!room->IncludesTilePosition(x, y))
-					continue;
+				//if (!room->IncludesTilePosition(x, y)) {
+				//	continue;
+				//}
+				//SDL_Log("r %d:%d", x, y);
 
 				Tile tile = blueprint->tiles[x][y];
 
 				if (tile == Tile::Void)
+				{
 					continue;
-				
-				//SDL_Log("tile : %s",Tiles::nameFromTile(tile));
-
+				}
+				//SDL_Log("tile : %s",Tiles::nameFromTile(tile).c_str());
 				TileRendering::renderTile(renderer, context, tile, x, y);
 			}
 		}
@@ -174,19 +180,19 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 		for (std::pair<Vector2Int, Vector2Int> bb : boxes)
 		{
 			Vector2Int pos, scale;
-			pos = bb.first * Tiles::tileSizePx;
 			scale = bb.second * Tiles::tileSizePx;
+			pos = bb.first * Tiles::tileSizePx + scale*0.5f;
+
 
 			DebugRendering::drawWorldRect(renderer, context, pos, scale, 0);
 		}
 	}
 
-	if (!focusRoom)
-		return;
+	//if (!focusRoom)
+	//	return;
 	
 	//auto visible = rooms.connected(focusRoom, 2);
 	//std::vector<Room*> visibleRoomsVector(visible.begin(), visible.end());
-
 	std::vector<Room*> visibleRoomsVector = this->rooms.getVertices();
 
 	renderRooms(renderer, context, visibleRoomsVector);
