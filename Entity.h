@@ -44,7 +44,7 @@ public:
     virtual ~Entity() {}
 
     virtual void update(const UpdateContext & context) = 0;
-    virtual void handleEvent(const SDL_Event event){}
+    virtual void handleEvent(const SDL_Event & event){}
     virtual void render(SDL_Renderer* renderer, const RenderingContext& context) = 0;
     virtual void debugRender(SDL_Renderer* renderer, const RenderingContext& context){}
 

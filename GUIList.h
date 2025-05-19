@@ -38,7 +38,7 @@ public:
         : GUIRect(anchor, offset, width, height), options(options), onSelect(onSelect), keyboardNavigation(keyboardNavigation){
     }
 
-    void handleEvent(const SDL_Event event) override;
+    void handleEvent(const SDL_Event & event) override;
 
     void update(const GUI_UpdateContext& context) override;
 

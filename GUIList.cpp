@@ -110,7 +110,7 @@ std::string GUIList::getSelectedOption()
     return options[selected_index];
 }
 
-void GUIList::handleEvent(const SDL_Event event)
+void GUIList::handleEvent(const SDL_Event & event)
 {
     if (keyboardNavigation && event.type == SDL_EVENT_KEY_DOWN)
     {

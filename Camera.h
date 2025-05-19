@@ -26,7 +26,7 @@ public:
         setPosition(p->getPosition());  // Set the camera's position to follow the player initially
     }
 
-    void handleEvent(const SDL_Event& event) {
+    void handleEvent(const SDL_Event& event) override {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
             float zoomFactor = 0.1f; // Adjust zoom speed
             float scale = getScale() + event.wheel.y * zoomFactor;
@@ -99,10 +99,6 @@ public:
     }
 
     Vector2Int screenToWorldPoint(Vector2Float screenPosition) const {
-        //SDL_Log("in function");
-		//SDL_Log("has angle : %b", hasAngle());
-
-        //SDL_Log("angle : %f", getAngle());
         Vector2Float offsetScreenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
 
         Vector2Float rotated = offsetScreenPosition.rotate(-getAngle());

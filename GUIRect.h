@@ -59,5 +59,5 @@ public:
 		dimensions = Vector2Int(w, h);
 	}
 
-	virtual void handleEvent(const SDL_Event event){}
+	virtual void handleEvent(const SDL_Event & event){}
 };

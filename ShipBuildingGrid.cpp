@@ -97,7 +97,7 @@ void ShipBuildingGrid::setDimensions(Vector2Int dimensions)
 	this->dimensions = dimensions;
 }
 
-void ShipBuildingGrid::handleEvent(const SDL_Event event)
+void ShipBuildingGrid::handleEvent(const SDL_Event & event)
 {
 	if (resizing)
 	{
