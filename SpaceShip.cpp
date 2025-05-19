@@ -182,9 +182,19 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 	std::vector<Room*> visibleRoomsVector = this->rooms.getVertices();
 	renderRooms(renderer, context, visibleRoomsVector);
 
-	SDL_SetRenderDrawColor(renderer,255, 100, 100, 255);
+
+
 	for (Room * room : rooms.getVertices())
 	{
+		if (!room->getBoundingBoxes().empty())
+		{
+			std::pair < Vector2Int,Vector2Int > bb = room->getBoundingBoxes()[0];
+			int r, g, b;
+			Hash::getRandomColor(bb.first.x, bb.first.y, &r, &g, &b);
+			SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+		}
+
+
 		for (Vector2Int tile : room->tiles)
 		{
 			Vector2Int screenPos = (tile * Tiles::tileSizePx + Vector2Int(Tiles::tileSizePx,Tiles::tileSizePx)*0.5f - context.cameraPos.scaleToScreenPosition()) / context.cameraScale;
@@ -194,9 +204,7 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 		std::vector<std::pair<Vector2Int,Vector2Int>> boxes = room->getBoundingBoxes();
 		for (const std::pair<Vector2Int, Vector2Int>& bb : boxes)
 		{
-			int r, g, b;
-			Hash::getRandomColor(bb.first.x, bb.first.y,&r,&g,&b);
-			SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+
 			DebugRendering::drawWorldRoomBoundingBox(renderer,context,bb.first,bb.second);
 		}
 	}
