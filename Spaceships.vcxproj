@@ -164,6 +164,7 @@
     <ClInclude Include="GUI.h" />
     <ClInclude Include="GUIList.h" />
     <ClInclude Include="GUIRect.h" />
+    <ClInclude Include="Hash.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MenuNavigation.h" />

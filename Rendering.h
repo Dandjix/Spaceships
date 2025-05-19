@@ -1,6 +1,7 @@
 #pragma once
 #include "Vectors.h"
 #include <SDL3/SDL.h>
+#include "Tile.h"
 ///
 struct RenderingContext
 {
@@ -125,5 +126,52 @@ public:
 				corners[i].x, corners[i].y,
 				corners[next].x, corners[next].y);
 		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="renderer"></param>
+	/// <param name="context"></param>
+	/// <param name="position">The tile position of the top left corner of the room</param>
+	/// <param name="dimensions">The tile dimensions of the room</param>
+	static void drawWorldRoomBoundingBox(SDL_Renderer * renderer,const RenderingContext & context,Vector2Int position, Vector2Int dimensions)
+	{
+		// Box corners in tile pixel space
+		Vector2Int topLeft = position * Tiles::tileSizePx;
+		Vector2Int size = dimensions * Tiles::tileSizePx;
+		Vector2Int bottomRight = topLeft + size;
+
+		Vector2Float TL = Vectors::toVector2Float(topLeft);
+		Vector2Float TR = Vectors::toVector2Float(Vector2Int(bottomRight.x, topLeft.y));
+		Vector2Float BR = Vectors::toVector2Float(bottomRight);
+		Vector2Float BL = Vectors::toVector2Float(Vector2Int(topLeft.x, bottomRight.y));
+
+		// Center of the box (in world coords)
+		Vector2Float center = (TL + BR) / 2.0f;
+
+		// Apply camera transform: offset, scale
+		auto transform = [&](Vector2Float pt) -> Vector2Float {
+			Vector2Float screenPt = (pt - Vectors::toVector2Float(context.cameraPos) / Vectors::getFactor()) / context.cameraScale;
+
+			// Rotate around center
+			Vector2Float relative = pt - center;
+			Vector2Float rotated = relative.rotate(context.cameraAngle);
+			Vector2Float finalPt = center + rotated;
+
+			// Apply camera transform again after rotation
+			return (finalPt - Vectors::toVector2Float(context.cameraPos) / Vectors::getFactor()) / context.cameraScale;
+			};
+
+		Vector2Float rTL = transform(TL);
+		Vector2Float rTR = transform(TR);
+		Vector2Float rBR = transform(BR);
+		Vector2Float rBL = transform(BL);
+
+		// Draw the rotated rectangle
+		SDL_RenderLine(renderer, rTL.x, rTL.y, rTR.x, rTR.y);
+		SDL_RenderLine(renderer, rTR.x, rTR.y, rBR.x, rBR.y);
+		SDL_RenderLine(renderer, rBR.x, rBR.y, rBL.x, rBL.y);
+		SDL_RenderLine(renderer, rBL.x, rBL.y, rTL.x, rTL.y);
 	}
 };

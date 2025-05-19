@@ -2,7 +2,9 @@
 #include "Entity.h"
 #include <queue>
 #include <unordered_set>
+#include <random>
 #include "TileRendering.h"
+#include "Hash.h"
 
 void SpaceShip::populateRooms()
 {
@@ -16,7 +18,6 @@ void SpaceShip::populateRooms()
 		{
 			if (shouldSkipTile(x, y, visited))
 				continue;
-
 			std::unordered_set<Vector2Int> connected = collectConnectedFloorTiles(x, y, visited);
 			Room* newRoom = createRoomFromTiles(connected);
 			rooms.addVertex(newRoom);
@@ -173,29 +174,27 @@ void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& con
 
 void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& context)
 {
+	//if (!focusRoom)
+	//	return;
+
+	//auto visible = rooms.connected(focusRoom, 2);
+	//std::vector<Room*> visibleRoomsVector(visible.begin(), visible.end());
+	std::vector<Room*> visibleRoomsVector = this->rooms.getVertices();
+	renderRooms(renderer, context, visibleRoomsVector);
+
 	SDL_SetRenderDrawColor(renderer,255, 100, 100, 255);
 	for (Room * room : rooms.getVertices())
 	{
 		std::vector<std::pair<Vector2Int,Vector2Int>> boxes = room->getBoundingBoxes();
-		for (std::pair<Vector2Int, Vector2Int> bb : boxes)
+		for (const std::pair<Vector2Int, Vector2Int>& bb : boxes)
 		{
-			Vector2Int pos, scale;
-			scale = bb.second * Tiles::tileSizePx;
-			pos = bb.first * Tiles::tileSizePx + scale*0.5f;
-
-
-			DebugRendering::drawWorldRect(renderer, context, pos, scale, 0);
+			int r, g, b;
+			Hash::getRandomColor(bb.first.x, bb.first.y,&r,&g,&b);
+			SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+			DebugRendering::drawWorldRoomBoundingBox(renderer,context,bb.first,bb.second);
 		}
 	}
-
-	//if (!focusRoom)
-	//	return;
-	
-	//auto visible = rooms.connected(focusRoom, 2);
-	//std::vector<Room*> visibleRoomsVector(visible.begin(), visible.end());
-	std::vector<Room*> visibleRoomsVector = this->rooms.getVertices();
-
-	renderRooms(renderer, context, visibleRoomsVector);
+	//SDL_Log("\n");
 }
 
 const std::unordered_set<Entity*>& SpaceShip::getEntities(RoomDistance queue) const
