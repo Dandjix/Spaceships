@@ -156,6 +156,7 @@
     <ClInclude Include="AdjacencyListGraph.h" />
     <ClInclude Include="BlueprintEditorAppearance.h" />
     <ClInclude Include="BlueprintTilePainter.h" />
+    <ClInclude Include="ConnectRoomGraph.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CardinalDirections.h" />
     <ClInclude Include="fonts.h" />

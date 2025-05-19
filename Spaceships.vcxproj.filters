@@ -254,5 +254,8 @@
     <ClInclude Include="Hash.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="ConnectRoomGraph.h">
+      <Filter>Source Files\SpaceShips</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

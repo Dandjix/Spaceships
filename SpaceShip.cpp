@@ -5,6 +5,7 @@
 #include <random>
 #include "TileRendering.h"
 #include "Hash.h"
+#include "ConnectRoomGraph.h"
 
 void SpaceShip::populateRooms()
 {
@@ -23,6 +24,8 @@ void SpaceShip::populateRooms()
 			rooms.addVertex(newRoom);
 		}
 	}
+
+	ConnectRoomGraph::Connect(rooms);
 }
 
 bool SpaceShip::shouldSkipTile(int x, int y, const std::vector<std::vector<bool>>& visited) const
