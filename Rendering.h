@@ -3,6 +3,19 @@
 #include <SDL3/SDL.h>
 #include "Tile.h"
 ///
+namespace RenderingTransformations {
+	inline Vector2Int screenToWorldPoint(Vector2Float screenPosition, Vector2Int screenDimensions, float cameraAngle, Vector2Int cameraPosition) {
+		Vector2Float offsetScreenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
+
+		Vector2Float rotated = offsetScreenPosition.rotate(-cameraAngle);
+		Vector2Float scaled = rotated * cameraAngle;
+
+		Vector2Int worldPoint = Vectors::toVector2Int(scaled).scaleToWorldPosition() + cameraPosition;
+
+		return worldPoint;
+	}
+}
+
 struct RenderingContext
 {
 	/// <summary>
@@ -15,7 +28,7 @@ struct RenderingContext
 
 	const float cameraScale;
 
-	const Vector2Float toScreenPoint(Vector2Int worldPosition) const
+	Vector2Float toScreenPoint(Vector2Int worldPosition) const
 	{
 		Vector2Float floatPosition = Vectors::toVector2Float(worldPosition);
 
@@ -29,6 +42,11 @@ struct RenderingContext
 		center = screenCenter - diff;
 
 		return center;
+	}
+
+	Vector2Int toWorldPosition(Vector2Float screenPosition) const
+	{
+		return RenderingTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle, cameraPos);
 	}
 
 	RenderingContext(Vector2Int cameraPos, float cameraAngle, Vector2Int screenDimensions, float cameraScale)

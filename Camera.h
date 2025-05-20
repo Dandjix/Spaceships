@@ -99,14 +99,7 @@ public:
     }
 
     Vector2Int screenToWorldPoint(Vector2Float screenPosition) const {
-        Vector2Float offsetScreenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
-
-        Vector2Float rotated = offsetScreenPosition.rotate(-getAngle());
-        Vector2Float scaled = rotated * getScale();
-
-        Vector2Int worldPoint = Vectors::toVector2Int(scaled).scaleToWorldPosition() + getPosition();
-
-        return worldPoint;
+        return RenderingTransformations::screenToWorldPoint(screenPosition, screenDimensions, getAngle(), getPosition());
     }
 
     //Vector2Float worldToScreenPoint(Vector2Int worldPosition) const {
