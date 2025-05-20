@@ -16,6 +16,6 @@ void TileRendering::renderTile(SDL_Renderer* renderer, const RenderingContext& c
 		Tiles::tileSizePx / context.cameraScale,
 		Tiles::tileSizePx / context.cameraScale
 	};
-
-	SDL_RenderTextureRotated(renderer, texture, nullptr, &dstrect,context.cameraAngle,nullptr,SDL_FlipMode::SDL_FLIP_NONE);
+	SDL_FPoint topLeft = { 0.0f, 0.0f };
+	SDL_RenderTextureRotated(renderer, texture, nullptr, &dstrect,context.cameraAngle, &topLeft,SDL_FlipMode::SDL_FLIP_NONE);
 }
