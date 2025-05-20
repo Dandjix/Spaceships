@@ -156,30 +156,23 @@ public:
 	static void drawWorldRoomBoundingBox(SDL_Renderer * renderer,const RenderingContext & context,Vector2Int position, Vector2Int dimensions)
 	{
 		// Box corners in tile pixel space
-		Vector2Int topLeft = position * Tiles::tileSizePx;
-		Vector2Int size = dimensions * Tiles::tileSizePx;
+		Vector2Int topLeft = position.scaleToWorldPosition() * Tiles::tileSizePx;
+		Vector2Int size = dimensions.scaleToWorldPosition() * Tiles::tileSizePx;
 		Vector2Int bottomRight = topLeft + size;
 
-		Vector2Float TL = Vectors::toVector2Float(topLeft);
-		Vector2Float TR = Vectors::toVector2Float(Vector2Int(bottomRight.x, topLeft.y));
-		Vector2Float BR = Vectors::toVector2Float(bottomRight);
-		Vector2Float BL = Vectors::toVector2Float(Vector2Int(topLeft.x, bottomRight.y));
+		Vector2Int TL = topLeft;
+		Vector2Int TR = Vector2Int(bottomRight.x, topLeft.y);
+		Vector2Int BR = bottomRight;
+		Vector2Int BL = Vector2Int(topLeft.x, bottomRight.y);
 
 		// Center of the box (in world coords)
-		Vector2Float center = (TL + BR) / 2.0f;
+		Vector2Int center = (TL + BR) / 2.0f;
+
 
 		// Apply camera transform: offset, scale
-		auto transform = [&](Vector2Float pt) -> Vector2Float {
-			Vector2Float screenPt = (pt - Vectors::toVector2Float(context.cameraPos) / Vectors::getFactor()) / context.cameraScale;
-
-			// Rotate around center
-			Vector2Float relative = pt - center;
-			Vector2Float rotated = relative.rotate(context.cameraAngle);
-			Vector2Float finalPt = center + rotated;
-
-			// Apply camera transform again after rotation
-			return (finalPt - Vectors::toVector2Float(context.cameraPos) / Vectors::getFactor()) / context.cameraScale;
-			};
+		auto transform = [&](Vector2Int pt) -> Vector2Float {
+			return context.toScreenPoint(pt);
+		};
 
 		Vector2Float rTL = transform(TL);
 		Vector2Float rTR = transform(TR);
