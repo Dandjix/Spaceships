@@ -45,7 +45,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         container1,
         container2,
         sphere,
-        //grid 
+        grid 
         }
     );
 
