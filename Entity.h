@@ -48,6 +48,15 @@ public:
     virtual void render(SDL_Renderer* renderer, const RenderingContext& context) = 0;
     virtual void debugRender(SDL_Renderer* renderer, const RenderingContext& context){}
 
+    /// <summary>
+    /// lowest values first ! put something early neear the start, something late near the end.
+    /// </summary>
+    /// <returns></returns>
+    virtual unsigned short int getQueueOrder()
+    {
+        return UINT16_MAX / 2;
+    }
+
     Vector2Int getPosition() const {
         return position;
     }

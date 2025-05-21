@@ -205,9 +205,13 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 	}
 }
 
-const std::unordered_set<Entity*>& SpaceShip::getEntities(RoomDistance queue) const
+std::vector<Entity*> SpaceShip::getEntities(RoomDistance queue) const
 {
-	return entities;
+	auto vec = std::vector<Entity*>(entities.begin(), entities.end());
+
+	std::sort(vec.begin(), vec.end(), EntityComparison::compareEntities);
+
+	return vec;
 }
 
 void SpaceShip::Dock(SpaceShip other)
@@ -256,4 +260,9 @@ void SpaceShip::update(const UpdateContext& context)
 void SpaceShip::setFocusEntity(Entity* focusEntity)
 {
 	this->focusEntity = focusEntity;
+}
+
+bool EntityComparison::compareEntities(Entity* e1, Entity* e2)
+{
+	return e1->getQueueOrder() < e2->getQueueOrder();
 }

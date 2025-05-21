@@ -38,6 +38,11 @@ public:
             setScale(scale);
         }
     }
+
+    unsigned short getQueueOrder() override
+    {
+        return UINT16_MAX;
+    }
     
     void setScale(float s)
     {
@@ -101,6 +106,7 @@ public:
     Vector2Int screenToWorldPoint(Vector2Float screenPosition) const {
         return RenderingTransformations::screenToWorldPoint(screenPosition, screenDimensions, getAngle(), getPosition());
     }
+
 
     //Vector2Float worldToScreenPoint(Vector2Int worldPosition) const {
     //use the context method for that. If you are sad that this method does not exist, just stop being sad. It's that simple folks.

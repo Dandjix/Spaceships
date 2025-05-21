@@ -15,6 +15,11 @@ enum class RoomDistance{
 	Far,
 };
 
+namespace EntityComparison
+{
+	inline static bool compareEntities(Entity* e1, Entity* e2);
+}
+
 class SpaceShip
 {
 private:
@@ -57,7 +62,7 @@ public:
 	/// returns the entities (read only)
 	/// </summary>
 	/// <returns></returns>
-	const std::unordered_set<Entity*>& getEntities(RoomDistance queue) const;
+	std::vector<Entity*> getEntities(RoomDistance queue) const;
 
 	/// <summary>
 	/// docks an other ship to this ship. You will want to align them relatively well since this will snap the other ship. Undocking is future me's problem
