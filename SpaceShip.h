@@ -48,6 +48,8 @@ protected:
 public:
 	SpaceShip(SpaceShipBlueprint * blueprint);
 
+	const std::vector<std::vector<Tile>> & getBlueprintTiles() const;
+
 	/// <summary>
 	/// renders the hull of the ship
 	/// </summary>

@@ -138,6 +138,11 @@ SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint)
 	//SDL_Log("number of rooms : %d", rooms.getVertices().size());
 }
 
+const std::vector<std::vector<Tile>>& SpaceShip::getBlueprintTiles() const
+{
+	return blueprint->tiles;
+}
+
 void SpaceShip::renderExterior(SDL_Renderer* renderer, const RenderingContext& context)
 {
 	//TODO : do dis

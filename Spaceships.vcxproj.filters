@@ -79,6 +79,9 @@
     <Filter Include="Source Files\SpaceShips\DataTiles">
       <UniqueIdentifier>{5518d5bc-22c9-4d2d-a291-7e2240c3d195}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{5aca862c-c914-4c2e-b9d8-cde3d008592f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceships.cpp">
@@ -140,6 +143,15 @@
     </ClCompile>
     <ClCompile Include="TileRendering.cpp">
       <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCaster.cpp">
+      <Filter>Source Files\Game\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="CirclePhysicsEntity.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +268,18 @@
     </ClInclude>
     <ClInclude Include="ConnectRoomGraph.h">
       <Filter>Source Files\SpaceShips</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="CirclePhysicsEntity.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEntity.h">
+      <Filter>Source Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCaster.h">
+      <Filter>Source Files\Game\Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

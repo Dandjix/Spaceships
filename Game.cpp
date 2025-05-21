@@ -14,6 +14,7 @@
 #include "DebugGrid.h"
 #include "SpaceShipBlueprint.h"
 #include "SpaceShip.h"
+#include "RayCaster.h"
 
 
 MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
@@ -25,13 +26,15 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     std::cout << "textures loaded";
 
     Camera * camera = new Camera(Vector2Int(0, 0), 0, 1);
-    Player * player = new Player(Vector2Int(0, 0), 0, 2000, camera); // Start at center, 200 pixels/sec
+    Player * player = new Player(Vector2Int(64*5, 64*5), 0, 2000, camera); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
 
     CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
     CargoContainer * container2 = new CargoContainer(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
     Sphere * sphere = new Sphere(Vector2Int(-5, -5), 32);
     DebugGrid * grid = new DebugGrid(0, 0, 64);
+    RayCaster* rayCaster = new RayCaster(camera, player);
+
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
 
@@ -45,7 +48,8 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         container1,
         container2,
         sphere,
-        grid 
+        grid,
+        rayCaster
         }
     );
 
@@ -73,7 +77,8 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         const UpdateContext updateContext =
         {
             deltaTime,
-            Vector2Int(0,0)
+            Vector2Int(0,0),
+            ship
         };
 
         //render variable calculation

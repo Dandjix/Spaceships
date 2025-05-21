@@ -140,9 +140,12 @@
     <ClCompile Include="BindableProperty.cpp" />
     <ClCompile Include="BlueprintEditorAppearance.cpp" />
     <ClCompile Include="BlueprintTilePainter.cpp" />
+    <ClCompile Include="CirclePhysicsEntity.cpp" />
     <ClCompile Include="fonts.cpp" />
     <ClCompile Include="GUIList.cpp" />
     <ClCompile Include="GUIRect.cpp" />
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="RayCaster.cpp" />
     <ClCompile Include="SaveAndLoadShips.cpp" />
     <ClCompile Include="ShipBuildingGrid.cpp" />
     <ClCompile Include="ShipEditor.cpp" />
@@ -156,6 +159,7 @@
     <ClInclude Include="AdjacencyListGraph.h" />
     <ClInclude Include="BlueprintEditorAppearance.h" />
     <ClInclude Include="BlueprintTilePainter.h" />
+    <ClInclude Include="CirclePhysicsEntity.h" />
     <ClInclude Include="ConnectRoomGraph.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="CardinalDirections.h" />
@@ -169,6 +173,9 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MenuNavigation.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="PhysicsEntity.h" />
+    <ClInclude Include="RayCaster.h" />
     <ClInclude Include="TileRendering.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="Rendering.h">
