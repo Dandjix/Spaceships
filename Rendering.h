@@ -4,16 +4,18 @@
 #include "Tile.h"
 ///
 namespace RenderingTransformations {
-	inline Vector2Int screenToWorldPoint(Vector2Float screenPosition, Vector2Int screenDimensions, float cameraAngle, Vector2Int cameraPosition) {
+	inline Vector2Int screenToWorldPoint(Vector2Float screenPosition, Vector2Int screenDimensions, float cameraAngle, float cameraScale, Vector2Int cameraPosition) {
 		Vector2Float offsetScreenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
 
 		Vector2Float rotated = offsetScreenPosition.rotate(-cameraAngle);
-		Vector2Float scaled = rotated * cameraAngle;
+		Vector2Float scaled = rotated * cameraScale;
 
 		Vector2Int worldPoint = Vectors::toVector2Int(scaled).scaleToWorldPosition() + cameraPosition;
 
 		return worldPoint;
 	}
+
+
 }
 
 struct RenderingContext
@@ -46,7 +48,7 @@ struct RenderingContext
 
 	Vector2Int toWorldPosition(Vector2Float screenPosition) const
 	{
-		return RenderingTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle, cameraPos);
+		return RenderingTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle,cameraScale, cameraPos);
 	}
 
 	RenderingContext(Vector2Int cameraPos, float cameraAngle, Vector2Int screenDimensions, float cameraScale)

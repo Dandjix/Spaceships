@@ -43,7 +43,7 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 	Vector2Float playerScreenPos = context.toScreenPoint(playerPos);
 
 	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 0);
-	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.toScreenPoint(mousePos)));
+	DebugRendering::drawCross(renderer, Vectors::toVector2Int(mouseScreenPos));
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 0, 0);
 	SDL_RenderLine(renderer, mouseScreenPos.x, mouseScreenPos.y, playerScreenPos.x, playerScreenPos.y);

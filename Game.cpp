@@ -34,9 +34,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     Sphere * sphere = new Sphere(Vector2Int(-5, -5), 32);
     DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
-
-    Uint64 now = SDL_GetTicks();
-    Uint64 last = 0;
+    Cursor* cursor = new Cursor(camera);
 
     SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/battleship.json");
     SpaceShip * ship = new SpaceShip(&blueprint);
@@ -48,13 +46,15 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         container1,
         container2,
         sphere,
-        grid,
-        rayCaster
+        //grid,
+        rayCaster,
+        cursor
         }
     );
 
+    Uint64 now = SDL_GetTicks();
+    Uint64 last = 0;
     float deltaTime = 0.0f;
-
     MenuNavigation destination = Game;
 
     ship->setFocusEntity(player);

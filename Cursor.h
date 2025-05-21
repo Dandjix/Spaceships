@@ -21,14 +21,7 @@ public :
 	}
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
-		Vector2Float screenPos = context.toScreenPoint(getPosition());
-		SDL_FRect rect = {
-			screenPos.x,
-			screenPos.y,
-			50,
-			50
-		};
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		SDL_RenderFillRect(renderer, &rect);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		DebugRendering::drawWorldRect(renderer, context, getPosition(), Vector2Int(64, 64),getAngle());
 	}
 };
