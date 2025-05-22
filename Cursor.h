@@ -23,5 +23,8 @@ public :
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override {
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		DebugRendering::drawWorldRect(renderer, context, getPosition(), Vector2Int(64, 64),getAngle());
+
+		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+		DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.toScreenPoint(getPosition())));
 	}
 };

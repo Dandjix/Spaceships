@@ -73,7 +73,7 @@ std::optional<Vector2Int> Physics::RayCast(Vector2Int origin, Vector2Float direc
 
         terminator++;
     } while (terminator<1000);
-    SDL_Log("terminator reached");
+    //SDL_Log("terminator reached");
 
     return std::nullopt;
 }

@@ -107,6 +107,10 @@ public:
         return CameraTransformations::screenToWorldPoint(screenPosition, screenDimensions, getAngle(),getScale(), getPosition());
     }
 
+    Vector2Int screenToWorldPointPerfectInverse(Vector2Float screenPosition) const {
+        return CameraTransformations::screenToWorldPointPerfectInverse(screenPosition, screenDimensions, getAngle(), getScale(), getPosition());
+    }
+
 
     //Vector2Float worldToScreenPoint(Vector2Int worldPosition) const {
     //use the context method for that. If you are sad that this method does not exist, just stop being sad. It's that simple folks.

@@ -26,6 +26,11 @@ struct RenderingContext
 		return CameraTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle,cameraScale, cameraPos);
 	}
 
+	Vector2Int toWorldPositionPerfectInverse(Vector2Float screenPosition) const
+	{
+		return CameraTransformations::screenToWorldPointPerfectInverse(screenPosition, screenDimensions, cameraAngle, cameraScale, cameraPos);
+	}
+
 	RenderingContext(Vector2Int cameraPos, float cameraAngle, Vector2Int screenDimensions, float cameraScale)
 		: cameraPos(cameraPos), cameraAngle(cameraAngle), screenDimensions(screenDimensions),cameraScale(cameraScale){}
 };
