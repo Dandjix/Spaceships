@@ -281,5 +281,8 @@
     <ClInclude Include="RayCaster.h">
       <Filter>Source Files\Game\Debug</Filter>
     </ClInclude>
+    <ClInclude Include="CameraTransformations.h">
+      <Filter>Source Files\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

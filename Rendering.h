@@ -2,21 +2,7 @@
 #include "Vectors.h"
 #include <SDL3/SDL.h>
 #include "Tile.h"
-///
-namespace RenderingTransformations {
-	inline Vector2Int screenToWorldPoint(Vector2Float screenPosition, Vector2Int screenDimensions, float cameraAngle, float cameraScale, Vector2Int cameraPosition) {
-		Vector2Float offsetScreenPosition = screenPosition - Vectors::toVector2Float(screenDimensions) / 2;
-
-		Vector2Float rotated = offsetScreenPosition.rotate(-cameraAngle);
-		Vector2Float scaled = rotated * cameraScale;
-
-		Vector2Int worldPoint = Vectors::toVector2Int(scaled).scaleToWorldPosition() + cameraPosition;
-
-		return worldPoint;
-	}
-
-
-}
+#include "CameraTransformations.h"
 
 struct RenderingContext
 {
@@ -32,23 +18,12 @@ struct RenderingContext
 
 	Vector2Float toScreenPoint(Vector2Int worldPosition) const
 	{
-		Vector2Float floatPosition = Vectors::toVector2Float(worldPosition);
-
-		Vector2Float floatCameraPosition = Vectors::toVector2Float(cameraPos);
-		Vector2Float worldCenter = floatPosition - floatCameraPosition;
-		Vector2Float center = (worldCenter) / cameraScale;
-		center = center.scaleToScreenPosition();
-
-		Vector2Float screenCenter = Vectors::toVector2Float(screenDimensions) / 2;
-		Vector2Float diff = (screenCenter - center).rotate(cameraAngle);
-		center = screenCenter - diff;
-
-		return center;
+		return CameraTransformations::worldToScreenPoint(worldPosition, screenDimensions, cameraAngle, cameraScale, cameraPos);
 	}
 
 	Vector2Int toWorldPosition(Vector2Float screenPosition) const
 	{
-		return RenderingTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle,cameraScale, cameraPos);
+		return CameraTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle,cameraScale, cameraPos);
 	}
 
 	RenderingContext(Vector2Int cameraPos, float cameraAngle, Vector2Int screenDimensions, float cameraScale)

@@ -26,7 +26,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     std::cout << "textures loaded";
 
     Camera * camera = new Camera(Vector2Int(0, 0), 0, 1);
-    Player * player = new Player(Vector2Int(64*5, 64*5), 0, 2000, camera); // Start at center, 200 pixels/sec
+    Player * player = new Player(Vector2Int(0, 0), 0, 2000, camera); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
 
     CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);

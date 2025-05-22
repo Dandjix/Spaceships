@@ -104,7 +104,7 @@ public:
     }
 
     Vector2Int screenToWorldPoint(Vector2Float screenPosition) const {
-        return RenderingTransformations::screenToWorldPoint(screenPosition, screenDimensions, getAngle(),getScale(), getPosition());
+        return CameraTransformations::screenToWorldPoint(screenPosition, screenDimensions, getAngle(),getScale(), getPosition());
     }
 
 

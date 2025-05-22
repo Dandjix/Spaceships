@@ -159,6 +159,7 @@
     <ClInclude Include="AdjacencyListGraph.h" />
     <ClInclude Include="BlueprintEditorAppearance.h" />
     <ClInclude Include="BlueprintTilePainter.h" />
+    <ClInclude Include="CameraTransformations.h" />
     <ClInclude Include="CirclePhysicsEntity.h" />
     <ClInclude Include="ConnectRoomGraph.h" />
     <ClInclude Include="Cursor.h" />
