@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include <unordered_set>
+#include <climits>
 #include "Tile.h"
 class Room
 {

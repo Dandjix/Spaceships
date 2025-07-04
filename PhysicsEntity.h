@@ -4,5 +4,5 @@
 class PhysicsEntity : public Entity
 {
 public :
-	virtual void  physicsUpdate(const PhysicsUpdateContext & context);
+	virtual void  physicsUpdate(const PhysicsUpdateContext & context){}
 };

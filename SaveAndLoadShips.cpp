@@ -1,6 +1,8 @@
 #include "tinyfiledialogs.h"
 #include <iostream>
 #include <fstream>
+#include <filesystem>
+#include <string>
 
 std::string readFileToString(const char* filePath)
 {
@@ -68,15 +70,22 @@ std::string LoadShip(std::string * name)
     {
         std::cout << "File selected: " << filePath << std::endl;
 
-		char drive[_MAX_DRIVE];
-		char dir[_MAX_DIR];
-		char fname[_MAX_FNAME];
-		char ext[_MAX_EXT];
+		// char drive[_MAX_DRIVE];
+		// char dir[_MAX_DIR];
+		// char fname[_MAX_FNAME];
+		// char ext[_MAX_EXT];
 
-        _splitpath_s(filePath, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
+        // _splitpath_s(filePath, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
+
+        std::filesystem::path p(filePath);
+        std::string drive = p.root_name().string();
+        std::string dir = p.parent_path().string();
+        std::string fname = p.stem().string();
+        std::string ext = p.extension().string();
+
 
         if(name != nullptr)
-            *name = std::string(fname);
+            *name = fname;
 
         std::ifstream shipFile(filePath);
         if (!shipFile) {

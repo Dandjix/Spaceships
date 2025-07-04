@@ -1,6 +1,7 @@
 #pragma once
 #include "Vectors.h"
 #include "SpaceShip.h"
+#include <cfloat>
 
 namespace Physics
 {
