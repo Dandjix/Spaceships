@@ -4,16 +4,10 @@
     {
       "label": "build cpp",
       "type": "shell",
-      "command": "g++",
+      "command": "bash",
       "args": [
-        "-std=c++20",
-        "-g",
-        "*.cpp",
-        "-o",
-        "main",
-        "-lSDL3", 
-        "-lSDL3_ttf",
-        "-lSDL3_image"
+        "-c",
+        "g++ -std=c++20 -g $(find src -name '*.cpp') -o main -lSDL3 -lSDL3_ttf -lSDL3_image"
       ],
       "group": {
         "kind": "build",
