@@ -7,7 +7,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "g++ -std=c++20 -g $(find src -name '*.cpp') -o main -lSDL3 -lSDL3_ttf -lSDL3_image"
+        "bear -- g++ -std=c++20 -Iinclude -g $(find src -name '*.cpp') -o main -lSDL3 -lSDL3_ttf -lSDL3_image"
       ],
       "group": {
         "kind": "build",

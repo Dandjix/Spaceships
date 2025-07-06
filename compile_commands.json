@@ -1,0 +1,332 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/entities/CargoContainer.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/entities/CargoContainer.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/entities/CirclePhysicsEntity.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/entities/CirclePhysicsEntity.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/entities/Sphere.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/entities/Sphere.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/game/Game.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/game/Game.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/imported/tinyfiledialogs.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/imported/tinyfiledialogs.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/physics/Physics.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/physics/Physics.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/physics/RayCaster.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/physics/RayCaster.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/shipEditor/BlueprintEditorAppearance.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/shipEditor/BlueprintEditorAppearance.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/shipEditor/BlueprintTilePainter.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/shipEditor/BlueprintTilePainter.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/shipEditor/ShipBuildingGrid.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/shipEditor/ShipBuildingGrid.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/shipEditor/ShipEditor.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/shipEditor/ShipEditor.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/spaceships/SpaceShip.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/spaceships/SpaceShip.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/spaceships/SpaceShipBlueprint.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/spaceships/SpaceShipBlueprint.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/spaceships/SaveAndLoadShips.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/spaceships/SaveAndLoadShips.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/spaceships/TileRendering.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/spaceships/TileRendering.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/spaceships/Tile.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/spaceships/Tile.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/tarot/TarotCard.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/tarot/TarotCard.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/userInterface/fonts.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/userInterface/fonts.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/userInterface/GUIList.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/userInterface/GUIList.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/userInterface/GUIRect.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/userInterface/GUIRect.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/userInterface/MainMenu.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/userInterface/MainMenu.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++20",
+      "-Iinclude",
+      "-g",
+      "-o",
+      "main",
+      "src/Spaceships.cpp"
+    ],
+    "directory": "/var/home/timon/Projects/Spaceships",
+    "file": "/var/home/timon/Projects/Spaceships/src/Spaceships.cpp",
+    "output": "/var/home/timon/Projects/Spaceships/main"
+  }
+]
