@@ -6,8 +6,8 @@ protected:
     int radius;
 
 public:
-    RoundEntity(Vector2Int position,std::optional<float> angle, int radius)
-        : Entity(position,angle), radius(radius) {}  // Calling Entity(Vector2 position)
+    RoundEntity(Vector2Int position,std::optional<float> angle, int radius,Behavior * behavior = nullptr)
+        : Entity(position,angle,behavior), radius(radius) {}  // Calling Entity(Vector2 position)
 
     virtual ~RoundEntity() {}
 

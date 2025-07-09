@@ -24,7 +24,7 @@ private:
 
 public:
     // Constructor
-    CargoContainer(Vector2Int position, float angle = 0.0f, Variation variation = Variation::blank);
+    explicit CargoContainer(Vector2Int position, float angle = 0.0f, Variation variation = Variation::blank);
 
     // Static method to load textures
     static void LoadTextures(SDL_Renderer* renderer);

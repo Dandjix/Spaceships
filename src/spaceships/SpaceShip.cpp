@@ -1,6 +1,5 @@
 #include <queue>
 #include <unordered_set>
-#include <random>
 
 #include "SpaceShip.h"
 #include "../entities/Entity.h"
@@ -102,11 +101,11 @@ Vector2Int SpaceShip::nextNonRoomCoords(int startX, int startY)
 			for (Room* room : rooms.getVertices())
 			{
 				if (!room->IncludesTilePosition(x, y))
-					return (x,y);
+					return Vector2Int(x,y);
 			}
 		}
 	}
-	return (-1, -1);
+	return Vector2Int(-1, -1);
 }
 
 bool SpaceShip::roomsAreDone()
@@ -230,6 +229,7 @@ void SpaceShip::registerEntities(std::initializer_list<Entity*> entities)
 	for (Entity* e: entities)
 	{
 		this->entities.insert(e);
+		e->onRegistered(this);
 	}
 }
 
@@ -238,6 +238,7 @@ void SpaceShip::unregisterEntities(std::initializer_list<Entity*> entities)
 	for (Entity* e : entities)
 	{
 		this->entities.erase(e);
+		e->onUnRegistered(this);
 	}
 }
 

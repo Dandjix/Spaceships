@@ -9,8 +9,8 @@ protected:
     Vector2Int scale; // Width and height in fixed-point format
 
 public:
-    BoxEntity(Vector2Int position, Vector2Int scale, float angle = 0.0f)
-        : Entity(position,angle), scale(scale) {}
+    BoxEntity(Vector2Int position, Vector2Int scale, float angle = 0.0f,Behavior * behavior = nullptr)
+        : Entity(position,angle,behavior), scale(scale) {}
 
     virtual ~BoxEntity() {}
 

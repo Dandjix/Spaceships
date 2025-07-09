@@ -5,13 +5,14 @@
 #include "../userInterface/MenuNavigation.h"
 
 #include "../player/Camera.h"
-#include "../player/Player.h"
+#include "../behavior/PlayerBehavior.h"
 
 #include "../debug/Cursor.h"
 
 #include "../entities/CargoContainer.h"
 #include "../entities/Sphere.h"
 #include "../debug/DebugGrid.h"
+#include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShipBlueprint.h"
 #include "../spaceships/SpaceShip.h"
 #include "../physics/RayCaster.h"
@@ -26,7 +27,10 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     std::cout << "textures loaded";
 
     Camera * camera = new Camera(Vector2Int(0, 0), 0, 1);
-    Player * player = new Player(Vector2Int(0, 0), 0, 2000, camera); // Start at center, 200 pixels/sec
+
+    PlayerBehavior * playerBehavior = new PlayerBehavior(camera);
+
+    Humanoid * player = new Humanoid(Vector2Int(0, 0), 0, playerBehavior); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
 
     CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
