@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 main
+compile_commands.json
