@@ -37,8 +37,10 @@ void ResizeGrid(Vector2Int newSize)
 
 //render
 
-MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
+MenuNavigation RunShipEditor(Clay_SDL3RendererData * rendererData, SDL_Window * window)
 {
+    SDL_Renderer * renderer = rendererData->renderer;
+
     Tiles::loadAll(renderer);
 
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);

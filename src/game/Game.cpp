@@ -4,22 +4,26 @@
 
 #include "../userInterface/MenuNavigation.h"
 
+#include "../debug/Cursor.h"
+#include "../debug/DebugGrid.h"
 #include "../player/Camera.h"
 #include "../behavior/PlayerBehavior.h"
+#include "../clay/renderers/clay_renderer_SDL3.h"
 
-#include "../debug/Cursor.h"
 
 #include "../entities/CargoContainer.h"
 #include "../entities/Sphere.h"
-#include "../debug/DebugGrid.h"
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShipBlueprint.h"
 #include "../spaceships/SpaceShip.h"
 #include "../physics/RayCaster.h"
 
 
-MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
+
+MenuNavigation RunGame(const Clay_SDL3RendererData * renderer_data, SDL_Window * window)
 {
+    SDL_Renderer * renderer = renderer_data->renderer;
+
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);
     Tiles::loadAll(renderer);

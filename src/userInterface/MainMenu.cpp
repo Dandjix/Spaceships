@@ -6,9 +6,13 @@
 #include "MenuNavigation.h"
 #include "fonts.h"
 
+#include "../clay/renderers/clay_renderer_SDL3.h"
+#include  "../clay/clay.h"
 
+MenuNavigation RunMainMenu(Clay_SDL3RendererData* rendererData,SDL_Window * window) {
 
-MenuNavigation RunMainMenu(SDL_Renderer* renderer,SDL_Window * window) {
+    SDL_Renderer * renderer = rendererData->renderer;
+
     std::vector<std::string> options = { "Game", "Settings", "Ship Editor", "Quit" };
     int selected = 0;
 

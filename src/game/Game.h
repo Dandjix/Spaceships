@@ -6,5 +6,6 @@
 #include "../debug/DebugGrid.h"
 #include "../math/Vectors.h"
 #include "../userInterface/MenuNavigation.h"
+#include "../clay/renderers/clay_renderer_SDL3.h"
 
-MenuNavigation RunGame(SDL_Renderer* renderer, SDL_Window* window);
+MenuNavigation RunGame(const Clay_SDL3RendererData * rendererData, SDL_Window* window);

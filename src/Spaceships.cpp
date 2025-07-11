@@ -9,7 +9,7 @@
 
     #define CLAY_IMPLEMENTATION
     #include "clay/clay.h"
-    #include "clay/renderers/clay_renderer_SDL3.c"
+    #include "clay/renderers/clay_renderer_SDL3.h"
 
     // ========== Global Clay Context ==========
 
@@ -97,17 +97,18 @@
             switch (navigation)
             {
             case Game:
-                navigation = RunGame(renderer, window);
+                navigation = RunGame(&clayRendererData, window);
                 std::cout << "navigation : " << navigation <<"\n";
                 break;
             case MainMenu:
-                navigation = RunMainMenu(renderer, window);
+                navigation = RunMainMenu(&clayRendererData, window);
                 break;
             case ShipEditor:
-                navigation = RunShipEditor(renderer, window);
+                navigation = RunShipEditor(&clayRendererData, window);
                 break;
             case Settings:
                 throw std::logic_error("Function not yet implemented");
+            default: ;
                 break;
             }
         }
