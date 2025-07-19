@@ -53,7 +53,6 @@ int main(int argc, char* argv[]) {
         {
         case Game:
             navigation = RunGame(renderer, window);
-            std::cout << "navigation : " << navigation <<"\n";
             break;
         case MainMenu:
             navigation = RunMainMenu(renderer, window);

@@ -13,7 +13,7 @@ Sphere::Sphere(Vector2Int position, int radius)
 void Sphere::LoadTextures(SDL_Renderer* renderer) {
     if (texturesLoaded) return;
 
-    texture = IMG_LoadTexture(renderer, "assets/textures/objects/spheres/1.png");
+    texture = IMG_LoadTexture(renderer, ENV_PROJECT_ROOT"assets/textures/objects/spheres/1.png");
 
     if (!texture) {
         std::cerr << "Failed to load texture: " << SDL_GetError() << std::endl;

@@ -40,7 +40,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     RayCaster* rayCaster = new RayCaster(camera, player);
     Cursor* cursor = new Cursor(camera);
 
-    SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/battleship.json");
+    SpaceShipBlueprint blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json");
     SpaceShip * ship = new SpaceShip(&blueprint);
 
     ship->registerEntities(

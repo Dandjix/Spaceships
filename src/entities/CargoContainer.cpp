@@ -8,10 +8,10 @@ bool CargoContainer::texturesLoaded = false;
 void CargoContainer::LoadTextures(SDL_Renderer* renderer) {
     if (texturesLoaded) return;
 
-    textures[0] = IMG_LoadTexture(renderer, "assets/textures/objects/cargoContainers/blank.png");
-    textures[1] = IMG_LoadTexture(renderer, "assets/textures/objects/cargoContainers/EMA.png");
-    textures[2] = IMG_LoadTexture(renderer, "assets/textures/objects/cargoContainers/SL.png");
-    textures[3] = IMG_LoadTexture(renderer, "assets/textures/objects/cargoContainers/SN.png");
+    textures[0] = IMG_LoadTexture(renderer, ENV_PROJECT_ROOT"assets/textures/objects/cargoContainers/blank.png");
+    textures[1] = IMG_LoadTexture(renderer, ENV_PROJECT_ROOT"assets/textures/objects/cargoContainers/EMA.png");
+    textures[2] = IMG_LoadTexture(renderer, ENV_PROJECT_ROOT"assets/textures/objects/cargoContainers/SL.png");
+    textures[3] = IMG_LoadTexture(renderer, ENV_PROJECT_ROOT"assets/textures/objects/cargoContainers/SN.png");
 
     for (int i = 0; i < static_cast<int>(Variation::COUNT); i++) {
         if (textures[i] == NULL) {

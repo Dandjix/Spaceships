@@ -365,5 +365,7 @@ FodyWeavers.xsd
 main
 compile_commands.json
 
+cmake-build-debug/
+
 ./.idea/
 ./.vscode/
