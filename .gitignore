@@ -16,8 +16,10 @@
 # Mono auto generated files
 mono_crash.*
 
+
+
 # Build results
-[Dd]ebug/
+# [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -369,3 +371,19 @@ cmake-build-debug/
 
 ./.idea/
 ./.vscode/
+.vscode
+
+#Cmake
+
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+CMakeUserPresets.json

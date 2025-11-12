@@ -56,8 +56,7 @@ file(GLOB_RECURSE SOURCES
 )
 
 # Create the executable from all your sources
-add_executable(${PROJECT_NAME} ${SOURCES}
-        src/Environment.h)
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)
 

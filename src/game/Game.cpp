@@ -2,16 +2,20 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
 
+#ifndef ENV_PROJECT_ROOT
+#define ENV_PROJECT_ROOT ""
+#endif
+
 #include "../userInterface/MenuNavigation.h"
 
 #include "../player/Camera.h"
 #include "../behavior/PlayerBehavior.h"
 
-#include "../debug/Cursor.h"
+// #include "../debug/Cursor.h"
 
 #include "../entities/CargoContainer.h"
 #include "../entities/Sphere.h"
-#include "../debug/DebugGrid.h"
+// #include "../debug/DebugGrid.h"
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShipBlueprint.h"
 #include "../spaceships/SpaceShip.h"
@@ -36,9 +40,9 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
     CargoContainer * container2 = new CargoContainer(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
     Sphere * sphere = new Sphere(Vector2Int(-5, -5), 32);
-    DebugGrid * grid = new DebugGrid(0, 0, 64);
+    // DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
-    Cursor* cursor = new Cursor(camera);
+    // Cursor* cursor = new Cursor(camera);
 
     SpaceShipBlueprint blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json");
     SpaceShip * ship = new SpaceShip(&blueprint);
@@ -52,7 +56,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         sphere,
         //grid,
         rayCaster,
-        cursor
+        // cursor
         }
     );
 
