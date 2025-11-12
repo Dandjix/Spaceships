@@ -388,6 +388,12 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
+#ninja
+.ninja_deps
+.ninja_log
+build.ninja
+.cmake/
+.idea/
 
 #Spaceships
 
