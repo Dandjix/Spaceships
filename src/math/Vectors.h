@@ -37,11 +37,11 @@ struct Vector2 {
         }
     }
 
-    Vector2<T> operator*(T scalar) const {
+    Vector2<T> operator*(float scalar) const {
         return Vector2<T>(static_cast<T>(x * scalar), static_cast<T>(y * scalar));
     }
 
-    Vector2<T> operator/(T divider) const {
+    Vector2<T> operator/(float divider) const {
         return Vector2<T>(static_cast<T>(x / divider), static_cast<T>(y / divider));
     }
 
@@ -97,15 +97,8 @@ struct Vector2 {
         os << "(" << v.x << ", " << v.y << ")";
         return os;
     }
-
-    static const Vector2<T> Zero;
-    static const Vector2<T> One;
 };
-template<typename T>
-const Vector2<T> Vector2<T>::Zero = Vector2<T>(0, 0);
 
-template<typename T>
-const Vector2<T> Vector2<T>::One = Vector2<T>(1, 1);
 
 using Vector2Int = Vector2<int>;
 using Vector2Float = Vector2<float>;
