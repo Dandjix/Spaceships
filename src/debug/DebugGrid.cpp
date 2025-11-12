@@ -5,10 +5,10 @@
 
 #include <iostream>
 
-DebugGrid::DebugGrid(int xOrigin, int yOrigin, int grid_resolution) : Entity(Vector2Int(0,0),0,nullptr)
+DebugGrid::DebugGrid(int xOrigin, int yOrigin, int grid_step) : Entity(Vector2Int(0,0),0,nullptr)
 {
     origin = {xOrigin, yOrigin};
-    resolution = grid_resolution;
+    step = grid_step;
 }
 
 DebugGrid::~DebugGrid()
@@ -23,26 +23,58 @@ Vector2Int closest_point(Vector2Int position, int resolution)
     return {closest_x, closest_y};
 }
 
-void DebugGrid::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
+
+
+Vector2Int DebugGrid::snap(Vector2Int worldPosition, bool ceil) const
 {
-    Vector2Int closest_point_to_camera = closest_point(context.cameraPos,resolution);
-
-    // render all lines in a radius visible to the camera. Assuming a square screen (worse scenario), we multiply by 1.42 to get the radius (the diagonal)
-    int screen_radius = std::max(context.screenDimensions.x,context.screenDimensions.y)* 1.42;
-    int world_radius = screen_radius * Vectors::getFactor();
-
-    int nb_lines_and_columns = world_radius*2 / (resolution*Vectors::getFactor());
-
-    Vector2Int start_x = closest_point_to_camera - Vector2Int(1,1) * world_radius;
-
-    for (int i=0;i<=nb_lines_and_columns; i++)
-    {
-        for (int j = 0; j < nb_lines_and_columns; ++j)
+        Vector2Int result = worldPosition.scaleToScreenPosition();
+        int x, y;
+        if (ceil)
         {
-
+            x = static_cast<int>(ceilf(static_cast<float>(result.x) / step)) * step;
+            y = static_cast<int>(ceilf(static_cast<float>(result.y) / step)) * step;
+            return {x, y};
         }
+        x = static_cast<int>(roundf(static_cast<float>(result.x) / step)) * step;
+        y = static_cast<int>(roundf(static_cast<float>(result.y) / step)) * step;
+        return {x, y};
     }
 
-    SDL_SetRenderDrawColor(renderer,255,0,0,255);
-    SDL_RenderLine(renderer,0,0,1000,1000);
-}
+void DebugGrid::debugRender(SDL_Renderer* renderer, const RenderingContext& context){
+        Vector2Int center = context.cameraPos + context.screenDimensions.scaleToWorldPosition()*0.5f*context.cameraScale;
+
+        int diameter;
+        if (context.screenDimensions.y > context.screenDimensions.x)
+            diameter = context.screenDimensions.y*2;
+        else
+            diameter = context.screenDimensions.x * 2;
+
+        diameter *= static_cast<int>(ceilf(context.cameraScale*1.42f * Vectors::getFactor()));
+
+        Vector2Int topLeft = snap(Vector2Int(center.x - diameter, center.y - diameter));
+        Vector2Int bottomRight = snap(Vector2Int(center.x + diameter, center.y + diameter),true);
+
+        //std::cout << "tl : " << topLeft.x << " : " << topLeft.y << "\n";
+        //std::cout << "br : " << bottomRight.x << " : " << bottomRight.y << "\n";
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+        for (int x = topLeft.x; x <= bottomRight.x; x+=step)
+        {
+            Vector2Float pos1, pos2;
+            pos1 = context.toScreenPoint(Vector2Int(x, topLeft.y).scaleToWorldPosition());
+            pos2 = context.toScreenPoint(Vector2Int(x, bottomRight.y).scaleToWorldPosition());
+
+            SDL_RenderLine(renderer, pos1.x,pos1.y,pos2.x,pos2.y);
+        }
+        for (int y = topLeft.y; y <= bottomRight.y; y += step)
+        {
+            Vector2Float pos1, pos2;
+            pos1 = context.toScreenPoint(Vector2Int(topLeft.x, y).scaleToWorldPosition());
+            pos2 = context.toScreenPoint(Vector2Int(bottomRight.x, y).scaleToWorldPosition());
+
+
+            SDL_RenderLine(renderer, pos1.x, pos1.y, pos2.x, pos2.y);
+        }
+
+    }
