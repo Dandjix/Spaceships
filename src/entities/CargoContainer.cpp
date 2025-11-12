@@ -15,7 +15,7 @@ void CargoContainer::LoadTextures(SDL_Renderer* renderer) {
 
     for (int i = 0; i < static_cast<int>(Variation::COUNT); i++) {
         if (textures[i] == NULL) {
-            std::cout << "texture " << i << " is null.\n";
+            std::cout << "texture " << i << " is null.\n" << std::endl;
         }
     }
 

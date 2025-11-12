@@ -21,7 +21,7 @@ const int gridSize = 64;
 
 void ResizeGrid(Vector2Int newSize)
 {
-    std::cout << "resizing to " << newSize.x << newSize.y << "\n";
+    std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
 }
 
 //inputs

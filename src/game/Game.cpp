@@ -15,7 +15,7 @@
 
 #include "../entities/CargoContainer.h"
 #include "../entities/Sphere.h"
-// #include "../debug/DebugGrid.h"
+#include "../debug/DebugGrid.h"
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShipBlueprint.h"
 #include "../spaceships/SpaceShip.h"
@@ -28,7 +28,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     Sphere::LoadTextures(renderer);
     Tiles::loadAll(renderer);
 
-    std::cout << "textures loaded";
+    std::cout << "textures loaded" << std::endl;
 
     Camera * camera = new Camera(Vector2Int(0, 0), 0, 1);
 
@@ -40,7 +40,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
     CargoContainer * container2 = new CargoContainer(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
     Sphere * sphere = new Sphere(Vector2Int(-5, -5), 32);
-    // DebugGrid * grid = new DebugGrid(0, 0, 64);
+    DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
     // Cursor* cursor = new Cursor(camera);
 
@@ -54,7 +54,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         container1,
         container2,
         sphere,
-        //grid,
+        grid,
         rayCaster,
         // cursor
         }

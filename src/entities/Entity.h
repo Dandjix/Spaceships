@@ -28,17 +28,17 @@ protected:
             center.y - destSize.y,
             destSize.x * 2.0f,
             destSize.y * 2.0f};
-        float angle;
+        float entity_angle;
         if (hasAngle())
         {
-            angle = getAngle() + context.cameraAngle;
+            entity_angle = getAngle() + context.cameraAngle;
         }
         else
         {
-            angle = 0;
+            entity_angle = 0;
         }
 
-        SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, angle, nullptr, SDL_FLIP_NONE);
+        SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, entity_angle, nullptr, SDL_FLIP_NONE);
     }
 public:
     /// <summary>
@@ -48,10 +48,10 @@ public:
     Entity(Vector2Int position, std::optional<float> angle, Behavior * behavior = nullptr)
         : position(position.scaleToWorldPosition()), angle(angle),behavior(behavior),attributes(new EntityAttributes()) {} // Constructor using Vector2
 
-    virtual ~Entity() {}
+    virtual ~Entity() = default;
 
-    virtual void update(const UpdateContext &context);
-    virtual void handleEvent(const SDL_Event &event);
+    virtual void update(const UpdateContext& context);
+    virtual void handleEvent(const SDL_Event& event);
     virtual void render(SDL_Renderer *renderer, const RenderingContext &context) = 0;
     virtual void debugRender(SDL_Renderer *renderer, const RenderingContext &context) {}
 
@@ -74,7 +74,7 @@ public:
 
     // accessors
     [[nodiscard]] Behavior * getBehavior() const {return behavior;};
-    void setBehavior(Behavior * behavior) {this->behavior = behavior;}
+    void setBehavior(Behavior * entity_behavior) {this->behavior = entity_behavior;}
 
     [[nodiscard]] EntityAttributes * getAttributes() const {return attributes;}
 
@@ -89,7 +89,7 @@ public:
         {
             throw std::invalid_argument("this entity was instantiated without an angle, it is not possible to assign it one now.");
         }
-        float new_angle = static_cast<float>(fmod(a + 360, 360));
+        auto new_angle = static_cast<float>(fmod(a + 360, 360));
         angle = new_angle;
     }
 

@@ -15,7 +15,7 @@ void main_menu()
 int main(int argc, char* argv[]) {
 
     if (!TTF_Init()) {
-        std::cout << "Failed to initialize SDL_ttf";
+        std::cout << "Failed to initialize SDL_ttf" << std::endl;
         // handle error
     }
 
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 
     if (!LoadFonts())
     {
-        std::cout << "could not load fonts";
+        std::cout << "could not load fonts" << std::endl;
         return 1;
     }
 
