@@ -14,6 +14,9 @@ struct RenderingContext
 
 	const Vector2Int screenDimensions;
 
+	/**
+	 * scale of the camera. 1 is regular camera zoom, while 0 would be infinitely zoomed in and inf infinitely zoomed out
+	 */
 	const float cameraScale;
 
 	Vector2Float toScreenPoint(Vector2Int worldPosition) const
