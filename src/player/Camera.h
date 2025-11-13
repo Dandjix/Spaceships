@@ -32,8 +32,7 @@ public:
             float scale = getScale() + event.wheel.y * zoomFactor;
 
             // Clamp scale
-            if (scale < 0.5f) scale = 0.5f;
-            if (scale > 5.0f) scale = 5.0f;
+            scale = std::clamp(scale, 0.5f,5.0f);
 
             setScale(scale);
         }
