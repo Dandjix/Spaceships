@@ -11,8 +11,6 @@
 #include "../player/Camera.h"
 #include "../behavior/PlayerBehavior.h"
 
-// #include "../debug/Cursor.h"
-
 #include "../entities/CargoContainer.h"
 #include "../entities/Sphere.h"
 #include "../debug/DebugGrid.h"
@@ -21,6 +19,42 @@
 #include "../spaceships/SpaceShip.h"
 #include "../physics/RayCaster.h"
 
+#include "../parallax/ParallaxObject.h"
+
+void renderSpaceBackground()
+{
+
+}
+
+void renderPlanets()
+{
+
+}
+
+void renderParallax(SDL_Renderer * renderer, const RenderingContext & context,std::vector<ParallaxObject> objects)
+{
+    for (auto object : objects)
+    {
+        object.render(renderer,context);
+    }
+}
+
+std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer * renderer)
+{
+    auto roid_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/environment/parallax/roid.png");
+
+    auto object_1 = ParallaxObject({0,0},0,0,roid_texture);
+
+    Vector2Int second_pos = Vector2Int(256,256) * static_cast<float>(Vectors::getFactor());
+    auto object_2 = ParallaxObject(second_pos,90,512*Vectors::getFactor(),roid_texture);
+
+    std::vector<ParallaxObject> objects = {
+        object_1,
+        object_2
+    };
+
+    return objects;
+}
 
 MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 {
@@ -30,9 +64,12 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 
     std::cout << "textures loaded" << std::endl;
 
+    // entities
+
     Camera * camera = new Camera(Vector2Int(0, 0), 0, 1);
 
     PlayerBehavior * playerBehavior = new PlayerBehavior(camera);
+
 
     Humanoid * player = new Humanoid(Vector2Int(0, 0), 0, playerBehavior); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
@@ -54,11 +91,17 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         container1,
         container2,
         sphere,
-        grid,
+        // grid,
         rayCaster,
         // cursor
         }
     );
+
+    //parallax
+
+
+
+    std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer);
 
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -109,6 +152,9 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
+        renderSpaceBackground();
+        renderPlanets();
+        renderParallax(renderer,renderingContext,parallax_objects);
 
         //the one place that hasn't been corrupted by capitalism (it is space)
         ship->renderExterior(renderer,renderingContext);
