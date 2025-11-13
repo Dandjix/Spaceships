@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
 #include <iostream>
-#include <functional> 
+#include <functional>
 
 inline const int factor = 64;
 // pixels subdivision
@@ -97,6 +97,13 @@ struct Vector2 {
         os << "(" << v.x << ", " << v.y << ")";
         return os;
     }
+
+    Vector2<int>& operator/=(float divider)
+    {
+        x = static_cast<T>(x / divider);
+        y = static_cast<T>(y / divider);
+        return *this;
+    }
 };
 
 
@@ -124,11 +131,22 @@ public:
         return factor;
     }
 
+    /**
+     * translates a vector int to float. Does not apply the factor.
+     * @param vec
+     * @return
+     */
     static Vector2Float toVector2Float(const Vector2Int& vec)
     {
         return Vector2Translations<int, float>::convert(vec);
     }
 
+    /**
+     * translates a vector float to int. Does not apply the factor.
+
+     * @param vec
+     * @return
+     */
     static Vector2Int toVector2Int(const Vector2Float& vec)
     {
         return Vector2Translations<float, int>::convert(vec);
