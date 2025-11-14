@@ -20,6 +20,24 @@ public:
 
     void render(SDL_Renderer * renderer, const RenderingContext & context);
 
+    bool operator<(const ParallaxObject & other) const
+    {
+        return other.depth < this->depth;
+    }
+    bool operator<=(const ParallaxObject & other) const
+    {
+        return other.depth <= this->depth;
+    }
+
+    bool operator>(const ParallaxObject & other) const
+    {
+        return other.depth > this->depth;
+    }
+
+    bool operator>=(const ParallaxObject & other) const
+    {
+        return other.depth >= this->depth;
+    }
 };
 
 

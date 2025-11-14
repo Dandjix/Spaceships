@@ -33,6 +33,7 @@ void renderPlanets()
 
 void renderParallax(SDL_Renderer * renderer, const RenderingContext & context,std::vector<ParallaxObject> objects)
 {
+    std::sort(objects.begin(),objects.end());
     for (auto object : objects)
     {
         object.render(renderer,context);
