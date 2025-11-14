@@ -48,9 +48,13 @@ std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer * renderer)
     Vector2Int second_pos = Vector2Int(256,256) * static_cast<float>(Vectors::getFactor());
     auto object_2 = ParallaxObject(second_pos,90,512*Vectors::getFactor(),roid_texture);
 
+    Vector2Int third_pos = Vector2Int(512,512) * static_cast<float>(Vectors::getFactor());
+    auto object_3 = ParallaxObject(third_pos,90,10000*Vectors::getFactor(),roid_texture,100);
+
     std::vector<ParallaxObject> objects = {
         object_1,
-        object_2
+        object_2,
+        object_3,
     };
 
     return objects;
