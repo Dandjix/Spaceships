@@ -1,0 +1,32 @@
+# Catch2 (assuming FetchContent or find_package is used above)
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.17.0
+)
+FetchContent_MakeAvailable(googletest)
+
+# Collect test files inside this folder only!
+file(GLOB TEST_SOURCES *.cpp)
+
+add_library(GTest::GTest INTERFACE IMPORTED)
+
+target_link_libraries(
+        GTest::GTest
+        INTERFACE
+        SpaceshipsLib
+    gtest_main
+)
+
+add_executable(SpaceshipsTests main.cpp)
+
+target_link_libraries(
+        SpaceshipsTests
+        PRIVATE
+        GTest::GTest
+)
+
+# Enable CLion / CTest integration
+#include(CTest)
+#include(Catch)
+#catch_discover_tests(SpaceshipsTests)

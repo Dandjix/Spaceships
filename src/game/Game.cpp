@@ -44,7 +44,7 @@ std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer * renderer)
 {
     auto roid_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/environment/parallax/roid.png");
 
-    auto object_1 = ParallaxObject({0,0},0,0,roid_texture);
+    auto object_1 = ParallaxObject({0,0},0,0,roid_texture,5);
 
     Vector2Int second_pos = Vector2Int(256,256) * static_cast<float>(Vectors::getFactor());
     auto object_2 = ParallaxObject(second_pos,90,512*Vectors::getFactor(),roid_texture);
