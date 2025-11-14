@@ -50,31 +50,10 @@ void ParallaxObject::render(SDL_Renderer* renderer, const RenderingContext& cont
     factor = std::clamp(factor, 0.0f, 1.0f);
 
     Vector2Int parallax_position = context.cameraPos + (position - context.cameraPos)
-    // * (depth / Vectors::getFactor());
     * factor;
 
 
-    // parallax_position /= context.cameraScale;
-
-
-    Vector2Float center;
-    // all indented is a copy of the contents of toScreenPoint adapted
-        Vector2Float floatPosition = Vectors::toVector2Float(parallax_position);
-
-        Vector2Float floatCameraPosition = Vectors::toVector2Float(context.cameraPos);
-        Vector2Float worldCenter = floatPosition - floatCameraPosition;
-        Vector2Float scaledWorldCenter = ((worldCenter) / context.cameraScale).scaleToScreenPosition();
-
-        Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2;
-        Vector2Float diff = (screenCenter - scaledWorldCenter).rotate(context.cameraAngle);
-        scaledWorldCenter = screenCenter - diff;
-
-        // return scaledWorldCenter;
-    // center  = context.toScreenPoint(parallax_position);
-    center = scaledWorldCenter;
-
-
-    // std::cout << "p_pos : "<< parallax_position << ", center : " << center << std::endl;
+    Vector2Float center  = context.toScreenPoint(parallax_position);
 
     float texture_w, texture_h;
 
