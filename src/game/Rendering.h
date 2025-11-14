@@ -29,11 +29,6 @@ struct RenderingContext
 		return CameraTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle,cameraScale, cameraPos);
 	}
 
-	Vector2Int toWorldPositionPerfectInverse(Vector2Float screenPosition) const
-	{
-		return CameraTransformations::screenToWorldPointPerfectInverse(screenPosition, screenDimensions, cameraAngle, cameraScale, cameraPos);
-	}
-
 	RenderingContext(Vector2Int cameraPos, float cameraAngle, Vector2Int screenDimensions, float cameraScale)
 		: cameraPos(cameraPos), cameraAngle(cameraAngle), screenDimensions(screenDimensions),cameraScale(cameraScale){}
 };
@@ -82,53 +77,6 @@ public:
 
 		//drawCross(renderer, screenPosition1);
 		drawCross(renderer, screenPosition2);
-	}
-
-	static void drawWorldRect(SDL_Renderer* renderer, const RenderingContext& context, Vector2Int position, Vector2Int scale, float angle) {
-		// Convert object position and camera to float
-		Vector2Float floatPosition = Vectors::toVector2Float(position);
-		Vector2Float floatCameraPosition = Vectors::toVector2Float(context.cameraPos);
-		Vector2Float worldCenter = floatPosition - floatCameraPosition;
-		Vector2Float center = worldCenter / context.cameraScale;
-		center = center.scaleToScreenPosition();
-
-		// Apply camera rotation
-		Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2.0f;
-		Vector2Float diff = (screenCenter - center).rotate(context.cameraAngle);
-		center = screenCenter - diff;
-
-		// Calculate half size with camera scale
-		Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
-
-		// Define corners in local space
-		Vector2Float corners[4] = {
-			{-halfSize.x, -halfSize.y},
-			{ halfSize.x, -halfSize.y},
-			{ halfSize.x,  halfSize.y},
-			{-halfSize.x,  halfSize.y}
-		};
-
-		// Total rotation = object angle + camera angle
-		float totalAngleDeg = angle + context.cameraAngle;
-		float angleRad = totalAngleDeg * (3.14159265f / 180.0f);
-		float cosA = cos(angleRad);
-		float sinA = sin(angleRad);
-
-		// Rotate corners around center
-		for (int i = 0; i < 4; ++i) {
-			float x = corners[i].x;
-			float y = corners[i].y;
-			corners[i].x = x * cosA - y * sinA + center.x;
-			corners[i].y = x * sinA + y * cosA + center.y;
-		}
-
-		// Draw rectangle from corners
-		for (int i = 0; i < 4; ++i) {
-			int next = (i + 1) % 4;
-			SDL_RenderLine(renderer,
-				corners[i].x, corners[i].y,
-				corners[next].x, corners[next].y);
-		}
 	}
 
 	/// <summary>

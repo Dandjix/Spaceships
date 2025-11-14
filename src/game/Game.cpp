@@ -75,8 +75,9 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 
     PlayerBehavior * playerBehavior = new PlayerBehavior(camera);
 
+    SDL_Texture * player_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/entities/player/player_placeholder.png");
 
-    Humanoid * player = new Humanoid(Vector2Int(0, 0), 0, playerBehavior); // Start at center, 200 pixels/sec
+    Humanoid * player = new Humanoid(Vector2Int(0, 0), 0, playerBehavior,player_texture); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
 
     CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
@@ -150,7 +151,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         }
         ship->update(updateContext);
 
-        Vector2Int cameraPos = camera->getOffsetPosition(screenDimensions);
+        Vector2Int cameraPos = camera->getPosition();
 
         RenderingContext renderingContext(cameraPos, camera->getAngle(), screenDimensions, camera->getScale());
 

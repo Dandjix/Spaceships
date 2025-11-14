@@ -15,25 +15,10 @@ public:
     void setRadius(int r) { radius = r; }
 
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override {
-        // Convert position and camera to float
-        Vector2Float floatPosition = Vectors::toVector2Float(position);
-        Vector2Float floatCameraPosition = Vectors::toVector2Float(context.cameraPos);
 
-        // Convert world position to screen space
-        Vector2Float worldCenter = floatPosition - floatCameraPosition;
-        Vector2Float center = worldCenter / context.cameraScale;
-        center = center.scaleToScreenPosition();
+        Vector2Float center = context.toScreenPoint(position);
 
-        // Adjust for camera rotation
-        Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2.0f;
-        Vector2Float diff = (screenCenter - center).rotate(context.cameraAngle);
-        center = screenCenter - diff;
-
-        // Calculate scaled radius
-        float scaledRadius = static_cast<float>(radius) / context.cameraScale;
-
-        // Set debug draw color (green, for example)
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        float scaledRadius = radius / context.cameraScale;
 
         // Draw debug circle
         const int segments = 16; // More = smoother circle

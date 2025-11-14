@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "../src/math/Vectors.h"
+#include "gtest/gtest.h"
 
 int main(int argc, char ** argv)
 {
-    Vector2Int myvector = {12,1231};
+    testing::InitGoogleTest(&argc, argv);
 
-    std::cout<<" tests main file function latest 2. Here's a vector : " << myvector <<  std::endl;
+    return RUN_ALL_TESTS();
 }

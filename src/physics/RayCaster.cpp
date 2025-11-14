@@ -10,7 +10,7 @@ void RayCaster::update(const UpdateContext& context)
 	SDL_GetMouseState(&mouseX, &mouseY);
 
 
-	Vector2Int mousePosition = camera->screenToWorldPointPerfectInverse(Vector2Float(mouseX,mouseY));
+	Vector2Int mousePosition = camera->screenToWorldPoint(Vector2Float(mouseX,mouseY));
 	Vector2Float direction = Vectors::toVector2Float(mousePosition - player->getPosition());
 
 	direction.normalize();
@@ -42,7 +42,7 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 	float mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 	Vector2Float mouseScreenPos = Vector2Float(mouseX, mouseY);
-	Vector2Int mousePos = context.toWorldPositionPerfectInverse(mouseScreenPos);
+	Vector2Int mousePos = context.toWorldPosition(mouseScreenPos);
 
 	Vector2Int playerPos = player->getPosition();
 	Vector2Float playerScreenPos = context.toScreenPoint(playerPos);

@@ -180,7 +180,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         actionsList.update(gui_updateContext);
 
 
-        Vector2Int cameraPos = camera.getOffsetPosition(screenDimensions);
+        Vector2Int cameraPos = camera.getPosition();
 
         RenderingContext renderingContext = {
             cameraPos,

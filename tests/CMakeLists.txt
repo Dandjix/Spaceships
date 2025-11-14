@@ -6,8 +6,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-# Collect test files inside this folder only!
-file(GLOB TEST_SOURCES *.cpp)
+# Collect test files
+file(GLOB_RECURSE TEST_SOURCES *.cpp)
 
 add_library(GTest::GTest INTERFACE IMPORTED)
 
@@ -18,7 +18,7 @@ target_link_libraries(
     gtest_main
 )
 
-add_executable(SpaceshipsTests main.cpp)
+add_executable(SpaceshipsTests ${TEST_SOURCES})
 
 target_link_libraries(
         SpaceshipsTests

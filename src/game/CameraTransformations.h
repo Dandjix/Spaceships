@@ -26,28 +26,6 @@ namespace CameraTransformations {
 	}
 
 	/// <summary>
-	/// sometimes this one does the trick kill me
-	/// </summary>
-	/// <param name="screenPosition"></param>
-	/// <param name="screenDimensions"></param>
-	/// <param name="cameraAngle"></param>
-	/// <param name="cameraScale"></param>
-	/// <param name="cameraPosition"></param>
-	/// <returns></returns>
-	inline Vector2Int screenToWorldPointPerfectInverse(Vector2Float screenPosition, Vector2Int screenDimensions, float cameraAngle, float cameraScale, Vector2Int cameraPosition) {
-
-		Vector2Float halfScreenDim = Vectors::toVector2Float(screenDimensions) / 2;
-		Vector2Float offsetScreenPosition = screenPosition - halfScreenDim;
-
-		Vector2Float rotated = offsetScreenPosition.rotate(-cameraAngle);
-		Vector2Float scaled = (rotated + halfScreenDim)*cameraScale;
-
-		Vector2Int worldPoint = Vectors::toVector2Int(scaled).scaleToWorldPosition() + cameraPosition;
-
-		return worldPoint;
-	}
-
-	/// <summary>
 	/// works fine actually i think maybe
 	/// </summary>
 	/// <param name="worldPosition"></param>
@@ -56,17 +34,26 @@ namespace CameraTransformations {
 	/// <param name="cameraScale"></param>
 	/// <param name="cameraPos"></param>
 	/// <returns></returns>
-	inline Vector2Float worldToScreenPoint(Vector2Int worldPosition, Vector2Int screenDimensions, float cameraAngle, float cameraScale, Vector2Int cameraPos) {
-		Vector2Float floatPosition = Vectors::toVector2Float(worldPosition);
+	inline Vector2Float worldToScreenPoint(Vector2Int worldPosition, Vector2Int screenDimensions, float cameraAngle, float cameraScale, Vector2Int cameraPos)
+	{
+			// 1. Get half screen dim
+			Vector2Float halfScreenDim = Vectors::toVector2Float(screenDimensions) / 2.0f;
 
-		Vector2Float floatCameraPosition = Vectors::toVector2Float(cameraPos);
-		Vector2Float worldCenter = floatPosition - floatCameraPosition;
-		Vector2Float scaledWorldCenter = ((worldCenter) / cameraScale).scaleToScreenPosition();
+			// 2. Undo "+ cameraPosition"
+			Vector2Float local = Vectors::toVector2Float(worldPosition - cameraPos);
 
-		Vector2Float screenCenter = Vectors::toVector2Float(screenDimensions) / 2;
-		Vector2Float diff = (screenCenter - scaledWorldCenter).rotate(cameraAngle);
-		scaledWorldCenter = screenCenter - diff;
+			// 3. Undo scaleToWorldPosition() -> return to the "scaled" grid space
+			Vector2Float grid = local.scaleToScreenPosition();
 
-		return scaledWorldCenter;
-	}
+			// 4. Undo "* cameraScale"
+			Vector2Float unscaled = grid / cameraScale;
+
+			// 5. Undo rotate(-angle) → rotate(+angle)
+			Vector2Float unrotated = unscaled.rotate(cameraAngle);
+
+			// 6. Undo "screenPosition - halfScreenDim"
+			Vector2Float screenPos = unrotated + halfScreenDim;
+
+			return screenPos;
+		}
 }

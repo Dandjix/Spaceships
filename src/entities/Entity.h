@@ -21,6 +21,8 @@ protected:
 
     void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture, Vector2Float destSize) const
     {
+        destSize = destSize / context.cameraScale;
+
         Vector2Float center = context.toScreenPoint(position);
 
         SDL_FRect destRect = {

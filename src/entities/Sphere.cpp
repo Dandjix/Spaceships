@@ -31,7 +31,6 @@ void Sphere::render(SDL_Renderer* renderer, const RenderingContext& context) {
 
     // Calculate the half-size of the sphere for rendering (scale it according to the camera)
     Vector2Float halfSize(static_cast<float>(radius), static_cast<float>(radius));
-    halfSize = halfSize / context.cameraScale;
 
     // Render the texture with calculated size
     renderTexture(renderer, context, texture, halfSize);
