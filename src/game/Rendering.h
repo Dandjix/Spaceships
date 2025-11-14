@@ -55,11 +55,11 @@ public :
 class DebugRendering
 {
 public:
-	static void drawCross(SDL_Renderer * renderer,Vector2Int screenPosition)
+	static void drawCross(SDL_Renderer * renderer,Vector2Int screenPosition, float size = 14.0f)
 	{
 		Vector2Float convertedPos = Vectors::toVector2Float(screenPosition);
 
-		float halfLength = 7;
+		float halfLength = size/2;
 
 		Vector2Float corners[4] = {
 			Vector2Float(convertedPos.x - halfLength,convertedPos.y - halfLength),

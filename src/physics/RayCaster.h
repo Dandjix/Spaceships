@@ -8,6 +8,7 @@ protected:
 	Camera* camera;
 	Entity* player;
 	std::optional<Vector2Int> hitPosition;
+	std::optional<Vector2Int> originPosition;
 
 public:
 	RayCaster(Camera* camera, Entity * player) : Entity(Vector2Int(0, 0), 0.0f), camera(camera), player(player) {}
