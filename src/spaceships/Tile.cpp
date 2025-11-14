@@ -42,7 +42,7 @@ void Tiles::loadAll(SDL_Renderer* renderer)
 
 void Tiles::loadTileTexture(SDL_Renderer * renderer, Tile tile)
 {
-	SDL_Texture* texture = IMG_LoadTexture(renderer, (std::string("assets/textures/tiles/") + filename(tile)).c_str());
+	SDL_Texture* texture = IMG_LoadTexture(renderer, (std::string(ENV_PROJECT_ROOT "assets/textures/tiles/") + filename(tile)).c_str());
 
 	manifest.emplace(tile, texture);
 }
