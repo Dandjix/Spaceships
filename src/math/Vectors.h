@@ -45,6 +45,11 @@ struct Vector2 {
         return Vector2<T>(static_cast<T>(x / divider), static_cast<T>(y / divider));
     }
 
+    Vector2<T> operator%(T modulus)
+    {
+        return Vector2<T>(x % modulus, y % modulus);
+    }
+
     T operator*(const Vector2<T>& other) const {
         return x * other.x + y * other.y;
     }
@@ -123,6 +128,13 @@ struct Vector2 {
     {
         x = static_cast<T>(x - vector2.x);
         y = static_cast<T>(y - vector2.y);
+        return *this;
+    }
+
+    Vector2<T> operator%=(T modulus)
+    {
+        x = x % modulus;
+        y = y % modulus;
         return *this;
     }
 };
