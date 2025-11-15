@@ -17,6 +17,7 @@
 #include "../spaceships/Tile.h"
 #include "../shipEditor/BlueprintEditorAppearance.h"
 #include "userInterface/GUICheckbox.h"
+#include "userInterface/GUILabel.h"
 
 const int gridSize = 64;
 
@@ -85,7 +86,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     );
     activeEntities.push_back(&grid);
 
-    BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
+    BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall,false);
     activeEntities.push_back(&painter);
 
     BlueprintEditorAppearance appearance(&blueprint);
@@ -157,15 +158,15 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
        );
     editorGUIElements.push_back(&actionsList);
 
-
+    editorGUIElements.push_back(new GUILabel(Anchor::TL,{200,0},50,25,"Fill",{255,255,255},fonts["sm"]));
 
     GUICheckbox fillCheckbox(
         Anchor::TL,
-        {200,0},
-        [](bool checkboxValue){
-            std::cout << "You clicked the checkbox, it is now " << checkboxValue << std::endl;
+        {250,0},
+        [&painter](bool checkboxValue){
+            painter.fill = checkboxValue;
         },
-        true
+        painter.fill
     );
     editorGUIElements.push_back(&fillCheckbox);
 

@@ -15,14 +15,21 @@ protected :
 	ShipBuildingGrid* grid;
 	Tile tileToPaint;
 public:
+	/**
+	 * When set to true, the painter fills an area of contiguous same tiles instead of changing just the one
+	 */
+	bool fill;
 
-	BlueprintTilePainter(SpaceShipBlueprint* blueprint, ShipBuildingGrid* grid, Tile tileToPaint);
+	BlueprintTilePainter(SpaceShipBlueprint* blueprint, ShipBuildingGrid* grid, Tile tileToPaint, bool fill);
 
 	void setTileToPaint(Tile tileToPaint);
 
 	bool getEnabled();
 
 	void setEnabled(bool enabled);
+	void paintSingleTile(Vector2Int coords);
+
+	void paintFill(Vector2Int coords);
 
 	void update(const UpdateContext& context) override;
 
