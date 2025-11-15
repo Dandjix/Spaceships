@@ -104,6 +104,27 @@ struct Vector2 {
         y = static_cast<T>(y / divider);
         return *this;
     }
+
+    Vector2<int>& operator*=(float scalar)
+    {
+        x = static_cast<T>(x * scalar);
+        y = static_cast<T>(y * scalar);
+        return *this;
+    }
+
+    Vector2<float>& operator+=(const Vector2& vector2)
+    {
+        x = static_cast<T>(x + vector2.x);
+        y = static_cast<T>(y + vector2.y);
+        return *this;
+    }
+
+    Vector2<float>& operator-=(const Vector2& vector2)
+    {
+        x = static_cast<T>(x - vector2.x);
+        y = static_cast<T>(y - vector2.y);
+        return *this;
+    }
 };
 
 
