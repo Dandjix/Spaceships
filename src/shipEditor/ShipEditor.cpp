@@ -16,6 +16,7 @@
 #include "../userInterface/GUIList.h"
 #include "../spaceships/Tile.h"
 #include "../shipEditor/BlueprintEditorAppearance.h"
+#include "userInterface/GUICheckbox.h"
 
 const int gridSize = 64;
 
@@ -39,6 +40,13 @@ void ResizeGrid(Vector2Int newSize)
 
 MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
+    // #================================================================================================================
+    // #================================================================================================================
+    // #================================================================================================================
+                                            // INITIAL SETUP
+    // #================================================================================================================
+    // #================================================================================================================
+    // #================================================================================================================
     Tiles::loadAll(renderer);
 
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
@@ -67,6 +75,38 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         }
     );
 
+    BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
+
+    BlueprintEditorAppearance appearance(&blueprint);
+
+    // #================================================================================================================
+    // #================================================================================================================
+    // #================================================================================================================
+                                            // GUI ELEMENTS
+    // #================================================================================================================
+    // #================================================================================================================
+    // #================================================================================================================
+    std::vector<std::string>tileOptions =
+    {
+        "Void",
+        "Wall",
+        "DoorH",
+        "DoorV",
+        "Floor"
+    };
+    GUIList tilesList(
+        Anchor::TL,
+        Vector2Int(0, 0),
+        100,
+        GUI_Fill,
+        tileOptions,
+        [&painter](const std::string& option) {
+            painter.setTileToPaint(Tiles::tileFromName(option));
+        },
+        true
+    );
+
+
     std::vector<std::string>actionOptions =
     {
         "Resize",
@@ -80,7 +120,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         100,
         150,
         actionOptions,
-        [&destination,&grid,&blueprint](std::string option) {
+        [&destination,&grid,&blueprint](const std::string& option) {
             if (option == "Resize")
             {
                 grid.startResizing();
@@ -96,7 +136,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 				blueprint = SpaceShipBlueprint::loads(content, name);
                 Vector2Int dimensions = Vector2Int(blueprint.tiles.size(), blueprint.tiles[0].size());
                 grid.setDimensions(dimensions);
-                
+
             }
             else if (option == "Exit")
             {
@@ -105,30 +145,25 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         }
        );
 
-	BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
 
-    std::vector<std::string>tileOptions =
-    {
-        "Void",
-        "Wall",
-        "DoorH",
-        "DoorV",
-        "Floor"
-    };
-    GUIList tilesList(
+
+
+    GUICheckbox fillCheckbox(
         Anchor::TL,
-        Vector2Int(0, 0),
-        100,
-        GUI_Fill,
-        tileOptions,
-        [&painter](std::string option) {
-            painter.setTileToPaint(Tiles::tileFromName(option));
+        {200,0},
+        [](bool checkboxValue){
+            std::cout << "You clicked the checkbox, it is now " << checkboxValue << std::endl;
         },
         true
     );
 
-    BlueprintEditorAppearance appearance(&blueprint);
-
+    // #================================================================================================================
+    // #================================================================================================================
+    // #================================================================================================================
+                                                // EDITOR LOOP
+    // #================================================================================================================
+    // #================================================================================================================
+    // #================================================================================================================
     while (destination == ShipEditor) {
         
         //render variable calculation
@@ -146,9 +181,11 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 			//important : grid must be registered before actions or resize will end instantly
             grid.handleEvent(event);
             camera.handleEvent(event);
+
             tilesList.handleEvent(event);
             actionsList.handleEvent(event);
             appearance.handleEvent(event);
+            fillCheckbox.handleEvent(event);
         }
 
         camera.setScreenDimensions(screenDimensions);
@@ -178,6 +215,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         //GUI update
         tilesList.update(gui_updateContext);
         actionsList.update(gui_updateContext);
+        fillCheckbox.update(gui_updateContext);
 
 
         Vector2Int cameraPos = camera.getPosition();
@@ -206,6 +244,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         //GUI render
         tilesList.render(renderer, GUI_renderingContext);
         actionsList.render(renderer, GUI_renderingContext);
+        fillCheckbox.render(renderer, GUI_renderingContext);
 
         SDL_RenderPresent(renderer);
 

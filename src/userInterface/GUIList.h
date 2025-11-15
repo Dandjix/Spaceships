@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <string>
+#include <utility>
 #include <vector>
 #include <functional>
 
@@ -37,7 +38,7 @@ public:
         std::function<void(std::string)> onSelect,
         bool keyboardNavigation = false
     )
-        : GUIRect(anchor, offset, width, height), options(options), onSelect(onSelect), keyboardNavigation(keyboardNavigation){
+        : GUIRect(anchor, offset, width, height), options(std::move(options)), onSelect(std::move(onSelect)), keyboardNavigation(keyboardNavigation){
     }
 
     void handleEvent(const SDL_Event & event) override;
