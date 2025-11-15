@@ -49,6 +49,7 @@ std::optional<Vector2Int> NaiveRaycast(
 // Sy = sqrt(1 + (dy/dx)²)
 
 
+
 std::optional<Vector2Int> Physics::RayCast(
     Vector2Int origin,
     Vector2Float direction,
@@ -56,6 +57,32 @@ std::optional<Vector2Int> Physics::RayCast(
     float maxDistance)
 {
 
-    return NaiveRaycast(origin,direction,spaceship,maxDistance);
-}
+    direction.normalize();
+    Vector2Float step_vector = direction * step;
 
+    float travelled = 0;
+    bool hit = false;
+
+    Vector2Float relative_position = {0,0};
+
+    while (travelled < maxDistance)
+    {
+        relative_position += step_vector;
+        travelled += step;
+
+        Vector2Int world_position = origin + Vectors::toVector2Int(relative_position);
+
+        Vector2Int tile_coordinates = world_position / static_cast<float>(Vectors::getFactor()*Tiles::tileSizePx);
+
+        if (tile_coordinates.x < 0 || tile_coordinates.y < 0 || tile_coordinates.x >= tiles_dimentions.x || tile_coordinates.y >= tiles_dimentions.y)
+        {
+            return std::nullopt;
+        }
+
+        if (tiles[tile_coordinates.x][tile_coordinates.y] == Tile::Wall)
+        {
+            return world_position;
+        }
+    }
+    return std::nullopt;
+}
