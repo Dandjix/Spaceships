@@ -47,10 +47,19 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
+
+    std::vector<Entity*> activeEntities = {};
+
+    // std::vector<Entity*> inactiveEntities = {};
+
+    std::vector<GUIRect*> editorGUIElements = {};
+
+
+
     Tiles::loadAll(renderer);
 
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
-
+    activeEntities.push_back(&camera);
 
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -74,11 +83,13 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             blueprint.resize(newDimensions);
         }
     );
+    activeEntities.push_back(&grid);
 
     BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall);
+    activeEntities.push_back(&painter);
 
     BlueprintEditorAppearance appearance(&blueprint);
-
+    activeEntities.push_back(&appearance);
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
@@ -105,7 +116,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         },
         true
     );
-
+    editorGUIElements.push_back(&tilesList);
 
     std::vector<std::string>actionOptions =
     {
@@ -144,7 +155,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             }
         }
        );
-
+    editorGUIElements.push_back(&actionsList);
 
 
 
@@ -156,6 +167,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         },
         true
     );
+    editorGUIElements.push_back(&fillCheckbox);
 
     // #================================================================================================================
     // #================================================================================================================
@@ -177,15 +189,14 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             if (event.type == SDL_EVENT_QUIT) {
                 destination = Quit;
             }
-			painter.handleEvent(event);
-			//important : grid must be registered before actions or resize will end instantly
-            grid.handleEvent(event);
-            camera.handleEvent(event);
-
-            tilesList.handleEvent(event);
-            actionsList.handleEvent(event);
-            appearance.handleEvent(event);
-            fillCheckbox.handleEvent(event);
+            for (Entity * entity : activeEntities)
+            {
+                entity->handleEvent(event);
+            }
+            for (GUIRect * element : editorGUIElements)
+            {
+                element->handleEvent(event);
+            }
         }
 
         camera.setScreenDimensions(screenDimensions);
@@ -201,10 +212,10 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         };
 
         // update
-        grid.update(updateContext);
-        camera.update(updateContext);
-        painter.update(updateContext);
-        appearance.update(updateContext);
+        for (Entity * entity : activeEntities)
+        {
+            entity->update(updateContext);
+        }
 
 
         GUI_UpdateContext gui_updateContext = {
@@ -213,9 +224,10 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         };
 
         //GUI update
-        tilesList.update(gui_updateContext);
-        actionsList.update(gui_updateContext);
-        fillCheckbox.update(gui_updateContext);
+        for (GUIRect * element : editorGUIElements)
+        {
+            element->update(gui_updateContext);
+        }
 
 
         Vector2Int cameraPos = camera.getPosition();
@@ -231,20 +243,24 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         SDL_RenderClear(renderer);
 
         //render
-        camera.render(renderer, renderingContext);
-        appearance.render(renderer, renderingContext);
-        grid.render(renderer, renderingContext);
-        painter.render(renderer, renderingContext);
+        for (Entity * entity : activeEntities)
+        {
+            entity->render(renderer,renderingContext);
+        }
 
         //render debug
-        grid.debugRender(renderer, renderingContext);
+        for (Entity * entity : activeEntities)
+        {
+            entity->debugRender(renderer,renderingContext);
+        }
 
         GUI_RenderingContext GUI_renderingContext(screenDimensions);
 
         //GUI render
-        tilesList.render(renderer, GUI_renderingContext);
-        actionsList.render(renderer, GUI_renderingContext);
-        fillCheckbox.render(renderer, GUI_renderingContext);
+        for (GUIRect * element : editorGUIElements)
+        {
+            element->render(renderer,GUI_renderingContext);
+        }
 
         SDL_RenderPresent(renderer);
 
