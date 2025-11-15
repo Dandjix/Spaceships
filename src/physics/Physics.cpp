@@ -2,78 +2,60 @@
 #include "../spaceships/SpaceShip.h"
 #include "../math/Vectors.h"
 
-std::optional<Vector2Int> Physics::RayCast(Vector2Int origin, Vector2Float direction, SpaceShip* spaceship, float maxDistance)
+
+// Sx = sqrt(1 + (dx/dy)²)
+// Sy = sqrt(1 + (dy/dx)²)
+
+const float step = 1.0f;
+
+std::optional<Vector2Int> Physics::RayCast(
+    Vector2Int origin,
+    Vector2Float direction,
+    SpaceShip* spaceship,
+    float maxDistance)
 {
-    direction.normalize();
-    int xDir, yDir;
-    if (direction.x == 0) xDir = 0;
-    else if (direction.x > 0)xDir = 1;
-    else xDir = -1;
 
-    if (direction.y == 0) yDir = 0;
-    else if (direction.y > 0)yDir = 1;
-    else yDir = -1;
+    return std::nullopt;
+}
 
+
+std::optional<Vector2Int> NaiveRaycast(
+    Vector2Int origin,
+    Vector2Float direction,
+    SpaceShip* spaceship,
+    float maxDistance)
+{
     const std::vector<std::vector<Tile>> & tiles = spaceship->getBlueprintTiles();
+    Vector2Int tiles_dimentions;
+    tiles_dimentions.x = tiles.size();
+    tiles_dimentions.y = tiles[0].size();
 
-    float Sx = std::sqrtf(1 + std::powf(direction.y / direction.x, 2));
-    float Sy = std::sqrtf(1 + std::powf(direction.x / direction.y, 2));
-    Vector2Int tileCoords;
-    Vector2Int intersection;
+    direction.normalize();
+    Vector2Float step_vector = direction * step;
 
-    int terminator = 0;
-    do
+    float travelled = 0;
+    bool hit = false;
+
+    Vector2Float relative_position = {0,0};
+
+    while (travelled < maxDistance)
     {
-        int Ax, Ay;
-        int snappedX = Vectors::getFactor() - origin.x % Vectors::getFactor();
-        int snappedY = Vectors::getFactor() - origin.y % Vectors::getFactor();
+        relative_position += step_vector;
+        travelled += step;
 
-        Ax = origin.x - snappedX;
-        if (xDir < 0)
-            Ax = Vectors::getFactor() - Ax;
+        Vector2Int world_position = origin + Vectors::toVector2Int(relative_position);
 
-        Ay = origin.y - snappedY;
-        if (yDir < 0)
-            Ay = Vectors::getFactor() - Ay;
+        Vector2Int tile_coordinates = world_position / static_cast<float>(Vectors::getFactor()*Tiles::tileSizePx);
 
-
-
-        float Vx = Ax * Sx;
-        float Vy = Ay * Sy;
-
-        //first loop logic
-        if (Vx == Vy)
+        if (tile_coordinates.x < 0 || tile_coordinates.y < 0 || tile_coordinates.x >= tiles_dimentions.x || tile_coordinates.y >= tiles_dimentions.y)
         {
-            snappedX += xDir * Vectors::getFactor();
-            snappedY += yDir * Vectors::getFactor();
-            intersection = Vectors::toVector2Int(direction * Vx);
-            SDL_Log("bruh perfect diagonal");
-
-        }
-        else if (Vx < Vy)
-        {
-            snappedX += xDir * Vectors::getFactor();
-            intersection = Vectors::toVector2Int(direction * Vx);
-        }
-        else
-        {
-            snappedY += yDir * Vectors::getFactor();
-            intersection = Vectors::toVector2Int(direction * Vy);
-        }
-        if ((origin - intersection).length() > maxDistance)
             return std::nullopt;
+        }
 
-        tileCoords = Vector2Int(snappedX, snappedY) / Vectors::getFactor();
-
-        if(tileCoords.x < 0 || tileCoords.x >= tiles.size() || tileCoords.y < 0 || tileCoords.y >= tiles[0].size())
-            return std::nullopt;
-
-        if (tiles[tileCoords.x][tileCoords.y] == Tile::Wall)
-            return intersection;
-
-        terminator++;
-    } while (terminator<1000);
-    //SDL_Log("terminator reached");
-
+        if (tiles[tile_coordinates.x][tile_coordinates.y] == Tile::Wall)
+        {
+            return world_position;
+        }
+    }
     return std::nullopt;
 }
