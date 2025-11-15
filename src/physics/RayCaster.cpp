@@ -73,7 +73,7 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 	}
 	if (hitPosition.has_value())
 	{
-		Vector2Float screenHit = context.toScreenPoint(originPosition.value());
+		Vector2Float screenHit = context.toScreenPoint(hitPosition.value());
 		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
