@@ -3,21 +3,7 @@
 #include "../math/Vectors.h"
 
 
-// Sx = sqrt(1 + (dx/dy)²)
-// Sy = sqrt(1 + (dy/dx)²)
-
 const float step = 1.0f;
-
-std::optional<Vector2Int> Physics::RayCast(
-    Vector2Int origin,
-    Vector2Float direction,
-    SpaceShip* spaceship,
-    float maxDistance)
-{
-
-    return std::nullopt;
-}
-
 
 std::optional<Vector2Int> NaiveRaycast(
     Vector2Int origin,
@@ -59,3 +45,17 @@ std::optional<Vector2Int> NaiveRaycast(
     }
     return std::nullopt;
 }
+// Sx = sqrt(1 + (dx/dy)²)
+// Sy = sqrt(1 + (dy/dx)²)
+
+
+std::optional<Vector2Int> Physics::RayCast(
+    Vector2Int origin,
+    Vector2Float direction,
+    SpaceShip* spaceship,
+    float maxDistance)
+{
+
+    return NaiveRaycast(origin,direction,spaceship,maxDistance);
+}
+
