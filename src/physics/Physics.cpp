@@ -56,33 +56,94 @@ std::optional<Vector2Int> Physics::RayCast(
     SpaceShip* spaceship,
     float maxDistance)
 {
+    const auto& tiles = spaceship->getBlueprintTiles();
+
+    int mapW = tiles.size();
+
+    int mapH;
+    if (mapW > 0) mapH  = tiles[0].size();
+    else mapH = 0;
 
     direction.normalize();
-    Vector2Float step_vector = direction * step;
 
-    float travelled = 0;
-    bool hit = false;
+    // Convert pixel-space origin into tile-space floating coords
+    const float tileSize = Tiles::tileSizePx * Vectors::getFactor();
+    Vector2Float rayPos = {
+        origin.x / tileSize,
+        origin.y / tileSize
+    };
 
-    Vector2Float relative_position = {0,0};
+    // Which tile are we in?
+    Vector2Int vMapCheck = {
+        (int)rayPos.x,
+        (int)rayPos.y
+    };
 
-    while (travelled < maxDistance)
+    // Precompute delta distances
+    Vector2Float deltaDist = {
+        std::abs(1.0f / direction.x),
+        std::abs(1.0f / direction.y)
+    };
+
+    Vector2Int vStep;
+    Vector2Float sideDist;
+
+    // Setup step direction and initial edge distances
+    if (direction.x < 0)
     {
-        relative_position += step_vector;
-        travelled += step;
+        vStep.x = -1;
+        sideDist.x = (rayPos.x - vMapCheck.x) * deltaDist.x;
+    }
+    else
+    {
+        vStep.x = 1;
+        sideDist.x = (vMapCheck.x + 1.0f - rayPos.x) * deltaDist.x;
+    }
 
-        Vector2Int world_position = origin + Vectors::toVector2Int(relative_position);
+    if (direction.y < 0)
+    {
+        vStep.y = -1;
+        sideDist.y = (rayPos.y - vMapCheck.y) * deltaDist.y;
+    }
+    else
+    {
+        vStep.y = 1;
+        sideDist.y = (vMapCheck.y + 1.0f - rayPos.y) * deltaDist.y;
+    }
 
-        Vector2Int tile_coordinates = world_position / static_cast<float>(Vectors::getFactor()*Tiles::tileSizePx);
+    float distance = 0;
 
-        if (tile_coordinates.x < 0 || tile_coordinates.y < 0 || tile_coordinates.x >= tiles_dimentions.x || tile_coordinates.y >= tiles_dimentions.y)
+    while (distance < maxDistance)
+    {
+        if (sideDist.x < sideDist.y)
         {
-            return std::nullopt;
+            vMapCheck.x += vStep.x;
+            distance = sideDist.x;
+            sideDist.x += deltaDist.x;
+        }
+        else
+        {
+            vMapCheck.y += vStep.y;
+            distance = sideDist.y;
+            sideDist.y += deltaDist.y;
         }
 
-        if (tiles[tile_coordinates.x][tile_coordinates.y] == Tile::Wall)
+        if (vMapCheck.x < 0 || vMapCheck.y < 0
+            || vMapCheck.x >= mapW || vMapCheck.y >= mapH)
+            return std::nullopt;
+
+        if (tiles[vMapCheck.x][vMapCheck.y] == Tile::Wall)
         {
-            return world_position;
+            // Convert ray length back to pixel world-space
+            Vector2Int hit = {
+                (int)(origin.x + direction.x * (distance * tileSize)),
+                (int)(origin.y + direction.y * (distance * tileSize))
+            };
+
+
+            return hit;
         }
     }
+
     return std::nullopt;
 }
