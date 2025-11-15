@@ -38,6 +38,99 @@ void ResizeGrid(Vector2Int newSize)
 
 //render
 
+void EditorMainLoop(SDL_Renderer* renderer, SDL_Window* window, std::vector<Entity*> activeEntities, std::vector<GUIRect*> editorGUIElements, FreeCamera camera, Uint64 now, Uint64 last, float deltaTime, MenuNavigation& destination)
+{
+    while (destination == ShipEditor) {
+
+        //render variable calculation
+        int screenWidth, screenHeight;
+        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
+
+        //handling events
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {
+                destination = Quit;
+            }
+            for (Entity * entity : activeEntities)
+            {
+                entity->handleEvent(event);
+            }
+            for (GUIRect * element : editorGUIElements)
+            {
+                element->handleEvent(event);
+            }
+        }
+
+        camera.setScreenDimensions(screenDimensions);
+
+        //creating update context
+        last = now;
+        now = SDL_GetTicks();
+        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
+
+        UpdateContext updateContext = {
+            deltaTime,
+            screenDimensions,
+        };
+
+        // update
+        for (Entity * entity : activeEntities)
+        {
+            entity->update(updateContext);
+        }
+
+
+        GUI_UpdateContext gui_updateContext = {
+            screenDimensions,
+            deltaTime
+        };
+
+        //GUI update
+        for (GUIRect * element : editorGUIElements)
+        {
+            element->update(gui_updateContext);
+        }
+
+
+        Vector2Int cameraPos = camera.getPosition();
+
+        RenderingContext renderingContext = {
+            cameraPos,
+            camera.getAngle(),
+            screenDimensions,
+            camera.getScale()
+        };
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
+        SDL_RenderClear(renderer);
+
+        //render
+        for (Entity * entity : activeEntities)
+        {
+            entity->render(renderer,renderingContext);
+        }
+
+        //render debug
+        for (Entity * entity : activeEntities)
+        {
+            entity->debugRender(renderer,renderingContext);
+        }
+
+        GUI_RenderingContext GUI_renderingContext(screenDimensions);
+
+        //GUI render
+        for (GUIRect * element : editorGUIElements)
+        {
+            element->render(renderer,GUI_renderingContext);
+        }
+
+        SDL_RenderPresent(renderer);
+
+    }
+}
+
 MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
     // #================================================================================================================
@@ -176,95 +269,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
-    while (destination == ShipEditor) {
-        
-        //render variable calculation
-        int screenWidth, screenHeight;
-        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
-        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
-
-        //handling events
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                destination = Quit;
-            }
-            for (Entity * entity : activeEntities)
-            {
-                entity->handleEvent(event);
-            }
-            for (GUIRect * element : editorGUIElements)
-            {
-                element->handleEvent(event);
-            }
-        }
-
-        camera.setScreenDimensions(screenDimensions);
-
-        //creating update context
-        last = now;
-        now = SDL_GetTicks();
-        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
-
-        UpdateContext updateContext = { 
-            deltaTime, 
-            screenDimensions,
-        };
-
-        // update
-        for (Entity * entity : activeEntities)
-        {
-            entity->update(updateContext);
-        }
-
-
-        GUI_UpdateContext gui_updateContext = {
-            screenDimensions,
-            deltaTime
-        };
-
-        //GUI update
-        for (GUIRect * element : editorGUIElements)
-        {
-            element->update(gui_updateContext);
-        }
-
-
-        Vector2Int cameraPos = camera.getPosition();
-
-        RenderingContext renderingContext = {
-            cameraPos,
-            camera.getAngle(),
-            screenDimensions,
-            camera.getScale()
-        };
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
-        SDL_RenderClear(renderer);
-
-        //render
-        for (Entity * entity : activeEntities)
-        {
-            entity->render(renderer,renderingContext);
-        }
-
-        //render debug
-        for (Entity * entity : activeEntities)
-        {
-            entity->debugRender(renderer,renderingContext);
-        }
-
-        GUI_RenderingContext GUI_renderingContext(screenDimensions);
-
-        //GUI render
-        for (GUIRect * element : editorGUIElements)
-        {
-            element->render(renderer,GUI_renderingContext);
-        }
-
-        SDL_RenderPresent(renderer);
-
-    }
+    EditorMainLoop(renderer, window, activeEntities, editorGUIElements, camera, now, last, deltaTime, destination);
 
     return destination;
 }
