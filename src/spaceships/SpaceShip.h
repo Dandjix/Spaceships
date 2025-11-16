@@ -8,6 +8,7 @@
 #include <queue>
 #include <unordered_set>
 
+#include "spaceshipTiles/SpaceshipTiles.h"
 enum class RoomDistance {
   All,
   Immediate,
@@ -46,12 +47,12 @@ private:
 protected:
   std::unordered_set<Entity *> entities;
   AdjacencyListGraph<Room *> rooms;
-  SpaceShipBlueprint *blueprint;
+  SpaceshipTiles spaceship_tiles;
 
 public:
-  SpaceShip(SpaceShipBlueprint *blueprint);
+  explicit SpaceShip(SpaceShipBlueprint *blueprint);
 
-  const std::vector<std::vector<Tile>> &getBlueprintTiles() const;
+  const SpaceshipTiles &getSpaceshipTiles() const;
 
   /// <summary>
   /// renders the hull of the ship

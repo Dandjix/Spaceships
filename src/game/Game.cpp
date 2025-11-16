@@ -40,16 +40,17 @@ void renderParallax(SDL_Renderer * renderer, const RenderingContext & context,st
     }
 }
 
-std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer * renderer)
+std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer * renderer,Vector2Int base_origin)
 {
+    std::cout << "origin : " << base_origin << std::endl;
     auto roid_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/environment/parallax/roid.png");
 
-    auto object_1 = ParallaxObject({0,0},0,0,roid_texture,5);
+    auto object_1 = ParallaxObject(base_origin,0,0,roid_texture,5);
 
-    Vector2Int second_pos = Vector2Int(256,256) * static_cast<float>(Vectors::getFactor());
+    Vector2Int second_pos = base_origin + Vector2Int(256,256) * static_cast<float>(Vectors::getFactor());
     auto object_2 = ParallaxObject(second_pos,90,512*Vectors::getFactor(),roid_texture);
 
-    Vector2Int third_pos = Vector2Int(512,512) * static_cast<float>(Vectors::getFactor());
+    Vector2Int third_pos = base_origin + Vector2Int(512,512) * static_cast<float>(Vectors::getFactor());
     auto object_3 = ParallaxObject(third_pos,90,10000*Vectors::getFactor(),roid_texture,100);
 
     std::vector<ParallaxObject> objects = {
@@ -71,18 +72,24 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 
     // entities
 
-    Camera * camera = new Camera(Vector2Int(0, 0), 0, 1);
+    // Vector2Int base_origin = Vector2Int(1,1)*std::numeric_limits<int>::max()*0.9f;
+    // Vector2Int base_origin = Vector2Int(6400,6400).scaleToWorldPosition();
+    Vector2Int base_origin = {0,0};
+
+    SDL_Log("Origin is a whopping : {%d,%d}",base_origin.x,base_origin.y);
+
+    Camera * camera = new Camera(base_origin, 0, 1);
 
     PlayerBehavior * playerBehavior = new PlayerBehavior(camera);
 
     SDL_Texture * player_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/entities/player/player_placeholder.png");
 
-    Humanoid * player = new Humanoid(Vector2Int(0, 0), 0, playerBehavior,player_texture); // Start at center, 200 pixels/sec
+    Humanoid * player = new Humanoid(base_origin+Vector2Int(200,200).scaleToWorldPosition(), 0, playerBehavior,player_texture); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
 
-    CargoContainer * container1 = new CargoContainer(Vector2Int(0, 0), 45, CargoContainer::Variation::EMA);
-    CargoContainer * container2 = new CargoContainer(Vector2Int(100, 0), 90, CargoContainer::Variation::SN);
-    Sphere * sphere = new Sphere(Vector2Int(-5, -5), 32);
+    CargoContainer * container1 = new CargoContainer(base_origin, 45, CargoContainer::Variation::EMA);
+    CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(100, 0).scaleToWorldPosition(), 90, CargoContainer::Variation::SN);
+    Sphere * sphere = new Sphere(Vector2Int(-5, -5).scaleToWorldPosition(), 32);
     DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
     // Cursor* cursor = new Cursor(camera);
@@ -107,7 +114,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 
 
 
-    std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer);
+    std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer,base_origin);
 
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;

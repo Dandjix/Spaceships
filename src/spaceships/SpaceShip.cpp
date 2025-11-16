@@ -6,16 +6,18 @@
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
+#include "spaceshipTiles/SpaceshipTiles.h"
 
 void SpaceShip::populateRooms()
 {
-	int width = blueprint->tiles.size();
-	int height = blueprint->tiles[0].size();
+	int width = spaceship_tiles.size_x();
+	int height = spaceship_tiles.size_y();
+
 	std::vector<std::vector<bool>> visited(width, std::vector<bool>(height, false));
 
-	for (int x = 0; x < width; ++x)
+	for (int x = 0 ; x < spaceship_tiles.size_x(); ++x)
 	{
-		for (int y = 0; y < height; ++y)
+		for (int y = 0; y < spaceship_tiles.size_y(); ++y)
 		{
 			if (shouldSkipTile(x, y, visited))
 				continue;
@@ -30,7 +32,7 @@ void SpaceShip::populateRooms()
 
 bool SpaceShip::shouldSkipTile(int x, int y, const std::vector<std::vector<bool>>& visited) const
 {
-	if (blueprint->tiles[x][y] != Tile::Floor)
+	if (spaceship_tiles.get_tile(x,y) != Tile::Floor)
 		return true;
 
 	if (visited[x][y])
@@ -69,11 +71,11 @@ std::unordered_set<Vector2Int> SpaceShip::collectConnectedFloorTiles(int startX,
 			int nx = current.x + dir.x;
 			int ny = current.y + dir.y;
 
-			if (nx >= 0 && ny >= 0 && nx < blueprint->tiles.size() && ny < blueprint->tiles[0].size())
+			if (nx >= 0 && ny >= 0 && nx < spaceship_tiles.size_x() && ny < spaceship_tiles.size_y())
 			{
-				if (!visited[nx][ny] && blueprint->tiles[nx][ny] == Tile::Floor)
+				if (!visited[nx][ny] && spaceship_tiles.get_tile(nx,ny) == Tile::Floor)
 				{
-					q.push(Vector2Int(nx, ny));
+					q.emplace(nx, ny);
 					visited[nx][ny] = true;
 				}
 			}
@@ -91,11 +93,11 @@ Room* SpaceShip::createRoomFromTiles(const std::unordered_set<Vector2Int>& tiles
 
 Vector2Int SpaceShip::nextNonRoomCoords(int startX, int startY)
 {
-	for (int x = startX; x < blueprint->tiles.size(); x++)
+	for (int x = startX; x < spaceship_tiles.size_x(); x++)
 	{
-		for (int y = startY; y < blueprint->tiles[x].size(); y++)
+		for (int y = startY; y < spaceship_tiles.size_y(); y++)
 		{
-			Tile tile = blueprint->tiles[x][y];
+			Tile tile = spaceship_tiles.get_tile(x,y);
 			if (tile == Tile::Void || tile == Tile::Wall)
 				continue;
 			for (Room* room : rooms.getVertices())
@@ -110,12 +112,12 @@ Vector2Int SpaceShip::nextNonRoomCoords(int startX, int startY)
 
 bool SpaceShip::roomsAreDone()
 {
-	int x = 0;
-	int y = 0;
-	for (std::vector<Tile> & column : blueprint->tiles)
+	for (int x = 0; x < spaceship_tiles.size_x();x++)
 	{
-		for (Tile tile : column)
+		for (int y = 0; y < spaceship_tiles.size_y(); ++y)
 		{
+			Tile tile = spaceship_tiles.get_tile(x,y);
+
 			if(tile == Tile::Void || tile == Tile::Wall)
 				continue;
 			for (Room * room : rooms.getVertices())
@@ -123,24 +125,19 @@ bool SpaceShip::roomsAreDone()
 				if (!room->IncludesTilePosition(x, y))
 					return false;
 			}
-			y++;
 		}
-		y=0;
-		x++;
 	}
 	return true;
 }
 
-SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint)
+SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint) : spaceship_tiles(SpaceshipTiles(blueprint->tiles))
 {
-	this->blueprint = blueprint;
 	populateRooms();
-	//SDL_Log("number of rooms : %d", rooms.getVertices().size());
 }
 
-const std::vector<std::vector<Tile>>& SpaceShip::getBlueprintTiles() const
+const SpaceshipTiles & SpaceShip::getSpaceshipTiles() const
 {
-	return blueprint->tiles;
+	return spaceship_tiles;
 }
 
 void SpaceShip::renderExterior(SDL_Renderer* renderer, const RenderingContext& context)
@@ -164,7 +161,7 @@ void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& con
 					continue;
 				}
 
-				Tile tile = blueprint->tiles[x][y];
+				Tile tile = spaceship_tiles.get_tile(x,y);
 
 				if (tile == Tile::Void)
 				{

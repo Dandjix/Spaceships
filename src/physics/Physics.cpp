@@ -1,7 +1,7 @@
 #include "Physics.h"
 #include "../spaceships/SpaceShip.h"
 #include "../math/Vectors.h"
-
+#include "../spaceships/spaceshipTiles/SpaceshipTiles.h"
 
 const float step = 1.0f;
 
@@ -11,10 +11,10 @@ std::optional<Vector2Int> NaiveRaycast(
     SpaceShip* spaceship,
     float maxDistance)
 {
-    const std::vector<std::vector<Tile>> & tiles = spaceship->getBlueprintTiles();
-    Vector2Int tiles_dimentions;
-    tiles_dimentions.x = tiles.size();
-    tiles_dimentions.y = tiles[0].size();
+    const SpaceshipTiles & tiles = spaceship->getSpaceshipTiles();
+    Vector2Int tiles_dimensions;
+    tiles_dimensions.x = tiles.size_x();
+    tiles_dimensions.y = tiles.size_y();
 
     direction.normalize();
     Vector2Float step_vector = direction * step;
@@ -33,12 +33,12 @@ std::optional<Vector2Int> NaiveRaycast(
 
         Vector2Int tile_coordinates = world_position / static_cast<float>(Vectors::getFactor()*Tiles::tileSizePx);
 
-        if (tile_coordinates.x < 0 || tile_coordinates.y < 0 || tile_coordinates.x >= tiles_dimentions.x || tile_coordinates.y >= tiles_dimentions.y)
+        if (tile_coordinates.x < 0 || tile_coordinates.y < 0 || tile_coordinates.x >= tiles_dimensions.x || tile_coordinates.y >= tiles_dimensions.y)
         {
             return std::nullopt;
         }
 
-        if (tiles[tile_coordinates.x][tile_coordinates.y] == Tile::Wall)
+        if (tiles.get_tile(tile_coordinates.x,tile_coordinates.y) == Tile::Wall)
         {
             return world_position;
         }
@@ -56,13 +56,11 @@ std::optional<Vector2Int> Physics::RayCast(
     SpaceShip* spaceship,
     float maxDistance)
 {
-    const auto& tiles = spaceship->getBlueprintTiles();
+    const auto& tiles = spaceship->getSpaceshipTiles();
 
-    int mapW = tiles.size();
+    int mapW = tiles.size_x();
 
-    int mapH;
-    if (mapW > 0) mapH  = tiles[0].size();
-    else mapH = 0;
+    int mapH = tiles.size_y();
 
     direction.normalize();
 
@@ -132,7 +130,7 @@ std::optional<Vector2Int> Physics::RayCast(
             || vMapCheck.x >= mapW || vMapCheck.y >= mapH)
             return std::nullopt;
 
-        if (tiles[vMapCheck.x][vMapCheck.y] == Tile::Wall)
+        if (tiles.get_tile(vMapCheck.x,vMapCheck.y) == Tile::Wall)
         {
             // Convert ray length back to pixel world-space
             Vector2Int hit = {

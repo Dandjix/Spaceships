@@ -16,6 +16,6 @@ void Entity::handleEvent(const SDL_Event &event) {
     behavior->handleEvent(event,this);
 }
 
-void Entity::movePosition(Vector2Float delta) {
+void Entity::movePosition(Vector2Float delta, SpaceShip * space_ship) {
     this->setPosition(this->getPosition()+ Vectors::toVector2Int(delta.scaleToWorldPosition()));
 }

@@ -103,28 +103,28 @@ struct Vector2 {
         return os;
     }
 
-    Vector2<int>& operator/=(float divider)
+    Vector2<T>& operator/=(float divider)
     {
         x = static_cast<T>(x / divider);
         y = static_cast<T>(y / divider);
         return *this;
     }
 
-    Vector2<int>& operator*=(float scalar)
+    Vector2<T>& operator*=(float scalar)
     {
         x = static_cast<T>(x * scalar);
         y = static_cast<T>(y * scalar);
         return *this;
     }
 
-    Vector2<float>& operator+=(const Vector2& vector2)
+    Vector2<T>& operator+=(const Vector2& vector2)
     {
         x = static_cast<T>(x + vector2.x);
         y = static_cast<T>(y + vector2.y);
         return *this;
     }
 
-    Vector2<float>& operator-=(const Vector2& vector2)
+    Vector2<T>& operator-=(const Vector2& vector2)
     {
         x = static_cast<T>(x - vector2.x);
         y = static_cast<T>(y - vector2.y);
@@ -136,6 +136,13 @@ struct Vector2 {
         x = x % modulus;
         y = y % modulus;
         return *this;
+    }
+
+    Vector2<float> normalized() const
+    {
+        Vector2<float> result = *this;
+        result.normalize();
+        return result;
     }
 };
 

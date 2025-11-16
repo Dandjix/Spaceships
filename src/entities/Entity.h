@@ -48,7 +48,7 @@ public:
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
     Entity(Vector2Int position, std::optional<float> angle, Behavior * behavior = nullptr)
-        : position(position.scaleToWorldPosition()), angle(angle),behavior(behavior),attributes(new EntityAttributes()) {} // Constructor using Vector2
+        : position(position), angle(angle),behavior(behavior),attributes(new EntityAttributes()) {} // Constructor using Vector2
 
     virtual ~Entity() = default;
 
@@ -95,5 +95,5 @@ public:
         angle = new_angle;
     }
 
-    void movePosition(Vector2Float delta);
+    virtual void movePosition(Vector2Float delta, SpaceShip * space_ship);
 };

@@ -21,4 +21,6 @@ public:
     void handleEvent(const SDL_Event & event) override;
 
     void render(SDL_Renderer *renderer, const RenderingContext & context) override;
+
+    void movePosition(Vector2Float delta, SpaceShip* space_ship) override;
 };

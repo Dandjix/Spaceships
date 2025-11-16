@@ -24,7 +24,7 @@ void PlayerBehavior::update(const UpdateContext &context, Entity * owner) {
 
     delta = delta * context.deltaTime * 600; //TODO : remove * 600
 
-    owner->movePosition(delta);
+    owner->movePosition(delta,context.spaceShip);
 }
 
 void PlayerBehavior::handleEvent(const SDL_Event &event, Entity *owner) {

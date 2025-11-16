@@ -89,19 +89,6 @@ public:
         //}
     }
 
-    /// <summary>
-    /// Get the offset position of the camera relative to the screen's size.
-    /// </summary>
-    /// <param name="screenWidth">Screen width</param>
-    /// <param name="screenHeight">Screen height</param>
-    /// <returns>Offset position as Vector2Int</returns>
-    Vector2Int getOffsetPosition(Vector2Int screenDimensions) const {
-        Vector2Int position = getPosition();
-        int x = static_cast<int>( position.x - (screenDimensions.x / 2)*Vectors::getFactor()*getScale());  // Offset X to center the camera
-        int y = static_cast<int>( position.y - (screenDimensions.y / 2)*Vectors::getFactor()*getScale());  // Offset Y to center the camera
-        return Vector2Int(x, y);
-    }
-
     Vector2Int screenToWorldPoint(Vector2Float screenPosition) const {
         return CameraTransformations::screenToWorldPoint(screenPosition, screenDimensions, getAngle(),getScale(), getPosition());
     }
