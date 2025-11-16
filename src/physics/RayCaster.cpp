@@ -18,7 +18,9 @@ void RayCaster::update(const UpdateContext& context)
 
 	if (state[SDL_SCANCODE_SPACE])
 	{
-		auto hit = Physics::RayCast(player->getPosition(), direction, context.spaceShip);
+		float maxDistance = (player->getPosition() - mousePosition).length();
+
+		auto hit = Physics::RayCast(player->getPosition(), direction, context.spaceShip,maxDistance);
 		// if (hit.has_value())
 		// {
 		// 	// SDL_Log("hit at %d %d",hit.value().x,hit.value().y);

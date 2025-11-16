@@ -42,7 +42,6 @@ void renderParallax(SDL_Renderer * renderer, const RenderingContext & context,st
 
 std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer * renderer,Vector2Int base_origin)
 {
-    std::cout << "origin : " << base_origin << std::endl;
     auto roid_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/environment/parallax/roid.png");
 
     auto object_1 = ParallaxObject(base_origin,0,0,roid_texture,5);
@@ -75,8 +74,6 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     // Vector2Int base_origin = Vector2Int(1,1)*std::numeric_limits<int>::max()*0.9f;
     // Vector2Int base_origin = Vector2Int(6400,6400).scaleToWorldPosition();
     Vector2Int base_origin = {0,0};
-
-    SDL_Log("Origin is a whopping : {%d,%d}",base_origin.x,base_origin.y);
 
     Camera * camera = new Camera(base_origin, 0, 1);
 
