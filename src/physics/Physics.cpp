@@ -71,6 +71,8 @@ std::optional<Vector2Int> Physics::RayCast(
         origin.y / tileSize
     };
 
+
+
     // Which tile are we in?
     Vector2Int vMapCheck = {
         (int)rayPos.x,
@@ -111,20 +113,10 @@ std::optional<Vector2Int> Physics::RayCast(
 
     float distance = 0;
 
+
+    maxDistance /= tileSize;
     while (distance < maxDistance)
     {
-        if (sideDist.x < sideDist.y)
-        {
-            vMapCheck.x += vStep.x;
-            distance = sideDist.x;
-            sideDist.x += deltaDist.x;
-        }
-        else
-        {
-            vMapCheck.y += vStep.y;
-            distance = sideDist.y;
-            sideDist.y += deltaDist.y;
-        }
 
         if (vMapCheck.x < 0 || vMapCheck.y < 0
             || vMapCheck.x >= mapW || vMapCheck.y >= mapH)
@@ -140,6 +132,19 @@ std::optional<Vector2Int> Physics::RayCast(
 
 
             return hit;
+        }
+
+        if (sideDist.x < sideDist.y)
+        {
+            vMapCheck.x += vStep.x;
+            distance = sideDist.x;
+            sideDist.x += deltaDist.x;
+        }
+        else
+        {
+            vMapCheck.y += vStep.y;
+            distance = sideDist.y;
+            sideDist.y += deltaDist.y;
         }
     }
 
