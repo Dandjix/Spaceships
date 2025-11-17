@@ -50,6 +50,14 @@ std::optional<Vector2Int> NaiveRaycast(
 
 
 
+/**
+ * Casts a ray that interracts with the tilemap
+ * @param origin the origin, in world units
+ * @param direction the direction vector. This is normalized in the function.
+ * @param spaceship the spaceship whose tilemap we are going to check
+ * @param maxDistance the max distance after which to give up
+ * @return the hit point, or nullopt if no hit
+ */
 std::optional<Vector2Int> Physics::RayCast(
     Vector2Int origin,
     Vector2Float direction,
