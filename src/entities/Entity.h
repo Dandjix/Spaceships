@@ -95,5 +95,10 @@ public:
         angle = new_angle;
     }
 
+    /**
+     * Moves an object by a world coordinates delta
+     * @param delta the vector to move, in world units
+     * @param space_ship the spaceship in which to move, used by physics (wall collisions notably)
+     */
     virtual void movePosition(Vector2Float delta, SpaceShip * space_ship);
 };

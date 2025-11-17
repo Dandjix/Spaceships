@@ -24,6 +24,8 @@ void PlayerBehavior::update(const UpdateContext &context, Entity * owner) {
 
     delta = delta * context.deltaTime * 600; //TODO : remove * 600
 
+    delta = delta.scaleToWorldPosition();
+
     owner->movePosition(delta,context.spaceShip);
 }
 
