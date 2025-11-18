@@ -23,7 +23,7 @@ void CargoContainer::LoadTextures(SDL_Renderer* renderer) {
 }
 
 CargoContainer::CargoContainer(Vector2Int position, float angle, Variation variation)
-    : BoxEntity(position, Vector2Int(61, 24), angle), variation(variation) {
+    : BoxEntity(position, Vector2Int(61, 24), angle,nullptr), variation(variation) {
     color = getRandomColor();
 }
 

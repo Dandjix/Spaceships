@@ -41,7 +41,7 @@ void ShipBuildingGrid::renderFluid(SDL_Renderer* renderer, const RenderingContex
 	drawLines(newDimensions, renderer, context);
 }
 
-ShipBuildingGrid::ShipBuildingGrid(Vector2Int dimensions, Camera* camera, std::function<void(Vector2Int dimensions)> onResize) :Entity(Vector2Int(0, 0), std::nullopt)
+ShipBuildingGrid::ShipBuildingGrid(Vector2Int dimensions, Camera* camera, std::function<void(Vector2Int dimensions)> onResize) :Entity(Vector2Int(0, 0), std::nullopt,nullptr)
 , sizePx(Tiles::tileSizePx), dimensions(dimensions), resizing(false), camera(camera), onResize(onResize)
 {
 

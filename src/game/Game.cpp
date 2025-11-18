@@ -84,9 +84,11 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     Humanoid * player = new Humanoid(base_origin+Vector2Int(200,200).scaleToWorldPosition(), 0, playerBehavior,player_texture); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
 
+    Humanoid * dummy = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
+
     CargoContainer * container1 = new CargoContainer(base_origin, 45, CargoContainer::Variation::EMA);
     CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(100, 0).scaleToWorldPosition(), 90, CargoContainer::Variation::SN);
-    Sphere * sphere = new Sphere(Vector2Int(-5, -5).scaleToWorldPosition(), 32);
+    Sphere * sphere = new Sphere(Vector2Int(-5, -5).scaleToWorldPosition(), 32,nullptr);
     DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
     // Cursor* cursor = new Cursor(camera);
@@ -98,6 +100,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         { 
         camera,
         player,
+        dummy,
         container1,
         container2,
         sphere,
@@ -121,6 +124,10 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     ship->setFocusEntity(player);
 
     while (destination == Game) {
+        last = now;
+        now = SDL_GetTicks();
+        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
+
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
@@ -131,9 +138,16 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
                 entity->handleEvent(event);
             }
         }
-        last = now;
-        now = SDL_GetTicks();
-        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
+
+        const PhysicsUpdateContext physicsContext = {
+            deltaTime,
+            ship
+        };
+
+        for (PhysicsEntity * entity : ship->getPhysicsEntities(RoomDistance::All))
+        {
+            entity->physicsUpdate(physicsContext);
+        }
 
         const UpdateContext updateContext =
         {

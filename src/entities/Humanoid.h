@@ -5,13 +5,17 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
-class Humanoid : public RoundEntity{
+#include "physics/PhysicsEntity.h"
+#include "physics/RoundPhysicsEntity.h"
+
+class Humanoid : public RoundPhysicsEntity{
 private:
     SDL_Texture * texture;
 
 public:
     Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior, SDL_Texture * humanoid_texture = nullptr)
-        : RoundEntity(position,angle,20,behavior)
+        : RoundPhysicsEntity(position,angle,20,behavior),
+        Entity(position,angle,behavior)
     {
         texture = humanoid_texture;
     }

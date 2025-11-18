@@ -1,18 +1,18 @@
 #pragma once
 #include "Entity.h"
 
-class RoundEntity : public Entity {
+class RoundEntity : virtual public Entity {
 protected:
-    int radius;
+    float radius;
 
 public:
-    RoundEntity(Vector2Int position,std::optional<float> angle, int radius,Behavior * behavior = nullptr)
-        : Entity(position,angle,behavior), radius(radius) {}  // Calling Entity(Vector2 position)
+    RoundEntity(Vector2Int position,std::optional<float> angle, float radius,Behavior * behavior = nullptr)
+        : Entity(position,angle,behavior), radius(radius) {}
 
     virtual ~RoundEntity() {}
 
-    int getRadius() const { return radius; }
-    void setRadius(int r) { radius = r; }
+    float getRadius() const { return radius; }
+    void setRadius(float r) { radius = r; }
 
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override {
 

@@ -14,7 +14,7 @@ public:
     /// Creates a Camera that follows the player.
     /// </summary>
     /// <param name="p">Pointer to the player entity</param>
-    Camera(Vector2Int position, float angle, float scale) : Entity(position,angle),scale(scale) {}
+    Camera(Vector2Int position, float angle, float scale) : Entity(position,angle,nullptr),scale(scale) {}
     
     /// <summary>
     /// Set the player entity that the camera follows.

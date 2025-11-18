@@ -1,5 +1,4 @@
 #pragma once
-#include "../entities/Entity.h"
 #include "../game/Rendering.h"
 #include "../math/AdjacencyListGraph.h"
 #include "Room.h"
@@ -9,6 +8,10 @@
 #include <unordered_set>
 
 #include "spaceshipTiles/SpaceshipTiles.h"
+
+class PhysicsEntity;
+class Entity;
+
 enum class RoomDistance {
   All,
   Immediate,
@@ -18,6 +21,7 @@ enum class RoomDistance {
 
 namespace EntityComparison {
 inline static bool compareEntities(Entity *e1, Entity *e2);
+inline static bool comparePhysicsEntities(PhysicsEntity *e1, PhysicsEntity *e2);
 }
 
 class SpaceShip {
@@ -45,11 +49,13 @@ private:
                    const std::vector<Room *> &rooms);
 
 protected:
-  std::unordered_set<Entity *> entities;
   AdjacencyListGraph<Room *> rooms;
   SpaceshipTiles spaceship_tiles;
 
 public:
+  std::unordered_set<Entity *> entities;
+  std::unordered_set<PhysicsEntity *> physics_entities;
+
   explicit SpaceShip(SpaceShipBlueprint *blueprint);
 
   const SpaceshipTiles &getSpaceshipTiles() const;
@@ -71,6 +77,11 @@ public:
   std::vector<Entity *> getEntities(RoomDistance queue) const;
 
   /// <summary>
+  /// returns the physics entities (read only)
+  /// </summary>
+  /// <returns></returns>
+  std::vector<PhysicsEntity *> getPhysicsEntities(RoomDistance queue) const;
+  /// <summary>
   /// docks an other ship to this ship. You will want to align them relatively
   /// well since this will snap the other ship. Undocking is future me's problem
   /// </summary>
@@ -82,6 +93,11 @@ public:
   /// </summary>
   void registerEntities(std::initializer_list<Entity *> entities);
 
+
+  void registerEntity(Entity * entity);
+
+
+
   /// <summary>
   /// removes one or more entries from the entities map. Used for when the
   /// object is destroyed or if another ship undocks prolly idk
@@ -89,6 +105,8 @@ public:
   /// <param name="entity"></param>
   /// <returns></returns>
   void unregisterEntities(std::initializer_list<Entity *> entities);
+
+  void unregisterEntity(Entity * entity);
 
   void update(const UpdateContext &context);
 

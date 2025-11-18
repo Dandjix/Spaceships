@@ -29,4 +29,5 @@ namespace Physics
 struct PhysicsUpdateContext
 {
 	float deltaTime;
+	SpaceShip * space_ship;
 };

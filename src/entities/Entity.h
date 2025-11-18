@@ -47,7 +47,7 @@ public:
     /// creates an entity
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
-    Entity(Vector2Int position, std::optional<float> angle, Behavior * behavior = nullptr)
+    Entity(Vector2Int position, std::optional<float> angle, Behavior * behavior)
         : position(position), angle(angle),behavior(behavior),attributes(new EntityAttributes()) {} // Constructor using Vector2
 
     virtual ~Entity() = default;
@@ -75,7 +75,27 @@ public:
     }
 
     // accessors
-    [[nodiscard]] Behavior * getBehavior() const {return behavior;};
+    [[nodiscard]] Behavior * getBehavior() const {return behavior;}
+    /**
+     * Registers an entity in the spaceship so that it's behavior and appearance are handled in this spaceship. Does not call any event, this is done in the spaceship itself.
+     *
+     *  You should never use this directly, call spaceship.registerEntity (which calls this)
+     *
+     *  The use of this is to be overriden by physics entities, as they also add themselves to the physics entities list
+     *
+     * @param space_ship the spaceship in which the entity will be registered
+     */
+    virtual void registerInSpaceship(SpaceShip* space_ship);
+    /**
+     *  Unregisters an entity in the spaceship so that it's behavior and appearance are handled in this spaceship. Does not call any event, this is done in the spaceship itself.
+     *
+     *  You should never use this directly, call spaceship.unregisterEntity (which calls this)
+     *
+     *  The use of this is to be overriden by physics entities, as they also add themselves to the physics entities list
+     *
+     * @param space_ship the spaceship in which the entity will be unregistered
+     */
+    virtual void unregisterInSpacehip(SpaceShip* space_ship);;
     void setBehavior(Behavior * entity_behavior) {this->behavior = entity_behavior;}
 
     [[nodiscard]] EntityAttributes * getAttributes() const {return attributes;}

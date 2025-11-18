@@ -12,7 +12,7 @@ private:
 
 public:
     // Constructor
-    Sphere(Vector2Int position, int radius);
+    Sphere(Vector2Int position, float radius, Behavior * behavior);
 
     // Static function to load textures
     static void LoadTextures(SDL_Renderer* renderer);

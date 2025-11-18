@@ -2,10 +2,10 @@
 #include <unordered_set>
 
 #include "SpaceShip.h"
-#include "../entities/Entity.h"
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
+#include "physics/PhysicsEntity.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
 
 void SpaceShip::populateRooms()
@@ -216,6 +216,15 @@ std::vector<Entity*> SpaceShip::getEntities(RoomDistance queue) const
 	return vec;
 }
 
+std::vector<PhysicsEntity*> SpaceShip::getPhysicsEntities(RoomDistance queue) const
+{
+	auto vec = std::vector<PhysicsEntity*>(physics_entities.begin(), physics_entities.end());
+
+	std::sort(vec.begin(), vec.end(), EntityComparison::comparePhysicsEntities);
+
+	return vec;
+}
+
 void SpaceShip::Dock(SpaceShip other)
 {
 
@@ -225,8 +234,7 @@ void SpaceShip::registerEntities(std::initializer_list<Entity*> entities)
 {
 	for (Entity* e: entities)
 	{
-		this->entities.insert(e);
-		e->onRegistered(this);
+		e->registerInSpaceship(this);
 	}
 }
 
@@ -234,8 +242,7 @@ void SpaceShip::unregisterEntities(std::initializer_list<Entity*> entities)
 {
 	for (Entity* e : entities)
 	{
-		this->entities.erase(e);
-		e->onUnRegistered(this);
+		e->unregisterInSpacehip(this);
 	}
 }
 
@@ -268,5 +275,11 @@ void SpaceShip::setFocusEntity(Entity* focusEntity)
 
 bool EntityComparison::compareEntities(Entity* e1, Entity* e2)
 {
+	return e1->getQueueOrder() < e2->getQueueOrder();
+}
+
+bool EntityComparison::comparePhysicsEntities(PhysicsEntity * e1, PhysicsEntity * e2)
+{
+	//TODO : add a queue order for the physics entities if necessary
 	return e1->getQueueOrder() < e2->getQueueOrder();
 }

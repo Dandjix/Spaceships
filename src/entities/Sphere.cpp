@@ -5,8 +5,8 @@
 SDL_Texture* Sphere::texture = nullptr;
 bool Sphere::texturesLoaded = false;
 
-Sphere::Sphere(Vector2Int position, int radius)
-    : RoundEntity(position, std::nullopt, radius) {
+Sphere::Sphere(Vector2Int position, float radius, Behavior * behavior)
+    : RoundEntity(position, std::nullopt, radius, behavior), Entity(position, angle, behavior) {
 }
 
 // Static function to load textures
