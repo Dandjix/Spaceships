@@ -56,9 +56,9 @@ std::optional<Vector2Int> NaiveRaycast(
  * @param direction the direction vector. This is normalized in the function.
  * @param spaceship the spaceship whose tilemap we are going to check
  * @param maxDistance the max distance after which to give up
- * @return the hit point, or nullopt if no hit
+ * @return a Physics::RaycastHitInfo object
  */
-std::optional<Vector2Int> Physics::RayCast(
+Physics::RaycastHitInfo Physics::RayCast(
     Vector2Int origin,
     Vector2Float direction,
     SpaceShip* spaceship,
@@ -71,6 +71,8 @@ std::optional<Vector2Int> Physics::RayCast(
     int mapH = tiles.size_y();
 
     direction.normalize();
+
+    std::vector<Vector2Int> checked_positions = {};
 
     // Convert pixel-space origin into tile-space floating coords
     const float tileSize = Tiles::tileSizePx * Vectors::getFactor();
@@ -125,21 +127,21 @@ std::optional<Vector2Int> Physics::RayCast(
     maxDistance /= tileSize;
     while (distance < maxDistance)
     {
+        // Convert ray length back to pixel world-space
+        Vector2Int world_position_to_check = {
+            (int)(origin.x + direction.x * (distance * tileSize)),
+            (int)(origin.y + direction.y * (distance * tileSize))
+        };
+
+        checked_positions.push_back(world_position_to_check);
 
         if (vMapCheck.x < 0 || vMapCheck.y < 0
             || vMapCheck.x >= mapW || vMapCheck.y >= mapH)
-            return std::nullopt;
+            return RaycastHitInfo(false,{0,0},checked_positions);
 
         if (tiles.get_tile(vMapCheck.x,vMapCheck.y) == Tile::Wall)
         {
-            // Convert ray length back to pixel world-space
-            Vector2Int hit = {
-                (int)(origin.x + direction.x * (distance * tileSize)),
-                (int)(origin.y + direction.y * (distance * tileSize))
-            };
-
-
-            return hit;
+            return RaycastHitInfo(true,world_position_to_check,checked_positions);
         }
 
         if (sideDist.x < sideDist.y)
@@ -156,5 +158,6 @@ std::optional<Vector2Int> Physics::RayCast(
         }
     }
 
-    return std::nullopt;
+    return RaycastHitInfo(false,{0,0},checked_positions);
+
 }

@@ -21,22 +21,18 @@ void RayCaster::update(const UpdateContext& context)
 		float maxDistance = (player->getPosition() - mousePosition).length();
 
 		auto hit = Physics::RayCast(player->getPosition(), direction, context.spaceShip,maxDistance);
-		// if (hit.has_value())
-		// {
-		// 	// SDL_Log("hit at %d %d",hit.value().x,hit.value().y);
-		// }
-		// else
-		// {
-		// 	// SDL_Log("no hit :(");
-		// }
+
 		originPosition = player->getPosition();
-		hitPosition = hit;
-		//SDL_Log("hit position set. has value ? : %b", hitPosition.has_value());
+		if (hit.hit)
+		{
+			hitPosition = hit.hit_world_position;
+		}
+		else
+		{
+			hitPosition = std::nullopt;
+		}
+		checked_positions = hit.checked_positions;
 	}
-	// else
-	// {
-	// 	hitPosition = std::nullopt;
-	// }
 }
 
 void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
@@ -73,6 +69,13 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 		SDL_SetRenderDrawColorFloat(renderer,0,0,1,1.0f);
 		DebugRendering::drawCross(renderer, Vectors::toVector2Int(originHit),15);
 	}
+
+	for (auto pos : checked_positions)
+	{
+		SDL_SetRenderDrawColorFloat(renderer,0,1,1,1.0f);
+		DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.toScreenPoint(pos)),12.5f);
+	}
+
 	if (hitPosition.has_value())
 	{
 		Vector2Float screenHit = context.toScreenPoint(hitPosition.value());
