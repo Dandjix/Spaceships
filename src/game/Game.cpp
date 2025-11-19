@@ -86,6 +86,11 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 
     Humanoid * dummy = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
 
+    Humanoid * dummy2 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
+
+    Humanoid * dummy3 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
+
+
     CargoContainer * container1 = new CargoContainer(base_origin, 45, CargoContainer::Variation::EMA);
     CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(100, 0).scaleToWorldPosition(), 90, CargoContainer::Variation::SN);
     Sphere * sphere = new Sphere(Vector2Int(-5, -5).scaleToWorldPosition(), 32,nullptr);
@@ -139,15 +144,41 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
             }
         }
 
+        // PHYSICS -----------------------------------------------------------------------------------------------------
+
         const PhysicsUpdateContext physicsContext = {
             deltaTime,
             ship
         };
 
+
+        PhysicsUpdateVisitor visitor = {};
+
+        auto physics_entities = ship->getPhysicsEntities(RoomDistance::Close);
+
+        for (int i = 0; i < physics_entities.size(); i++)
+        {
+            for (int j = i+1; j < physics_entities.size(); j++)
+            {
+                auto e1 = physics_entities.at(i);
+                auto e2 = physics_entities.at(j);
+
+                e1->beVisitedBy(e2,&visitor,ship);
+            }
+        }
+
+        for (PhysicsEntity * e : ship->getPhysicsEntities(RoomDistance::All))
+        {
+            visitor.visitWall(e,ship);
+        }
+
+
         for (PhysicsEntity * entity : ship->getPhysicsEntities(RoomDistance::All))
         {
             entity->physicsUpdate(physicsContext);
         }
+
+        // UPDATE ------------------------------------------------------------------------------------------------------
 
         const UpdateContext updateContext =
         {

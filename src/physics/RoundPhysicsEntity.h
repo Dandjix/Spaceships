@@ -4,6 +4,12 @@
 
 class RoundPhysicsEntity : public RoundEntity, public PhysicsEntity
 {public:
+
+	void beVisitedBy(PhysicsEntity * other, PhysicsUpdateVisitor * visitor, SpaceShip * space_ship) override
+	{
+		visitor->visitRound(other,this,space_ship);
+	}
+
 	RoundPhysicsEntity(
 		Vector2Int position,
 		std::optional<float> angle,
