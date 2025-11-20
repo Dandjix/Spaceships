@@ -22,7 +22,12 @@ struct Vector2 {
     Vector2(T x = 0, T y = 0) : x(x), y(y) {}
 
     float length() const {
-        return std::sqrt(static_cast<float>(x * x + y * y));
+        float l = std::sqrt(static_cast<float>(x) * static_cast<float>(x) + static_cast<float>(y) * static_cast<float>(y));
+        if (std::isnan(l))
+        {
+            throw std::runtime_error("l is nan ! x : " + std::to_string(x) + ", y : " + std::to_string(y));
+        }
+        return l;
     }
 
     T sqrLength() const {

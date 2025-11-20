@@ -32,9 +32,9 @@ void Entity::movePosition(Vector2Float delta, SpaceShip * space_ship) {
     if (delta.sqrLength() <= 0)
         return;
 
-    auto old = getPosition();
+    // auto old = getPosition();
 
-    this->setPosition(this->getPosition()+ Vectors::toVector2Int(delta));
+    this->setPosition(this->getPosition() + Vectors::toVector2Int(delta));
 
-    std::cout << "MOVEMENT DID OCCUR :" << getPosition()-old <<  std::endl;
+    // std::cout << "MOVEMENT DID OCCUR :" << getPosition()-old <<  std::endl;
 }
