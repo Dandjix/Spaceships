@@ -1,22 +1,24 @@
 #pragma once
 
-#include "RoundEntity.h"
 #include "../behavior/Behavior.h"
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
 #include "physics/PhysicsEntity.h"
-#include "physics/RoundPhysicsEntity.h"
+#include "physics/RoundPhysicsShape.h"
 
-class Humanoid : public RoundPhysicsEntity{
+class Humanoid : public PhysicsEntity{
 private:
     SDL_Texture * texture;
 
+protected:
+    float radius;
+
 public:
-    Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior, SDL_Texture * humanoid_texture = nullptr)
-        : RoundPhysicsEntity(position,angle,20,behavior),
-        Entity(position,angle,behavior)
+    Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior, SDL_Texture * humanoid_texture = nullptr) :
+        PhysicsEntity(position,angle,behavior,new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f)))
     {
+        radius = 20;
         texture = humanoid_texture;
     }
 

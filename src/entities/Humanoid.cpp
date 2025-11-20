@@ -7,18 +7,14 @@
 #include "physics/Physics.h"
 
 void Humanoid::update(const UpdateContext &context) {
-    RoundEntity::update(context);
+    PhysicsEntity::update(context);
 }
 
 void Humanoid::handleEvent(const SDL_Event &event) {
-    RoundEntity::handleEvent(event);
+    PhysicsEntity::handleEvent(event);
 }
 
 void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
-
-    std::cout << "Render pos = "
-              << getPosition().x << ", " << getPosition().y << "\n";
-
 
     renderTexture(renderer,context,texture,Vector2Float(
         radius,
@@ -26,8 +22,6 @@ void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
         )
     );
 }
-
-const float cushion = 0.1f; // 1/10th of a pixel
 
 void Humanoid::movePosition(Vector2Float delta, SpaceShip * space_ship)
 {

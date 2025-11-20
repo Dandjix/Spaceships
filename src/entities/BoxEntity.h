@@ -6,24 +6,24 @@
 
 class BoxEntity : public Entity {
 protected:
-    Vector2Int scale; // Width and height in fixed-point format
+    Vector2Float scale; // Width and height in fixed-point format
 
 public:
-    BoxEntity(Vector2Int position, Vector2Int scale, float angle,Behavior * behavior)
+    BoxEntity(Vector2Int position, Vector2Float scale, std::optional<float> angle,Behavior * behavior)
         : Entity(position,angle,behavior), scale(scale) {}
 
     virtual ~BoxEntity() {}
 
-    Vector2Int getScale() const { return scale; }
+    Vector2Float getScale() const { return scale; }
 
-    void setScale(const Vector2Int& s) { scale = s; }
+    void setScale(const Vector2Float& s) { scale = s; }
 
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override {
 		// Set debug color (blue)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 
         // Calculate half size with camera scale
-        Vector2Float halfSize = Vectors::toVector2Float(scale) * 0.5f / context.cameraScale;
+        Vector2Float halfSize = scale * 0.5f / context.cameraScale;
 
         Vector2Float center = context.toScreenPoint(position);
 

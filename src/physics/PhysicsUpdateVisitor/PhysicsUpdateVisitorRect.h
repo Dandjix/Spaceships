@@ -9,24 +9,24 @@
 #include "PhysicsUpdateVisitor.h"
 
 class PhysicsEntity;
-class RoundPhysicsEntity;
-class RectPhysicsEntity;
+class RoundPhysicsShape;
+class RectPhysicsShape;
 class SpaceShip;
 
 class PhysicsUpdateVisitorRect : public PhysicsUpdateVisitor
 {
 protected:
-    RectPhysicsEntity * e1;
+    RectPhysicsShape * e1;
 
 public:
-    explicit PhysicsUpdateVisitorRect(RectPhysicsEntity * e1) : PhysicsUpdateVisitor(), e1(e1) {  }
+    explicit PhysicsUpdateVisitorRect(RectPhysicsShape * e1) : PhysicsUpdateVisitor(), e1(e1) {  }
 
-    void visitRect(RectPhysicsEntity* e2, SpaceShip* space_ship) override
+    void visitRect(RectPhysicsShape* e2, SpaceShip* space_ship) override
     {
         PhysicsCollisions::visitRects(e1,e2,space_ship);
     }
 
-    void visitRound(RoundPhysicsEntity* e2, SpaceShip * space_ship) override
+    void visitRound(RoundPhysicsShape* e2, SpaceShip * space_ship) override
     {
         PhysicsCollisions::visitRectRound(e1,e2,space_ship);
     }

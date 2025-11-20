@@ -7,25 +7,25 @@
 #include <iostream>
 
 #include "math/Vectors.h"
-#include "physics/RoundPhysicsEntity.h"
+#include "physics/RoundPhysicsShape.h"
 
 namespace PhysicsCollisions
 {
-    void visitRects(RectPhysicsEntity* e1, RectPhysicsEntity* e2, SpaceShip* space_ship)
+    void visitRects(RectPhysicsShape* e1, RectPhysicsShape* e2, SpaceShip* space_ship)
     {
         // std::cout << "rect on rect collision" << std::endl;
     }
 
-    void visitRectRound(RectPhysicsEntity* e1, RoundPhysicsEntity* e2, SpaceShip* space_ship)
+    void visitRectRound(RectPhysicsShape* e1, RoundPhysicsShape* e2, SpaceShip* space_ship)
     {
         // std::cout << "rect on round collision" << std::endl;
     }
 
-    void visitRounds(RoundPhysicsEntity* e1, RoundPhysicsEntity* e2, SpaceShip* space_ship)
+    void visitRounds(RoundPhysicsShape* e1, RoundPhysicsShape* e2, SpaceShip* space_ship)
     {
-        Vector2Int diff = e1->getPosition() - e2->getPosition();
+        Vector2Int diff = e1->owner_entity->getPosition() - e2->owner_entity->getPosition();
 
-        float combined_radius = e1->getRadius() + e2->getRadius();
+        float combined_radius = e1->radius + e2->radius;
 
         // if ( diff.sqrLength()>=  static_cast<int>(combined_radius*combined_radius))
         // {
@@ -33,7 +33,7 @@ namespace PhysicsCollisions
         //     return;
         // }
 
-        float force_value = Scaling::scaleToWorld(e1->getRadius()) + Scaling::scaleToWorld(e2->getRadius())  - diff.length();
+        float force_value = Scaling::scaleToWorld(e1->radius) + Scaling::scaleToWorld(e2->radius)  - diff.length();
 
         // std::cout << "diff length : " << diff.length() << std::endl;
 
@@ -48,22 +48,22 @@ namespace PhysicsCollisions
         float force_e1 = force_value * (e2->get_weight()/e1->get_weight());
         float force_e2 = force_value * (e1->get_weight()/e2->get_weight());
 
-        auto delta_e1 = (Vectors::toVector2Float(e1->getPosition()-e2->getPosition()) * force_e1);
-        auto delta_e2 = (Vectors::toVector2Float(e2->getPosition()-e1->getPosition()) * force_e2);
+        auto delta_e1 = (Vectors::toVector2Float(e1->owner_entity->getPosition()-e2->owner_entity->getPosition()) * force_e1);
+        auto delta_e2 = (Vectors::toVector2Float(e2->owner_entity->getPosition()-e1->owner_entity->getPosition()) * force_e2);
 
-        e1->movePosition(delta_e1,space_ship);
-        e1->movePosition(delta_e2,space_ship);
+        e1->owner_entity->movePosition(delta_e1,space_ship);
+        e1->owner_entity->movePosition(delta_e2,space_ship);
 
     }
 
 
-    void visitRoundWall(RoundPhysicsEntity* e1, SpaceShip* space_ship)
+    void visitRoundWall(RoundPhysicsShape* e1, SpaceShip* space_ship)
     {
         // std::cout << "round on wall collision" << std::endl;
 
     }
 
-    void visitRectWall(RectPhysicsEntity* e1, SpaceShip* space_ship)
+    void visitRectWall(RectPhysicsShape* e1, SpaceShip* space_ship)
     {
         // std::cout << "rect on wall collision" << std::endl;
     }

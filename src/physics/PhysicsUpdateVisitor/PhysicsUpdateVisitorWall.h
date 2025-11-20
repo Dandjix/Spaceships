@@ -10,8 +10,8 @@
 #include "PhysicsUpdateVisitor.h"
 
 class PhysicsEntity;
-class RoundPhysicsEntity;
-class RectPhysicsEntity;
+class RoundPhysicsShape;
+class RectPhysicsShape;
 class SpaceShip;
 
 class PhysicsUpdateVisitorWall : public PhysicsUpdateVisitor
@@ -19,11 +19,11 @@ class PhysicsUpdateVisitorWall : public PhysicsUpdateVisitor
 public:
     PhysicsUpdateVisitorWall() : PhysicsUpdateVisitor() {  }
 
-    void visitRect(RectPhysicsEntity* e2, SpaceShip* space_ship) override
+    void visitRect(RectPhysicsShape* e2, SpaceShip* space_ship) override
     {
         PhysicsCollisions::visitRectWall(e2,space_ship);
     }
-    void visitRound(RoundPhysicsEntity* e2, SpaceShip * space_ship) override
+    void visitRound(RoundPhysicsShape* e2, SpaceShip * space_ship) override
     {
         PhysicsCollisions::visitRoundWall(e2,space_ship);
     }

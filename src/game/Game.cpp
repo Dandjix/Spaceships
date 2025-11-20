@@ -163,9 +163,9 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
                 auto e1 = physics_entities.at(i);
                 auto e2 = physics_entities.at(j);
 
-                PhysicsUpdateVisitor *  visitor = e1->createVisitor();
+                PhysicsUpdateVisitor *  visitor = e1->shape->createVisitor();
 
-                e2->consumeVisitor(visitor,ship);
+                e2->shape->consumeVisitor(visitor,ship);
 
                 delete visitor;
             }
@@ -174,13 +174,13 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         for (PhysicsEntity * e : ship->getPhysicsEntities(RoomDistance::All))
         {
             PhysicsUpdateVisitorWall visitor = PhysicsUpdateVisitorWall();
-            e->consumeVisitor(&visitor,ship);
+            e->shape->consumeVisitor(&visitor,ship);
         }
 
 
         for (PhysicsEntity * entity : ship->getPhysicsEntities(RoomDistance::All))
         {
-            entity->physicsUpdate(physicsContext);
+            entity->shape->physicsUpdate(physicsContext);
         }
 
         // UPDATE ------------------------------------------------------------------------------------------------------

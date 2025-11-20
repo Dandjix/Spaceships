@@ -5,15 +5,15 @@
 #pragma once
 
 
-class RoundPhysicsEntity;
-class RectPhysicsEntity;
+class RoundPhysicsShape;
+class RectPhysicsShape;
 class SpaceShip;
 
 namespace PhysicsCollisions
 {
-    void visitRects(RectPhysicsEntity * e1, RectPhysicsEntity * e2, SpaceShip * space_ship);
-    void visitRectRound(RectPhysicsEntity * e1, RoundPhysicsEntity * e2, SpaceShip * space_ship);
-    void visitRounds(RoundPhysicsEntity * e1, RoundPhysicsEntity * e2, SpaceShip * space_ship);
-    void visitRoundWall(RoundPhysicsEntity * e1, SpaceShip * space_ship);
-    void visitRectWall(RectPhysicsEntity * e1, SpaceShip * space_ship);
+    void visitRects(RectPhysicsShape * e1, RectPhysicsShape * e2, SpaceShip * space_ship);
+    void visitRectRound(RectPhysicsShape * e1, RoundPhysicsShape * e2, SpaceShip * space_ship);
+    void visitRounds(RoundPhysicsShape * e1, RoundPhysicsShape * e2, SpaceShip * space_ship);
+    void visitRoundWall(RoundPhysicsShape * e1, SpaceShip * space_ship);
+    void visitRectWall(RectPhysicsShape * e1, SpaceShip * space_ship);
 };

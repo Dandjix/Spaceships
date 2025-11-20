@@ -4,12 +4,6 @@
 
 #include "PhysicsEntity.h"
 
-void PhysicsEntity::physicsUpdate(const PhysicsUpdateContext& context)
-{
-    std::cout << "Physics pos = "
-          << this->position.x << ", " << this->position.y << "\n";
-}
-
 inline void PhysicsEntity::registerInSpaceship(SpaceShip* space_ship)
 {
     Entity::registerInSpaceship(space_ship);

@@ -4,16 +4,14 @@
 
 #pragma once
 #include "PhysicsEntity.h"
+#include "PhysicsShape.h"
 #include "PhysicsUpdateVisitor/PhysicsUpdateVisitorRect.h"
 
 
-class RectPhysicsEntity : public PhysicsEntity
+class RectPhysicsShape : public PhysicsShape
 {
 public:
-    RectPhysicsEntity(const Vector2Int& position, const std::optional<float>& angle, Behavior* behavior)
-        : PhysicsEntity(position, angle, behavior)
-    {
-    }
+    Vector2Float dimensions;
 
     PhysicsUpdateVisitor * createVisitor() override
     {
@@ -25,6 +23,7 @@ public:
         visitor->visitRect(this,space_ship);
     }
 
+    RectPhysicsShape(PhysicsEntity * owner_entity, Vector2Float dimensions) : PhysicsShape(owner_entity), dimensions(dimensions) {  }
 private:
 };
 
