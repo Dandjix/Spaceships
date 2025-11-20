@@ -16,6 +16,10 @@ void Humanoid::handleEvent(const SDL_Event &event) {
 
 void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
 
+    std::cout << "Render pos = "
+              << getPosition().x << ", " << getPosition().y << "\n";
+
+
     renderTexture(renderer,context,texture,Vector2Float(
         radius,
         radius

@@ -29,5 +29,12 @@ void Entity::unregisterInSpacehip(SpaceShip* space_ship)
 }
 
 void Entity::movePosition(Vector2Float delta, SpaceShip * space_ship) {
+    if (delta.sqrLength() <= 0)
+        return;
+
+    auto old = getPosition();
+
     this->setPosition(this->getPosition()+ Vectors::toVector2Int(delta));
+
+    std::cout << "MOVEMENT DID OCCUR :" << getPosition()-old <<  std::endl;
 }
