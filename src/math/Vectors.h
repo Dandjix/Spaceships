@@ -30,8 +30,8 @@ struct Vector2 {
         return l;
     }
 
-    T sqrLength() const {
-        return x * x + y * y;
+    float sqrLength() const {
+        return static_cast<float>(x) * static_cast<float>(x) +  static_cast<float>(y) * static_cast<float>(y);
     }
 
     void normalize() {
