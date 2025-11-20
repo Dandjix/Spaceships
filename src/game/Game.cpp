@@ -2,6 +2,8 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
 
+#include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
+
 #ifndef ENV_PROJECT_ROOT
 #define ENV_PROJECT_ROOT ""
 #endif
@@ -152,8 +154,6 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
         };
 
 
-        PhysicsUpdateVisitor visitor = {};
-
         auto physics_entities = ship->getPhysicsEntities(RoomDistance::Close);
 
         for (int i = 0; i < physics_entities.size(); i++)
@@ -163,13 +163,18 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
                 auto e1 = physics_entities.at(i);
                 auto e2 = physics_entities.at(j);
 
-                e1->beVisitedBy(e2,&visitor,ship);
+                PhysicsUpdateVisitor *  visitor = e1->createVisitor();
+
+                e2->consumeVisitor(visitor,ship);
+
+                delete visitor;
             }
         }
 
         for (PhysicsEntity * e : ship->getPhysicsEntities(RoomDistance::All))
         {
-            visitor.visitWall(e,ship);
+            PhysicsUpdateVisitorWall visitor = PhysicsUpdateVisitorWall();
+            e->consumeVisitor(&visitor,ship);
         }
 
 

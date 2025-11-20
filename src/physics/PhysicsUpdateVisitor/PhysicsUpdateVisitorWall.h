@@ -1,0 +1,34 @@
+//
+// Created by timon on 11/19/25.
+//
+
+#pragma once
+#include <stdexcept>
+#include <SDL3/SDL_log.h>
+
+#include "PhysicsCollisions.h"
+#include "PhysicsUpdateVisitor.h"
+
+class PhysicsEntity;
+class RoundPhysicsEntity;
+class RectPhysicsEntity;
+class SpaceShip;
+
+class PhysicsUpdateVisitorWall : public PhysicsUpdateVisitor
+{
+public:
+    PhysicsUpdateVisitorWall() : PhysicsUpdateVisitor() {  }
+
+    void visitRect(RectPhysicsEntity* e2, SpaceShip* space_ship) override
+    {
+        PhysicsCollisions::visitRectWall(e2,space_ship);
+    }
+    void visitRound(RoundPhysicsEntity* e2, SpaceShip * space_ship) override
+    {
+        PhysicsCollisions::visitRoundWall(e2,space_ship);
+    }
+    void visitWall(SpaceShip* space_ship) override
+    {
+        throw std::invalid_argument("Uhhhh you tried to make a wall collide with a wall... Gone a little bonjour have you now ?");
+    }
+};

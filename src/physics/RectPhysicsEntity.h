@@ -4,6 +4,7 @@
 
 #pragma once
 #include "PhysicsEntity.h"
+#include "PhysicsUpdateVisitor/PhysicsUpdateVisitorRect.h"
 
 
 class RectPhysicsEntity : public PhysicsEntity
@@ -14,8 +15,17 @@ public:
     {
     }
 
+    PhysicsUpdateVisitor * createVisitor() override
+    {
+        return new PhysicsUpdateVisitorRect(this);
+    }
+
+    void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship) override
+    {
+        visitor->visitRect(this,space_ship);
+    }
+
 private:
-    void beVisitedBy(PhysicsEntity* other, PhysicsUpdateVisitor* visitor, SpaceShip * space_ship) override;
 };
 
 

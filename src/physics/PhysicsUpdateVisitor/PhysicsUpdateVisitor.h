@@ -3,19 +3,22 @@
 //
 
 #pragma once
-#include "PhysicsUpdateAdapter.h"
 
 
 class PhysicsEntity;
 class RoundPhysicsEntity;
 class RectPhysicsEntity;
+class SpaceShip;
 
-class PhysicsUpdateVisitor : public PhysicsUpdateAdapter
+class PhysicsUpdateVisitor
 {
 public:
-    void visitRect(PhysicsEntity * e1, RectPhysicsEntity * e2, SpaceShip * space_ship);
-    void visitRound(PhysicsEntity * e1, RoundPhysicsEntity * e2, SpaceShip * space_ship);
-    void visitWall(PhysicsEntity * e1, SpaceShip * space_ship);
+    explicit PhysicsUpdateVisitor()= default;
+    virtual ~PhysicsUpdateVisitor() = default;
+
+    virtual void visitRect(RectPhysicsEntity * e2, SpaceShip* space_ship)=0;
+    virtual void visitRound(RoundPhysicsEntity * e2, SpaceShip* space_ship)=0;
+    virtual void visitWall(SpaceShip* space_ship)=0;
 };
 
 

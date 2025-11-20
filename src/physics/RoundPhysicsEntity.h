@@ -1,13 +1,17 @@
 #pragma once
 #include "PhysicsEntity.h"
 #include "../entities/RoundEntity.h"
+#include "PhysicsUpdateVisitor/PhysicsUpdateVisitorRound.h"
 
 class RoundPhysicsEntity : public RoundEntity, public PhysicsEntity
 {public:
-
-	void beVisitedBy(PhysicsEntity * other, PhysicsUpdateVisitor * visitor, SpaceShip * space_ship) override
+	PhysicsUpdateVisitor * createVisitor() override
 	{
-		visitor->visitRound(other,this,space_ship);
+		return  new PhysicsUpdateVisitorRound(this);
+	}
+	void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship) override
+	{
+		visitor->visitRound(this,space_ship);
 	}
 
 	RoundPhysicsEntity(
@@ -22,5 +26,7 @@ class RoundPhysicsEntity : public RoundEntity, public PhysicsEntity
 	{}
 
 	// Inherited via PhysicsEntity
-	void physicsUpdate(const PhysicsUpdateContext& context) override;
+	void physicsUpdate(const PhysicsUpdateContext& context) override
+	{
+	}
 };

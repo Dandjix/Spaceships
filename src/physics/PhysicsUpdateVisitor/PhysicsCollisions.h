@@ -9,9 +9,8 @@ class RoundPhysicsEntity;
 class RectPhysicsEntity;
 class SpaceShip;
 
-class PhysicsUpdateAdapter
+namespace PhysicsCollisions
 {
-protected:
     void visitRects(RectPhysicsEntity * e1, RectPhysicsEntity * e2, SpaceShip * space_ship);
     void visitRectRound(RectPhysicsEntity * e1, RoundPhysicsEntity * e2, SpaceShip * space_ship);
     void visitRounds(RoundPhysicsEntity * e1, RoundPhysicsEntity * e2, SpaceShip * space_ship);
