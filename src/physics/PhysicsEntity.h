@@ -18,6 +18,11 @@ public :
 	{
 	}
 
+	~PhysicsEntity() override
+	{
+		delete shape;
+	}
+
 	virtual float get_weight() { return 1.0f; }
 
 	void registerInSpaceship(SpaceShip* space_ship) override;
