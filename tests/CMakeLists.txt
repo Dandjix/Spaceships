@@ -6,6 +6,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+include_directories(
+        INTERFACE
+        ${SDL3_INCLUDE_DIRS}
+        ../src/.
+        ../src/imported
+)
+
 # Collect test files
 file(GLOB_RECURSE TEST_SOURCES *.cpp)
 

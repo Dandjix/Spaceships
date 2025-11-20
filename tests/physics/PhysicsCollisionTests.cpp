@@ -4,11 +4,53 @@
 
 #include "gtest/gtest.h"
 #include "../../src/spaceships/SpaceShip.h"
+#include "physics/PhysicsEntity.h"
+#include "physics/RoundPhysicsShape.h"
+
+class MockRoundPhysicsEntity : public PhysicsEntity
+{
+public:
+    MockRoundPhysicsEntity(const Vector2Int& position, const std::optional<float>& angle, Behavior* behavior, float radius)
+        : PhysicsEntity(position, angle, behavior, new RoundPhysicsShape(this,radius))
+    {
+    }
+
+    ~MockRoundPhysicsEntity()
+    {
+        delete shape;
+    }
+
+    void render(SDL_Renderer* renderer, const RenderingContext& context) override {}
+};
+
+bool are_vectors_close(Vector2Int a, Vector2Int b, int tolerance = 10)
+{
+    return std::abs(a.x - b.x) <= tolerance && std::abs(a.y - b.y) <= tolerance;
+}
 
 TEST(PhysicsCollisionTestSuite, RoundRoundSimpleTest)
 {
-    SpaceShip * space_ship = new SpaceShip();
+    auto space_ship = new SpaceShip();
 
-    std::cout << "empty sc : " << space_ship << std::endl;
-    ASSERT_TRUE(false);
+    auto e1 = new MockRoundPhysicsEntity({100,100},0,nullptr,50);
+
+    auto e2 = new MockRoundPhysicsEntity({125,125},0,nullptr,50);
+
+    auto visitor = e1->shape->createVisitor();
+
+    e2->shape->consumeVisitor(visitor,space_ship);
+
+    std::cout << "Mock collision positions : "<< std::endl << e1->getPosition() << std::endl;
+    std::cout << e2->getPosition() << std::endl << std::endl;
+
+    // diagonal distance of about 45 (radius 50)
+
+    ASSERT_TRUE(are_vectors_close(e1->getPosition(),{100-45,100-45}));
+    ASSERT_TRUE(are_vectors_close(e2->getPosition(),{125+45,125+45}));
+
+    delete e1;
+    delete e2;
+    delete visitor;
+    delete space_ship;
+
 }

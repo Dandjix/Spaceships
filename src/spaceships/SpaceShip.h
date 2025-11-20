@@ -57,6 +57,7 @@ public:
   std::unordered_set<PhysicsEntity *> physics_entities;
 
   explicit SpaceShip(SpaceShipBlueprint *blueprint);
+  explicit SpaceShip();
 
   const SpaceshipTiles &getSpaceshipTiles() const;
 

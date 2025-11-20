@@ -134,6 +134,10 @@ SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint) : spaceship_tiles(SpaceshipT
 {
 	populateRooms();
 }
+SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({}))
+{
+	populateRooms();
+}
 
 const SpaceshipTiles & SpaceShip::getSpaceshipTiles() const
 {
