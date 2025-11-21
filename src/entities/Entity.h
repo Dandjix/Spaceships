@@ -8,6 +8,7 @@
 #include "../game/Update.h"
 #include  "../behavior/EntityAttributes.h"
 #include  "../spaceships/SpaceShip.h"
+#include "events/Event.h"
 
 class Entity
 {
@@ -43,6 +44,10 @@ protected:
         SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, entity_angle, nullptr, SDL_FLIP_NONE);
     }
 public:
+
+    Event<> on_die;
+
+
     /// <summary>
     /// creates an entity
     /// </summary>
@@ -50,7 +55,10 @@ public:
     Entity(Vector2Int position, std::optional<float> angle, Behavior * behavior)
         : position(position), angle(angle),behavior(behavior),attributes(new EntityAttributes()) {} // Constructor using Vector2
 
-    virtual ~Entity() = default;
+    virtual ~Entity()
+    {
+        on_die.emit();
+    };
 
     virtual void update(const UpdateContext& context);
     virtual void handleEvent(const SDL_Event& event);

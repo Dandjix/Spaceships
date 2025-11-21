@@ -211,7 +211,7 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 	}
 }
 
-std::vector<Entity*> SpaceShip::getEntities(RoomDistance queue) const
+std::vector<Entity*> SpaceShip::getEntities(RoomDistance queue, Room* reference_room) const
 {
 	auto vec = std::vector<Entity*>(entities.begin(), entities.end());
 
@@ -220,7 +220,7 @@ std::vector<Entity*> SpaceShip::getEntities(RoomDistance queue) const
 	return vec;
 }
 
-std::vector<PhysicsEntity*> SpaceShip::getPhysicsEntities(RoomDistance queue) const
+std::vector<PhysicsEntity*> SpaceShip::getPhysicsEntities(RoomDistance queue, Room* reference_room) const
 {
 	auto vec = std::vector<PhysicsEntity*>(physics_entities.begin(), physics_entities.end());
 

@@ -73,15 +73,16 @@ public:
 
   /// <summary>
   /// returns the entities (read only)
+  /// @param reference_room the room to which this is Immediate, close etc. By default (nullptr) this will be relative to the player
   /// </summary>
   /// <returns></returns>
-  std::vector<Entity *> getEntities(RoomDistance queue) const;
+  std::vector<Entity *> getEntities(RoomDistance queue, Room* reference_room = nullptr) const;
 
   /// <summary>
   /// returns the physics entities (read only)
   /// </summary>
   /// <returns></returns>
-  std::vector<PhysicsEntity *> getPhysicsEntities(RoomDistance queue) const;
+  std::vector<PhysicsEntity *> getPhysicsEntities(RoomDistance queue, Room* reference_room = nullptr) const;
   /// <summary>
   /// docks an other ship to this ship. You will want to align them relatively
   /// well since this will snap the other ship. Undocking is future me's problem

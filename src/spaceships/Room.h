@@ -95,10 +95,4 @@ public :
 		TL = Vector2Int(minX, minY);
 		BR = Vector2Int(maxX-1, maxY-1);
 	}
-
-	void Scan()
-	{
-
-	}
-
 };
