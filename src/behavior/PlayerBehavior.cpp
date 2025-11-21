@@ -22,7 +22,7 @@ void PlayerBehavior::update(const UpdateContext &context, Entity * owner) {
 
     delta.normalize();
 
-    delta = delta * context.deltaTime * 600; //TODO : remove * 600
+    delta = delta * context.deltaTime * 200; //TODO : remove * 600
 
     delta = delta.scaleToWorldPosition();
 

@@ -47,5 +47,9 @@ int SpaceshipTiles::maximum_y() const
 
 Tile SpaceshipTiles::get_tile(int x, int y) const
 {
+    if (x < minimum_x() || x >= maximum_x() || y < minimum_y() || y >= maximum_y())
+    {
+        return Tile::Void;
+    }
     return tiles[x][y];
 }

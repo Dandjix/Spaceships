@@ -53,13 +53,72 @@ namespace PhysicsCollisions
     }
 
 
-    void visitRoundWall(RoundPhysicsShape* e1, SpaceShip* space_ship)
+void visitRoundWall(RoundPhysicsShape* shape1, SpaceShip* space_ship)
+{
+    Vector2Int tilesStart;
+    Vector2Int tilesEnd;
+
+    auto AABB = shape1->getBoundingBox();
+
+    int factor = Vectors::getFactor();
+    int tileWorldSize = factor * Tiles::tileSizePx;
+
+    // Tile range overlapped by the bounding box (+1 margin)
+    tilesStart = AABB.topLeft() / tileWorldSize;// - Vector2Int(1, 1);
+    tilesEnd   = AABB.bottomRight() / tileWorldSize;// + Vector2Int(1, 1);
+
+    Vector2Float center = Vectors::toVector2Float(shape1->owner_entity->getPosition());
+    float radius = shape1->radius;
+
+    for (int tx = tilesStart.x; tx <= tilesEnd.x; ++tx)
     {
-        // std::cout << "round on wall collision" << std::endl;
+        for (int ty = tilesStart.y; ty <= tilesEnd.y; ++ty)
+        {
+            Tile tile = space_ship->getSpaceshipTiles().get_tile(tx, ty);
 
+            // Only collide with solid (or wall) tiles
+            if (tile != Tile::Wall)
+                continue;
+
+            // Compute the tile's AABB in world coordinates
+            Vector2Float tileMin(tx * tileWorldSize,
+                                 ty * tileWorldSize);
+
+            Vector2Float tileMax = tileMin + Vector2Float(tileWorldSize, tileWorldSize);
+
+            // Closest point on tile to the circle center
+            Vector2Float closest;
+            closest.x = std::max(tileMin.x, std::min(center.x, tileMax.x));
+            closest.y = std::max(tileMin.y, std::min(center.y, tileMax.y));
+
+            Vector2Float diff = center - closest;
+            float dist = diff.length();
+
+            float penetration = radius - dist;
+
+            if (penetration > 0.0f)  // Collision!
+            {
+                // If center is EXACTLY inside the tile center (rare), avoid NaN
+                Vector2Float normal;
+                if (dist == 0)
+                    normal = Vector2Float(0, -1);
+                else
+                    normal = diff.normalized();
+
+                Vector2Float delta = normal * penetration;
+
+                // Apply collision correction
+                shape1->owner_entity->movePosition(delta, space_ship);
+
+                // Update center because we moved
+                center = center + delta;
+            }
+        }
     }
+}
 
-    void visitRectWall(RectPhysicsShape* e1, SpaceShip* space_ship)
+
+    void visitRectWall(RectPhysicsShape* shape1, SpaceShip* space_ship)
     {
         // std::cout << "rect on wall collision" << std::endl;
     }
