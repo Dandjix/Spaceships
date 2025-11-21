@@ -36,7 +36,7 @@ void CargoContainer::render(SDL_Renderer* renderer, const RenderingContext& cont
     SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 
     // Calculate the half-size of the container
-    Vector2Float halfSize = scale * 0.5f;
+    Vector2Float halfSize = scale.scaleToScreenPosition() * 0.5f;
 
     // Render the texture
 

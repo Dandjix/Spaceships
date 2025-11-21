@@ -6,6 +6,7 @@
 
 void RoundPhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
 {
+    PhysicsShape::debugRender(renderer, context);
     SDL_SetRenderDrawColor(renderer,255,0,0,255);
     DebugRendering::drawCircle(renderer,context,owner_entity->getPosition(),radius);
 }

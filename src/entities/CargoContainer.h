@@ -26,7 +26,7 @@ private:
 
 public:
     // Constructor
-    explicit CargoContainer(Vector2Int position, float angle = 0.0f, Variation variation = Variation::blank, const Vector2Float scale = Vector2Float(61,24))
+    explicit CargoContainer(Vector2Int position, float angle = 0.0f, Variation variation = Variation::blank, const Vector2Float scale = Vector2Float(61,24).scaleToWorldPosition())
     : PhysicsEntity(position, angle,nullptr,new RectPhysicsShape(this, scale)), variation(variation), scale(scale) {
         color = getRandomColor();
     }

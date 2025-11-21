@@ -4,6 +4,7 @@
 
 #pragma once
 #include "Physics.h"
+#include "PhysicsEntity.h"
 #include "math/BoundingBox.h"
 #include "spaceships/SpaceShip.h"
 
@@ -15,11 +16,13 @@ class PhysicsShape
 public:
     PhysicsEntity * owner_entity;
 
+    PhysicsShape(PhysicsEntity * owner_entity) : owner_entity(owner_entity){}
     virtual ~PhysicsShape() = default;
 
     virtual void physicsUpdate(const PhysicsUpdateContext & context);
+    void drawBoundingBox(SDL_Renderer* renderer, const RenderingContext& context);
 
-    virtual void debugRender(SDL_Renderer * renderer, const RenderingContext & context){}
+    virtual void debugRender(SDL_Renderer * renderer, const RenderingContext & context);
 
     /**
      * Creates a visitor, which can be consumed by calling it with another physics entity, calling the right physics function
@@ -38,6 +41,5 @@ public:
 
     virtual BoundingBox<int> getBoundingBox()=0;
 
-    PhysicsShape(PhysicsEntity * owner_entity) : owner_entity(owner_entity){}
 
 };

@@ -2,10 +2,8 @@
 #include "PhysicsShape.h"
 #include "../entities/Entity.h"
 #include "../physics/Physics.h"
-#include "PhysicsUpdateVisitor/PhysicsUpdateVisitor.h"
 
-class RoundPhysicsShape;
-class RectPhysicsShape;
+class PhysicsShape;
 
 class PhysicsEntity : public Entity
 {
