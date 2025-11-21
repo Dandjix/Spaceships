@@ -31,4 +31,21 @@ public:
     {
         return boundingBoxDimensions;
     }
+
+    bool intersects(BoundingBox other)
+    {
+        Vector2<T> aMin = topLeftCorner;
+        Vector2<T> aMax = topLeftCorner + boundingBoxDimensions;
+
+        Vector2<T> bMin = other.topLeftCorner;
+        Vector2<T> bMax = other.topLeftCorner + other.boundingBoxDimensions;
+
+        // No overlap if one is completely to the left/right or above/below the other
+        if (aMax.x <= bMin.x) return false; // this is left of other
+        if (bMax.x <= aMin.x) return false; // other is left of this
+        if (aMax.y <= bMin.y) return false; // this is above other
+        if (bMax.y <= aMin.y) return false; // other is above this
+
+        return true;
+    }
 };

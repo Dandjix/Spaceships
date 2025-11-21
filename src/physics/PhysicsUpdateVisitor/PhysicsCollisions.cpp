@@ -23,6 +23,9 @@ namespace PhysicsCollisions
 
     void visitRounds(RoundPhysicsShape* shape1, RoundPhysicsShape* shape2, SpaceShip* space_ship)
     {
+        // std::cout << "round on round collision" << std::endl;
+
+
         Vector2Int diff = shape1->owner_entity->getPosition() - shape2->owner_entity->getPosition();
 
         float combined_radius = shape1->radius + shape2->radius;
