@@ -22,8 +22,10 @@ public:
     {
         visitor->visitRect(this,space_ship);
     }
+    BoundingBox<int> getBoundingBox() override;
 
     RectPhysicsShape(PhysicsEntity * owner_entity, Vector2Float dimensions) : PhysicsShape(owner_entity), dimensions(dimensions) {  }
+
 private:
 };
 

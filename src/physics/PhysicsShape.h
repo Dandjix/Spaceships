@@ -4,6 +4,7 @@
 
 #pragma once
 #include "Physics.h"
+#include "math/BoundingBox.h"
 #include "spaceships/SpaceShip.h"
 
 
@@ -37,6 +38,8 @@ public:
      * @param space_ship the spaceship that both entities belong to
      */
     virtual void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship)=0;
+
+    virtual BoundingBox<int> getBoundingBox()=0;
 
     PhysicsShape(PhysicsEntity * owner_entity) : owner_entity(owner_entity){}
 

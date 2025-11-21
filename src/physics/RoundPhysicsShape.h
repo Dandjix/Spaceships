@@ -21,4 +21,6 @@ class RoundPhysicsShape : public PhysicsShape
 	{
 
 	}
+
+	BoundingBox<int> getBoundingBox() override;
 };
