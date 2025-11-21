@@ -16,7 +16,7 @@ class PhysicsShape
 public:
     PhysicsEntity * owner_entity;
 
-    PhysicsShape(PhysicsEntity * owner_entity) : owner_entity(owner_entity){}
+    explicit PhysicsShape(PhysicsEntity * owner_entity) : owner_entity(owner_entity){}
     virtual ~PhysicsShape() = default;
 
     virtual void physicsUpdate(const PhysicsUpdateContext & context);
