@@ -93,9 +93,9 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
     Humanoid * dummy3 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
 
 
-    CargoContainer * container1 = new CargoContainer(base_origin, 45, CargoContainer::Variation::EMA);
-    CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(100, 0).scaleToWorldPosition(), 22, CargoContainer::Variation::SN);
-    Sphere * sphere = new Sphere(Vector2Int(-100, -100).scaleToWorldPosition(),  Scaling::scaleToWorld(32.0f),nullptr);
+    CargoContainer * container1 = new CargoContainer(base_origin + Vector2Int(500,500).scaleToWorldPosition(), 45, CargoContainer::Variation::EMA);
+    CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(200, 300).scaleToWorldPosition(), 22, CargoContainer::Variation::SN);
+    Sphere * sphere = new Sphere(Vector2Int(200, 200).scaleToWorldPosition(),  Scaling::scaleToWorld(32.0f),nullptr);
     DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
     // Cursor* cursor = new Cursor(camera);
