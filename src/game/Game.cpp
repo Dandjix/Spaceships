@@ -95,7 +95,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 
     CargoContainer * container1 = new CargoContainer(base_origin, 45, CargoContainer::Variation::EMA);
     CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(100, 0).scaleToWorldPosition(), 90, CargoContainer::Variation::SN);
-    Sphere * sphere = new Sphere(Vector2Int(-5, -5).scaleToWorldPosition(), 32,nullptr);
+    Sphere * sphere = new Sphere(Vector2Int(-5, -5).scaleToWorldPosition(),  Scaling::scaleToWorld(32.0f),nullptr);
     DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
     // Cursor* cursor = new Cursor(camera);
@@ -232,6 +232,11 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window)
 		{
 			entity->debugRender(renderer, renderingContext);
 		}
+        //physics shapes debug
+        for (PhysicsEntity * entity : ship->getPhysicsEntities(RoomDistance::Immediate))
+        {
+            entity->shape->debugRender(renderer, renderingContext);
+        }
         
         SDL_RenderPresent(renderer);
     }

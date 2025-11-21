@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include <SDL3/SDL.h>
 #include "../math/Vectors.h"
 #include "../spaceships/Tile.h"
@@ -83,7 +84,7 @@ public:
 	{
 		Vector2Float center = context.toScreenPoint(position);
 
-		float scaledRadius = radius / context.cameraScale;
+		float scaledRadius = Scaling::scaleToScreen(radius) / context.cameraScale;
 
 		// Draw debug circle
 		const int segments = 16; // More = smoother circle
@@ -99,6 +100,45 @@ public:
 			float y2 = center.y + sinf(theta2) * scaledRadius;
 
 			SDL_RenderLine(renderer, x1, y1, x2, y2);
+		}
+	}
+
+	static void drawRect(SDL_Renderer * renderer,const RenderingContext& context,
+		Vector2Float dimensions, Vector2Int position, float angle )
+	{
+		// Calculate half size with camera scale
+		Vector2Float halfSize = dimensions * 0.5f / context.cameraScale;
+
+		Vector2Float center = context.toScreenPoint(position);
+
+		// Define corners in local space
+		Vector2Float corners[4] = {
+			{-halfSize.x, -halfSize.y},
+			{ halfSize.x, -halfSize.y},
+			{ halfSize.x,  halfSize.y},
+			{-halfSize.x,  halfSize.y}
+		};
+
+		// Total rotation = object angle + camera angle
+		float totalAngleDeg = angle + context.cameraAngle;
+		float angleRad = totalAngleDeg * (3.14159265f / 180.0f);
+		float cosA = cos(angleRad);
+		float sinA = sin(angleRad);
+
+		// Rotate corners around center
+		for (int i = 0; i < 4; ++i) {
+			float x = corners[i].x;
+			float y = corners[i].y;
+			corners[i].x = x * cosA - y * sinA + center.x;
+			corners[i].y = x * sinA + y * cosA + center.y;
+		}
+
+		// Draw rectangle from corners
+		for (int i = 0; i < 4; ++i) {
+			int next = (i + 1) % 4;
+			SDL_RenderLine(renderer,
+				corners[i].x, corners[i].y,
+				corners[next].x, corners[next].y);
 		}
 	}
 

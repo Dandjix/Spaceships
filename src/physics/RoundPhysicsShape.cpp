@@ -4,6 +4,12 @@
 
 #include "RoundPhysicsShape.h"
 
+void RoundPhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
+{
+    SDL_SetRenderDrawColor(renderer,255,0,0,255);
+    DebugRendering::drawCircle(renderer,context,owner_entity->getPosition(),radius);
+}
+
 BoundingBox<int> RoundPhysicsShape::getBoundingBox()
 {
     Vector2Int TL;

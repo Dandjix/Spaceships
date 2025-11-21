@@ -17,12 +17,9 @@ public:
 
     virtual ~PhysicsShape() = default;
 
-    virtual void  physicsUpdate(const PhysicsUpdateContext & context);
+    virtual void physicsUpdate(const PhysicsUpdateContext & context);
 
-    virtual float get_weight()
-    {
-        return 1.0f;
-    }
+    virtual void debugRender(SDL_Renderer * renderer, const RenderingContext & context){}
 
     /**
      * Creates a visitor, which can be consumed by calling it with another physics entity, calling the right physics function

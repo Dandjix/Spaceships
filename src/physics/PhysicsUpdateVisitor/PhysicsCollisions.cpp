@@ -11,23 +11,23 @@
 
 namespace PhysicsCollisions
 {
-    void visitRects(RectPhysicsShape* e1, RectPhysicsShape* e2, SpaceShip* space_ship)
+    void visitRects(RectPhysicsShape* shape1, RectPhysicsShape* shape2, SpaceShip* space_ship)
     {
         // std::cout << "rect on rect collision" << std::endl;
     }
 
-    void visitRectRound(RectPhysicsShape* e1, RoundPhysicsShape* e2, SpaceShip* space_ship)
+    void visitRectRound(RectPhysicsShape* shape1, RoundPhysicsShape* shape2, SpaceShip* space_ship)
     {
         // std::cout << "rect on round collision" << std::endl;
     }
 
-    void visitRounds(RoundPhysicsShape* e1, RoundPhysicsShape* e2, SpaceShip* space_ship)
+    void visitRounds(RoundPhysicsShape* shape1, RoundPhysicsShape* shape2, SpaceShip* space_ship)
     {
-        Vector2Int diff = e1->owner_entity->getPosition() - e2->owner_entity->getPosition();
+        Vector2Int diff = shape1->owner_entity->getPosition() - shape2->owner_entity->getPosition();
 
-        float combined_radius = e1->radius + e2->radius;
+        float combined_radius = shape1->radius + shape2->radius;
 
-        float force_value = e1->radius + e2->radius  - diff.length();
+        float force_value = shape1->radius + shape2->radius  - diff.length();
 
 
         if (force_value <= 0)
@@ -35,15 +35,17 @@ namespace PhysicsCollisions
             return;
         }
 
+        float e1_weight = shape1->owner_entity->get_weight();
+        float e2_weight = shape2->owner_entity->get_weight();
 
-        float force_e1 = force_value * (e2->get_weight()/e1->get_weight());
-        float force_e2 = force_value * (e1->get_weight()/e2->get_weight());
+        float force_e1 = force_value * (e2_weight / (e2_weight + e1_weight));
+        float force_e2 = force_value * (e1_weight / (e2_weight + e1_weight));
 
-        auto delta_e1 = (Vectors::toVector2Float(e1->owner_entity->getPosition()-e2->owner_entity->getPosition()).normalized() * force_e1);
-        auto delta_e2 = (Vectors::toVector2Float(e2->owner_entity->getPosition()-e1->owner_entity->getPosition()).normalized() * force_e2);
+        auto delta_e1 = (Vectors::toVector2Float(shape1->owner_entity->getPosition()-shape2->owner_entity->getPosition()).normalized() * force_e1);
+        auto delta_e2 = (Vectors::toVector2Float(shape2->owner_entity->getPosition()-shape1->owner_entity->getPosition()).normalized() * force_e2);
 
-        e1->owner_entity->movePosition(delta_e1,space_ship);
-        e2->owner_entity->movePosition(delta_e2,space_ship);
+        shape1->owner_entity->movePosition(delta_e1,space_ship);
+        shape2->owner_entity->movePosition(delta_e2,space_ship);
 
     }
 

@@ -13,6 +13,8 @@ class RectPhysicsShape : public PhysicsShape
 public:
     Vector2Float dimensions;
 
+    void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override;
+
     PhysicsUpdateVisitor * createVisitor() override
     {
         return new PhysicsUpdateVisitorRect(this);

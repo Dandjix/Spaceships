@@ -22,5 +22,7 @@ class RoundPhysicsShape : public PhysicsShape
 
 	}
 
+	void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override;
+
 	BoundingBox<int> getBoundingBox() override;
 };

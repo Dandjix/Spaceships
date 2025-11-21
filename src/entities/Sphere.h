@@ -2,11 +2,12 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
-#include "BoxEntity.h"
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
+#include "physics/PhysicsEntity.h"
+#include "physics/RoundPhysicsShape.h"
 
-class Sphere : public BoxEntity {
+class Sphere : public PhysicsEntity {
 private:
     static SDL_Texture* texture;  // Texture for the sphere
     static bool texturesLoaded;   // Flag to check if textures are loaded
@@ -14,12 +15,14 @@ private:
 public:
     // Constructor
     Sphere(Vector2Int position, float radius, Behavior * behavior)
-        : BoxEntity(position, {radius, radius}, std::nullopt, behavior), radius(radius)
+        : PhysicsEntity(position,  std::nullopt,behavior,new RoundPhysicsShape(this,radius)), radius(radius)
     {
     }
 
     // Static function to load textures
     static void LoadTextures(SDL_Renderer* renderer);
+
+    float get_weight() override { return  5;}
 
     // Override render function to render the sphere
     void render(SDL_Renderer* renderer, const RenderingContext& context) override;

@@ -1,11 +1,12 @@
 #pragma once
-#include "BoxEntity.h"
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
+#include "physics/PhysicsEntity.h"
+#include "physics/RectPhysicsShape.h"
 
-class CargoContainer : public BoxEntity {
+class CargoContainer : public PhysicsEntity {
 public:
     enum class Variation {
         blank,
@@ -21,10 +22,14 @@ private:
 
     Variation variation;
     SDL_Color color;
+    Vector2Float scale;
 
 public:
     // Constructor
-    explicit CargoContainer(Vector2Int position, float angle = 0.0f, Variation variation = Variation::blank);
+    explicit CargoContainer(Vector2Int position, float angle = 0.0f, Variation variation = Variation::blank, const Vector2Float scale = Vector2Float(61,24))
+    : PhysicsEntity(position, angle,nullptr,new RectPhysicsShape(this, scale)), variation(variation), scale(scale) {
+        color = getRandomColor();
+    }
 
     // Static method to load textures
     static void LoadTextures(SDL_Renderer* renderer);

@@ -11,9 +11,9 @@ class SpaceShip;
 
 namespace PhysicsCollisions
 {
-    void visitRects(RectPhysicsShape * e1, RectPhysicsShape * e2, SpaceShip * space_ship);
-    void visitRectRound(RectPhysicsShape * e1, RoundPhysicsShape * e2, SpaceShip * space_ship);
-    void visitRounds(RoundPhysicsShape * e1, RoundPhysicsShape * e2, SpaceShip * space_ship);
+    void visitRects(RectPhysicsShape * shape1, RectPhysicsShape * shape2, SpaceShip * space_ship);
+    void visitRectRound(RectPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
+    void visitRounds(RoundPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
     void visitRoundWall(RoundPhysicsShape * e1, SpaceShip * space_ship);
     void visitRectWall(RectPhysicsShape * e1, SpaceShip * space_ship);
 };

@@ -22,11 +22,6 @@ void CargoContainer::LoadTextures(SDL_Renderer* renderer) {
     texturesLoaded = true;
 }
 
-CargoContainer::CargoContainer(Vector2Int position, float angle, Variation variation)
-    : BoxEntity(position, Vector2Float(61, 24), angle,nullptr), variation(variation) {
-    color = getRandomColor();
-}
-
 void CargoContainer::update(const UpdateContext & context) {
     // CargoContainer might not need to move, so leave it empty.
 }
@@ -43,7 +38,8 @@ void CargoContainer::render(SDL_Renderer* renderer, const RenderingContext& cont
     // Calculate the half-size of the container
     Vector2Float halfSize = scale * 0.5f;
 
-    // Render the texture (this assumes you have a rendering function like `renderTexture` elsewhere)
+    // Render the texture
+
     renderTexture(renderer, context, texture, halfSize);
 }
 

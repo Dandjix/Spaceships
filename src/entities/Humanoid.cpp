@@ -23,11 +23,6 @@ void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
     );
 }
 
-void Humanoid::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
-{
-    DebugRendering::drawCircle(renderer,context,position,radius);
-}
-
 void Humanoid::movePosition(Vector2Float delta, SpaceShip * space_ship)
 {
     Entity::movePosition(delta, space_ship);
