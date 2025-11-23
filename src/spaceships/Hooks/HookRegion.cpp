@@ -22,8 +22,8 @@ void HookRegion::unRegisterEntity(Entity* entity)
 bool HookRegion::pointIsInside(Vector2Int world_position) const
 {
     return (
-        world_position.x >= position.x && world_position.y >= position.y
-        && world_position.x <= position.x + dimensions.x && world_position.y <= position.y + dimensions.y
+        world_position.x >= TL.x && world_position.y >= TL.y
+        && world_position.x <= TL.x + dimensions.x && world_position.y <= TL.y + dimensions.y
     );
 }
 
@@ -32,17 +32,42 @@ bool HookRegion::hasEntity(Entity* entity) const
     return entities_inside.contains(entity);
 }
 
-void HookRegion::update(const UpdateContext& context)
-{
-    Entity::update(context);
+void HookRegion::update(const UpdateContext &context) {
+    auto entities = context.spaceShip->getEntities(RoomDistance::All);
 
-    auto entities = context.spaceShip->getEntities(RoomDistance::All); //TODO: only filter through the entities that are immediate to the room of this entity
-
-    for (auto e : entities)
-    {
-        if (hasEntity(e) && e)
-        {
-
+    for (auto entity: entities) {
+        if (pointIsInside(entity->getPosition())) {
+            if (!hasEntity(entity)) {
+                registerEntity(entity);
+            }
+        }
+        else {
+            if (hasEntity(entity)) {
+                unRegisterEntity(entity);
+            }
         }
     }
+}
+
+void HookRegion::debugRender(SDL_Renderer *renderer, const RenderingContext &context) {
+
+    Vector2Float TL_screen, BR_screen, TR_screen, BL_screen;
+
+    TL_screen = context.toScreenPoint(TL);
+    BR_screen = context.toScreenPoint(TL + dimensions);
+    TR_screen = context.toScreenPoint(Vector2Int(TL.x + dimensions.x,TL.y));
+    BL_screen = context.toScreenPoint(Vector2Int(TL.x,TL.y + dimensions.y));
+
+    std::vector<Vector2Float> corners = {
+        TL_screen,TR_screen,BR_screen,BL_screen
+    };
+
+    SDL_SetRenderDrawColor(renderer,0,255,255,255);
+
+    for (int i = 0; i < corners.size(); ++i) {
+        int next_i = (i + 1) % corners.size();
+
+        SDL_RenderLine(renderer,corners[i].x,corners[i].y,corners[next_i].x,corners[ next_i].y);
+    }
+
 }

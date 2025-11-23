@@ -13,27 +13,31 @@
 
 class Entity;
 
-class HookRegion : public Entity
+class HookRegion
 {
 public:
 
     void registerEntity(Entity * entity);
     void unRegisterEntity(Entity * entity);
 
+    Vector2Int TL;
     Vector2Int dimensions;
-    std::function<void(Entity *)> on_enter;
-    std::function<void(Entity *)> on_leave;
+    Event<Entity*> on_enter;
+    Event<Entity*> on_leave;
+
     std::unordered_map<Entity *,u_int64_t> entities_inside;
 
 
-    HookRegion(Vector2Int TL, Vector2Int dimensions, std::function<void(Entity *)> on_enter = {}, std::function<void(Entity *)> on_leave = {})
-        : Entity(TL, std::nullopt,nullptr),
-    dimensions(dimensions),on_enter(std::move(on_enter)),on_leave(std::move(on_leave))
+    HookRegion(Vector2Int TL, Vector2Int dimensions) :
+    TL(TL),
+    dimensions(dimensions)
     {}
 
     bool pointIsInside(Vector2Int world_position) const;
 
     bool hasEntity(Entity * entity) const;
 
-    void update(const UpdateContext & context) override;
+    void update(const UpdateContext & context);
+
+    void debugRender(SDL_Renderer * renderer, const RenderingContext & context);
 };
