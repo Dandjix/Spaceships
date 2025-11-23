@@ -27,7 +27,7 @@ getCameraDistance(float field_of_view, float screenWidth)
 {
     float A = (screenWidth * static_cast<float>(Vectors::getFactor())) /2.0f;
 
-    float T = std::tanf(field_of_view/2);
+    float T = std::tan(field_of_view/2);
 
     float O = A*T;
 

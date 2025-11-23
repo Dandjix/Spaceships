@@ -17,7 +17,7 @@ BoundingBox<int> RoundPhysicsShape::getBoundingBox()
 
     TL = owner_entity->getPosition() - Vector2Int( radius,radius);
 
-    Vector2Int dimensions = {static_cast<int>(std::ceilf(radius*2)),static_cast<int>(std::ceilf(radius*2))};
+    Vector2Int dimensions = {static_cast<int>(std::ceil(radius*2)),static_cast<int>(std::ceil(radius*2))};
 
     return BoundingBox<int>(TL,dimensions);
 }
