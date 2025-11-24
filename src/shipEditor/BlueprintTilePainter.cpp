@@ -93,6 +93,10 @@ void BlueprintTilePainter::paintFill(Vector2Int coords)
 
 void BlueprintTilePainter::update(const UpdateContext& context)
 {
+	if (context.mouse_position_type != GameEvent::Game) {
+		return;
+	}
+
 	if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_LMASK)
 	{
 		Vector2Int coords = grid->getMouseCoordinates();

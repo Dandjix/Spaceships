@@ -29,7 +29,7 @@ public:
     }
     bool get_value() const {return value;}
 
-    void handleEvent(const SDL_Event& event) override;
+    void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext & context) override;
 
     void render(SDL_Renderer* renderer, const GUI_RenderingContext& context) const override;
 };

@@ -10,10 +10,10 @@ void Entity::update(const UpdateContext &context) {
     behavior->update(context,this);
 }
 
-void Entity::handleEvent(const SDL_Event &event) {
+void Entity::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
     if (behavior == nullptr)
         return;
-    behavior->handleEvent(event,this);
+    behavior->handleEvent(event, context, this);
 }
 
 void Entity::registerInSpaceship(SpaceShip* space_ship)

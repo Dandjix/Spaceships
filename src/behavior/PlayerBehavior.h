@@ -11,6 +11,6 @@ private:
     }
 
     void update(const UpdateContext &context, Entity * owner) override;
-    void handleEvent(const SDL_Event &event, Entity * owner) override;
+    void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, Entity * owner) override;
 };
 

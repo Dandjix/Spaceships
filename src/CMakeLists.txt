@@ -51,14 +51,19 @@ file(GLOB_RECURSE SOURCES
         *.c
 )
 # library for unit tests
-add_library(SpaceshipsLib ${SOURCES})
+add_library(SpaceshipsLib ${SOURCES}
+        gameEvent/MousePositionType.h
+        gameEvent/GetMousePositionType.cpp
+        gameEvent/GetMousePositionType.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
 )
 
 # Create the executable from all your sources
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+        gameEvent/GameEvent.h
+)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)
 

@@ -16,6 +16,8 @@
 #include "../userInterface/GUIList.h"
 #include "../spaceships/Tile.h"
 #include "../shipEditor/BlueprintEditorAppearance.h"
+#include "gameEvent/GameEvent.h"
+#include "gameEvent/GetMousePositionType.h"
 #include "userInterface/GUICheckbox.h"
 #include "userInterface/GUILabel.h"
 
@@ -184,6 +186,15 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
         Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
 
+        float mouse_x, mouse_y;
+        SDL_GetMouseState(&mouse_x,&mouse_y);
+
+        auto mouse_position_type = GameEvent::getMousePositionType(editorGUIElements, {mouse_x,mouse_y});
+
+        GameEvent::GameEventContext event_context = {
+            mouse_position_type
+        };
+
         //handling events
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -192,11 +203,11 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             }
             for (Entity * entity : activeEntities)
             {
-                entity->handleEvent(event);
+                entity->handleEvent(event, event_context);
             }
             for (GUIRect * element : editorGUIElements)
             {
-                element->handleEvent(event);
+                element->handleEvent(event, event_context);
             }
         }
 
@@ -210,6 +221,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         UpdateContext updateContext = { 
             deltaTime, 
             screenDimensions,
+            nullptr,
+            mouse_position_type
         };
 
         // update

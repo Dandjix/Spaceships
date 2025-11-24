@@ -26,7 +26,7 @@ public:
         setPosition(p->getPosition());  // Set the camera's position to follow the player initially
     }
 
-    void handleEvent(const SDL_Event& event) override {
+    void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context) override {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
             float zoomFactor = 0.1f; // Adjust zoom speed
             float scale = getScale() + event.wheel.y * zoomFactor;

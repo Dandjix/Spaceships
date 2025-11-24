@@ -41,7 +41,7 @@ public:
         : GUIRect(anchor, offset, width, height), options(std::move(options)), onSelect(std::move(onSelect)), keyboardNavigation(keyboardNavigation){
     }
 
-    void handleEvent(const SDL_Event & event) override;
+    void handleEvent(const SDL_Event & event, const GameEvent::GameEventContext & context) override;
 
     void update(const GUI_UpdateContext& context) override;
 

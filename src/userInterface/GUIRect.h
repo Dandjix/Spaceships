@@ -5,7 +5,7 @@
 
 #include "GUI.h"
 #include "../math/Vectors.h"
-#include "../game/Update.h"
+#include "entities/Entity.h"
 
 class GUIRect {
 protected :
@@ -38,7 +38,7 @@ public:
 
 	virtual void update(const GUI_UpdateContext& context);
 
-	virtual void handleEvent(const SDL_Event & event){}
+	virtual void handleEvent(const SDL_Event & event, const GameEvent::GameEventContext & context){}
 };
 
 

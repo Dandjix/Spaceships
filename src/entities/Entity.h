@@ -10,6 +10,11 @@
 #include  "../spaceships/SpaceShip.h"
 #include "events/Event.h"
 
+
+
+
+
+
 class Entity
 {
 protected:
@@ -61,7 +66,7 @@ public:
     };
 
     virtual void update(const UpdateContext& context);
-    virtual void handleEvent(const SDL_Event& event);
+    virtual void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context);
     virtual void render(SDL_Renderer *renderer, const RenderingContext &context) = 0;
     virtual void debugRender(SDL_Renderer *renderer, const RenderingContext &context) {}
 

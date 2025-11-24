@@ -7,7 +7,7 @@
 const int middle_rect_relative_size = 4;
 const int inner_rect_relative_size = 4;
 
-void GUICheckbox::handleEvent(const SDL_Event& event)
+void GUICheckbox::handleEvent(const SDL_Event& event, const GameEvent::GameEventContext & context)
 {
     if (event.type != SDL_EVENT_MOUSE_BUTTON_DOWN)
     {

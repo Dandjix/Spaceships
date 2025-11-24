@@ -29,5 +29,5 @@ void PlayerBehavior::update(const UpdateContext &context, Entity * owner) {
     owner->movePosition(delta,context.spaceShip);
 }
 
-void PlayerBehavior::handleEvent(const SDL_Event &event, Entity *owner) {
+void PlayerBehavior::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, Entity *owner) {
 }

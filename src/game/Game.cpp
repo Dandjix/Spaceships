@@ -2,6 +2,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
 
+#include "gameEvent/GameEvent.h"
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 
 #ifndef ENV_PROJECT_ROOT
@@ -132,7 +133,8 @@ void UpdateHandling(SDL_Window* window, Camera* camera, SpaceShip* ship, float d
     {
         deltaTime,
         Vector2Int(0,0),
-        ship
+        ship,
+        GameEvent::Game //TODO : compute this from UI elements
     };
 
 
@@ -257,7 +259,9 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
             }
             for (Entity * entity : ship->getEntities(RoomDistance::All))
             {
-                entity->handleEvent(event);
+                entity->handleEvent(event, {
+                    GameEvent::MousePositionType::Game
+                });
             }
         }
 
