@@ -10,7 +10,7 @@ void RayCaster::update(const UpdateContext& context)
 	SDL_GetMouseState(&mouseX, &mouseY);
 
 
-	Vector2Int mousePosition = camera->screenToWorldPoint(Vector2Float(mouseX,mouseY));
+	Vector2Int mousePosition = context.camera_info.screenToWorldPoint(Vector2Float(mouseX,mouseY));
 	Vector2Float direction = Vectors::toVector2Float(mousePosition - player->getPosition());
 
 	direction.normalize();
@@ -40,17 +40,17 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 	float mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 	Vector2Float mouseScreenPos = Vector2Float(mouseX, mouseY);
-	Vector2Int mousePos = context.toWorldPosition(mouseScreenPos);
+	Vector2Int mousePos =context.camera_info.screenToWorldPoint(mouseScreenPos);
 
 	Vector2Int playerPos = player->getPosition();
-	Vector2Float playerScreenPos = context.toScreenPoint(playerPos);
+	Vector2Float playerScreenPos = context.camera_info.worldToScreenPoint(playerPos);
 
 	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.toScreenPoint(mousePos)));
+	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(mousePos)));
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.toScreenPoint(playerPos + Vector2Int(1200,1200))));
-	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.toScreenPoint(playerPos - Vector2Int(1200,1200))));
+	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(playerPos + Vector2Int(1200,1200))));
+	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(playerPos - Vector2Int(1200,1200))));
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
 	SDL_RenderLine(renderer, mouseScreenPos.x, mouseScreenPos.y, playerScreenPos.x, playerScreenPos.y);
@@ -58,14 +58,14 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 
 	if (originPosition.has_value() && hitPosition.has_value())
 	{
-		Vector2Float hitPoint = context.toScreenPoint(originPosition.value());
-		Vector2Float originPoint = context.toScreenPoint(hitPosition.value());
+		Vector2Float hitPoint = context.camera_info.worldToScreenPoint(originPosition.value());
+		Vector2Float originPoint = context.camera_info.worldToScreenPoint(hitPosition.value());
 		SDL_SetRenderDrawColorFloat(renderer,0,1,0,1.0f);
 		SDL_RenderLine(renderer,originPoint.x,originPoint.y,hitPoint.x,hitPoint.y);
 	}
 	if (originPosition.has_value())
 	{
-		Vector2Float originHit = context.toScreenPoint(originPosition.value());
+		Vector2Float originHit = context.camera_info.worldToScreenPoint(originPosition.value());
 		SDL_SetRenderDrawColorFloat(renderer,0,0,1,1.0f);
 		DebugRendering::drawCross(renderer, Vectors::toVector2Int(originHit),15);
 	}
@@ -73,12 +73,12 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 	for (auto pos : checked_positions)
 	{
 		SDL_SetRenderDrawColorFloat(renderer,0,1,1,1.0f);
-		DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.toScreenPoint(pos)),12.5f);
+		DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(pos)),12.5f);
 	}
 
 	if (hitPosition.has_value())
 	{
-		Vector2Float screenHit = context.toScreenPoint(hitPosition.value());
+		Vector2Float screenHit = context.camera_info.worldToScreenPoint(hitPosition.value());
 		float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);

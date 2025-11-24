@@ -41,15 +41,15 @@ Vector2Int DebugGrid::snap(Vector2Int worldPosition, bool ceil) const
     }
 
 void DebugGrid::debugRender(SDL_Renderer* renderer, const RenderingContext& context){
-        Vector2Int center = context.cameraPos + context.screenDimensions.scaleToWorldPosition()*0.5f*context.cameraScale;
+        Vector2Int center = context.camera_info.cameraPosition + context.camera_info.screenDimensions.scaleToWorldPosition()*0.5f*context.camera_info.cameraScale;
 
         int diameter;
-        if (context.screenDimensions.y > context.screenDimensions.x)
-            diameter = context.screenDimensions.y*2;
+        if (context.camera_info.screenDimensions.y > context.camera_info.screenDimensions.x)
+            diameter = context.camera_info.screenDimensions.y*2;
         else
-            diameter = context.screenDimensions.x * 2;
+            diameter = context.camera_info.screenDimensions.x * 2;
 
-        diameter *= static_cast<int>(ceilf(context.cameraScale*1.42f * Vectors::getFactor()));
+        diameter *= static_cast<int>(ceilf(context.camera_info.cameraScale*1.42f * Vectors::getFactor()));
 
         Vector2Int topLeft = snap(Vector2Int(center.x - diameter, center.y - diameter));
         Vector2Int bottomRight = snap(Vector2Int(center.x + diameter, center.y + diameter),true);
@@ -62,16 +62,16 @@ void DebugGrid::debugRender(SDL_Renderer* renderer, const RenderingContext& cont
         for (int x = topLeft.x; x <= bottomRight.x; x+=step)
         {
             Vector2Float pos1, pos2;
-            pos1 = context.toScreenPoint(Vector2Int(x, topLeft.y).scaleToWorldPosition());
-            pos2 = context.toScreenPoint(Vector2Int(x, bottomRight.y).scaleToWorldPosition());
+            pos1 = context.camera_info.worldToScreenPoint(Vector2Int(x, topLeft.y).scaleToWorldPosition());
+            pos2 = context.camera_info.worldToScreenPoint(Vector2Int(x, bottomRight.y).scaleToWorldPosition());
 
             SDL_RenderLine(renderer, pos1.x,pos1.y,pos2.x,pos2.y);
         }
         for (int y = topLeft.y; y <= bottomRight.y; y += step)
         {
             Vector2Float pos1, pos2;
-            pos1 = context.toScreenPoint(Vector2Int(topLeft.x, y).scaleToWorldPosition());
-            pos2 = context.toScreenPoint(Vector2Int(bottomRight.x, y).scaleToWorldPosition());
+            pos1 = context.camera_info.worldToScreenPoint(Vector2Int(topLeft.x, y).scaleToWorldPosition());
+            pos2 = context.camera_info.worldToScreenPoint(Vector2Int(bottomRight.x, y).scaleToWorldPosition());
 
 
             SDL_RenderLine(renderer, pos1.x, pos1.y, pos2.x, pos2.y);

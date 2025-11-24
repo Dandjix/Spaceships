@@ -9,17 +9,17 @@
 
 TEST(CameraTransformationsTestSuite, ReversabilitySimple)
 {
-    RenderingContext context = {
-        {0,0},0,{1000,500},1
-    };
+    auto context = RenderingContext(
+        {{0,0},0,{1000,500},1}
+    );
 
     Vector2Float screenPos = {500,250};
 
-    Vector2Int world_pos = context.toWorldPosition(screenPos);
+    Vector2Int world_pos = context.camera_info.screenToWorldPoint(screenPos);
 
-    Vector2Float back_to_screen = context.toScreenPoint(world_pos);
+    Vector2Float back_to_screen = context.camera_info.worldToScreenPoint(world_pos);
 
-    auto back_to_world = context.toWorldPosition(back_to_screen);
+    auto back_to_world = context.camera_info.screenToWorldPoint(back_to_screen);
 
     std::cout << "world pos : " << world_pos << std::endl;
     ASSERT_EQ(world_pos.x,0);
@@ -36,18 +36,18 @@ TEST(CameraTransformationsTestSuite, ReversabilitySimple)
 
 TEST(CameraTransformationsTestSuite, ReversabilityOffset)
 {
-    RenderingContext context = {
-        {500*Vectors::getFactor(),250*Vectors::getFactor()},0,{1000,500},2
-    };
+    auto context = RenderingContext(
+        {{500*Vectors::getFactor(),250*Vectors::getFactor()},0,{1000,500},2}
+    );
 
     Vector2Float screenPos = {500,250};
 
-    Vector2Int world_pos = context.toWorldPosition(screenPos);
+    Vector2Int world_pos = context.camera_info.screenToWorldPoint(screenPos);
     std::cout << "world pos : " << world_pos << std::endl;
     ASSERT_EQ(world_pos.x,500*Vectors::getFactor());
     ASSERT_EQ(world_pos.y,250*Vectors::getFactor());
 
-    Vector2Float back_to_screen = context.toScreenPoint(world_pos);
+    Vector2Float back_to_screen = context.camera_info.worldToScreenPoint(world_pos);
     std::cout << "back_to_screen : " << back_to_screen << std::endl;
     ASSERT_EQ(back_to_screen.x,500);
     ASSERT_EQ(back_to_screen.y,250);

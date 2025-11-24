@@ -5,8 +5,9 @@
 class SpaceShip;
 
 struct UpdateContext {
+	CameraTransformations::CameraInfo camera_info;
+
 	float deltaTime;
-	Vector2Int screenDimensions;
 	SpaceShip* spaceShip;
 	GameEvent::MousePositionType mouse_position_type;
 };

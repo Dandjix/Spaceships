@@ -31,7 +31,7 @@ public:
 
 	int getSizePx() const;
 
-	Vector2Int getMouseCoordinates(bool strict = true) const;
+	Vector2Int getMouseCoordinates(const CameraTransformations::CameraInfo & camera_info,bool strict = true) const;
 
 	void startResizing();
 

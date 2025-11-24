@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
+#include <utility>
 
 #include "gameEvent/GameEvent.h"
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
@@ -127,35 +128,25 @@ void renderEntities(SDL_Renderer* renderer, SpaceShip* ship, RenderingContext re
     }
 }
 
-void UpdateHandling(SDL_Window* window, Camera* camera, SpaceShip* ship, float deltaTime, Vector2Int& screenDimensions)
+void UpdateHandling(const UpdateContext & updateContext)
 {
-    const UpdateContext updateContext =
-    {
-        deltaTime,
-        Vector2Int(0,0),
-        ship,
-        GameEvent::Game //TODO : compute this from UI elements
-    };
-
-
-    camera->setScreenDimensions(screenDimensions);
 
     // update
-    for (Entity * entity : ship->getEntities(RoomDistance::All))
+    for (Entity * entity : updateContext.spaceShip->getEntities(RoomDistance::All))
     {
         entity->update(updateContext);
     }
-    ship->update(updateContext);
+    updateContext.spaceShip->update(updateContext);
 }
 
-void RenderingHandle(SDL_Renderer* renderer, SpaceShip* ship, std::vector<ParallaxObject> parallax_objects, RenderingContext renderingContext)
+void RenderingHandle(SDL_Renderer* renderer, SpaceShip* ship, std::vector<ParallaxObject> parallax_objects, const RenderingContext &renderingContext)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
     SDL_RenderClear(renderer);
 
     renderSpaceBackground();
     renderPlanets();
-    renderParallax(renderer,renderingContext,parallax_objects);
+    renderParallax(renderer,renderingContext,std::move(parallax_objects));
 
     //the one place that hasn't been corrupted by capitalism (it is space)
     ship->renderExterior(renderer,renderingContext);
@@ -241,6 +232,10 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
+        int screenWidth, screenHeight;
+        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
+
         if (deltaTime < target_delta_time)
         {
             int ms_to_wait = static_cast<int>((target_delta_time - deltaTime) * 1000);
@@ -251,6 +246,18 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
         // if (deltaTime != target_delta_time)
         //     std::cout << "fps : " << std::fixed << std::setprecision(6) << deltaTime << "(" << 1.0f/deltaTime << " fps)" << "\n";
 
+        GameEvent::GameEventContext event_context =
+        {
+            {
+                camera->getPosition(),
+                camera->getAngle(),
+                screenDimensions,
+                camera->getScale()
+            },
+            GameEvent::MousePositionType::Game,
+        };
+
+
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -259,9 +266,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
             }
             for (Entity * entity : ship->getEntities(RoomDistance::All))
             {
-                entity->handleEvent(event, {
-                    GameEvent::MousePositionType::Game
-                });
+                entity->handleEvent(event,event_context);
             }
         }
 
@@ -271,17 +276,22 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
 
         // UPDATE ------------------------------------------------------------------------------------------------------
 
-        int screenWidth, screenHeight;
-        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+        camera->setScreenDimensions(screenDimensions);
+        UpdateContext update_context = {
+            {camera->getPosition(),camera->getAngle(),screenDimensions,camera->getScale()},
+            deltaTime,
+            ship,
+            GameEvent::Game
+        };
+        UpdateHandling(update_context);
 
-        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
+        // RENDERING ---------------------------------------------------------------------------------------------------
 
-        UpdateHandling(window, camera, ship, deltaTime, screenDimensions);
-
-        Vector2Int cameraPos = camera->getPosition();
-
-        RenderingContext renderingContext(cameraPos, camera->getAngle(), screenDimensions, camera->getScale());
-
+        RenderingContext renderingContext = {
+            {
+                camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()
+            }
+        };
         RenderingHandle(renderer, ship, parallax_objects, renderingContext);
     }
     return destination;

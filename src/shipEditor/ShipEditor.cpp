@@ -1,21 +1,19 @@
 #include <SDL3/SDL.h>
-#include <SDL3_ttf/SDL_ttf.h>
-#include <SDL3_image/SDL_image.h>
 #include <functional>
 #include <vector>
 #include <string>
 
-#include "../userInterface/MenuNavigation.h"
-#include "../math/Vectors.h"
-#include "../player/FreeCamera.h"
-#include "../shipEditor/ShipEditor.h"
-#include "../shipEditor/ShipBuildingGrid.h"
-#include "../spaceships/SaveAndLoadShips.h"
-#include "../spaceships/SpaceShipBlueprint.h"
-#include "../shipEditor/BlueprintTilePainter.h"
-#include "../userInterface/GUIList.h"
-#include "../spaceships/Tile.h"
-#include "../shipEditor/BlueprintEditorAppearance.h"
+#include "userInterface/MenuNavigation.h"
+#include "math/Vectors.h"
+#include "player/FreeCamera.h"
+#include "shipEditor/ShipEditor.h"
+#include "shipEditor/ShipBuildingGrid.h"
+#include "spaceships/SaveAndLoadShips.h"
+#include "spaceships/SpaceShipBlueprint.h"
+#include "shipEditor/BlueprintTilePainter.h"
+#include "userInterface/GUIList.h"
+#include "spaceships/Tile.h"
+#include "shipEditor/BlueprintEditorAppearance.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
 #include "userInterface/GUICheckbox.h"
@@ -88,8 +86,10 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     );
     activeEntities.push_back(&grid);
 
-    BlueprintTilePainter painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall,false);
-    activeEntities.push_back(&painter);
+    BlueprintTilePainter tile_painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall,false);
+    activeEntities.push_back(&tile_painter);
+
+    // HookPainter hook_painter = HookPainter(&blueprint,HookPainter::Off);
 
     BlueprintEditorAppearance appearance(&blueprint);
     activeEntities.push_back(&appearance);
@@ -114,8 +114,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         100,
         GUI_Fill,
         tileOptions,
-        [&painter](const std::string& option) {
-            painter.setTileToPaint(Tiles::tileFromName(option));
+        [&tile_painter](const std::string& option) {
+            tile_painter.setTileToPaint(Tiles::tileFromName(option));
         },
         true
     );
@@ -165,10 +165,10 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     GUICheckbox fillCheckbox(
         Anchor::TL,
         {250,0},
-        [&painter](bool checkboxValue){
-            painter.fill = checkboxValue;
+        [&tile_painter](bool checkboxValue){
+            tile_painter.fill = checkboxValue;
         },
-        painter.fill
+        tile_painter.fill
     );
     editorGUIElements.push_back(&fillCheckbox);
 
@@ -192,6 +192,12 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         auto mouse_position_type = GameEvent::getMousePositionType(editorGUIElements, {mouse_x,mouse_y});
 
         GameEvent::GameEventContext event_context = {
+            {
+                camera.getPosition(),
+                camera.getAngle(),
+                screenDimensions,
+                camera.getScale()
+            },
             mouse_position_type
         };
 
@@ -218,9 +224,14 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         now = SDL_GetTicks();
         deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
 
-        UpdateContext updateContext = { 
-            deltaTime, 
-            screenDimensions,
+        UpdateContext updateContext = {
+            {
+                camera.getPosition(),
+                camera.getAngle(),
+                screenDimensions,
+                camera.getScale()
+            },
+            deltaTime,
             nullptr,
             mouse_position_type
         };

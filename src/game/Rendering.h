@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <utility>
 #include <SDL3/SDL.h>
 #include "../math/Vectors.h"
 #include "../spaceships/Tile.h"
@@ -7,31 +8,7 @@
 
 struct RenderingContext
 {
-	/// <summary>
-	/// camera position in world units
-	/// </summary>
-	const Vector2Int cameraPos;
-	const float cameraAngle;
-
-	const Vector2Int screenDimensions;
-
-	/**
-	 * scale of the camera. 1 is regular camera zoom, while 0 would be infinitely zoomed in and inf infinitely zoomed out
-	 */
-	const float cameraScale;
-
-	Vector2Float toScreenPoint(Vector2Int worldPosition) const
-	{
-		return CameraTransformations::worldToScreenPoint(worldPosition, screenDimensions, cameraAngle, cameraScale, cameraPos);
-	}
-
-	Vector2Int toWorldPosition(Vector2Float screenPosition) const
-	{
-		return CameraTransformations::screenToWorldPoint(screenPosition, screenDimensions, cameraAngle,cameraScale, cameraPos);
-	}
-
-	RenderingContext(Vector2Int cameraPos, float cameraAngle, Vector2Int screenDimensions, float cameraScale)
-		: cameraPos(cameraPos), cameraAngle(cameraAngle), screenDimensions(screenDimensions),cameraScale(cameraScale){}
+	CameraTransformations::CameraInfo camera_info;
 };
 
 class Rendering
@@ -39,10 +16,10 @@ class Rendering
 public :
 	static Vector2Int get_zero(const RenderingContext& context)
 	{
-		Vector2Int zero = Vector2Int(0, 0) - (context.cameraPos).scaleToScreenPosition() / context.cameraScale; //scale zero
+		Vector2Int zero = Vector2Int(0, 0) - (context.camera_info.cameraPosition).scaleToScreenPosition() / context.camera_info.cameraScale; //scale zero
 
-		Vector2Float screenCenter = Vectors::toVector2Float(context.screenDimensions) / 2;
-		Vector2Float diff = (screenCenter - Vectors::toVector2Float(zero)).rotate(context.cameraAngle); //rotate zero
+		Vector2Float screenCenter = Vectors::toVector2Float(context.camera_info.screenDimensions) / 2;
+		Vector2Float diff = (screenCenter - Vectors::toVector2Float(zero)).rotate(context.camera_info.cameraAngle); //rotate zero
 		zero = Vectors::toVector2Int(screenCenter - diff);
 		return zero;
 	}
@@ -82,9 +59,9 @@ public:
 
 	static void drawCircle(SDL_Renderer * renderer, const RenderingContext & context,Vector2Int position, float radius)
 	{
-		Vector2Float center = context.toScreenPoint(position);
+		Vector2Float center = context.camera_info.worldToScreenPoint(position);
 
-		float scaledRadius = Scaling::scaleToScreen(radius) / context.cameraScale;
+		float scaledRadius = Scaling::scaleToScreen(radius) / context.camera_info.cameraScale;
 
 		// Draw debug circle
 		const int segments = 16; // More = smoother circle
@@ -107,9 +84,9 @@ public:
 		Vector2Float dimensions, Vector2Int position, float angle )
 	{
 		// Calculate half size with camera scale
-		Vector2Float halfSize = dimensions * 0.5f / context.cameraScale;
+		Vector2Float halfSize = dimensions * 0.5f / context.camera_info.cameraScale;
 
-		Vector2Float center = context.toScreenPoint(position);
+		Vector2Float center = context.camera_info.worldToScreenPoint(position);
 
 		// Define corners in local space
 		Vector2Float corners[4] = {
@@ -120,7 +97,7 @@ public:
 		};
 
 		// Total rotation = object angle + camera angle
-		float totalAngleDeg = angle + context.cameraAngle;
+		float totalAngleDeg = angle + context.camera_info.cameraAngle;
 		float angleRad = totalAngleDeg * (3.14159265f / 180.0f);
 		float cosA = cos(angleRad);
 		float sinA = sin(angleRad);
@@ -167,7 +144,7 @@ public:
 
 		// Apply camera transform: offset, scale
 		auto transform = [&](Vector2Int pt) -> Vector2Float {
-			return context.toScreenPoint(pt);
+			return context.camera_info.worldToScreenPoint(pt);
 		};
 
 		Vector2Float rTL = transform(TL);

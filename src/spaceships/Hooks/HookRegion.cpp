@@ -53,10 +53,10 @@ void HookRegion::debugRender(SDL_Renderer *renderer, const RenderingContext &con
 
     Vector2Float TL_screen, BR_screen, TR_screen, BL_screen;
 
-    TL_screen = context.toScreenPoint(TL);
-    BR_screen = context.toScreenPoint(TL + dimensions);
-    TR_screen = context.toScreenPoint(Vector2Int(TL.x + dimensions.x,TL.y));
-    BL_screen = context.toScreenPoint(Vector2Int(TL.x,TL.y + dimensions.y));
+    TL_screen = context.camera_info.worldToScreenPoint(TL);
+    BR_screen = context.camera_info.worldToScreenPoint(TL + dimensions);
+    TR_screen = context.camera_info.worldToScreenPoint(Vector2Int(TL.x + dimensions.x,TL.y));
+    BL_screen = context.camera_info.worldToScreenPoint(Vector2Int(TL.x,TL.y + dimensions.y));
 
     std::vector<Vector2Float> corners = {
         TL_screen,TR_screen,BR_screen,BL_screen

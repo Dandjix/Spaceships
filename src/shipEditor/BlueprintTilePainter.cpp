@@ -99,7 +99,7 @@ void BlueprintTilePainter::update(const UpdateContext& context)
 
 	if (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON_LMASK)
 	{
-		Vector2Int coords = grid->getMouseCoordinates();
+		Vector2Int coords = grid->getMouseCoordinates(context.camera_info);
 		if (coords == Vector2Int(-1, -1))
 			return;
 
@@ -117,7 +117,7 @@ void BlueprintTilePainter::update(const UpdateContext& context)
 
 void BlueprintTilePainter::render(SDL_Renderer* renderer, const RenderingContext& context)
 {
-	Vector2Int coords = grid->getMouseCoordinates();
+	Vector2Int coords = grid->getMouseCoordinates(context.camera_info);
 	if (coords == Vector2Int(-1, -1))
 		return;
 
@@ -125,13 +125,13 @@ void BlueprintTilePainter::render(SDL_Renderer* renderer, const RenderingContext
 
 	coords = coords * Vectors::getFactor() * pxGridSize;
 
-	Vector2Float toPaintPos = context.toScreenPoint(coords);
+	Vector2Float toPaintPos = context.camera_info.worldToScreenPoint(coords);
 
 	SDL_FRect rect = { 
 		static_cast<float>(toPaintPos.x),
 		static_cast<float>(toPaintPos.y),
-		static_cast<float>(pxGridSize / context.cameraScale),
-		static_cast<float>(pxGridSize / context.cameraScale)
+		static_cast<float>(pxGridSize / context.camera_info.cameraScale),
+		static_cast<float>(pxGridSize / context.camera_info.cameraScale)
 	};
 	SDL_SetRenderDrawColor(renderer,0,0,255,255);
 	SDL_RenderRect(renderer, &rect);

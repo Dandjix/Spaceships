@@ -12,8 +12,8 @@ void ShipBuildingGrid::drawLines(Vector2Int dimensions, SDL_Renderer* renderer, 
 		Vector2Int start(x_coord, 0);
 		Vector2Int end(x_coord, vLength);
 		Vector2Float startS, endS;
-		startS = context.toScreenPoint(start);
-		endS = context.toScreenPoint(end);
+		startS = context.camera_info.worldToScreenPoint(start);
+		endS = context.camera_info.worldToScreenPoint(end);
 		SDL_RenderLine(renderer, startS.x, startS.y, endS.x, endS.y);
 	}
 	for (int y = 0; y <= dimensions.y; y++)
@@ -22,8 +22,8 @@ void ShipBuildingGrid::drawLines(Vector2Int dimensions, SDL_Renderer* renderer, 
 		Vector2Int start(0, y_coord);
 		Vector2Int end(hLength, y_coord);
 		Vector2Float startS, endS;
-		startS = context.toScreenPoint(start);
-		endS = context.toScreenPoint(end);
+		startS = context.camera_info.worldToScreenPoint(start);
+		endS = context.camera_info.worldToScreenPoint(end);
 		SDL_RenderLine(renderer, startS.x, startS.y, endS.x, endS.y);
 	}
 }
@@ -37,7 +37,7 @@ void ShipBuildingGrid::renderFixed(SDL_Renderer* renderer, const RenderingContex
 void ShipBuildingGrid::renderFluid(SDL_Renderer* renderer, const RenderingContext& context)
 {
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	Vector2Int newDimensions = getMouseCoordinates(false) + Vector2Int(1, 1);
+	Vector2Int newDimensions = getMouseCoordinates(context.camera_info,false) + Vector2Int(1, 1);
 	drawLines(newDimensions, renderer, context);
 }
 
@@ -64,11 +64,11 @@ int ShipBuildingGrid::getSizePx() const
 	return sizePx;
 }
 
-Vector2Int ShipBuildingGrid::getMouseCoordinates(bool strict) const
+Vector2Int ShipBuildingGrid::getMouseCoordinates(const CameraTransformations::CameraInfo & camera_info, bool strict) const
 {
 	float mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
-	Vector2Int worldCursorPoint = camera->screenToWorldPoint(Vector2Float(mouseX, mouseY));
+	Vector2Int worldCursorPoint = camera_info.screenToWorldPoint(Vector2Float(mouseX, mouseY));
 
 	int factor = Vectors::getFactor() * sizePx;
 
@@ -103,7 +103,7 @@ void ShipBuildingGrid::handleEvent(const SDL_Event & event, const GameEvent::Gam
 	{
 		if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
 		{
-			Vector2Int newDimensions = getMouseCoordinates(false) + Vector2Int(1, 1);
+			Vector2Int newDimensions = getMouseCoordinates(context.camera_info,false) + Vector2Int(1, 1);
 			onResize(newDimensions);
 			dimensions = newDimensions;
 			resizing = false;

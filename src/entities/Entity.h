@@ -27,9 +27,9 @@ protected:
 
     void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture, Vector2Float destSize) const
     {
-        destSize = destSize / context.cameraScale;
+        destSize = destSize / context.camera_info.cameraScale;
 
-        Vector2Float center = context.toScreenPoint(position);
+        Vector2Float center = context.camera_info.worldToScreenPoint(position);
 
         SDL_FRect destRect = {
             center.x - destSize.x,
@@ -39,7 +39,7 @@ protected:
         float entity_angle;
         if (hasAngle())
         {
-            entity_angle = getAngle() + context.cameraAngle;
+            entity_angle = getAngle() + context.camera_info.cameraAngle;
         }
         else
         {

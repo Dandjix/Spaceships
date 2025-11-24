@@ -21,10 +21,10 @@ void PhysicsShape::drawBoundingBox(SDL_Renderer* renderer, const RenderingContex
     auto BR_world = bbox.bottomRight();
     Vector2Int BL_world = {bbox.topLeft().x,bbox.bottomRight().y};
 
-    Vector2Float TL = context.toScreenPoint(TL_world);
-    Vector2Float BR = context.toScreenPoint(BR_world);
-    Vector2Float TR = context.toScreenPoint(TR_world);
-    Vector2Float BL = context.toScreenPoint(BL_world);
+    Vector2Float TL = context.camera_info.worldToScreenPoint(TL_world);
+    Vector2Float BR = context.camera_info.worldToScreenPoint(BR_world);
+    Vector2Float TR = context.camera_info.worldToScreenPoint(TR_world);
+    Vector2Float BL = context.camera_info.worldToScreenPoint(BL_world);
 
 
     SDL_SetRenderDrawColor(renderer,0,255,0,255);

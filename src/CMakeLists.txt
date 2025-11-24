@@ -54,7 +54,9 @@ file(GLOB_RECURSE SOURCES
 add_library(SpaceshipsLib ${SOURCES}
         gameEvent/MousePositionType.h
         gameEvent/GetMousePositionType.cpp
-        gameEvent/GetMousePositionType.h)
+        gameEvent/GetMousePositionType.h
+        shipEditor/HookPainter.cpp
+        shipEditor/HookPainter.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

@@ -1,5 +1,7 @@
 #pragma once
 #include "../math/Vectors.h"
+#include "game/CameraTransformations.h"
+
 enum class Anchor
 {
 	TL,
@@ -26,6 +28,6 @@ struct GUI_RenderingContext
 
 struct GUI_UpdateContext
 {
-	const Vector2Int screenDimensions;
+	CameraTransformations::CameraInfo camera_info;
 	const float deltaTime;
 };
