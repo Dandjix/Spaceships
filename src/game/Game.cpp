@@ -65,80 +65,6 @@ std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer * renderer,Vect
     return objects;
 }
 
-void PhysicsHandling(SpaceShip* ship, float target_delta_time, int subdivisions = 2)
-{
-    const PhysicsUpdateContext physicsContext = {
-        target_delta_time / static_cast<float>(subdivisions),
-        ship
-    };
-
-    for (int i = 0; i < subdivisions; ++i)
-    {
-        auto physics_entities = ship->getPhysicsEntities(RoomDistance::Close);
-
-        for (int i = 0; i < physics_entities.size(); i++)
-        {
-            for (int j = i+1; j < physics_entities.size(); j++)
-            {
-                auto e1 = physics_entities.at(i);
-                auto e2 = physics_entities.at(j);
-
-                if (!e1->shape->getBoundingBox().intersects(e2->shape->getBoundingBox()))
-                {
-                    continue;
-                }
-
-                PhysicsUpdateVisitor *  visitor = e1->shape->createVisitor();
-
-                e2->shape->consumeVisitor(visitor,ship);
-
-                delete visitor;
-            }
-        }
-    }
-
-    for (PhysicsEntity * e : ship->getPhysicsEntities(RoomDistance::All))
-    {
-        PhysicsUpdateVisitorWall visitor = PhysicsUpdateVisitorWall();
-        e->shape->consumeVisitor(&visitor,ship);
-    }
-
-
-    for (PhysicsEntity * entity : ship->getPhysicsEntities(RoomDistance::All))
-    {
-        entity->shape->physicsUpdate(physicsContext);
-    }
-}
-
-void renderEntities(SDL_Renderer* renderer, SpaceShip* ship, RenderingContext renderingContext)
-{
-    for (Entity* entity : ship->getEntities(RoomDistance::Immediate))
-    {
-        entity->render(renderer, renderingContext);
-    }
-    //render debug
-    for (Entity* entity : ship->getEntities(RoomDistance::Immediate))
-    {
-        entity->debugRender(renderer, renderingContext);
-    }
-    //physics shapes debug
-    for (PhysicsEntity * entity : ship->getPhysicsEntities(RoomDistance::Immediate))
-    {
-        entity->shape->debugRender(renderer, renderingContext);
-    }
-}
-
-void UpdateHandling(const UpdateContext & updateContext)
-{
-
-    // update
-    for (Entity * entity : updateContext.spaceShip->getEntities(RoomDistance::All))
-    {
-        entity->update(updateContext);
-    }
-    updateContext.spaceShip->update(updateContext);
-}
-
 void RenderingHandle(SDL_Renderer* renderer, SpaceShip* ship, std::vector<ParallaxObject> parallax_objects, const RenderingContext &renderingContext)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
@@ -155,10 +81,12 @@ void RenderingHandle(SDL_Renderer* renderer, SpaceShip* ship, std::vector<Parall
     ship->renderInterior(renderer,renderingContext);
 
     //render
-    renderEntities(renderer, ship, renderingContext);
+    ship->renderEntities(renderer, renderingContext);
 
     SDL_RenderPresent(renderer);
 }
+
+
 
 MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float target_delta_time)  // target_delta_time = 1.0/60.0
 {
@@ -245,7 +173,6 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
 
         // if (deltaTime != target_delta_time)
         //     std::cout << "fps : " << std::fixed << std::setprecision(6) << deltaTime << "(" << 1.0f/deltaTime << " fps)" << "\n";
-
         GameEvent::GameEventContext event_context =
         {
             {
@@ -257,33 +184,26 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
             GameEvent::MousePositionType::Game,
         };
 
-
-
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 destination = Quit;
             }
-            for (Entity * entity : ship->getEntities(RoomDistance::All))
-            {
-                entity->handleEvent(event,event_context);
-            }
+            ship->eventHandling(event,event_context);
         }
-
-        // PHYSICS -----------------------------------------------------------------------------------------------------
-
-        PhysicsHandling(ship,target_delta_time);
-
         // UPDATE ------------------------------------------------------------------------------------------------------
 
         camera->setScreenDimensions(screenDimensions);
-        UpdateContext update_context = {
+
+        ship->updateHandling(
             {camera->getPosition(),camera->getAngle(),screenDimensions,camera->getScale()},
             deltaTime,
-            ship,
-            GameEvent::Game
-        };
-        UpdateHandling(update_context);
+            GameEvent::Game);
+        // QUEUE DELETION ----------------------------------------------------------------------------------------------
+        ship->handleQueueDeletion();
+        // PHYSICS -----------------------------------------------------------------------------------------------------
+
+        ship->physicsHandling(target_delta_time);
 
         // RENDERING ---------------------------------------------------------------------------------------------------
 

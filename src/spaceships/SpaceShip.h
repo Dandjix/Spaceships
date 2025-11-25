@@ -51,6 +51,7 @@ private:
 protected:
   AdjacencyListGraph<Room *> rooms;
   SpaceshipTiles spaceship_tiles;
+  std::vector<Entity*> deletion_queue;
 
 public:
   std::unordered_set<Entity *> entities;
@@ -95,20 +96,27 @@ public:
   /// </summary>
   void registerEntities(std::initializer_list<Entity *> entities);
 
+  void queueDelete(Entity * entity) {
+    deletion_queue.push_back(entity);
+  }
 
-  void registerEntity(Entity * entity);
+  void handleQueueDeletion();
 
+  void physicsHandling(float target_delta_time, int subdivisions = 2);
 
+  void renderEntities(SDL_Renderer *renderer, RenderingContext renderingContext);
+
+  void eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context);
+
+  void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type);
 
   /// <summary>
   /// removes one or more entries from the entities map. Used for when the
   /// object is destroyed or if another ship undocks prolly idk
   /// </summary>
-  /// <param name="entity"></param>
+  /// <param name="entities"> the entiti(es) to unregister</param>
   /// <returns></returns>
   void unregisterEntities(std::initializer_list<Entity *> entities);
-
-  void unregisterEntity(Entity * entity);
 
   void update(const UpdateContext &context);
 

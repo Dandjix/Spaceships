@@ -6,6 +6,7 @@
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
 #include "physics/PhysicsEntity.h"
+#include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
 
 void SpaceShip::populateRooms()
@@ -234,17 +235,22 @@ void SpaceShip::Dock(SpaceShip other)
 
 }
 
-void SpaceShip::registerEntities(std::initializer_list<Entity*> entities)
+void SpaceShip::registerEntities(std::initializer_list<Entity*> to_register)
 {
-	for (Entity* e: entities)
+	for (Entity* e: to_register)
 	{
 		e->registerInSpaceship(this);
 	}
 }
 
-void SpaceShip::unregisterEntities(std::initializer_list<Entity*> entities)
+void SpaceShip::handleQueueDeletion() {
+	for (auto e: deletion_queue) {
+		delete e;
+	}
+}
+void SpaceShip::unregisterEntities(std::initializer_list<Entity*> to_unregister)
 {
-	for (Entity* e : entities)
+	for (Entity* e : to_unregister)
 	{
 		e->unregisterInSpacehip(this);
 	}
@@ -286,4 +292,95 @@ bool EntityComparison::comparePhysicsEntities(PhysicsEntity * e1, PhysicsEntity 
 {
 	//TODO : add a queue order for the physics entities if necessary
 	return e1->getQueueOrder() < e2->getQueueOrder();
+}
+
+
+
+// Handling ------------------------------------------------------------------------------------------------------------
+
+void SpaceShip::physicsHandling(float target_delta_time, int subdivisions)
+{
+    const PhysicsUpdateContext physicsContext = {
+        target_delta_time / static_cast<float>(subdivisions),
+        this
+    };
+
+    for (int i = 0; i < subdivisions; ++i)
+    {
+        auto physics_entities = getPhysicsEntities(RoomDistance::Close);
+
+        for (int i = 0; i < physics_entities.size(); i++)
+        {
+            for (int j = i+1; j < physics_entities.size(); j++)
+            {
+                auto e1 = physics_entities.at(i);
+                auto e2 = physics_entities.at(j);
+
+                if (!e1->shape->getBoundingBox().intersects(e2->shape->getBoundingBox()))
+                {
+                    continue;
+                }
+
+                PhysicsUpdateVisitor *  visitor = e1->shape->createVisitor();
+
+                e2->shape->consumeVisitor(visitor,this);
+
+                delete visitor;
+            }
+        }
+    }
+
+    for (PhysicsEntity * e : getPhysicsEntities(RoomDistance::All))
+    {
+        PhysicsUpdateVisitorWall visitor = PhysicsUpdateVisitorWall();
+        e->shape->consumeVisitor(&visitor,this);
+    }
+
+
+    for (PhysicsEntity * entity : getPhysicsEntities(RoomDistance::All))
+    {
+        entity->shape->physicsUpdate(physicsContext);
+    }
+}
+
+void SpaceShip::renderEntities(SDL_Renderer* renderer, RenderingContext renderingContext)
+{
+    for (Entity* entity : getEntities(RoomDistance::Immediate))
+    {
+        entity->render(renderer, renderingContext);
+    }
+    //render debug
+    for (Entity* entity : getEntities(RoomDistance::Immediate))
+    {
+        entity->debugRender(renderer, renderingContext);
+    }
+    //physics shapes debug
+    for (PhysicsEntity * entity : getPhysicsEntities(RoomDistance::Immediate))
+    {
+        entity->shape->debugRender(renderer, renderingContext);
+    }
+}
+
+void SpaceShip::eventHandling(const SDL_Event & event, const GameEvent::GameEventContext & event_context) {
+	for (Entity * entity : getEntities(RoomDistance::All))
+	{
+		entity->handleEvent(event,event_context);
+	}
+}
+
+void SpaceShip::updateHandling(const CameraTransformations::CameraInfo & camera_info, float deltaTime,GameEvent::MousePositionType mouse_position_type)
+{
+	UpdateContext updateContext = {
+		camera_info,
+		deltaTime,
+		this,
+		mouse_position_type
+	};
+
+    // update
+    for (Entity * entity : getEntities(RoomDistance::All))
+    {
+        entity->update(updateContext);
+    }
+    update(updateContext);
 }
