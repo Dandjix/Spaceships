@@ -7,6 +7,8 @@
 #include "math/Vectors.h"
 #include "player/FreeCamera.h"
 #include "shipEditor/ShipEditor.h"
+
+#include "HookPainter.h"
 #include "shipEditor/ShipBuildingGrid.h"
 #include "spaceships/SaveAndLoadShips.h"
 #include "spaceships/SpaceShipBlueprint.h"
@@ -16,6 +18,8 @@
 #include "shipEditor/BlueprintEditorAppearance.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
+#include "shipEditorModes/CommonEditorEntities.h"
+#include "shipEditorModes/ShipEditorStateMachine.h"
 #include "userInterface/GUICheckbox.h"
 #include "userInterface/GUILabel.h"
 
@@ -26,18 +30,6 @@ void ResizeGrid(Vector2Int newSize)
     std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
 }
 
-//inputs
-
-//pr� physique
-//d�cisions IA
-
-//physique
-//mouvements, d�tection de collision, gravit�
-
-//post physique
-//r�ponse des collisions, MAJ position camera
-
-//render
 
 MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
@@ -48,16 +40,14 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
+    Tiles::loadAll(renderer);
 
     std::vector<Entity*> activeEntities = {};
 
-    // std::vector<Entity*> inactiveEntities = {};
+    std::vector<Entity*> inactiveEntities = {};
 
     std::vector<GUIRect*> editorGUIElements = {};
 
-
-
-    Tiles::loadAll(renderer);
 
     FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
     activeEntities.push_back(&camera);
@@ -86,47 +76,26 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     );
     activeEntities.push_back(&grid);
 
-    BlueprintTilePainter tile_painter = BlueprintTilePainter(&blueprint, &grid, Tile::Wall,false);
-    activeEntities.push_back(&tile_painter);
-
-    // HookPainter hook_painter = HookPainter(&blueprint,HookPainter::Off);
-
     BlueprintEditorAppearance appearance(&blueprint);
     activeEntities.push_back(&appearance);
-    // #================================================================================================================
-    // #================================================================================================================
-    // #================================================================================================================
-                                            // GUI ELEMENTS
-    // #================================================================================================================
-    // #================================================================================================================
-    // #================================================================================================================
-    std::vector<std::string>tileOptions =
-    {
-        "Void",
-        "Wall",
-        "DoorH",
-        "DoorV",
-        "Floor"
+
+    ShipEditorModes::CommonEditorObjects common = {
+        &blueprint,
+        &grid,
+        &appearance,
+        &blueprintTiles
     };
-    GUIList tilesList(
-        Anchor::TL,
-        Vector2Int(0, 0),
-        100,
-        GUI_Fill,
-        tileOptions,
-        [&tile_painter](const std::string& option) {
-            tile_painter.setTileToPaint(Tiles::tileFromName(option));
-        },
-        true
-    );
-    editorGUIElements.push_back(&tilesList);
+
+    ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(common,&activeEntities,&editorGUIElements,ShipEditorModes::HookPainter);
 
     std::vector<std::string>actionOptions =
     {
         "Resize",
         "Save",
         "Load",
-        "Exit"
+        "Exit",
+        "Edit tiles",
+        "Edit hooks"
     };
     GUIList actionsList(
         Anchor::TL,
@@ -134,20 +103,20 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         100,
         150,
         actionOptions,
-        [&destination,&grid,&blueprint](const std::string& option) {
+        [&destination,&grid,&blueprint,&state_machine](const std::string& option) {
             if (option == "Resize")
             {
                 grid.startResizing();
             }
             else if (option == "Save")
             {
-				SaveShip(blueprint.dumps());
+                SaveShip(blueprint.dumps());
             }
             else if (option == "Load")
             {
-				std::string name;
-				std::string content = LoadShip(&name);
-				blueprint = SpaceShipBlueprint::loads(content, name);
+                std::string name;
+                std::string content = LoadShip(&name);
+                blueprint = SpaceShipBlueprint::loads(content, name);
                 Vector2Int dimensions = Vector2Int(blueprint.tiles.size(), blueprint.tiles[0].size());
                 grid.setDimensions(dimensions);
 
@@ -156,21 +125,16 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             {
                 destination = MainMenu;
             }
+            else if (option =="Edit tiles") {
+                state_machine.setMode(ShipEditorModes::TilePainter);
+            }
+            else if (option == "Edit hooks") {
+                state_machine.setMode(ShipEditorModes::HookPainter);
+            }
         }
        );
     editorGUIElements.push_back(&actionsList);
 
-    editorGUIElements.push_back(new GUILabel(Anchor::TL,{200,0},50,25,"Fill",{255,255,255},fonts["sm"]));
-
-    GUICheckbox fillCheckbox(
-        Anchor::TL,
-        {250,0},
-        [&tile_painter](bool checkboxValue){
-            tile_painter.fill = checkboxValue;
-        },
-        tile_painter.fill
-    );
-    editorGUIElements.push_back(&fillCheckbox);
 
     // #================================================================================================================
     // #================================================================================================================

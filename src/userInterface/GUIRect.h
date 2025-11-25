@@ -24,6 +24,8 @@ protected :
 	Vector2Int dimensions;
 
 public:
+	virtual ~GUIRect() = default;
+
 	GUIRect(Anchor anchor, Vector2Int offset,int width, int height)
 	{
 		this->anchor = anchor;

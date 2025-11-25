@@ -13,7 +13,7 @@
 class GUIList : public GUIRect
 {
 private:
-    SDL_FRect buttonRect(int i) const;
+    [[nodiscard]] SDL_FRect buttonRect(int i) const;
 
     int outerPadding = 10;
     int marginY = 5; //margin between buttons

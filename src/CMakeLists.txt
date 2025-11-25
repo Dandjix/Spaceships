@@ -56,7 +56,13 @@ add_library(SpaceshipsLib ${SOURCES}
         gameEvent/GetMousePositionType.cpp
         gameEvent/GetMousePositionType.h
         shipEditor/HookPainter.cpp
-        shipEditor/HookPainter.h)
+        shipEditor/HookPainter.h
+        shipEditor/shipEditorModes/ShipEditorStateMachine.h
+        shipEditor/shipEditorModes/ModeTilePainter.cpp
+        shipEditor/shipEditorModes/ModeTilePainter.h
+        shipEditor/shipEditorModes/ModeHookPainter.cpp
+        shipEditor/shipEditorModes/ModeHookPainter.h
+        shipEditor/shipEditorModes/CommonEditorEntities.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
@@ -65,6 +71,8 @@ target_compile_definitions(SpaceshipsLib PRIVATE
 # Create the executable from all your sources
 add_executable(${PROJECT_NAME} ${SOURCES}
         gameEvent/GameEvent.h
+        shipEditor/shipEditorModes/ShipEditorMode.cpp
+        shipEditor/shipEditorModes/ShipEditorMode.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)
