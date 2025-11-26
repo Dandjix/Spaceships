@@ -127,7 +127,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     };
     GUIList actionsList(
         Anchor::TL,
-        Vector2Int(100, 0),
+        Vector2Int(0, 0),
         100,
         150,
         actionOptions,

@@ -35,7 +35,7 @@ void ShipEditorModes::ModeTilePainter::enter() {
     };
     auto tilesList = new GUIList(
         Anchor::TL,
-        Vector2Int(0, 0),
+        Vector2Int(100, 0),
         100,
         GUI_Fill,
         tileOptions,
