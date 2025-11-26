@@ -28,15 +28,12 @@ void ShipEditorModes::ModeHookPainter::enter() {
         switch (auto s = hook_painter->getState()) {
                 case HookPainter::Off:
                     hook_painter->setState(HookPainter::Regions);
-                    std::cout << "set to regions" << std::endl;
                     break;
                 case HookPainter::Regions:
                     hook_painter->setState(HookPainter::Point);
-                    std::cout << "set to point" << std::endl;
                     break;
                 case HookPainter::Point:
                     hook_painter->setState(HookPainter::Off);
-                    std::cout << "set to off" << std::endl;
                     break;
             }
         },

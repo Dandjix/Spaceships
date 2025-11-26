@@ -30,6 +30,13 @@ namespace HookPainter{
         Precision precision;
         SpaceShipBlueprint * blueprint;
         std::function<std::string()> promptForName;
+
+
+
+        void renderRegionHelper(SDL_Renderer *renderer, const RenderingContext &context);
+
+        void renderPointHelper(SDL_Renderer *renderer, const RenderingContext &context);
+
     public:
         /**
          * Called when a region is placed, with arguments :
@@ -49,6 +56,9 @@ namespace HookPainter{
         State getState(){ return state;}
 
         void setPrecision(Precision precision);
+
+        Vector2Int snapPosition(Vector2Int world_point);
+
         Precision getPrecision(){ return precision;}
 
 
@@ -61,7 +71,7 @@ namespace HookPainter{
         Entity({0,0},std::nullopt,nullptr), blueprint(blueprint),state(state),precision(precision), promptForName(std::move(promptForName))
         {}
 
-        void render(SDL_Renderer *renderer, const RenderingContext &context) override {}
+        void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
         void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 
