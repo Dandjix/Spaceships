@@ -9,9 +9,9 @@
 class HookPoint
 {
 public:
-    Vector2Int spaceship_position;
+    Vector2Int position;
 
-    HookPoint(Vector2Int spaceship_position) : spaceship_position(spaceship_position)
+    HookPoint(Vector2Int spaceship_position) : position(spaceship_position)
     {
 
     }

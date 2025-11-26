@@ -9,18 +9,13 @@
 
 using json = nlohmann::json;
 
-SpaceShipBlueprint::SpaceShipBlueprint(std::string name, std::string pathToExterior, std::vector<std::vector<Tile>> tiles)
-{
-	this->name = name;
-	this->pathToExterior = pathToExterior;
-	this->tiles = tiles;
-}
 
 std::string SpaceShipBlueprint::dumps() const
 {
 	json dict;
 	dict["pathToExterior"] = pathToExterior;
 	dict["tiles"] = tiles;
+	dict["hooks"] = hooks.toJson();
 	return dict.dump(4);
 }
 
@@ -29,7 +24,9 @@ SpaceShipBlueprint SpaceShipBlueprint::loads(std::string from, std::string name)
 	json dict = json::parse(from);
 	std::string pathToExterior = dict["pathToExterior"];
 	std::vector<std::vector<Tile>> tiles = dict["tiles"];
-	return { name, pathToExterior, tiles };
+	SpaceshipHooks hooks = SpaceshipHooks::fromJson(dict["hooks"]);
+
+	return { name, pathToExterior, tiles, hooks };
 }
 
 void SpaceShipBlueprint::resize(Vector2Int newDimensions)

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "SpaceShipBlueprint.h"
@@ -7,7 +8,7 @@
 #include <iostream>
 #include "../math/Vectors.h"
 #include "Tile.h"
-
+#include "Hooks/SpaceshipHooks.h"
 
 
 /// <summary>
@@ -19,10 +20,16 @@ class SpaceShipBlueprint
 		std::string name;
 		std::string pathToExterior;
 		std::vector<std::vector<Tile>> tiles;
+		SpaceshipHooks hooks;
 
-		SpaceShipBlueprint(std::string name,std::string pathToExterior,std::vector<std::vector<Tile>> tiles);
+		SpaceShipBlueprint(std::string name,std::string pathToExterior,std::vector<std::vector<Tile>> tiles, SpaceshipHooks hooks)
+		:
+		name(std::move(name)),pathToExterior(std::move(pathToExterior)),tiles(std::move(tiles)),hooks(std::move(hooks))
+		{
 
-		std::string dumps() const;
+		}
+
+		[[nodiscard]] std::string dumps() const;
 
 		void resize(Vector2Int newDimensions);
 

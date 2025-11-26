@@ -28,7 +28,6 @@ namespace HookPainter{
 
         State state;
         Precision precision;
-        SpaceShipBlueprint * blueprint;
         std::function<std::string()> promptForName;
 
 
@@ -63,12 +62,11 @@ namespace HookPainter{
 
 
         Painter(
-            SpaceShipBlueprint * blueprint,
             HookPainter::State state,
             HookPainter::Precision precision,
             std::function<std::string()> promptForName)
         :
-        Entity({0,0},std::nullopt,nullptr), blueprint(blueprint),state(state),precision(precision), promptForName(std::move(promptForName))
+        Entity({0,0},std::nullopt,nullptr),state(state),precision(precision), promptForName(std::move(promptForName))
         {}
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override;

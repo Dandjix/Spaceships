@@ -5,11 +5,16 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <utility>
 
-#include "HookPoint.h"
-#include "HookRegion.h"
+#include "json.hpp"
+#include "json.hpp"
+#include "json.hpp"
+#include "behavior/Behavior.h"
 
 
+class HookPoint;
+class HookRegion;
 struct UpdateContext;
 
 class SpaceshipHooks
@@ -19,23 +24,21 @@ protected:
     std::unordered_map<std::string,HookPoint *> points;
 
 public:
-    HookRegion * getRegion(const std::string& key)
-    {
-        if (auto it = regions.find(key); it != regions.end())
-            return it->second;
+    SpaceshipHooks(
+        std::unordered_map<std::string,HookRegion *> regions,
+        std::unordered_map<std::string,HookPoint *> points)
+    :
+    regions(std::move(regions)),points(std::move(points)) {  }
 
-        return nullptr;
-    }
+    HookRegion * getRegion(const std::string& key);
 
-    HookPoint * getPoint(const std::string& key)
-    {
-        if (auto it = points.find(key); it != points.end())
-            return it->second;
-
-        return nullptr;
-    }
+    HookPoint * getPoint(const std::string& key);
 
     void update(const UpdateContext & context);
+
+    [[nodiscard]] nlohmann::json toJson() const;
+
+    static SpaceshipHooks fromJson(const nlohmann::json &entry);
 };
 
 

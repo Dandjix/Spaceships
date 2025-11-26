@@ -85,7 +85,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
 	//SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
 	std::vector<std::vector<Tile>> blueprintTiles(initialDimensions.x, std::vector<Tile>(initialDimensions.y, Tile::Void));
-	SpaceShipBlueprint blueprint = SpaceShipBlueprint("Untitled", "", blueprintTiles);
+	SpaceShipBlueprint blueprint = SpaceShipBlueprint("Untitled", "", blueprintTiles,{{},{}});
 
     ShipBuildingGrid grid(
         initialDimensions,

@@ -3,6 +3,9 @@
 #include <iostream>
 #include <functional>
 
+#include "json.hpp"
+#include "json.hpp"
+
 inline const int factor = 64;
 // pixels subdivision
 // factor 1 : 1px = 1 distance unit
@@ -143,11 +146,24 @@ struct Vector2 {
         return *this;
     }
 
-    Vector2<float> normalized() const
+    [[nodiscard]] Vector2<float> normalized() const
     {
         Vector2<float> result = *this;
         result.normalize();
         return result;
+    }
+
+    nlohmann::json toJson() {
+        nlohmann::json entry = {};
+        entry["x"] = x;
+        entry["y"] = y;
+        return entry;
+    }
+
+    static Vector2<T> fromJson(nlohmann::json entry) {
+        T x = entry["x"];
+        T y = entry["y"];
+        return Vector2<T>(x,y);
     }
 };
 
