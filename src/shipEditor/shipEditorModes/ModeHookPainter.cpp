@@ -9,38 +9,46 @@
 #include "ShipEditorStateMachine.h"
 
 void ShipEditorModes::ModeHookPainter::enter() {
+
+    addedActiveEntities = {};
+    addedEditorGUIElements = {};
+
     auto * hook_painter = new HookPainter::Painter(
-    state_machine->common.blueprint,
-    HookPainter::Off,
-    HookPainter::Intersection,
-    []() {
-    return "Point_1";
-});
+        state_machine->common->blueprint,
+        HookPainter::Off,
+        HookPainter::Intersection,
+        []() {
+        return "Point_1";
+    });
+    addedActiveEntities.push_back(hook_painter);
     auto hookCheckbox = new GUICheckbox(
     Anchor::TR,
     {250,100},
-    [&hook_painter](bool checkboxValue){
+    [hook_painter](bool checkboxValue){
         switch (auto s = hook_painter->getState()) {
                 case HookPainter::Off:
                     hook_painter->setState(HookPainter::Regions);
+                    std::cout << "set to regions" << std::endl;
                     break;
                 case HookPainter::Regions:
                     hook_painter->setState(HookPainter::Point);
+                    std::cout << "set to point" << std::endl;
                     break;
                 case HookPainter::Point:
                     hook_painter->setState(HookPainter::Off);
+                    std::cout << "set to off" << std::endl;
                     break;
             }
         },
         false
     );
-    editorGUIElements.push_back(hookCheckbox);
+    addedEditorGUIElements.push_back(hookCheckbox);
 
-    hook_painter->on_point_placed.subscribe([](std::string name, Vector2Int position) {
+    hook_painter->on_point_placed.subscribe([](const std::string &name, Vector2Int position) {
         std::cout << "point " << name << "has been placed at " << position << " (" << Vectors::toVector2Float(position).scaleToScreenPosition() / Tiles::tileSizePx << ")" << std::endl;
     });
 
-    hook_painter->on_region_placed.subscribe([](std::string name, Vector2Int start, Vector2Int end) {
+    hook_painter->on_region_placed.subscribe([](const std::string &name, Vector2Int start, Vector2Int end) {
         std::cout <<
         "region " <<
         name <<
@@ -52,20 +60,12 @@ void ShipEditorModes::ModeHookPainter::enter() {
         ", " << Vectors::toVector2Float(end).scaleToScreenPosition() / Tiles::tileSizePx <<
         ")" << std::endl;
     });
-    activeEntities.push_back(hook_painter);
+
+    addActiveEntities(addedActiveEntities);
+    addGUIElements(addedEditorGUIElements);
 }
 
 void ShipEditorModes::ModeHookPainter::leave() {
-    removeActiveEntities(activeEntities);
-    removeGUIElements(editorGUIElements);
-
-    for (auto e: activeEntities) {
-        delete e;
-    }
-    for (auto e: editorGUIElements) {
-        delete e;
-    }
-
-    activeEntities = {};
-    editorGUIElements = {};
+    removeActiveEntities(addedActiveEntities);
+    removeGUIElements(addedEditorGUIElements);
 }

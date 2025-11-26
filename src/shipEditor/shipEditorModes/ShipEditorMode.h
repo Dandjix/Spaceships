@@ -15,20 +15,7 @@ namespace ShipEditorModes {
     class ShipEditorMode {
     protected:
 
-        template <typename T>
-        void removeItems(std::vector<T>* active,
-                         const std::vector<T>& to_remove)
-        {
-            std::unordered_set<T> remove_set(to_remove.begin(), to_remove.end());
 
-            active->erase(
-                std::remove_if(active->begin(), active->end(),
-                    [&](const T& item) {
-                        return remove_set.contains(item);
-                    }),
-                active->end()
-            );
-        }
 
         template <typename T>
         void addItems(std::vector<T>* active,

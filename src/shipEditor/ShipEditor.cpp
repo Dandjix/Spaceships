@@ -30,6 +30,25 @@ void ResizeGrid(Vector2Int newSize)
     std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
 }
 
+template <typename T>
+void deleteItems(std::vector<T>* active,
+                 const std::vector<T>& to_remove)
+{
+    std::unordered_set<T> remove_set(to_remove.begin(), to_remove.end());
+
+
+    active->erase(
+        std::remove_if(active->begin(), active->end(),
+            [&](const T& item) {
+                return  remove_set.contains(item);
+            }),
+        active->end()
+    );
+
+    for (auto e: to_remove) {
+        delete e;
+    }
+}
 
 MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
@@ -42,15 +61,18 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     // #================================================================================================================
     Tiles::loadAll(renderer);
 
-    std::vector<Entity*> activeEntities = {};
+    std::vector<Entity *> activeEntities = {};
+    std::vector<Entity *> activeEntitiesDeletionQueue = {};
 
-    std::vector<Entity*> inactiveEntities = {};
+    // std::vector<Entity*> inactiveEntities = {};
 
     std::vector<GUIRect*> editorGUIElements = {};
+    std::vector<GUIRect*> editorGUIElementsDeletionQueue = {};
 
 
-    FreeCamera camera(Vector2Int(0, 0), 0, 1,600);
-    activeEntities.push_back(&camera);
+
+    auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1,600);
+    activeEntities.push_back(camera);
 
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -67,7 +89,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     ShipBuildingGrid grid(
         initialDimensions,
-		&camera,
+		camera,
         [&blueprint](Vector2Int newDimensions)
         {
             //std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
@@ -86,7 +108,13 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         &blueprintTiles
     };
 
-    ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(common,&activeEntities,&editorGUIElements,ShipEditorModes::HookPainter);
+    ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(
+        &common,
+        &activeEntities,
+        &activeEntitiesDeletionQueue,
+        &editorGUIElements,
+        &editorGUIElementsDeletionQueue,
+    ShipEditorModes::TilePainter);
 
     std::vector<std::string>actionOptions =
     {
@@ -157,10 +185,10 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
         GameEvent::GameEventContext event_context = {
             {
-                camera.getPosition(),
-                camera.getAngle(),
+                camera->getPosition(),
+                camera->getAngle(),
                 screenDimensions,
-                camera.getScale()
+                camera->getScale()
             },
             mouse_position_type
         };
@@ -181,7 +209,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
             }
         }
 
-        camera.setScreenDimensions(screenDimensions);
+        camera->setScreenDimensions(screenDimensions);
 
         //creating update context
         last = now;
@@ -190,10 +218,10 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
         UpdateContext updateContext = {
             {
-                camera.getPosition(),
-                camera.getAngle(),
+                camera->getPosition(),
+                camera->getAngle(),
                 screenDimensions,
-                camera.getScale()
+                camera->getScale()
             },
             deltaTime,
             nullptr,
@@ -219,13 +247,13 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         }
 
 
-        Vector2Int cameraPos = camera.getPosition();
+        Vector2Int cameraPos = camera->getPosition();
 
         RenderingContext renderingContext = {
             cameraPos,
-            camera.getAngle(),
+            camera->getAngle(),
             screenDimensions,
-            camera.getScale()
+            camera->getScale()
         };
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
@@ -253,6 +281,11 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
         SDL_RenderPresent(renderer);
 
+        deleteItems(&activeEntities,activeEntitiesDeletionQueue);
+        activeEntitiesDeletionQueue.clear();
+
+        deleteItems(&editorGUIElements,editorGUIElementsDeletionQueue);
+        editorGUIElementsDeletionQueue.clear();
     }
 
     return destination;

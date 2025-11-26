@@ -7,7 +7,6 @@
 void HookPainter::Painter::setState(State new_state) {
     state = new_state;
     cancelPlacement();
-    std::cout << "state set to : " << new_state << std::endl;
 }
 
 void HookPainter::Painter::setPrecision(Precision new_precision) {
@@ -29,8 +28,6 @@ void HookPainter::Painter::handleEvent(const SDL_Event &event, const GameEvent::
         Vector2Int adjusted_world_point;
         switch (precision) {
             case Center:
-                std::cout << "center" << std::endl;
-
                 adjusted_world_point = {
                     static_cast<int>(std::floor(world_point_pixels.x)),
                     static_cast<int>(std::floor(world_point_pixels.y))
@@ -42,7 +39,6 @@ void HookPainter::Painter::handleEvent(const SDL_Event &event, const GameEvent::
 
                 break;
             case Intersection:
-                std::cout << "inter" << std::endl;
 
                 adjusted_world_point = {
                     static_cast<int>(std::round(world_point_pixels.x)),
@@ -54,7 +50,6 @@ void HookPainter::Painter::handleEvent(const SDL_Event &event, const GameEvent::
 
                 break;
             case Free:
-                std::cout << "free" << std::endl;
                 adjusted_world_point = world_point;
                 break;
         }

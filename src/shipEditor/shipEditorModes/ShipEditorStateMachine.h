@@ -26,13 +26,32 @@ namespace ShipEditorModes {
         ModeHookPainter * hook_painter_mode;
 
     public:
-        CommonEditorObjects common;
-        std::vector<Entity * > * activeEntities;
-        std::vector<GUIRect * > * GUIElements;
+        virtual ~ShipEditorStateMachine() = default;
 
-        explicit ShipEditorStateMachine(CommonEditorObjects common, std::vector<Entity * > * active, std::vector<GUIRect * > * GUIElements,Mode initial)
+        CommonEditorObjects * common;
+
+        std::vector<Entity * > * activeEntities;
+        std::vector<Entity*> * activeEntitiesDeletionQueue;
+
+
+        std::vector<GUIRect * > * editorGUIElements;
+        std::vector<GUIRect*> * editorGUIElementsDeletionQueue;
+
+        explicit ShipEditorStateMachine(
+            CommonEditorObjects * common,
+            std::vector<Entity * > * active,
+            std::vector<Entity * > * activeEntitiesDeletionQueue,
+            std::vector<GUIRect * > * GUIElements,
+            std::vector<GUIRect * > * editorGUIElementsDeletionQueue,
+            Mode initial)
         :
-        common(common), current_mode_label(initial), activeEntities(active),GUIElements(GUIElements) {
+        common(common),
+        current_mode_label(initial),
+        activeEntities(active),
+        activeEntitiesDeletionQueue(activeEntitiesDeletionQueue),
+        editorGUIElements(GUIElements),
+        editorGUIElementsDeletionQueue(editorGUIElementsDeletionQueue)
+        {
             tile_painter_mode = new ModeTilePainter(this);
             hook_painter_mode = new ModeHookPainter(this);
             switch (initial) {
@@ -51,7 +70,6 @@ namespace ShipEditorModes {
                 return ;
 
             current_mode->leave();
-            std::cout << "left with success" << std::endl;
             //Assignments
             current_mode_label = label;
             switch (label) {
@@ -64,7 +82,6 @@ namespace ShipEditorModes {
             }
 
             current_mode->enter();
-            std::cout << "entered with success" << std::endl;
 
         }
 
