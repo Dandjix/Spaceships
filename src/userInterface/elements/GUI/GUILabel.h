@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#include "fonts.h"
-#include "GUIRect.h"
+#include "../../fonts.h"
+#include "../../GUIRect.h"
 
 class GUILabel : public GUIRect
 {

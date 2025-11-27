@@ -5,7 +5,7 @@
 #include "ModeHookPainter.h"
 
 #include "../HookPainter/HookPainter.h"
-#include "userInterface/GUICheckbox.h"
+#include "../../userInterface/elements/GUI/GUICheckbox.h"
 #include "ShipEditorStateMachine.h"
 #include "shipEditor/HookPainter/HookAppearance.h"
 #include "spaceships/Hooks/HookRegion.h"

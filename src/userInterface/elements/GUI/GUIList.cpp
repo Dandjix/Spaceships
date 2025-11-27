@@ -1,8 +1,9 @@
 #include "GUIList.h"
+
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3/SDL.h>
-#include "fonts.h"
-#include "GUI.h"
+#include "../../fonts.h"
+#include "../../GUI.h"
 
 const SDL_Color textColor = { 255,255,255,255 };
 const SDL_Color highlightedColor = { 255, 255, 0, 255 };

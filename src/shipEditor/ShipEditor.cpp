@@ -13,15 +13,14 @@
 #include "spaceships/SaveAndLoadShips.h"
 #include "spaceships/SpaceShipBlueprint.h"
 #include "TilePainter/BlueprintTilePainter.h"
-#include "userInterface/GUIList.h"
+#include "../userInterface/elements/GUI/GUIList.h"
 #include "spaceships/Tile.h"
 #include "shipEditor/BlueprintEditorAppearance.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
 #include "shipEditorModes/CommonEditorEntities.h"
 #include "shipEditorModes/ShipEditorStateMachine.h"
-#include "userInterface/GUICheckbox.h"
-#include "userInterface/GUILabel.h"
+#include "../userInterface/elements/GUI/GUICheckbox.h"
 
 const int gridSize = 64;
 

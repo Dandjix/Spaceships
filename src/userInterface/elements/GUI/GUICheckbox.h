@@ -5,9 +5,9 @@
 #pragma once
 #include <utility>
 
-#include "GUI.h"
-#include "GUIRect.h"
-#include "../math/Vectors.h"
+#include "../../GUI.h"
+#include "../../GUIRect.h"
+#include "../../../math/Vectors.h"
 
 
 class GUICheckbox : public GUIRect

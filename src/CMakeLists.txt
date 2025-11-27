@@ -75,6 +75,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         gameEvent/GameEvent.h
         shipEditor/shipEditorModes/ShipEditorMode.cpp
         shipEditor/shipEditorModes/ShipEditorMode.h
+        userInterface/elements/prompts/TextPrompt.cpp
+        userInterface/elements/prompts/TextPrompt.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

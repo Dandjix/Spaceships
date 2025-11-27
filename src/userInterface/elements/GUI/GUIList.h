@@ -6,8 +6,8 @@
 #include <vector>
 #include <functional>
 
-#include "../userInterface/GUIRect.h"
-#include "../game/Update.h"
+#include "../../GUIRect.h"
+#include "../../../game/Update.h"
 
 
 class GUIList : public GUIRect

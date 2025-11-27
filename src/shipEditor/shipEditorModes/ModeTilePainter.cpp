@@ -5,9 +5,9 @@
 #include "ModeTilePainter.h"
 
 #include "../TilePainter/BlueprintTilePainter.h"
-#include "userInterface/GUICheckbox.h"
-#include "userInterface/GUILabel.h"
-#include "userInterface/GUIList.h"
+#include "../../userInterface/elements/GUI/GUICheckbox.h"
+#include "../../userInterface/elements/GUI/GUILabel.h"
+#include "../../userInterface/elements/GUI/GUIList.h"
 #include "ShipEditorStateMachine.h"
 
 void ShipEditorModes::ModeTilePainter::enter() {

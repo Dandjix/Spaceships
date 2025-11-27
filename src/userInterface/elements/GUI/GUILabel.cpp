@@ -2,6 +2,7 @@
 // Created by timon on 11/15/25.
 //
 
+
 #include "GUILabel.h"
 
 void GUILabel::render(SDL_Renderer* renderer, const GUI_RenderingContext& context) const
