@@ -19,20 +19,38 @@ struct UpdateContext;
 
 class SpaceshipHooks
 {
-protected:
+public:
     std::unordered_map<std::string,HookRegion *> regions;
     std::unordered_map<std::string,HookPoint *> points;
 
-public:
+
     SpaceshipHooks(
         std::unordered_map<std::string,HookRegion *> regions,
         std::unordered_map<std::string,HookPoint *> points)
     :
     regions(std::move(regions)),points(std::move(points)) {  }
 
+    ~SpaceshipHooks();
+
     HookRegion * getRegion(const std::string& key);
 
     HookPoint * getPoint(const std::string& key);
+
+    void addRegion(const std::string& name, HookRegion * region) {
+        regions.insert({name,region});
+    }
+    void removeRegion(const std::string &name) {
+        regions.erase(name);
+    }
+
+    void addPoint(const std::string& name, HookPoint * point) {
+        points.insert({name,point});
+
+    }
+    void removePoint(const std::string &name) {
+        points.erase(name);
+    }
+
 
     void update(const UpdateContext & context);
 

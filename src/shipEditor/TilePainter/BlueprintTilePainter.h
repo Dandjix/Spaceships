@@ -1,13 +1,13 @@
 #pragma once
 #include <SDL3/SDL.h>
 
-#include "../entities/Entity.h"
-#include "../math/Vectors.h"
-#include "../game/Update.h"
-#include "../spaceships/SpaceShipBlueprint.h"
-#include "../player/Camera.h"
-#include "../shipEditor/ShipBuildingGrid.h"
-#include "../spaceships/Tile.h"
+#include "../../entities/Entity.h"
+#include "../../math/Vectors.h"
+#include "../../game/Update.h"
+#include "../../spaceships/SpaceShipBlueprint.h"
+#include "../../player/Camera.h"
+#include "../ShipBuildingGrid.h"
+#include "../../spaceships/Tile.h"
 class BlueprintTilePainter : public Entity {
 protected :
 	bool enabled = true;

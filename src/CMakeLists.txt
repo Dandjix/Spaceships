@@ -55,14 +55,16 @@ add_library(SpaceshipsLib ${SOURCES}
         gameEvent/MousePositionType.h
         gameEvent/GetMousePositionType.cpp
         gameEvent/GetMousePositionType.h
-        shipEditor/HookPainter.cpp
-        shipEditor/HookPainter.h
+        shipEditor/HookPainter/HookPainter.cpp
+        shipEditor/HookPainter/HookPainter.h
         shipEditor/shipEditorModes/ShipEditorStateMachine.h
         shipEditor/shipEditorModes/ModeTilePainter.cpp
         shipEditor/shipEditorModes/ModeTilePainter.h
         shipEditor/shipEditorModes/ModeHookPainter.cpp
         shipEditor/shipEditorModes/ModeHookPainter.h
-        shipEditor/shipEditorModes/CommonEditorEntities.h)
+        shipEditor/shipEditorModes/CommonEditorEntities.h
+        shipEditor/HookPainter/HookAppearance.cpp
+        shipEditor/HookPainter/HookAppearance.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

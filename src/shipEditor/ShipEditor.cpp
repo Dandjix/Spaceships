@@ -8,11 +8,11 @@
 #include "player/FreeCamera.h"
 #include "shipEditor/ShipEditor.h"
 
-#include "HookPainter.h"
+#include "HookPainter/HookPainter.h"
 #include "shipEditor/ShipBuildingGrid.h"
 #include "spaceships/SaveAndLoadShips.h"
 #include "spaceships/SpaceShipBlueprint.h"
-#include "shipEditor/BlueprintTilePainter.h"
+#include "TilePainter/BlueprintTilePainter.h"
 #include "userInterface/GUIList.h"
 #include "spaceships/Tile.h"
 #include "shipEditor/BlueprintEditorAppearance.h"

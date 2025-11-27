@@ -4,7 +4,7 @@
 
 #include "ModeTilePainter.h"
 
-#include "shipEditor/BlueprintTilePainter.h"
+#include "../TilePainter/BlueprintTilePainter.h"
 #include "userInterface/GUICheckbox.h"
 #include "userInterface/GUILabel.h"
 #include "userInterface/GUIList.h"
@@ -23,7 +23,7 @@ void ShipEditorModes::ModeTilePainter::enter() {
 
     auto tile_painter = new BlueprintTilePainter(blueprint, grid, Tile::Wall,false);
     addedActiveEntities.push_back(tile_painter);
-
+    
 
     std::vector<std::string>tileOptions =
     {

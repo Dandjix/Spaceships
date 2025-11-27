@@ -11,6 +11,15 @@
 #include "game/Update.h"
 #include "spaceships/SpaceShip.h"
 
+SpaceshipHooks::~SpaceshipHooks() {
+    // for (auto val: regions | std::views::values) {
+    //     delete val;
+    // }
+    // for (auto val: points | std::views::values) {
+    //     delete val;
+    // }
+}
+
 HookRegion * SpaceshipHooks::getRegion(const std::string &key) {
     if (auto it = regions.find(key); it != regions.end())
         return it->second;

@@ -1,7 +1,7 @@
 #include "BlueprintTilePainter.h"
 #include <SDL3/SDL.h>
-#include "../math/Vectors.h"
-#include "../spaceships/Tile.h"
+#include "../../math/Vectors.h"
+#include "../../spaceships/Tile.h"
 
 BlueprintTilePainter::BlueprintTilePainter(SpaceShipBlueprint* blueprint, ShipBuildingGrid* grid, Tile tileToPaint, bool fill)
 : Entity(Vector2Int(0, 0), std::nullopt, nullptr),
