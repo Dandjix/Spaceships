@@ -1,8 +1,10 @@
 #pragma once
 #include <unordered_set>
 #include <climits>
-#include "../entities/Entity.h"
 #include "Tile.h"
+
+class Entity;
+
 class Room
 {
 protected:

@@ -1,7 +1,7 @@
 #include "PlayerBehavior.h"
 #include "../entities/Humanoid.h"
 
-void PlayerBehavior::update(const UpdateContext &context, Entity * owner) {
+void PlayerBehavior::update(const UpdateContext &context, PhysicsEntity * owner) {
     const bool * state = SDL_GetKeyboardState(nullptr);
     float deltaX = 0;
     float deltaY = 0;
@@ -29,5 +29,5 @@ void PlayerBehavior::update(const UpdateContext &context, Entity * owner) {
     owner->movePosition(delta,context.spaceShip);
 }
 
-void PlayerBehavior::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, Entity *owner) {
+void PlayerBehavior::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, PhysicsEntity *owner) {
 }

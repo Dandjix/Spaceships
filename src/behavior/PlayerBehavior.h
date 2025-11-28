@@ -9,8 +9,7 @@ private:
     public:
     explicit PlayerBehavior(Camera * camera): camera(camera) {
     }
-
-    void update(const UpdateContext &context, Entity * owner) override;
-    void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, Entity * owner) override;
+    void update(const UpdateContext &context, PhysicsEntity * owner) override;
+    void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, PhysicsEntity * owner) override;
 };
 

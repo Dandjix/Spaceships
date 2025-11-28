@@ -68,7 +68,8 @@ add_library(SpaceshipsLib ${SOURCES}
         shipEditor/HookPainter/RegionDeleter.cpp
         shipEditor/HookPainter/RegionDeleter.h
         shipEditor/HookPainter/PointDeleter.cpp
-        shipEditor/HookPainter/PointDeleter.h)
+        shipEditor/HookPainter/PointDeleter.h
+        behavior/BehavioredEntity.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

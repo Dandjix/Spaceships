@@ -7,7 +7,7 @@ namespace GameEvent {
     struct GameEventContext;
 }
 
-class Entity;
+class PhysicsEntity;
 
 class Behavior{
 
@@ -16,6 +16,6 @@ class Behavior{
 
     explicit Behavior()= default;
 
-    virtual void update(const UpdateContext &context, Entity * owner) = 0;
-    virtual void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, Entity * owner) = 0;
+    virtual void update(const UpdateContext &context, PhysicsEntity * owner) = 0;
+    virtual void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, PhysicsEntity * owner) = 0;
 };
