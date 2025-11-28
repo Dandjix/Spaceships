@@ -4,9 +4,9 @@
 std::unordered_map<std::string, TTF_Font*> fonts;
 
 bool LoadFonts() {
-    fonts["sm"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/square-deal/square-deal.ttf", 16);
-    fonts["md"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/square-deal/square-deal.ttf", 24);
-    fonts["lg"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/square-deal/square-deal.ttf", 32);
+    fonts["sm"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/open-sans/OpenSans-Bold.ttf", 16);
+    fonts["md"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/open-sans/OpenSans-Bold.ttf", 24);
+    fonts["lg"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/open-sans/OpenSans-Bold.ttf", 32);
 
     for (auto& [key, font] : fonts) {
         if (!font) {

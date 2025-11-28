@@ -48,6 +48,13 @@ public:
         }
     }
 
+    /**
+     * Clears the event of callbacks. Does not delete anything
+     */
+    void clear() {
+        subscribers.clear();
+    }
+
 private:
     uint64_t next_id = 0;
     std::unordered_map<uint64_t, Callback> subscribers;

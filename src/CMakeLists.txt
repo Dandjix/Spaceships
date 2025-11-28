@@ -55,8 +55,6 @@ add_library(SpaceshipsLib ${SOURCES}
         gameEvent/MousePositionType.h
         gameEvent/GetMousePositionType.cpp
         gameEvent/GetMousePositionType.h
-        shipEditor/HookPainter/HookPainter.cpp
-        shipEditor/HookPainter/HookPainter.h
         shipEditor/shipEditorModes/ShipEditorStateMachine.h
         shipEditor/shipEditorModes/ModeTilePainter.cpp
         shipEditor/shipEditorModes/ModeTilePainter.h
@@ -64,7 +62,9 @@ add_library(SpaceshipsLib ${SOURCES}
         shipEditor/shipEditorModes/ModeHookPainter.h
         shipEditor/shipEditorModes/CommonEditorEntities.h
         shipEditor/HookPainter/HookAppearance.cpp
-        shipEditor/HookPainter/HookAppearance.h)
+        shipEditor/HookPainter/HookAppearance.h
+        shipEditor/HookPainter/PainterStates/Painter.cpp
+        shipEditor/HookPainter/PainterStates/Painter.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
@@ -75,8 +75,10 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         gameEvent/GameEvent.h
         shipEditor/shipEditorModes/ShipEditorMode.cpp
         shipEditor/shipEditorModes/ShipEditorMode.h
-        userInterface/elements/prompts/TextPrompt.cpp
-        userInterface/elements/prompts/TextPrompt.h
+        userInterface/elements/prompts/GUITextPrompt.cpp
+        userInterface/elements/prompts/GUITextPrompt.h
+        shipEditor/HookPainter/PainterStates/PainterStates.cpp
+        shipEditor/HookPainter/PainterStates/PainterStates.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

@@ -182,6 +182,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
                 camera->getScale()
             },
             GameEvent::MousePositionType::Game,
+            window
         };
 
         SDL_Event event;

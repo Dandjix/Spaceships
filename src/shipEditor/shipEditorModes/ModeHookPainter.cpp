@@ -4,24 +4,31 @@
 
 #include "ModeHookPainter.h"
 
-#include "../HookPainter/HookPainter.h"
 #include "../../userInterface/elements/GUI/GUICheckbox.h"
 #include "ShipEditorStateMachine.h"
 #include "shipEditor/HookPainter/HookAppearance.h"
+#include "shipEditor/HookPainter/PainterStates/Painter.h"
 #include "spaceships/Hooks/HookRegion.h"
 #include "spaceships/Hooks/HookPoint.h"
+#include "userInterface/elements/prompts/GUITextPrompt.h"
 
 void ShipEditorModes::ModeHookPainter::enter() {
 
     addedActiveEntities = {};
     addedEditorGUIElements = {};
 
-    auto * hook_painter = new HookPainter::Painter(
-        HookPainter::Off,
-        HookPainter::Intersection,
-        []() {
-        return "Point_1";
-    });
+    auto hook_name_dialog = new GUITextPrompt(Anchor::Center,{0,0},400,100,false);
+    addedEditorGUIElements.push_back(hook_name_dialog);
+
+    auto * hook_painter = new HookPainter::Painter(HookPainter::Mode::Off,HookPainter::Precision::Center);
+
+    hook_painter->promptForName = [hook_name_dialog,hook_painter](){
+        hook_name_dialog->on_confirm.clear();
+        hook_name_dialog->on_confirm.subscribe([hook_painter](const std::string &name) {
+            hook_painter->confirmPlacement(name);
+        });
+        hook_name_dialog->show();
+    };
 
     hook_painter->on_region_placed.subscribe([this](const std::string &name, Vector2Int TL, Vector2Int dimensions){
         state_machine->common->blueprint->hooks.addRegion(name,new HookRegion(TL,dimensions));
@@ -36,15 +43,15 @@ void ShipEditorModes::ModeHookPainter::enter() {
     Anchor::TR,
     {250,100},
     [hook_painter](bool checkboxValue){
-        switch (auto s = hook_painter->getState()) {
-                case HookPainter::Off:
-                    hook_painter->setState(HookPainter::Regions);
+        switch (auto s = hook_painter->getMode()) {
+                case HookPainter::Mode::Off:
+                    hook_painter->setMode(HookPainter::Mode::Regions);
                     break;
-                case HookPainter::Regions:
-                    hook_painter->setState(HookPainter::Point);
+            case HookPainter::Mode::Regions:
+                    hook_painter->setMode(HookPainter::Mode::Point);
                     break;
-                case HookPainter::Point:
-                    hook_painter->setState(HookPainter::Off);
+            case HookPainter::Mode::Point:
+                    hook_painter->setMode(HookPainter::Mode::Off);
                     break;
             }
         },

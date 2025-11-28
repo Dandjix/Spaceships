@@ -8,7 +8,6 @@
 #include "player/FreeCamera.h"
 #include "shipEditor/ShipEditor.h"
 
-#include "HookPainter/HookPainter.h"
 #include "shipEditor/ShipBuildingGrid.h"
 #include "spaceships/SaveAndLoadShips.h"
 #include "spaceships/SpaceShipBlueprint.h"
@@ -189,7 +188,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
                 screenDimensions,
                 camera->getScale()
             },
-            mouse_position_type
+            mouse_position_type,
+            window
         };
 
         //handling events

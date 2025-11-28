@@ -34,7 +34,7 @@ public:
 		this->height = height;
 	}
 
-	bool is_inside(Vector2Float position);
+	virtual bool is_inside(Vector2Float position);
 
 	virtual void render(SDL_Renderer* renderer, const GUI_RenderingContext& context) const = 0;
 
