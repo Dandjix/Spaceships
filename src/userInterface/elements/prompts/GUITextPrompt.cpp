@@ -8,29 +8,44 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
+void GUITextPrompt::setFocused(bool new_focused) {
+    if (new_focused != focused) {
+        if (new_focused) {
+            std::cout << "text input started" << std::endl;
+            SDL_StartTextInput(window);
+        }
+        else {
+            std::cout << "text input stopped" << std::endl;
+            SDL_StopTextInput(window);
+        }
+        on_focused_change.emit(new_focused);
+    }
+    focused = new_focused;
+}
+
 void GUITextPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
+    if (frames_until_active > 0) {
+        return;
+    }
+
     if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         float mouse_x,mouse_y;
         SDL_GetMouseState(&mouse_x,&mouse_y);
 
         auto new_focused =  is_inside({mouse_x,mouse_y});
 
-        if (new_focused !=focused) {
-            if (new_focused) {
-                SDL_StartTextInput(context.window);
-            }
-            else {
-                SDL_StopTextInput(context.window);
-            }
-        }
-        focused = new_focused;
+        setFocused(new_focused);
+    }
+
+    if (!shown ) {
+        return;
     }
 
     if (focused) {
         if (event.type == SDL_EVENT_TEXT_INPUT) {
             value.append(event.text.text);
         }
-        if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_BACKSPACE || event.key.key == SDLK_DELETE && !value.empty()) {
+        if ((event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_BACKSPACE || event.key.key == SDLK_DELETE) && !value.empty()) {
             value.pop_back();
         }
         if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_RETURN) {
@@ -42,6 +57,7 @@ void GUITextPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEve
 
 void GUITextPrompt::show() {
     shown = true;
+    frames_until_active = 1;
 }
 
 void GUITextPrompt::hide() {
@@ -90,4 +106,13 @@ void GUITextPrompt::render(SDL_Renderer *renderer, const GUI_RenderingContext &c
         SDL_DestroyTexture(texture);
         SDL_DestroySurface(surface);
     }
+}
+
+void GUITextPrompt::update(const GUI_UpdateContext &context) {
+    GUIRect::update(context);
+
+    frames_until_active = frames_until_active -1;
+    if (frames_until_active < 0)
+        frames_until_active = 0;
+
 }

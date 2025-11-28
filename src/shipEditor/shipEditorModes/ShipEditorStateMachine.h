@@ -26,6 +26,8 @@ namespace ShipEditorModes {
         ModeHookPainter * hook_painter_mode;
 
     public:
+        SDL_Window * window;
+
         virtual ~ShipEditorStateMachine() = default;
 
         CommonEditorObjects * common;
@@ -43,14 +45,16 @@ namespace ShipEditorModes {
             std::vector<Entity * > * activeEntitiesDeletionQueue,
             std::vector<GUIRect * > * GUIElements,
             std::vector<GUIRect * > * editorGUIElementsDeletionQueue,
-            Mode initial)
+            Mode initial,
+            SDL_Window * window)
         :
         common(common),
         current_mode_label(initial),
         activeEntities(active),
         activeEntitiesDeletionQueue(activeEntitiesDeletionQueue),
         editorGUIElements(GUIElements),
-        editorGUIElementsDeletionQueue(editorGUIElementsDeletionQueue)
+        editorGUIElementsDeletionQueue(editorGUIElementsDeletionQueue),
+        window(window)
         {
             tile_painter_mode = new ModeTilePainter(this);
             hook_painter_mode = new ModeHookPainter(this);

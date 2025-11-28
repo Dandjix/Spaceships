@@ -112,7 +112,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         &activeEntitiesDeletionQueue,
         &editorGUIElements,
         &editorGUIElementsDeletionQueue,
-    ShipEditorModes::TilePainter);
+        ShipEditorModes::TilePainter,
+        window);
 
     std::vector<std::string>actionOptions =
     {
@@ -170,7 +171,6 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     // #================================================================================================================
     // #================================================================================================================
     while (destination == ShipEditor) {
-        
         //render variable calculation
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);

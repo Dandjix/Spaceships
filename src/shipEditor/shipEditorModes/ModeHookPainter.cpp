@@ -17,10 +17,18 @@ void ShipEditorModes::ModeHookPainter::enter() {
     addedActiveEntities = {};
     addedEditorGUIElements = {};
 
-    auto hook_name_dialog = new GUITextPrompt(Anchor::Center,{0,0},400,100,false);
+    auto hook_name_dialog = new GUITextPrompt(Anchor::Center,{0,0},400,100,state_machine->window,false);
     addedEditorGUIElements.push_back(hook_name_dialog);
 
+    hook_name_dialog->on_focused_change.subscribe([hook_name_dialog](bool focused) {
+        if (!focused) {
+            hook_name_dialog->hide();
+            std::cout << "went out of focus, hiding" << "\n";
+        }
+    });
+
     auto * hook_painter = new HookPainter::Painter(HookPainter::Mode::Off,HookPainter::Precision::Center);
+
 
     hook_painter->promptForName = [hook_name_dialog,hook_painter](){
         hook_name_dialog->on_confirm.clear();
@@ -28,6 +36,7 @@ void ShipEditorModes::ModeHookPainter::enter() {
             hook_painter->confirmPlacement(name);
         });
         hook_name_dialog->show();
+        hook_name_dialog->setFocused(true);
     };
 
     hook_painter->on_region_placed.subscribe([this](const std::string &name, Vector2Int TL, Vector2Int dimensions){

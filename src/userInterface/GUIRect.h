@@ -41,6 +41,10 @@ public:
 	virtual void update(const GUI_UpdateContext& context);
 
 	virtual void handleEvent(const SDL_Event & event, const GameEvent::GameEventContext & context){}
+
+	virtual unsigned short int getQueueOrder() {
+		return 1000;
+	}
 };
 
 
