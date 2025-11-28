@@ -40,7 +40,8 @@ public:
         window(window),
         placeholder(std::move(placeholder)),
         value(std::move(value)),
-        shown(shown) {
+        shown(shown)
+    {
         setFocused(element_is_focused);
     }
 

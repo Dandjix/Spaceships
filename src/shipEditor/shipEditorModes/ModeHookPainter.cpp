@@ -30,12 +30,16 @@ void ShipEditorModes::ModeHookPainter::enter() {
 
 
     hook_painter->promptForName = [hook_name_dialog,hook_painter](){
+
         hook_name_dialog->on_confirm.clear();
         hook_name_dialog->on_confirm.subscribe([hook_painter](const std::string &name) {
             hook_painter->confirmPlacement(name);
         });
-        hook_name_dialog->show();
-        hook_name_dialog->setFocused(true);
+
+        if (!hook_name_dialog->shown) {
+            hook_name_dialog->show();
+            hook_name_dialog->setFocused(true);
+        }
     };
 
     hook_painter->on_region_placed.subscribe([this](const std::string &name, Vector2Int TL, Vector2Int dimensions){
@@ -49,7 +53,7 @@ void ShipEditorModes::ModeHookPainter::enter() {
     addedActiveEntities.push_back(hook_painter);
     auto hookCheckbox = new GUICheckbox(
     Anchor::TR,
-    {250,100},
+    {-64,64},
     [hook_painter](bool checkboxValue){
         switch (auto s = hook_painter->getMode()) {
                 case HookPainter::Mode::Off:

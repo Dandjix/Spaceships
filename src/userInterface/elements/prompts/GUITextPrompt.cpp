@@ -50,6 +50,9 @@ void GUITextPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEve
             on_confirm.emit(value);
             hide();
         }
+        if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE) {
+            setFocused(false);
+        }
     }
 }
 

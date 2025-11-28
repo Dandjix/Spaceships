@@ -128,7 +128,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         Anchor::TL,
         Vector2Int(0, 0),
         100,
-        150,
+        GUI_Fill,
         actionOptions,
         [&destination,&grid,&blueprint,&state_machine](const std::string& option) {
             if (option == "Resize")
@@ -235,7 +235,12 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
 
         GUI_UpdateContext gui_updateContext = {
-            screenDimensions,
+            {
+                camera->getPosition(),
+                camera->getAngle(),
+                screenDimensions,
+                camera->getScale(),
+            },
             deltaTime
         };
 

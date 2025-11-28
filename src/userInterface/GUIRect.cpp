@@ -38,6 +38,16 @@ void GUIRect::update(const GUI_UpdateContext& context)
     case Anchor::BL:
         topLeftCorner = Vector2Int(0, context.camera_info.screenDimensions.y);
         break;
+    case Anchor::CenterX:
+        break;
+    case Anchor::CenterY:
+        break;
+    case Anchor::Center:
+        topLeftCorner = Vector2Int(
+            context.camera_info.screenDimensions.x*0.5f - w*0.5f,
+            context.camera_info.screenDimensions.y*0.5f - h*0.5f
+            );
+        break;
     }
 
     screenPosition = topLeftCorner + offset;
