@@ -10,6 +10,7 @@ void HookRegion::registerEntity(Entity* entity)
         unRegisterEntity(entity);
     });
     entities_inside.insert({entity,id});
+    on_enter.emit(entity);
 }
 
 void HookRegion::unRegisterEntity(Entity* entity)
@@ -17,6 +18,7 @@ void HookRegion::unRegisterEntity(Entity* entity)
     auto id = entities_inside[entity];
     entities_inside.erase(entity);
     entity->on_die.unsubscribe(id);
+    on_leave.emit(entity);
 }
 
 bool HookRegion::pointIsInside(Vector2Int world_position) const

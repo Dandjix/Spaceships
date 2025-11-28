@@ -131,11 +131,11 @@ bool SpaceShip::roomsAreDone()
 	return true;
 }
 
-SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint) : spaceship_tiles(SpaceshipTiles(blueprint->tiles))
+SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint) : spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks)
 {
 	populateRooms();
 }
-SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({}))
+SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})),hooks({},{})
 {
 	populateRooms();
 }
@@ -382,5 +382,8 @@ void SpaceShip::updateHandling(const CameraTransformations::CameraInfo & camera_
     {
         entity->update(updateContext);
     }
+
+	hooks.update(updateContext);
+
     update(updateContext);
 }

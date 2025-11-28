@@ -57,6 +57,8 @@ public:
   std::unordered_set<Entity *> entities;
   std::unordered_set<PhysicsEntity *> physics_entities;
 
+  SpaceshipHooks hooks;
+
   explicit SpaceShip(SpaceShipBlueprint *blueprint);
   explicit SpaceShip();
 

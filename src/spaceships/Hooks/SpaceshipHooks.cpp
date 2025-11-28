@@ -34,7 +34,7 @@ HookPoint * SpaceshipHooks::getPoint(const std::string &key) {
     return nullptr;
 }
 
-inline void SpaceshipHooks::update(const UpdateContext& context)
+void SpaceshipHooks::update(const UpdateContext& context)
 {
     for (auto entity : context.spaceShip->getEntities(RoomDistance::All))
     {
