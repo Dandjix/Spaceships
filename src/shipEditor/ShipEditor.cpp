@@ -213,7 +213,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         //creating update context
         last = now;
         now = SDL_GetTicks();
-        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
+        deltaTime = static_cast<float>(now - last) / 1000.0f; // Convert ms to seconds
 
         UpdateContext updateContext = {
             {
