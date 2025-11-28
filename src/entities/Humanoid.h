@@ -14,9 +14,11 @@ private:
 protected:
     float radius;
 
+    Behavior * behavior;
+
 public:
     Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior, SDL_Texture * humanoid_texture = nullptr) :
-        PhysicsEntity(position,angle,behavior,new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f)))
+        PhysicsEntity(position,angle,new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f))), behavior(behavior)
     {
         radius = 20;
         texture = humanoid_texture;

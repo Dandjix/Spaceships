@@ -11,8 +11,8 @@ public:
 	PhysicsShape * const shape;
 
 public :
-	PhysicsEntity(const Vector2Int& position, const std::optional<float>& angle, Behavior* behavior, PhysicsShape * shape)
-		: Entity(position, angle, behavior), shape(shape)
+	PhysicsEntity(const Vector2Int& position, const std::optional<float>& angle, PhysicsShape * shape)
+		: Entity(position, angle), shape(shape)
 	{
 	}
 

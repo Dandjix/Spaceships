@@ -45,10 +45,9 @@ namespace HookPainter {
 
         Painter(Mode mode,
                 Precision precision)
-        : Entity({0,0},std::nullopt,nullptr),
+        : Entity({0,0},std::nullopt),
           mode(mode),
-          precision(precision),
-          promptForName(std::move(promptForName))
+          precision(precision)
         {}
 
         // state control

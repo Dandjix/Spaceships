@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-DebugGrid::DebugGrid(int xOrigin, int yOrigin, int grid_step) : Entity(Vector2Int(0,0),0,nullptr)
+DebugGrid::DebugGrid(int xOrigin, int yOrigin, int grid_step) : Entity(Vector2Int(0,0),0)
 {
     origin = {xOrigin, yOrigin};
     step = grid_step;

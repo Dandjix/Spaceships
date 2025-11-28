@@ -4,17 +4,9 @@
 
 #include "Entity.h"
 
-void Entity::update(const UpdateContext &context) {
-    if (behavior == nullptr)
-        return;
-    behavior->update(context,this);
-}
+void Entity::update(const UpdateContext &context) {}
 
-void Entity::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
-    if (behavior == nullptr)
-        return;
-    behavior->handleEvent(event, context, this);
-}
+void Entity::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {}
 
 void Entity::registerInSpaceship(SpaceShip* space_ship)
 {

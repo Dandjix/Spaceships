@@ -25,7 +25,7 @@ protected :
 	void renderFluid(SDL_Renderer* renderer, const RenderingContext& context);
 
 public:
-	ShipBuildingGrid(Vector2Int dimensions, Camera * camera, std::function<void(Vector2Int dimensions)> onResize);
+	ShipBuildingGrid(Vector2Int dimensions, Camera * camera, const std::function<void(Vector2Int dimensions)> &onResize);
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override;
 

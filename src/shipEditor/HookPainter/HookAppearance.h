@@ -12,7 +12,7 @@ private:
 
     public:
     explicit HookAppearance(SpaceshipHooks * hooks)
-        : Entity({0,0},0,nullptr), hooks(hooks) {
+        : Entity({0,0},0), hooks(hooks) {
 
     }
 

@@ -8,7 +8,7 @@ void BlueprintEditorAppearance::renderTile(SDL_Renderer* renderer, const Renderi
 }
 
 BlueprintEditorAppearance::BlueprintEditorAppearance(SpaceShipBlueprint* blueprint) : 
-	Entity(Vector2Int(0,0),std::nullopt,nullptr), blueprint(blueprint){}
+	Entity(Vector2Int(0,0),std::nullopt), blueprint(blueprint){}
 
 void BlueprintEditorAppearance::update(const UpdateContext& context){}
 

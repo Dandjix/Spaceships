@@ -7,11 +7,13 @@
 #include "physics/Physics.h"
 
 void Humanoid::update(const UpdateContext &context) {
-    PhysicsEntity::update(context);
+    if (behavior != nullptr)
+        behavior->update(context,this);
 }
 
 void Humanoid::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
-    PhysicsEntity::handleEvent(event, context);
+    if (behavior != nullptr)
+        behavior->handleEvent(event,context,this);
 }
 
 void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {

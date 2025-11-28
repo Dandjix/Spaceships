@@ -25,7 +25,7 @@ namespace HookDeleter{
 
     public:
         explicit PointDeleter(SpaceshipHooks * hooks, bool enabled = false)
-            : Entity({0,0}, 0, nullptr),hooks(hooks), enabled(enabled), closest_point(nullptr){
+            : Entity({0,0}, 0),hooks(hooks), enabled(enabled), closest_point(nullptr){
         }
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override {

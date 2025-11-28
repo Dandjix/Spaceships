@@ -21,8 +21,6 @@ protected:
     Vector2Int position;        // Using Vector2 to represent position
     std::optional<float> angle; // if an angle is null, the object will always face towards the camera
 
-    Behavior * behavior;
-
     EntityAttributes * attributes;
 
     void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture, Vector2Float destSize) const
@@ -57,8 +55,8 @@ public:
     /// creates an entity
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
-    Entity(Vector2Int position, std::optional<float> angle, Behavior * behavior)
-        : position(position), angle(angle),behavior(behavior),attributes(new EntityAttributes()) {} // Constructor using Vector2
+    Entity(Vector2Int position, std::optional<float> angle)
+        : position(position), angle(angle),attributes(new EntityAttributes()) {} // Constructor using Vector2
 
     virtual ~Entity()
     {
@@ -87,8 +85,6 @@ public:
         return position;
     }
 
-    // accessors
-    [[nodiscard]] Behavior * getBehavior() const {return behavior;}
     /**
      * Registers an entity in the spaceship so that it's behavior and appearance are handled in this spaceship. Does not call any event, this is done in the spaceship itself.
      *
@@ -109,7 +105,6 @@ public:
      * @param space_ship the spaceship in which the entity will be unregistered
      */
     virtual void unregisterInSpacehip(SpaceShip* space_ship);;
-    void setBehavior(Behavior * entity_behavior) {this->behavior = entity_behavior;}
 
     [[nodiscard]] EntityAttributes * getAttributes() const {return attributes;}
 

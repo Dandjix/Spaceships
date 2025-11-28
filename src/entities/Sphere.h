@@ -14,8 +14,8 @@ private:
     float radius;
 public:
     // Constructor
-    Sphere(Vector2Int position, float radius, Behavior * behavior)
-        : PhysicsEntity(position,  std::nullopt,behavior,new RoundPhysicsShape(this,radius)), radius(radius)
+    Sphere(Vector2Int position, float radius)
+        : PhysicsEntity(position,  std::nullopt,new RoundPhysicsShape(this,radius)), radius(radius)
     {
     }
 

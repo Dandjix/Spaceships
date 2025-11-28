@@ -4,7 +4,7 @@
 #include "../../spaceships/Tile.h"
 
 BlueprintTilePainter::BlueprintTilePainter(SpaceShipBlueprint* blueprint, ShipBuildingGrid* grid, Tile tileToPaint, bool fill)
-: Entity(Vector2Int(0, 0), std::nullopt, nullptr),
+: Entity(Vector2Int(0, 0), std::nullopt),
 blueprint(blueprint), grid(grid), tileToPaint(tileToPaint), fill(fill)
 {
 

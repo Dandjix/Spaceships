@@ -10,8 +10,8 @@
 class MockRoundPhysicsEntity : public PhysicsEntity
 {
 public:
-    MockRoundPhysicsEntity(const Vector2Int& position, const std::optional<float>& angle, Behavior* behavior, float radius)
-        : PhysicsEntity(position, angle, behavior, new RoundPhysicsShape(this,radius))
+    MockRoundPhysicsEntity(const Vector2Int& position, const std::optional<float>& angle, float radius)
+        : PhysicsEntity(position, angle, new RoundPhysicsShape(this,radius))
     {
     }
 
@@ -32,9 +32,9 @@ TEST(PhysicsCollisionTestSuite, RoundRoundSimpleTest)
 {
     auto space_ship = new SpaceShip();
 
-    auto e1 = new MockRoundPhysicsEntity({100,100},0,nullptr,50);
+    auto e1 = new MockRoundPhysicsEntity({100,100},0,50);
 
-    auto e2 = new MockRoundPhysicsEntity({125,125},0,nullptr,50);
+    auto e2 = new MockRoundPhysicsEntity({125,125},0,50);
 
     auto visitor = e1->shape->createVisitor();
 

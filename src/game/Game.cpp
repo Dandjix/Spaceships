@@ -120,7 +120,7 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
 
     CargoContainer * container1 = new CargoContainer(base_origin + Vector2Int(500,500).scaleToWorldPosition(), 45, CargoContainer::Variation::EMA);
     CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(200, 300).scaleToWorldPosition(), 22, CargoContainer::Variation::SN);
-    Sphere * sphere = new Sphere(Vector2Int(700, 200).scaleToWorldPosition(),  Scaling::scaleToWorld(50.0f),nullptr);
+    Sphere * sphere = new Sphere(Vector2Int(700, 200).scaleToWorldPosition(),  Scaling::scaleToWorld(50.0f));
     // DebugGrid * grid = new DebugGrid(0, 0, 64);
     RayCaster* rayCaster = new RayCaster(camera, player);
     // Cursor* cursor = new Cursor(camera);
