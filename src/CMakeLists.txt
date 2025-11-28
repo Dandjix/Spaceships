@@ -64,7 +64,11 @@ add_library(SpaceshipsLib ${SOURCES}
         shipEditor/HookPainter/HookAppearance.cpp
         shipEditor/HookPainter/HookAppearance.h
         shipEditor/HookPainter/PainterStates/Painter.cpp
-        shipEditor/HookPainter/PainterStates/Painter.h)
+        shipEditor/HookPainter/PainterStates/Painter.h
+        shipEditor/HookPainter/RegionDeleter.cpp
+        shipEditor/HookPainter/RegionDeleter.h
+        shipEditor/HookPainter/PointDeleter.cpp
+        shipEditor/HookPainter/PointDeleter.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

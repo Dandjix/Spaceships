@@ -6,7 +6,9 @@
 
 #include "../../userInterface/elements/GUI/GUICheckbox.h"
 #include "ShipEditorStateMachine.h"
+#include "shipEditor/HookPainter/RegionDeleter.h"
 #include "shipEditor/HookPainter/HookAppearance.h"
+#include "shipEditor/HookPainter/PointDeleter.h"
 #include "shipEditor/HookPainter/PainterStates/Painter.h"
 #include "spaceships/Hooks/HookRegion.h"
 #include "spaceships/Hooks/HookPoint.h"
@@ -28,7 +30,6 @@ void ShipEditorModes::ModeHookPainter::enter() {
     });
 
     auto * hook_painter = new HookPainter::Painter(HookPainter::Mode::Off,HookPainter::Precision::Center);
-
 
     hook_painter->promptForName = [hook_name_dialog,hook_painter](){
 
@@ -53,9 +54,22 @@ void ShipEditorModes::ModeHookPainter::enter() {
 
     addedActiveEntities.push_back(hook_painter);
 
+    auto region_deleter = new HookDeleter::RegionDeleter(&state_machine->common->blueprint->hooks,false);
+    addedActiveEntities.push_back(region_deleter);
+    auto point_deleter = new HookDeleter::PointDeleter(&state_machine->common->blueprint->hooks,false);
+    addedActiveEntities.push_back(point_deleter);
+
     auto action_list = new GUIList(Anchor::TL,{100,0},160,GUI_Fill,std::vector<std::string>{
-    "Snap Center","Snap Intersection", "Snap Off","Paint Region", "Paint Point", "Paint Off"},
-        [hook_painter](auto option) {
+        "Snap Center",
+        "Snap Intersection",
+        "Snap Off",
+        "Paint Region",
+        "Paint Point",
+        "Paint Off",
+        "Delete Regions",
+        "Delete Points"
+    },
+        [hook_painter,region_deleter,point_deleter](auto option) {
             if (option == "Snap Center") {
                 hook_painter->setPrecision(HookPainter::Precision::Center);
             }
@@ -67,12 +81,26 @@ void ShipEditorModes::ModeHookPainter::enter() {
             }
             else if (option == "Paint Region"){
                 hook_painter->setMode(HookPainter::Mode::Regions);
+                region_deleter->disable();
+                point_deleter->disable();
             }
             else if (option == "Paint Point"){
                 hook_painter->setMode(HookPainter::Mode::Point);
+                region_deleter->disable();
+                point_deleter->disable();
             }
             else if (option == "Paint Off"){
                 hook_painter->setMode(HookPainter::Mode::Off);
+            }
+            else if (option == "Delete Regions") {
+                hook_painter->setMode(HookPainter::Mode::Off);
+                region_deleter->enable();
+                point_deleter->disable();
+            }
+            else if (option == "Delete Points") {
+                hook_painter->setMode(HookPainter::Mode::Off);
+                region_deleter->disable();
+                point_deleter->enable();
             }
         }
     );

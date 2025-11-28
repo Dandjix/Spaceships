@@ -74,7 +74,7 @@ public:
     virtual void onUnRegistered(SpaceShip * oldSpaceship) {}
 
     /// <summary>
-    /// lowest values first ! put something early neear the start, something late near the end.
+    /// lowest values first ! put something early neear the start, something late near the end. Base value is around 30000
     /// </summary>
     /// <returns></returns>
     virtual unsigned short int getQueueOrder()
