@@ -5,81 +5,76 @@
 #include <string>
 #include "MenuNavigation.h"
 #include "fonts.h"
+#include "elements/GUI/GUIList.h"
 
 
+MenuNavigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *window) {
+    MenuNavigation navigation = MainMenu;
 
-MenuNavigation RunMainMenu(SDL_Renderer* renderer,SDL_Window * window) {
-    std::vector<std::string> options = { "Game", "Settings", "Ship Editor", "Quit" };
-    int selected = 0;
+    auto menu = GUIList(Anchor::Center, {0, 0}, GUI_Fill, GUI_Fill, {
+                            "New Game",
+                            "Load Save",
+                            "Ship Editor",
+                            "Exit to desktop"
+                        }, [renderer,window,&navigation](const std::string &selected) {
+                            if (selected == "New Game") {
+                                navigation = Game;
+                            } else if (selected == "Load Save") {
+                                navigation = Game;
+                            } else if (selected == "Ship Editor") {
+                                navigation = ShipEditor;
+                            } else if (selected == "Exit to desktop") {
+                                navigation = Quit;
+                            }
+                        }, true);
 
-    TTF_Font* font = fonts["lg"];
-
-    bool running = true;
-    SDL_Event e;
-
-    SDL_Color normalColor = { 255, 255, 255, 255 }; // white
-    SDL_Color selectedColor = { 255, 255, 0, 255 }; // yellow
-
-    while (running) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_EVENT_QUIT) {
-                return Quit;
-            }
-            if (e.type == SDL_EVENT_KEY_DOWN) {
-                SDL_Keycode key = e.key.key;
-
-                switch (key) {
-                case SDLK_UP:
-                    // Move up the menu
-                    if (selected > 0) {
-                        --selected;
-                    }
-                    break;
-
-                case SDLK_DOWN:
-                    // Move down the menu
-                    if (selected < options.size() - 1) {
-                        ++selected;
-                    }
-                    break;
-                case SDLK_RETURN:
-                case SDLK_KP_ENTER:
-                    // Enter the selected option
-                    switch (selected) {
-                    case 0:  // "Game"
-                        return Game;
-                    case 1:  // "Settings"
-                        return Settings;
-                    case 2:  // "Ship Editor"
-                        return ShipEditor;
-                    case 3:  // "Quit"
-                        return Quit;
-                    }
-                    break;
-                }
-            }
-
-        }
-
+    while (navigation == MainMenu) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        for (int i = 0; i < options.size(); ++i) {
-            SDL_Surface* surface = TTF_RenderText_Solid(font, options[i].c_str(), options[i].length(), i == selected ? selectedColor : normalColor);
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        int win_x, win_y;
+        SDL_GetWindowSize(window, &win_x, &win_y);
 
-            float textW = 0, textH = 0;
-            SDL_GetTextureSize(texture, &textW, &textH);
-            SDL_FRect dstRect = { 100.0f, 100.0f + i * 60.0f, static_cast<float>(textW), static_cast<float>(textH) };
-            SDL_RenderTexture(renderer, texture, NULL, &dstRect);
+        GUI_RenderingContext rendering_context = {
+            {win_x, win_y},
+        };
 
-            SDL_DestroyTexture(texture);
-            SDL_DestroySurface(surface);
+        menu.render(renderer, rendering_context);
+
+        float delta_time = 16.0f / 1000.0f;
+
+        GUI_UpdateContext update_context = {
+            {
+                {0, 0},
+                0,
+                {win_x, win_y}
+            },
+            delta_time
+        };
+
+        SDL_Event event;
+
+        GameEvent::GameEventContext game_event_context = {
+            {
+                {0,0},
+                0,
+                {win_x,win_y}
+            },
+            GameEvent::UI,
+            window
+        };
+
+        while (SDL_PollEvent(&event)) {
+            menu.handleEvent(event,game_event_context);
+            if (event.type == SDL_EVENT_QUIT) {
+                return Quit;
+            }
         }
+
+        menu.update(update_context);
 
         SDL_RenderPresent(renderer);
         SDL_Delay(16); // ~60fps
     }
-
-    return Quit;
+    return navigation;
 }

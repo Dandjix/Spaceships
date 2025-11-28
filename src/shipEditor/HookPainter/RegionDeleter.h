@@ -4,10 +4,11 @@
 
 #pragma once
 #include "entities/Entity.h"
+#include "entities/ShortLivedEntity.h"
 
 namespace HookDeleter{
 
-    class RegionDeleter : public Entity{
+    class RegionDeleter : public ShortLivedEntity{
     private:
         SpaceshipHooks * hooks;
         bool enabled;
@@ -22,7 +23,7 @@ namespace HookDeleter{
 
     public:
         explicit RegionDeleter(SpaceshipHooks * hooks, bool enabled = false)
-            : Entity({0,0}, 0),hooks(hooks), enabled(enabled), closest_region(nullptr){
+            : ShortLivedEntity({0,0}, 0),hooks(hooks), enabled(enabled), closest_region(nullptr){
         }
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override {

@@ -6,6 +6,7 @@
 #include "game/Game.h"
 #include "shipEditor/ShipEditor.h"
 #include "userInterface/fonts.h"
+#include "userInterface/elements/GUI/GUIList.h"
 
 void main_menu()
 {

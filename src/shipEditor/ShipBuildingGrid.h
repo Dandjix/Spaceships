@@ -5,7 +5,9 @@
 #include "../player/Camera.h"
 #include <functional>
 
-class ShipBuildingGrid : public Entity
+#include "entities/ShortLivedEntity.h"
+
+class ShipBuildingGrid : public ShortLivedEntity
 {
 private:
 	void drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context) const;

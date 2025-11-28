@@ -3,16 +3,16 @@
 //
 
 #pragma once
-#include "entities/Entity.h"
+#include "entities/ShortLivedEntity.h"
 
 
-class HookAppearance : public Entity {
+class HookAppearance : public ShortLivedEntity {
 private:
     SpaceshipHooks * hooks;
 
     public:
     explicit HookAppearance(SpaceshipHooks * hooks)
-        : Entity({0,0},0), hooks(hooks) {
+        : ShortLivedEntity({0,0},0), hooks(hooks) {
 
     }
 

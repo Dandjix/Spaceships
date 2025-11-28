@@ -18,7 +18,7 @@ void PlayerBehavior::update(const UpdateContext &context, PhysicsEntity * owner)
         deltaX += 1;
     }
 
-    Vector2Float delta = Vector2Float(deltaX, deltaY).rotate(-camera->getAngle());
+    Vector2Float delta = Vector2Float(deltaX, deltaY).rotate(-context.camera_info.cameraAngle);
 
     delta.normalize();
 
@@ -30,4 +30,8 @@ void PlayerBehavior::update(const UpdateContext &context, PhysicsEntity * owner)
 }
 
 void PlayerBehavior::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, PhysicsEntity *owner) {
+}
+
+nlohmann::json PlayerBehavior::toJson() {
+    return "player_behavior";
 }

@@ -40,7 +40,10 @@ public:
     virtual ~Entity()
     {
         on_die.emit();
-    };
+    }
+
+    virtual nlohmann::json toJson()=0;
+    virtual bool isJsonSerializable(){return true;}
 
     virtual void update(const UpdateContext& context);
     virtual void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context);

@@ -4,12 +4,13 @@
 
 #pragma once
 #include "entities/Entity.h"
+#include "entities/ShortLivedEntity.h"
 #include "game/Rendering.h"
 #include "spaceships/Hooks/SpaceshipHooks.h"
 
 namespace HookDeleter{
 
-    class PointDeleter : public Entity{
+    class PointDeleter : public ShortLivedEntity{
     private:
         SpaceshipHooks * hooks;
         bool enabled;
@@ -25,7 +26,7 @@ namespace HookDeleter{
 
     public:
         explicit PointDeleter(SpaceshipHooks * hooks, bool enabled = false)
-            : Entity({0,0}, 0),hooks(hooks), enabled(enabled), closest_point(nullptr){
+            : ShortLivedEntity({0,0}, 0),hooks(hooks), enabled(enabled), closest_point(nullptr){
         }
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override {

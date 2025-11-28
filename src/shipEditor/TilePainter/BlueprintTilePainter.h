@@ -8,7 +8,7 @@
 #include "../../player/Camera.h"
 #include "../ShipBuildingGrid.h"
 #include "../../spaceships/Tile.h"
-class BlueprintTilePainter : public Entity {
+class BlueprintTilePainter : public ShortLivedEntity {
 protected :
 	bool enabled = true;
 	SpaceShipBlueprint * blueprint;

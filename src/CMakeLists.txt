@@ -69,7 +69,10 @@ add_library(SpaceshipsLib ${SOURCES}
         shipEditor/HookPainter/RegionDeleter.h
         shipEditor/HookPainter/PointDeleter.cpp
         shipEditor/HookPainter/PointDeleter.h
-        behavior/BehavioredEntity.h)
+        behavior/BehavioredEntity.h
+        shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.cpp
+        shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.h
+        entities/ShortLivedEntity.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
@@ -84,6 +87,11 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         userInterface/elements/prompts/GUITextPrompt.h
         shipEditor/HookPainter/PainterStates/PainterStates.cpp
         shipEditor/HookPainter/PainterStates/PainterStates.h
+        shipEditor/EntityPlacer/EntityPlacer.cpp
+        shipEditor/EntityPlacer/EntityPlacer.h
+        textures/Textures.cpp
+        textures/Textures.h
+        spaceships/EntityData/SpaceshipEntityData.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

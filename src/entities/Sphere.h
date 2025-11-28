@@ -29,4 +29,14 @@ public:
 
     // Override update function (currently does nothing)
     void update(const UpdateContext & context) override;
+
+    static Entity * fromJson(nlohmann::json::const_reference json) {
+        return new Sphere(Vector2Int::fromJson(json["position"]),json["radius"]);
+    }
+
+    nlohmann::json toJson() override {
+        auto json = Entity::toJson();
+        json["radius"] = radius;
+        return json;
+    }
 };

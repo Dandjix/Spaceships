@@ -2,7 +2,9 @@
 #include "../entities/Entity.h"
 #include "../player/Camera.h"
 #include "../math/Vectors.h"
-class RayCaster : public Entity
+#include "entities/ShortLivedEntity.h"
+
+class RayCaster : public ShortLivedEntity
 {
 protected:
 	Camera* camera;
@@ -12,7 +14,7 @@ protected:
 	std::vector<Vector2Int> checked_positions;
 
 public:
-	RayCaster(Camera* camera, Entity * player) : Entity(Vector2Int(0, 0), 0.0f), camera(camera), player(player) {}
+	RayCaster(Camera* camera, Entity * player) : ShortLivedEntity(Vector2Int(0, 0), 0.0f), camera(camera), player(player) {}
 
 	// Inherited via Entity
 	void update(const UpdateContext& context) override;

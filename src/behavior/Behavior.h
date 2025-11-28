@@ -14,6 +14,10 @@ class Behavior{
     public:
     virtual ~Behavior() = default;
 
+    virtual nlohmann::json toJson()=0;
+
+    static Behavior * fromJson(const nlohmann::basic_json<> & value);
+
     explicit Behavior()= default;
 
     virtual void update(const UpdateContext &context, PhysicsEntity * owner) = 0;

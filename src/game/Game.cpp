@@ -104,18 +104,18 @@ MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float targe
 
     Camera * camera = new Camera(base_origin, 0, 1);
 
-    PlayerBehavior * playerBehavior = new PlayerBehavior(camera);
+    PlayerBehavior * playerBehavior = new PlayerBehavior();
 
-    SDL_Texture * player_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/entities/player/player_placeholder.png");
 
-    Humanoid * player = new Humanoid(base_origin+Vector2Int(200,200).scaleToWorldPosition(), 0, playerBehavior,player_texture); // Start at center, 200 pixels/sec
+
+    Humanoid * player = new Humanoid(base_origin+Vector2Int(200,200).scaleToWorldPosition(), 0, playerBehavior); // Start at center, 200 pixels/sec
     camera->setPlayer(player);
 
-    Humanoid * dummy = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
+    Humanoid * dummy = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr);
 
-    // Humanoid * dummy2 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
+    // Humanoid * dummy2 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr);
     //
-    // Humanoid * dummy3 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr,nullptr);
+    // Humanoid * dummy3 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr);
 
 
     CargoContainer * container1 = new CargoContainer(base_origin + Vector2Int(500,500).scaleToWorldPosition(), 45, CargoContainer::Variation::EMA);

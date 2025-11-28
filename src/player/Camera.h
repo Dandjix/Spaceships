@@ -89,6 +89,16 @@ public:
         //}
     }
 
+    nlohmann::json toJson() override {
+        auto json = Entity::toJson();
+        json["scale"] = scale;
+        return json;
+    }
+
+    static Camera * fromJson(nlohmann::json json) {
+        return new Camera(Vector2Int::fromJson(json["position"]),json["angle"],json["scale"]);
+    }
+
 
     //Vector2Float worldToScreenPoint(Vector2Int worldPosition) const {
     //use the context method for that. If you are sad that this method does not exist, just stop being sad. It's that simple folks.

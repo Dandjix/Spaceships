@@ -1,6 +1,8 @@
 #pragma once
 #include "../entities/Entity.h"
-class BlueprintEditorAppearance : public Entity
+#include "entities/ShortLivedEntity.h"
+
+class BlueprintEditorAppearance : public ShortLivedEntity
 {
 protected:
 	SpaceShipBlueprint* blueprint;

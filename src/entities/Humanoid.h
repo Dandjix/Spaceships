@@ -7,6 +7,7 @@
 #include "behavior/BehavioredEntity.h"
 #include "physics/PhysicsEntity.h"
 #include "physics/RoundPhysicsShape.h"
+#include "textures/Textures.h"
 
 class Humanoid : public BehavioredEntity{
 private:
@@ -16,11 +17,37 @@ protected:
     float radius;
 
 public:
-    Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior, SDL_Texture * humanoid_texture = nullptr) :
+    Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior) :
         BehavioredEntity(position,angle,new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f)),behavior)
     {
         radius = 20;
-        texture = humanoid_texture;
+        texture = nullptr;
     }
     void render(SDL_Renderer *renderer, const RenderingContext & context) override;
+
+    nlohmann::json toJson() override {
+        auto json = Entity::toJson();
+
+        if (behavior!=nullptr) json["behavior"] = behavior->toJson();
+        return json;
+    }
+
+    static Entity * fromJson(nlohmann::json::const_reference json) {
+        std::optional<float> angle = std::nullopt;
+        if (json.contains("angle")) {
+            angle = json["angle"];
+        }
+
+        Behavior * behavior = nullptr;
+        if (json.contains("behavior")) behavior = Behavior::fromJson(json["behavior"]);
+
+        return  new Humanoid(
+            Vector2Int{
+                json["position"]["x"],
+                json["position"]["y"]
+            },
+            angle,
+            behavior
+        );
+    }
 };

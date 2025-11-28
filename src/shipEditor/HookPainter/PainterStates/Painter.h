@@ -8,6 +8,7 @@
 #pragma once
 
 #include "entities/Entity.h"
+#include "entities/ShortLivedEntity.h"
 #include "shipEditor/HookPainter/PainterStates/PainterStates.h"
 
 
@@ -25,7 +26,7 @@ namespace HookPainter {
         Free
     };
 
-    class Painter : public Entity {
+    class Painter : public ShortLivedEntity {
     private:
         friend class PainterState;
 
@@ -45,7 +46,7 @@ namespace HookPainter {
 
         Painter(Mode mode,
                 Precision precision)
-        : Entity({0,0},std::nullopt),
+        : ShortLivedEntity({0,0},std::nullopt),
           mode(mode),
           precision(precision)
         {}

@@ -28,6 +28,17 @@ void Entity::renderTexture(SDL_Renderer *renderer, const RenderingContext &conte
     SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, entity_angle, nullptr, SDL_FLIP_NONE);
 }
 
+nlohmann::json Entity::toJson() {
+    nlohmann::json entry = {};
+
+    entry["position"] = getPosition().toJson();
+    if (hasAngle()) {
+        entry["angle"] = getAngle();
+    }
+
+    return entry;
+}
+
 void Entity::update(const UpdateContext &context) {}
 
 void Entity::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {}

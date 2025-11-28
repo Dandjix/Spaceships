@@ -40,8 +40,19 @@ public:
     // Override render method
     void render(SDL_Renderer* renderer, const RenderingContext& context) override;
 
+    static Entity * fromJson(nlohmann::json::const_reference json) {
+        return new CargoContainer(Vector2Int::fromJson(json["position"]),json["angle"],json["variation"],Vector2Float::fromJson(json["scale"]));
+    }
+    nlohmann::json toJson() override {
+        auto json = Entity::toJson();
+        json["variation"] = variation;
+        json["scale"] = scale.toJson();
+        return json;
+    }
+
 private:
     // Helper method to generate random color
     SDL_Color getRandomColor();
+
 };
 

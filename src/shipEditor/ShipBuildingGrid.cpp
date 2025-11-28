@@ -43,7 +43,7 @@ void ShipBuildingGrid::renderFluid(SDL_Renderer* renderer, const RenderingContex
 
 ShipBuildingGrid::ShipBuildingGrid(Vector2Int dimensions, Camera* camera, const std::function<void(Vector2Int dimensions)> &onResize)
 :
-Entity(Vector2Int(0, 0), std::nullopt)
+ShortLivedEntity(Vector2Int(0, 0), std::nullopt)
 , sizePx(Tiles::tileSizePx), dimensions(dimensions), resizing(false), camera(camera), onResize(onResize)
 {
 
