@@ -98,3 +98,7 @@ void Painter::confirmPlacement(const std::string &name) {
     clearStart();
     setMode(mode);  // restart state (idle again)
 }
+
+void Painter::setPrecision(Precision value) {
+    precision = value;
+}

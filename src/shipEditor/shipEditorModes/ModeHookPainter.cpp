@@ -10,6 +10,7 @@
 #include "shipEditor/HookPainter/PainterStates/Painter.h"
 #include "spaceships/Hooks/HookRegion.h"
 #include "spaceships/Hooks/HookPoint.h"
+#include "userInterface/elements/GUI/GUIList.h"
 #include "userInterface/elements/prompts/GUITextPrompt.h"
 
 void ShipEditorModes::ModeHookPainter::enter() {
@@ -51,25 +52,32 @@ void ShipEditorModes::ModeHookPainter::enter() {
     });
 
     addedActiveEntities.push_back(hook_painter);
-    auto hookCheckbox = new GUICheckbox(
-    Anchor::TR,
-    {-64,64},
-    [hook_painter](bool checkboxValue){
-        switch (auto s = hook_painter->getMode()) {
-                case HookPainter::Mode::Off:
-                    hook_painter->setMode(HookPainter::Mode::Regions);
-                    break;
-            case HookPainter::Mode::Regions:
-                    hook_painter->setMode(HookPainter::Mode::Point);
-                    break;
-            case HookPainter::Mode::Point:
-                    hook_painter->setMode(HookPainter::Mode::Off);
-                    break;
+
+    auto action_list = new GUIList(Anchor::TL,{100,0},160,GUI_Fill,std::vector<std::string>{
+    "Snap Center","Snap Intersection", "Snap Off","Paint Region", "Paint Point", "Paint Off"},
+        [hook_painter](auto option) {
+            if (option == "Snap Center") {
+                hook_painter->setPrecision(HookPainter::Precision::Center);
             }
-        },
-        false
+            else if (option == "Snap Intersection"){
+                hook_painter->setPrecision(HookPainter::Precision::Intersection);
+            }
+            else if (option == "Snap Off"){
+                hook_painter->setPrecision(HookPainter::Precision::Free);
+            }
+            else if (option == "Paint Region"){
+                hook_painter->setMode(HookPainter::Mode::Regions);
+            }
+            else if (option == "Paint Point"){
+                hook_painter->setMode(HookPainter::Mode::Point);
+            }
+            else if (option == "Paint Off"){
+                hook_painter->setMode(HookPainter::Mode::Off);
+            }
+        }
     );
-    addedEditorGUIElements.push_back(hookCheckbox);
+
+    addedEditorGUIElements.push_back(action_list);
 
     auto appearance = new HookAppearance(&state_machine->common->blueprint->hooks);
 

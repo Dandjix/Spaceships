@@ -72,6 +72,8 @@ namespace HookPainter {
         void handleEvent(const SDL_Event &event,const GameEvent::GameEventContext &ctx) override;
 
         void confirmPlacement(const std::string& name);
+
+        void setPrecision(Precision value);
     };
 
 } // namespace HookPainter
