@@ -23,7 +23,6 @@ void ShipEditorModes::ModeHookPainter::enter() {
     hook_name_dialog->on_focused_change.subscribe([hook_name_dialog](bool focused) {
         if (!focused) {
             hook_name_dialog->hide();
-            std::cout << "went out of focus, hiding" << "\n";
         }
     });
 

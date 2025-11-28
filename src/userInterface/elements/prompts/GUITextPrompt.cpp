@@ -11,11 +11,9 @@
 void GUITextPrompt::setFocused(bool new_focused) {
     if (new_focused != focused) {
         if (new_focused) {
-            std::cout << "text input started" << std::endl;
             SDL_StartTextInput(window);
         }
         else {
-            std::cout << "text input stopped" << std::endl;
             SDL_StopTextInput(window);
         }
         on_focused_change.emit(new_focused);
