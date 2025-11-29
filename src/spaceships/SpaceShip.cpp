@@ -208,10 +208,6 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 		//SDL_Log("rendering %d rooms (%d)",visibleRoomsVector.size(), visible.size());
 		renderRooms(renderer, context, visibleRoomsVector);
 	}
-	else
-	{
-		std::cout << "no focus room" << std::endl;
-	}
 
 	for (Room * room : rooms.getVertices())
 	{
