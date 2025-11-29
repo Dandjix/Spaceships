@@ -6,8 +6,11 @@
 #include <filesystem>
 #include <vector>
 
-#include "player/Camera.h"
+#include "json.hpp"
 
+
+class Entity;
+class Camera;
 class SpaceShip;
 
 namespace GameState {
@@ -15,12 +18,16 @@ namespace GameState {
         explicit GameState(const std::vector<SpaceShip *> & space_ships) : space_ships(space_ships) {  }
         std::vector<SpaceShip * >space_ships;
         Camera * getCamera();
+        Entity * getPlayer();
+        SpaceShip * getPlayerSpaceship();
+
+        void after_deserialized(nlohmann::json json);
+
     };
 
     void dumpGameState(const GameState & game_state, const std::filesystem::path & path);
-    std::string dumpsGameState(const GameState &game_state);
+    std::string dumpsGameState(GameState game_state);
 
     GameState loadGameState(const std::filesystem::path & path);
     GameState loadsGameState(const std::string & content);
-
 }

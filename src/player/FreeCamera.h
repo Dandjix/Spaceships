@@ -9,7 +9,7 @@ public:
     FreeCamera(Vector2Int position,float angle,float scale, float speed) : Camera(position,angle,scale),speed(speed) {}
 
     void update(const UpdateContext & context) override {
-        const bool* state = SDL_GetKeyboardState(NULL);
+        const bool* state = SDL_GetKeyboardState(nullptr);
         float deltaX = 0;
         float deltaY = 0;
         if (state[SDL_SCANCODE_W]) {

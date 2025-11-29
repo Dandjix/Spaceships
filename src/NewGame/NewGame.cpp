@@ -8,14 +8,14 @@ std::filesystem::path NewGame::ConstructNewGame() {
 
     SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json");
 
-    auto player = new Humanoid(Vector2Int{64,64}.scaleToWorldPosition(),45,new PlayerBehavior());
+    auto player = new Humanoid(Vector2Int{128,128}.scaleToWorldPosition(),45,new PlayerBehavior());
     auto camera =  new Camera(Vector2Int(0,0),0,1);
     camera->setPlayer(player);
 
     std::vector<Entity * > entities = {
         player,
         camera,
-        new Humanoid(Vector2Int{96,64}.scaleToWorldPosition(),45,nullptr),
+        new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
         new CargoContainer(Vector2Int{96,96}.scaleToWorldPosition(),22)
     };
 

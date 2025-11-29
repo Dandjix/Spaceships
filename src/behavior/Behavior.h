@@ -20,6 +20,8 @@ class Behavior{
 
     explicit Behavior()= default;
 
+    virtual bool constexpr isPlayerBehavior() {return false;}
+
     virtual void update(const UpdateContext &context, PhysicsEntity * owner) = 0;
     virtual void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, PhysicsEntity * owner) = 0;
 };

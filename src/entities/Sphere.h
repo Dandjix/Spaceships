@@ -39,4 +39,6 @@ public:
         json["radius"] = radius;
         return json;
     }
+
+    constexpr std::string getJsonType(){return "sphere";}
 };

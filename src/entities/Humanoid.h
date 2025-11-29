@@ -28,7 +28,14 @@ public:
     nlohmann::json toJson() override {
         auto json = Entity::toJson();
 
-        if (behavior!=nullptr) json["behavior"] = behavior->toJson();
+        if (behavior!=nullptr) {
+            json["behavior"] = behavior->toJson();
+
+            if (behavior->isPlayerBehavior()) {
+                json["is_player"] = true;
+            }
+
+        }
         return json;
     }
 
@@ -39,7 +46,11 @@ public:
         }
 
         Behavior * behavior = nullptr;
-        if (json.contains("behavior")) behavior = Behavior::fromJson(json["behavior"]);
+
+
+        if (json.contains("behavior")) {
+            behavior = Behavior::fromJson(json["behavior"]);
+        }
 
         return  new Humanoid(
             Vector2Int{
@@ -49,5 +60,13 @@ public:
             angle,
             behavior
         );
+    }
+
+    constexpr std::string getJsonType() override{return "humanoid";}
+
+    constexpr bool is_player() override {
+        if (behavior ==nullptr)
+            return false;
+        return behavior->isPlayerBehavior();
     }
 };

@@ -10,7 +10,8 @@
 class Entity;
 
 Behavior * Behavior::fromJson(const nlohmann::basic_json<> &value) {
-    if (value == "player") {
+    if (value == "player_behavior") {
         return new PlayerBehavior();
     }
+    return nullptr;
 }

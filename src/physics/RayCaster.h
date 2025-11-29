@@ -19,5 +19,4 @@ public:
 	// Inherited via Entity
 	void update(const UpdateContext& context) override;
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override;
-
 };

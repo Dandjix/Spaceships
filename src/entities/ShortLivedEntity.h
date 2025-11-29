@@ -16,11 +16,16 @@ public:
 
     ~ShortLivedEntity() override =default;
 
-    nlohmann::json toJson() override {
+    nlohmann::json toJson() final{
         throw std::invalid_argument("Tried to convert a short lived object to JSON : this is illegal");
     }
 
-    bool isJsonSerializable() override {
+    bool isJsonSerializable() final {
         return false;
+    }
+
+    constexpr std::string getJsonType() final {
+        // throw std::invalid_argument("Tried to get the json type of a short lived object : this is illegal"); //can't throw in a constexpr sadly
+        return nullptr;
     }
 };

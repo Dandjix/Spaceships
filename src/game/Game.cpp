@@ -85,6 +85,8 @@ void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<Parall
 MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, std::filesystem::path path_to_save,
                                    float target_delta_time) // target_delta_time = 1.0/60.0
 {
+
+
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);
     Tiles::loadAll(renderer);
@@ -92,6 +94,10 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, s
     GameState::GameState game_state = GameState::loadGameState(path_to_save);
 
     Camera *camera = game_state.getCamera();
+    Entity * player = game_state.getPlayer();
+    SpaceShip * player_spaceship = game_state.getPlayerSpaceship();
+    camera->setPlayer(player);
+    player_spaceship->setFocusEntity(player);
 
     std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer, {0, 0});
 
@@ -155,7 +161,6 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, s
         }
 
         // RENDERING ---------------------------------------------------------------------------------------------------
-
         RenderingContext renderingContext = {
             {
                 camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()

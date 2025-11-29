@@ -54,5 +54,7 @@ private:
     // Helper method to generate random color
     SDL_Color getRandomColor();
 
+public:
+    constexpr std::string getJsonType() override{return "cargo_container";}
 };
 

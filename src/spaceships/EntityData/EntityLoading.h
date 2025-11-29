@@ -33,11 +33,13 @@ namespace EntityLoading {
         else if (t =="camera") {
             entity = Camera::fromJson(entry);
         }
+        else {
+            std::string message = "t : ";
+            message.append(t);
+            message.append(" not handled");
 
-        std::string message = "t : ";
-        message.append(t);
-        message.append(" not handled");
-
-        throw std::invalid_argument(message);
+            throw std::invalid_argument(message);
+        }
+        return entity;
     }
 };

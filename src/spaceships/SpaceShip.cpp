@@ -210,6 +210,7 @@ void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& c
 	}
 	else
 	{
+		std::cout << "no focus room" << std::endl;
 	}
 
 	for (Room * room : rooms.getVertices())
@@ -274,11 +275,14 @@ void SpaceShip::unregisterEntities(const std::vector<Entity *> &to_unregister)
 	}
 }
 
+bool SpaceShip::has_entity(Entity *entity) const {
+	return entities.contains(entity);
+}
+
 void SpaceShip::update(const UpdateContext& context)
 {
 	if (!focusEntity)
 	{
-		//SDL_Log("no focus entity");
 		focusRoom = nullptr;
 		return;
 	}

@@ -5,7 +5,7 @@
 
 class Camera : public Entity {  // Inherit from Entity
 protected:
-    Entity* player = nullptr;  // Pointer to the player entity
+    Entity* player;  // Pointer to the player entity
     Vector2Int screenDimensions = Vector2Int(0, 0);
 private :
     float scale;
@@ -14,7 +14,8 @@ public:
     /// Creates a Camera that follows the player.
     /// </summary>
     /// <param name="p">Pointer to the player entity</param>
-    Camera(Vector2Int position, float angle, float scale) : Entity(position,angle),scale(scale) {}
+    Camera(Vector2Int position, float angle, float scale) : Entity(position, angle), player(nullptr), scale(scale) {
+    }
 
     SpaceShip * working_spaceship = nullptr;
 
@@ -96,7 +97,7 @@ public:
         return json;
     }
 
-    static Camera * fromJson(nlohmann::json json) {
+    static Entity * fromJson(nlohmann::json json) {
         return new Camera(Vector2Int::fromJson(json["position"]),json["angle"],json["scale"]);
     }
 
@@ -113,4 +114,6 @@ public:
     void onRegistered(SpaceShip *newSpaceship) override {
         working_spaceship = newSpaceship;
     }
+
+    constexpr std::string getJsonType() override {return "camera";}
 };

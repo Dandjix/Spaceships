@@ -97,10 +97,6 @@ public:
   /// <param name="other"> The other ship</param>
   void Dock(SpaceShip other);
 
-  /// <summary>
-  /// adds one or more entries to the entities map
-  /// </summary>
-  void registerEntities(const std::vector<Entity *> &entities);
 
   void queueDelete(Entity * entity) {
     deletion_queue.push_back(entity);
@@ -117,6 +113,11 @@ public:
   void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type);
 
   /// <summary>
+  /// adds one or more entries to the entities map
+  /// </summary>
+  void registerEntities(const std::vector<Entity *> &entities);
+
+  /// <summary>
   /// removes one or more entries from the entities map. Used for when the
   /// object is destroyed or if another ship undocks prolly idk
   /// </summary>
@@ -124,9 +125,12 @@ public:
   /// <returns></returns>
   void unregisterEntities(const std::vector<Entity *> &entities);
 
+  bool has_entity(Entity * entity) const;
+
   void update(const UpdateContext &context);
 
   void setFocusEntity(Entity *entity);
+
 
   static SpaceShip * fromJson(nlohmann::json::const_reference json);
 

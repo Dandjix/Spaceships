@@ -9,10 +9,7 @@
 #include  "../behavior/EntityAttributes.h"
 #include  "../spaceships/SpaceShip.h"
 #include "events/Event.h"
-
-
-
-
+#include "LoadGame/GameState.h"
 
 
 class Entity
@@ -35,7 +32,8 @@ public:
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
     Entity(Vector2Int position, std::optional<float> angle)
-        : position(position), angle(angle),attributes(new EntityAttributes()) {} // Constructor using Vector2
+        : position(position), angle(angle),attributes(new EntityAttributes()) {
+    } // Constructor using Vector2
 
     virtual ~Entity()
     {
@@ -44,6 +42,7 @@ public:
 
     virtual nlohmann::json toJson()=0;
     virtual bool isJsonSerializable(){return true;}
+    virtual constexpr std::string getJsonType()=0;
 
     virtual void update(const UpdateContext& context);
     virtual void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context);
@@ -111,4 +110,8 @@ public:
      * @param space_ship the spaceship in which to move, used by physics (wall collisions notably)
      */
     virtual void movePosition(Vector2Float delta, SpaceShip * space_ship);
+
+    virtual void after_deserialized(GameState::GameState * game_state) {}
+
+    virtual constexpr bool is_player(){return false;}
 };
