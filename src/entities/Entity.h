@@ -6,7 +6,6 @@
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
 #include "../game/Update.h"
-#include  "../behavior/EntityAttributes.h"
 #include  "../spaceships/SpaceShip.h"
 #include "events/Event.h"
 #include "LoadGame/GameState.h"
@@ -17,8 +16,6 @@ class Entity
 protected:
     Vector2Int position;        // Using Vector2 to represent position
     std::optional<float> angle; // if an angle is null, the object will always face towards the camera
-
-    EntityAttributes * attributes;
 
     void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture, Vector2Float destSize) const;
 
@@ -32,7 +29,7 @@ public:
     /// </summary>
     /// <param name="position">pixel position, converted internally to a position</param>
     Entity(Vector2Int position, std::optional<float> angle)
-        : position(position), angle(angle),attributes(new EntityAttributes()) {
+        : position(position), angle(angle) {
     } // Constructor using Vector2
 
     virtual ~Entity()
@@ -86,8 +83,6 @@ public:
      * @param space_ship the spaceship in which the entity will be unregistered
      */
     virtual void unregisterInSpacehip(SpaceShip* space_ship);;
-
-    [[nodiscard]] EntityAttributes * getAttributes() const {return attributes;}
 
     int getX() const { return position.x; }
     int getY() const { return position.y; }
