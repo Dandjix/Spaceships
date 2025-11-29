@@ -235,7 +235,12 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
 
         GUI_UpdateContext gui_updateContext = {
-            screenDimensions,
+            {
+                camera->getPosition(),
+                camera->getAngle(),
+                screenDimensions,
+                camera->getScale()
+            },
             deltaTime
         };
 
