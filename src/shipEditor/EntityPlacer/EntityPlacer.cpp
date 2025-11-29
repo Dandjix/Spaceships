@@ -9,7 +9,6 @@ void EntityPlacement::EntityPlacer::placeEntity(Vector2Int world_position, float
 }
 
 inline void EntityPlacement::EntityPlacer::update(const UpdateContext &context) {
-    Entity::update(context);
 
     float mouse_x,mouse_y;
     SDL_GetMouseState(&mouse_x,&mouse_y);

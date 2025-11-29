@@ -90,7 +90,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, c
     Entity * player = game_state.getPlayer();
     SpaceShip * player_spaceship = game_state.getPlayerSpaceship();
     camera->setPlayer(player);
-    player_spaceship->setFocusEntity(player);
+    player_spaceship->setPlayer(player);
 
     std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer, {0, 0});
 

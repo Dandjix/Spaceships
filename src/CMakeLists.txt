@@ -98,6 +98,10 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         LoadGame/LoadSavedGame.h
         NewGame/NewGame.cpp
         NewGame/NewGame.h
+        vehicles/Vehicle.h
+        vehicles/combatOutfit/CombatOutfit.h
+        vehicles/combatOutfit/CombatOutfit.cpp
+        vehicles/Vechicle.cpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

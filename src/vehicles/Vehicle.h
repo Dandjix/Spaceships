@@ -3,44 +3,49 @@
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShip.h"
 
-class Vehicle : public Entity
+class Vehicle : public PhysicsEntity
 {
 protected:
     Humanoid *pilot;
 
-    SpaceShip *spaceship;
+    SpaceShip *spaceship = nullptr;
 
+public:
+    Vehicle(const Vector2Int &position, const std::optional<float> &angle, PhysicsShape *shape,Humanoid *pilot = nullptr)
+        : PhysicsEntity(position, angle, shape),
+          pilot(pilot)
+    {
+    }
+
+    ~Vehicle() override {
+        delete pilot;
+    }
+
+protected:
     virtual void assumeControl(Humanoid * pilot) = 0;
-    virtual void reliquishControl(Humanoid * pilot) = 0;
+    virtual void relinquishControl() = 0;
 
 public:
     
-    void onRegistered(SpaceShip * newSpaceship) override
-    {
-        spaceship = newSpaceship;
-    }
+    void onRegistered(SpaceShip * newSpaceship) override;
 
     Humanoid * getPilot()
     {
         return pilot;
     }
 
-    void startPiloting(Humanoid *newPilot)
-    {
-        stopPiloting();
+    void startPiloting(Humanoid *newPilot);
 
-        pilot = newPilot;
-        spaceship->registerEntities({pilot});
-    }
+    void stopPiloting();
 
-    void stopPiloting()
-    {
-        if(pilot == nullptr) return;
-        
-        pilot->setPosition(getPosition());
-        pilot->setAngle(getAngle());
-        spaceship->unregisterEntities({pilot});
+    nlohmann::json toJson() override;
 
-        pilot = nullptr;
-    }
+    constexpr bool is_player() override;
+
+    void update(const UpdateContext &context) override;
+
+    void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 };
+
+
+

@@ -33,10 +33,6 @@ void HookDeleter::PointDeleter::renderPoint(SDL_Renderer *renderer, const Render
 }
 
 void HookDeleter::PointDeleter::update(const UpdateContext &context) {
-    Entity::update(context);
-
-    Entity::update(context);
-
     HookPoint * working_closest_point = nullptr;
     std::string working_closest_point_name;
     float current_shortest_distance = std::numeric_limits<float>::max();

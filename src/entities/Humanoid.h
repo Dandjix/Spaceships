@@ -39,7 +39,7 @@ public:
         return json;
     }
 
-    static Entity * fromJson(nlohmann::json::const_reference json) {
+    static Humanoid * fromJson(nlohmann::json::const_reference json) {
         std::optional<float> angle = std::nullopt;
         if (json.contains("angle")) {
             angle = json["angle"];

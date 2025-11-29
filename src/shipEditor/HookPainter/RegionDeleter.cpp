@@ -31,8 +31,6 @@ void HookDeleter::RegionDeleter::update(const UpdateContext &context) {
     if (!enabled)
         return;
 
-    Entity::update(context);
-
     HookRegion * working_closest_region = nullptr;
     std::string working_closest_region_name;
 

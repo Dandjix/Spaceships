@@ -129,7 +129,7 @@ public:
 
   void update(const UpdateContext &context);
 
-  void setFocusEntity(Entity *entity);
+  void setPlayer(Entity *entity);
 
 
   static SpaceShip * fromJson(nlohmann::json::const_reference json);

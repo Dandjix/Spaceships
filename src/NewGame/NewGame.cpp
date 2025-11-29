@@ -4,19 +4,24 @@
 
 #include "NewGame.h"
 
+#include "vehicles/combatOutfit/CombatOutfit.h"
+
 std::filesystem::path NewGame::ConstructNewGame() {
 
     SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json");
 
     auto player = new Humanoid(Vector2Int{128,128}.scaleToWorldPosition(),45,new PlayerBehavior());
     auto camera =  new Camera(Vector2Int(0,0),0,1);
+
+
     camera->setPlayer(player);
 
     std::vector<Entity * > entities = {
         player,
         camera,
         new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
-        new CargoContainer(Vector2Int{96,96}.scaleToWorldPosition(),22)
+        new CargoContainer(Vector2Int{96,96}.scaleToWorldPosition(),22),
+        new CombatOutfit(Vector2Int{196,128}.scaleToWorldPosition(),35)
     };
 
     auto * space_ship = new SpaceShip(blueprint,entities);

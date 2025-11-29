@@ -9,6 +9,7 @@
 #include "entities/Sphere.h"
 #include "math/Vectors.h"
 #include "player/Camera.h"
+#include "vehicles/combatOutfit/CombatOutfit.h"
 
 
 namespace EntityLoading {
@@ -32,6 +33,9 @@ namespace EntityLoading {
         }
         else if (t =="camera") {
             entity = Camera::fromJson(entry);
+        }
+        else if (t=="combat_outfit") {
+            entity = CombatOutfit::fromJson(entry);
         }
         else {
             std::string message = "t : ";

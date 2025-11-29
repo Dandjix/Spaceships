@@ -296,7 +296,7 @@ void SpaceShip::update(const UpdateContext& context)
 	focusRoom = nullptr;
 }
 
-void SpaceShip::setFocusEntity(Entity* focusEntity)
+void SpaceShip::setPlayer(Entity* focusEntity)
 {
 	this->focusEntity = focusEntity;
 }

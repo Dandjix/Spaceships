@@ -6,6 +6,9 @@
 class RoundPhysicsShape : public PhysicsShape
 {
 	public:
+	/**
+	 * radius of the shape, in world units
+	 */
 	float radius;
 
 	PhysicsUpdateVisitor * createVisitor() override
@@ -17,6 +20,11 @@ class RoundPhysicsShape : public PhysicsShape
 		visitor->visitRound(this,space_ship);
 	}
 
+	/**
+	 * a round physics shape
+	 * @param owner the owner entity
+	 * @param radius the radius in world units
+	 */
 	RoundPhysicsShape(PhysicsEntity * owner, float radius) : PhysicsShape(owner), radius(radius)
 	{
 
