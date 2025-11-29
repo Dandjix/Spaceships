@@ -1,12 +1,9 @@
 #include <SDL3/SDL.h>
-#include <SDL3_ttf/SDL_ttf.h>
-#include <iostream>
 #include <utility>
 
 #include "gameEvent/GameEvent.h"
 #include "LoadGame/GameState.h"
 #include "LoadGame/LoadSavedGame.h"
-#include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 
 #ifndef ENV_PROJECT_ROOT
 #define ENV_PROJECT_ROOT ""
@@ -15,15 +12,11 @@
 #include "../userInterface/MenuNavigation.h"
 
 #include "../player/Camera.h"
-#include "../behavior/PlayerBehavior.h"
 
 #include "../entities/CargoContainer.h"
 #include "../entities/Sphere.h"
 #include "../debug/DebugGrid.h"
-#include "../entities/Humanoid.h"
-#include "../spaceships/SpaceShipBlueprint.h"
 #include "../spaceships/SpaceShip.h"
-#include "../physics/RayCaster.h"
 
 #include "../parallax/ParallaxObject.h"
 
@@ -82,7 +75,7 @@ void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<Parall
 }
 
 
-MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, std::filesystem::path path_to_save,
+MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, const std::filesystem::path &path_to_save,
                                    float target_delta_time) // target_delta_time = 1.0/60.0
 {
 
@@ -109,7 +102,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, s
     while (destination == MenuNavigation::Game) {
         last = now;
         now = SDL_GetTicks();
-        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
+        deltaTime = static_cast<float>(now - last) / 1000.0f; // Convert ms to seconds
 
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
