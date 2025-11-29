@@ -7,4 +7,6 @@
 #include "../math/Vectors.h"
 #include "../userInterface/MenuNavigation.h"
 
-MenuNavigation RunGame(SDL_Renderer* renderer, SDL_Window* window, float target_delta_time = 1.0f/120.0f);
+MenuNavigation::Navigation RunGame(SDL_Renderer* renderer, SDL_Window* window,std::filesystem::path saved_game_path, float target_delta_time = 1.0f/120.0f);
+
+

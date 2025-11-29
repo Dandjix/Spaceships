@@ -17,14 +17,14 @@
 class SpaceShipBlueprint
 {
 	public :
-		std::string name;
+		std::filesystem::path path;
 		std::string pathToExterior;
 		std::vector<std::vector<Tile>> tiles;
 		SpaceshipHooks hooks;
 
-		SpaceShipBlueprint(std::string name,std::string pathToExterior,std::vector<std::vector<Tile>> tiles, SpaceshipHooks hooks)
+		SpaceShipBlueprint(std::filesystem::path path,std::string pathToExterior,std::vector<std::vector<Tile>> tiles, const SpaceshipHooks& hooks)
 		:
-		name(std::move(name)),pathToExterior(std::move(pathToExterior)),tiles(std::move(tiles)),hooks(std::move(hooks))
+		path(std::move(path)),pathToExterior(std::move(pathToExterior)),tiles(std::move(tiles)),hooks(hooks)
 		{
 
 		}
@@ -35,7 +35,7 @@ class SpaceShipBlueprint
 
 		void paint(int x, int y, Tile tileToPaint);
 
-		static SpaceShipBlueprint load(std::string path);
-		static SpaceShipBlueprint loads(std::string from, std::string name);
+		static SpaceShipBlueprint *load(std::filesystem::path path);
+		static SpaceShipBlueprint *loads(std::string from, std::filesystem::path path);
 
 };

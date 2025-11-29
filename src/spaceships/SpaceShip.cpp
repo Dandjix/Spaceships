@@ -5,9 +5,21 @@
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
+#include "EntityData/EntityLoading.h"
 #include "physics/PhysicsEntity.h"
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
+
+bool EntityComparison::compareEntities(Entity* e1, Entity* e2)
+{
+	return e1->getQueueOrder() < e2->getQueueOrder();
+}
+
+bool EntityComparison::comparePhysicsEntities(PhysicsEntity * e1, PhysicsEntity * e2)
+{
+	//TODO : add a queue order for the physics entities if necessary
+	return e1->getQueueOrder() < e2->getQueueOrder();
+}
 
 void SpaceShip::populateRooms()
 {
@@ -30,6 +42,27 @@ void SpaceShip::populateRooms()
 
 	ConnectRoomGraph::Connect(rooms);
 }
+
+bool SpaceShip::roomsAreDone()
+{
+	for (int x = 0; x < spaceship_tiles.size_x();x++)
+	{
+		for (int y = 0; y < spaceship_tiles.size_y(); ++y)
+		{
+			Tile tile = spaceship_tiles.get_tile(x,y);
+
+			if(tile == Tile::Void || tile == Tile::Wall)
+				continue;
+			for (Room * room : rooms.getVertices())
+			{
+				if (!room->IncludesTilePosition(x, y))
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
 
 bool SpaceShip::shouldSkipTile(int x, int y, const std::vector<std::vector<bool>>& visited) const
 {
@@ -90,8 +123,6 @@ Room* SpaceShip::createRoomFromTiles(const std::unordered_set<Vector2Int>& tiles
 {
 	return new Room(tiles); // Assumes you have this constructor or similar method
 }
-
-
 Vector2Int SpaceShip::nextNonRoomCoords(int startX, int startY)
 {
 	for (int x = startX; x < spaceship_tiles.size_x(); x++)
@@ -110,46 +141,6 @@ Vector2Int SpaceShip::nextNonRoomCoords(int startX, int startY)
 	}
 	return Vector2Int(-1, -1);
 }
-
-bool SpaceShip::roomsAreDone()
-{
-	for (int x = 0; x < spaceship_tiles.size_x();x++)
-	{
-		for (int y = 0; y < spaceship_tiles.size_y(); ++y)
-		{
-			Tile tile = spaceship_tiles.get_tile(x,y);
-
-			if(tile == Tile::Void || tile == Tile::Wall)
-				continue;
-			for (Room * room : rooms.getVertices())
-			{
-				if (!room->IncludesTilePosition(x, y))
-					return false;
-			}
-		}
-	}
-	return true;
-}
-
-SpaceShip::SpaceShip(SpaceShipBlueprint* blueprint) : spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks)
-{
-	populateRooms();
-}
-SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})),hooks({},{})
-{
-	populateRooms();
-}
-
-const SpaceshipTiles & SpaceShip::getSpaceshipTiles() const
-{
-	return spaceship_tiles;
-}
-
-void SpaceShip::renderExterior(SDL_Renderer* renderer, const RenderingContext& context)
-{
-	//TODO : do dis
-}
-
 void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& context, const std::vector<Room*> & rooms)
 {
 	for (const Room * room : rooms)
@@ -177,6 +168,33 @@ void SpaceShip::renderRooms(SDL_Renderer * renderer, const RenderingContext& con
 			}
 		}
 	}
+}
+
+SpaceShip::SpaceShip(const SpaceShipBlueprint* blueprint) : spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks), blueprint_path(blueprint->path)
+{
+	populateRooms();
+}
+
+SpaceShip::SpaceShip(const SpaceShipBlueprint* blueprint, const std::vector<Entity*> &entities)
+	: spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks),blueprint_path(blueprint->path)
+{
+	populateRooms();
+	registerEntities(entities);
+}
+
+SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})),hooks({},{}), blueprint_path("")
+{
+	populateRooms();
+}
+
+const SpaceshipTiles & SpaceShip::getSpaceshipTiles() const
+{
+	return spaceship_tiles;
+}
+
+void SpaceShip::renderExterior(SDL_Renderer* renderer, const RenderingContext& context)
+{
+	//TODO : do dis
 }
 
 void SpaceShip::renderInterior(SDL_Renderer* renderer, const RenderingContext& context)
@@ -234,8 +252,7 @@ void SpaceShip::Dock(SpaceShip other)
 {
 
 }
-
-void SpaceShip::registerEntities(std::initializer_list<Entity*> to_register)
+void SpaceShip::registerEntities(const std::vector<Entity *> &to_register)
 {
 	for (Entity* e: to_register)
 	{
@@ -248,7 +265,8 @@ void SpaceShip::handleQueueDeletion() {
 		delete e;
 	}
 }
-void SpaceShip::unregisterEntities(std::initializer_list<Entity*> to_unregister)
+
+void SpaceShip::unregisterEntities(const std::vector<Entity *> &to_unregister)
 {
 	for (Entity* e : to_unregister)
 	{
@@ -283,15 +301,36 @@ void SpaceShip::setFocusEntity(Entity* focusEntity)
 	this->focusEntity = focusEntity;
 }
 
-bool EntityComparison::compareEntities(Entity* e1, Entity* e2)
-{
-	return e1->getQueueOrder() < e2->getQueueOrder();
+SpaceShip * SpaceShip::fromJson(nlohmann::json::const_reference json) {
+
+	SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(json["blueprint_path"]);
+
+	std::vector<Entity * > loaded_entities = {};
+	for (auto entity_entry: json["entities"]) {
+		loaded_entities.push_back(EntityLoading::fromJson(entity_entry));
+	}
+	SpaceShip * space_ship = new SpaceShip(blueprint,loaded_entities);
+
+	delete blueprint;
+
+	return space_ship;
 }
 
-bool EntityComparison::comparePhysicsEntities(PhysicsEntity * e1, PhysicsEntity * e2)
-{
-	//TODO : add a queue order for the physics entities if necessary
-	return e1->getQueueOrder() < e2->getQueueOrder();
+nlohmann::json SpaceShip::toJson() {
+	nlohmann::json json = {};
+
+	json["blueprint_path"] = blueprint_path;
+
+	std::vector<nlohmann::json> entity_entries = nlohmann::json::array();
+	for (auto e: entities) {
+		if (e->isJsonSerializable()) {
+			entity_entries.push_back(e->toJson());
+		}
+	}
+
+	json["entities"] = entity_entries;
+
+	return json;
 }
 
 
@@ -307,14 +346,14 @@ void SpaceShip::physicsHandling(float target_delta_time, int subdivisions)
 
     for (int i = 0; i < subdivisions; ++i)
     {
-        auto physics_entities = getPhysicsEntities(RoomDistance::Close);
+        auto working_physics_entities = getPhysicsEntities(RoomDistance::Close);
 
-        for (int i = 0; i < physics_entities.size(); i++)
+        for (int i = 0; i < working_physics_entities.size(); i++)
         {
-            for (int j = i+1; j < physics_entities.size(); j++)
+            for (int j = i+1; j < working_physics_entities.size(); j++)
             {
-                auto e1 = physics_entities.at(i);
-                auto e2 = physics_entities.at(j);
+                auto e1 = working_physics_entities.at(i);
+                auto e2 = working_physics_entities.at(j);
 
                 if (!e1->shape->getBoundingBox().intersects(e2->shape->getBoundingBox()))
                 {

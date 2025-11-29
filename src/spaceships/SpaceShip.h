@@ -54,12 +54,14 @@ protected:
   std::vector<Entity*> deletion_queue;
 
 public:
+  std::filesystem::path blueprint_path;
   std::unordered_set<Entity *> entities;
   std::unordered_set<PhysicsEntity *> physics_entities;
 
   SpaceshipHooks hooks;
 
-  explicit SpaceShip(SpaceShipBlueprint *blueprint);
+  explicit SpaceShip(const SpaceShipBlueprint *blueprint);
+  explicit SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities);
   explicit SpaceShip();
 
   const SpaceshipTiles &getSpaceshipTiles() const;
@@ -96,7 +98,7 @@ public:
   /// <summary>
   /// adds one or more entries to the entities map
   /// </summary>
-  void registerEntities(std::initializer_list<Entity *> entities);
+  void registerEntities(const std::vector<Entity *> &entities);
 
   void queueDelete(Entity * entity) {
     deletion_queue.push_back(entity);
@@ -118,9 +120,13 @@ public:
   /// </summary>
   /// <param name="entities"> the entiti(es) to unregister</param>
   /// <returns></returns>
-  void unregisterEntities(std::initializer_list<Entity *> entities);
+  void unregisterEntities(const std::vector<Entity *> &entities);
 
   void update(const UpdateContext &context);
 
   void setFocusEntity(Entity *entity);
+
+  static SpaceShip * fromJson(nlohmann::json::const_reference json);
+
+  nlohmann::json toJson();
 };

@@ -4,6 +4,7 @@
 
 #include "userInterface/MainMenu.h"
 #include "game/Game.h"
+#include "LoadGame/LoadSavedGame.h"
 #include "shipEditor/ShipEditor.h"
 #include "userInterface/fonts.h"
 #include "userInterface/elements/GUI/GUIList.h"
@@ -46,22 +47,28 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    MenuNavigation navigation = MainMenu;
-
-    while (navigation != Quit)
+    MenuNavigation::Navigation navigation = MenuNavigation::MainMenu;
+    std::filesystem::path save_to_load = "";
+    while (navigation != MenuNavigation::Quit)
     {
         switch (navigation)
         {
-        case Game:
-            navigation = RunGame(renderer, window);
+        case MenuNavigation::Game:
+            navigation = RunGame(renderer, window,save_to_load);
             break;
-        case MainMenu:
+        case MenuNavigation::NewGame:
+            navigation = RunGame(renderer,window, ENV_PROJECT_ROOT"assets/newGame/start.save.json");
+            break;
+        case MenuNavigation::LoadGame:
+            navigation = LoadSavedGame::SavePickerPage(renderer,window,&save_to_load);
+            break;
+        case MenuNavigation::MainMenu:
             navigation = RunMainMenu(renderer, window);
             break;
-        case ShipEditor:
+        case MenuNavigation::ShipEditor:
             navigation = RunShipEditor(renderer, window);
             break;
-        case Settings:
+        case MenuNavigation::Settings:
             throw std::logic_error("Function not yet implemented");
             break;
         }

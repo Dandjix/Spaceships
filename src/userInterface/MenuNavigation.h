@@ -1,9 +1,14 @@
 #pragma once
-enum MenuNavigation
-{
-	Game,
-	MainMenu,
-	ShipEditor,
-	Settings,
-	Quit
-};
+
+namespace MenuNavigation {
+	enum Navigation
+	{
+		NewGame,
+		LoadGame,
+		Game,
+		MainMenu,
+		ShipEditor,
+		Settings,
+		Quit
+	};
+}

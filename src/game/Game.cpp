@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "gameEvent/GameEvent.h"
+#include "LoadGame/LoadSavedGame.h"
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 
 #ifndef ENV_PROJECT_ROOT
@@ -88,132 +89,83 @@ void RenderingHandle(SDL_Renderer* renderer, SpaceShip* ship, std::vector<Parall
 
 
 
-MenuNavigation RunGame(SDL_Renderer * renderer, SDL_Window * window, float target_delta_time)  // target_delta_time = 1.0/60.0
+MenuNavigation::Navigation RunGame(SDL_Renderer * renderer, SDL_Window * window,std::filesystem::path path_to_save, float target_delta_time)  // target_delta_time = 1.0/60.0
 {
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);
     Tiles::loadAll(renderer);
 
-    std::cout << "textures loaded" << std::endl;
+    LoadSavedGame::SavedGameData save = LoadSavedGame::SavedGameData(path_to_save);
 
-    // entities
-
-    // Vector2Int base_origin = Vector2Int(1,1)*std::numeric_limits<int>::max()*0.9f;
-    // Vector2Int base_origin = Vector2Int(6400,6400).scaleToWorldPosition();
-    Vector2Int base_origin = {0,0};
-
-    Camera * camera = new Camera(base_origin, 0, 1);
-
-    PlayerBehavior * playerBehavior = new PlayerBehavior();
+    auto space_ships = save.load_spaceships();
 
 
-
-    Humanoid * player = new Humanoid(base_origin+Vector2Int(200,200).scaleToWorldPosition(), 0, playerBehavior); // Start at center, 200 pixels/sec
-    camera->setPlayer(player);
-
-    Humanoid * dummy = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr);
-
-    // Humanoid * dummy2 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr);
-    //
-    // Humanoid * dummy3 = new Humanoid(base_origin + Vector2Int(300,300).scaleToWorldPosition(),0,nullptr);
-
-
-    CargoContainer * container1 = new CargoContainer(base_origin + Vector2Int(500,500).scaleToWorldPosition(), 45, CargoContainer::Variation::EMA);
-    CargoContainer * container2 = new CargoContainer(base_origin + Vector2Int(200, 300).scaleToWorldPosition(), 22, CargoContainer::Variation::SN);
-    Sphere * sphere = new Sphere(Vector2Int(700, 200).scaleToWorldPosition(),  Scaling::scaleToWorld(50.0f));
-    // DebugGrid * grid = new DebugGrid(0, 0, 64);
-    RayCaster* rayCaster = new RayCaster(camera, player);
-    // Cursor* cursor = new Cursor(camera);
-
-    SpaceShipBlueprint blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json");
-    SpaceShip * ship = new SpaceShip(&blueprint);
-
-    ship->registerEntities(
-        { 
-        camera,
-        player,
-        dummy,
-        container1,
-        container2,
-        sphere,
-        // grid,
-        rayCaster,
-        // cursor
-        }
-    );
-
-    //parallax
-
-
-
-    std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer,base_origin);
+    std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer,{0,0});
 
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
     float deltaTime = 0.0f;
-    MenuNavigation destination = Game;
+    MenuNavigation::Navigation destination = MenuNavigation::Game;
 
-    ship->setFocusEntity(player);
-
-    while (destination == Game) {
-        last = now;
-        now = SDL_GetTicks();
-        deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
-
-        int screenWidth, screenHeight;
-        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
-        Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
-
-        if (deltaTime < target_delta_time)
-        {
-            int ms_to_wait = static_cast<int>((target_delta_time - deltaTime) * 1000);
-            deltaTime = target_delta_time;
-            SDL_Delay(ms_to_wait);
-        }
-
-        // if (deltaTime != target_delta_time)
-        //     std::cout << "fps : " << std::fixed << std::setprecision(6) << deltaTime << "(" << 1.0f/deltaTime << " fps)" << "\n";
-        GameEvent::GameEventContext event_context =
-        {
-            {
-                camera->getPosition(),
-                camera->getAngle(),
-                screenDimensions,
-                camera->getScale()
-            },
-            GameEvent::MousePositionType::Game,
-            window
-        };
-
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                destination = Quit;
-            }
-            ship->eventHandling(event,event_context);
-        }
-        // UPDATE ------------------------------------------------------------------------------------------------------
-
-        camera->setScreenDimensions(screenDimensions);
-
-        ship->updateHandling(
-            {camera->getPosition(),camera->getAngle(),screenDimensions,camera->getScale()},
-            deltaTime,
-            GameEvent::Game);
-        // QUEUE DELETION ----------------------------------------------------------------------------------------------
-        ship->handleQueueDeletion();
-        // PHYSICS -----------------------------------------------------------------------------------------------------
-
-        ship->physicsHandling(target_delta_time);
-
-        // RENDERING ---------------------------------------------------------------------------------------------------
-
-        RenderingContext renderingContext = {
-            {
-                camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()
-            }
-        };
-        RenderingHandle(renderer, ship, parallax_objects, renderingContext);
-    }
+    // while (destination == MenuNavigation::Game) {
+    //     last = now;
+    //     now = SDL_GetTicks();
+    //     deltaTime = (now - last) / 1000.0f; // Convert ms to seconds
+    //
+    //     int screenWidth, screenHeight;
+    //     SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+    //     Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
+    //
+    //     if (deltaTime < target_delta_time)
+    //     {
+    //         int ms_to_wait = static_cast<int>((target_delta_time - deltaTime) * 1000);
+    //         deltaTime = target_delta_time;
+    //         SDL_Delay(ms_to_wait);
+    //     }
+    //
+    //     // if (deltaTime != target_delta_time)
+    //     //     std::cout << "fps : " << std::fixed << std::setprecision(6) << deltaTime << "(" << 1.0f/deltaTime << " fps)" << "\n";
+    //     GameEvent::GameEventContext event_context =
+    //     {
+    //         {
+    //             camera->getPosition(),
+    //             camera->getAngle(),
+    //             screenDimensions,
+    //             camera->getScale()
+    //         },
+    //         GameEvent::MousePositionType::Game,
+    //         window
+    //     };
+    //
+    //     SDL_Event event;
+    //     while (SDL_PollEvent(&event)) {
+    //         if (event.type == SDL_EVENT_QUIT) {
+    //             destination = MenuNavigation::Quit;
+    //         }
+    //         ship->eventHandling(event,event_context);
+    //     }
+    //     // UPDATE ------------------------------------------------------------------------------------------------------
+    //
+    //     camera->setScreenDimensions(screenDimensions);
+    //
+    //     ship->updateHandling(
+    //         {camera->getPosition(),camera->getAngle(),screenDimensions,camera->getScale()},
+    //         deltaTime,
+    //         GameEvent::Game);
+    //     // QUEUE DELETION ----------------------------------------------------------------------------------------------
+    //     ship->handleQueueDeletion();
+    //     // PHYSICS -----------------------------------------------------------------------------------------------------
+    //
+    //     ship->physicsHandling(target_delta_time);
+    //
+    //     // RENDERING ---------------------------------------------------------------------------------------------------
+    //
+    //     RenderingContext renderingContext = {
+    //         {
+    //             camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()
+    //         }
+    //     };
+    //     RenderingHandle(renderer, ship, parallax_objects, renderingContext);
+    // }
     return destination;
 }

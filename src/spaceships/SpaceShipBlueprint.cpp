@@ -7,26 +7,32 @@
 #include "../math/Vectors.h"
 #include "Tile.h"
 
-using json = nlohmann::json;
-
 
 std::string SpaceShipBlueprint::dumps() const
 {
-	json dict;
+	nlohmann::json dict;
 	dict["pathToExterior"] = pathToExterior;
 	dict["tiles"] = tiles;
 	dict["hooks"] = hooks.toJson();
 	return dict.dump(4);
 }
 
-SpaceShipBlueprint SpaceShipBlueprint::loads(std::string from, std::string name)
+SpaceShipBlueprint *SpaceShipBlueprint::loads(std::string from, std::filesystem::path path)
 {
-	json dict = json::parse(from);
+	nlohmann::json dict = nlohmann::json::parse(from);
 	std::string pathToExterior = dict["pathToExterior"];
 	std::vector<std::vector<Tile>> tiles = dict["tiles"];
 	SpaceshipHooks hooks = SpaceshipHooks::fromJson(dict["hooks"]);
 
-	return { name, pathToExterior, tiles, hooks };
+	return new SpaceShipBlueprint{ path, pathToExterior, tiles, hooks };
+}
+
+SpaceShipBlueprint *SpaceShipBlueprint::load(std::filesystem::path path)
+{
+	std::ifstream file(path);
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	return loads(buffer.str(), path);
 }
 
 void SpaceShipBlueprint::resize(Vector2Int newDimensions)
@@ -55,10 +61,3 @@ void SpaceShipBlueprint::paint(int x, int y, Tile tileToPaint)
 	tiles[x][y] = tileToPaint;
 }
 
-SpaceShipBlueprint SpaceShipBlueprint::load(std::string path)
-{
-	std::ifstream file(path);
-	std::stringstream buffer;
-	buffer << file.rdbuf();
-	return loads(buffer.str(), path); // or some name you determine from path
-}

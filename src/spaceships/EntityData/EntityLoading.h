@@ -10,10 +10,10 @@
 #include "math/Vectors.h"
 
 
-namespace SpaceshipEntityData {
-    Entity * entityFromJson(nlohmann::json entry) {
+namespace EntityLoading {
+    inline Entity * fromJson(nlohmann::json entry) {
 
-        Entity * entity;
+        Entity * entity = nullptr;
 
         auto t = entry["type"];
 
@@ -26,5 +26,7 @@ namespace SpaceshipEntityData {
         else if (t == "cargo_container") {
             entity = CargoContainer::fromJson(entry);
         }
+
+        return entity;
     }
 };

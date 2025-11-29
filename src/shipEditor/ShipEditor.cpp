@@ -48,7 +48,25 @@ void deleteItems(std::vector<T>* active,
     }
 }
 
-MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
+#include <string>
+
+int nthOccurrence(const std::string& str, const std::string& findMe, int nth)
+{
+    size_t  pos = 0;
+    int     cnt = 0;
+
+    while( cnt != nth )
+    {
+        pos+=1;
+        pos = str.find(findMe, pos);
+        if ( pos == std::string::npos )
+            return -1;
+        cnt++;
+    }
+    return pos;
+}
+
+MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 {
     // #================================================================================================================
     // #================================================================================================================
@@ -79,11 +97,15 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
 
     float deltaTime = 0.0f;
 
-    MenuNavigation destination = ShipEditor;
+    MenuNavigation::Navigation destination = MenuNavigation::ShipEditor;
 
-	//SpaceShipBlueprint blueprint = SpaceShipBlueprint::load("assets/spaceships/corvette.json");
 	std::vector<std::vector<Tile>> blueprintTiles(initialDimensions.x, std::vector<Tile>(initialDimensions.y, Tile::Void));
-	SpaceShipBlueprint blueprint = SpaceShipBlueprint("Untitled", "", blueprintTiles,{{},{}});
+	auto * blueprint = new SpaceShipBlueprint(
+	    "",
+	    "",
+	    blueprintTiles,
+	    {{},{}}
+	);
 
     ShipBuildingGrid grid(
         initialDimensions,
@@ -91,16 +113,16 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         [&blueprint](Vector2Int newDimensions)
         {
             //std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
-            blueprint.resize(newDimensions);
+            blueprint->resize(newDimensions);
         }
     );
     activeEntities.push_back(&grid);
 
-    BlueprintEditorAppearance appearance(&blueprint);
+    BlueprintEditorAppearance appearance(blueprint);
     activeEntities.push_back(&appearance);
 
     ShipEditorModes::CommonEditorObjects common = {
-        &blueprint,
+        blueprint,
         &grid,
         &appearance,
         &blueprintTiles
@@ -124,33 +146,47 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         "Edit tiles",
         "Edit hooks"
     };
+
+    std::string blueprint_name = "untitled.json";
+
     GUIList actionsList(
         Anchor::TL,
         Vector2Int(0, 0),
         100,
         GUI_Fill,
         actionOptions,
-        [&destination,&grid,&blueprint,&state_machine](const std::string& option) {
+        [&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string& option) {
             if (option == "Resize")
             {
                 grid.startResizing();
             }
             else if (option == "Save")
             {
-                SaveShip(blueprint.dumps());
+                SaveShip(blueprint->dumps(),blueprint_name);
             }
             else if (option == "Load")
             {
-                std::string name;
-                std::string content = LoadShip(&name);
-                blueprint = SpaceShipBlueprint::loads(content, name);
-                Vector2Int dimensions = Vector2Int(blueprint.tiles.size(), blueprint.tiles[0].size());
+                std::string path;
+                std::string content = LoadShip(&path);
+
+                if (content.empty()) {
+                    return;
+                }
+
+                auto loaded = SpaceShipBlueprint::loads(content, path);
+
+                blueprint_name = path;
+
+
+
+                * blueprint = *loaded;
+                Vector2Int dimensions = Vector2Int(blueprint->tiles.size(), blueprint->tiles[0].size());
                 grid.setDimensions(dimensions);
 
             }
             else if (option == "Exit")
             {
-                destination = MainMenu;
+                destination = MenuNavigation::MainMenu;
             }
             else if (option =="Edit tiles") {
                 state_machine.setMode(ShipEditorModes::TilePainter);
@@ -170,7 +206,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
-    while (destination == ShipEditor) {
+    while (destination == MenuNavigation::ShipEditor) {
         //render variable calculation
         int screenWidth, screenHeight;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
@@ -196,7 +232,7 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
-                destination = Quit;
+                destination = MenuNavigation::Quit;
             }
             for (Entity * entity : activeEntities)
             {
@@ -291,6 +327,8 @@ MenuNavigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
         deleteItems(&editorGUIElements,editorGUIElementsDeletionQueue);
         editorGUIElementsDeletionQueue.clear();
     }
+
+    delete blueprint;
 
     return destination;
 }

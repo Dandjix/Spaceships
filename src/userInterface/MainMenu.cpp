@@ -8,8 +8,8 @@
 #include "elements/GUI/GUIList.h"
 
 
-MenuNavigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *window) {
-    MenuNavigation navigation = MainMenu;
+MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *window) {
+    MenuNavigation::Navigation navigation = MenuNavigation::MainMenu;
 
     auto menu = GUIList(Anchor::Center, {0, 0}, GUI_Fill, GUI_Fill, {
                             "New Game",
@@ -18,17 +18,17 @@ MenuNavigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *window) {
                             "Exit to desktop"
                         }, [renderer,window,&navigation](const std::string &selected) {
                             if (selected == "New Game") {
-                                navigation = Game;
+                                navigation = MenuNavigation::NewGame;
                             } else if (selected == "Load Save") {
-                                navigation = Game;
+                                navigation = MenuNavigation::LoadGame;
                             } else if (selected == "Ship Editor") {
-                                navigation = ShipEditor;
+                                navigation = MenuNavigation::ShipEditor;
                             } else if (selected == "Exit to desktop") {
-                                navigation = Quit;
+                                navigation = MenuNavigation::Quit;
                             }
                         }, true);
 
-    while (navigation == MainMenu) {
+    while (navigation == MenuNavigation::MainMenu) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
@@ -67,7 +67,7 @@ MenuNavigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *window) {
         while (SDL_PollEvent(&event)) {
             menu.handleEvent(event,game_event_context);
             if (event.type == SDL_EVENT_QUIT) {
-                return Quit;
+                return MenuNavigation::Quit;
             }
         }
 

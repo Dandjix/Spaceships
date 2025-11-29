@@ -2,6 +2,6 @@
 #include "../imported/tinyfiledialogs.h"
 #include <fstream>
 
-void SaveShip(std::string blueprint);
+void SaveShip(const std::string &blueprint, const std::string & file_name = "untitled.json");
 
-std::string LoadShip(std::string * name = nullptr);
+std::string LoadShip(std::string * path = nullptr);

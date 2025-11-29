@@ -91,7 +91,11 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         shipEditor/EntityPlacer/EntityPlacer.h
         textures/Textures.cpp
         textures/Textures.h
-        spaceships/EntityData/SpaceshipEntityData.h
+        spaceships/EntityData/EntityLoading.h
+        LoadGame/LoadSavedGame.cpp
+        LoadGame/LoadSavedGame.h
+        NewGame/NewGame.cpp
+        NewGame/NewGame.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

@@ -17,7 +17,7 @@ public:
     ~ShortLivedEntity() override =default;
 
     nlohmann::json toJson() override {
-        return "short_lived";
+        throw std::invalid_argument("Tried to convert a short lived object to JSON : this is illegal");
     }
 
     bool isJsonSerializable() override {

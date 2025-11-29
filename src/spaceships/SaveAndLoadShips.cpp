@@ -31,11 +31,11 @@ std::string readFileToString(const char* filePath)
     return fileContents;  // Return the string containing file contents
 }
 
-void SaveShip(const std::string blueprint)
+void SaveShip(const std::string &blueprint, const std::string& file_name)
 {
     const char* filePath = tinyfd_saveFileDialog(
         "Save Ship File",            // Title of the dialog
-        "untitled.json",             // Default filename
+        file_name.c_str(),             // Default filename
         1,                           // Number of file filters (1 for simplicity)
         new const char* { "*.json" }, // File filters (only allow JSON files)
         "Ship Files"                 // Filter description (e.g., "JSON Files")
@@ -55,7 +55,7 @@ void SaveShip(const std::string blueprint)
     }
 }
 
-std::string LoadShip(std::string * name)
+std::string LoadShip(std::string * path)
 {
     const char* filePath = tinyfd_openFileDialog(
         "Open Ship File",            // Title of the dialog
@@ -84,8 +84,8 @@ std::string LoadShip(std::string * name)
         std::string ext = p.extension().string();
 
 
-        if(name != nullptr)
-            *name = fname;
+        if(path != nullptr)
+            *path = filePath;
 
         std::ifstream shipFile(filePath);
         if (!shipFile) {
@@ -97,6 +97,6 @@ std::string LoadShip(std::string * name)
     else
     {
         std::cout << "No file selected." << std::endl;
-        return "Error";
+        return "";
     }
 }
