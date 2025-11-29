@@ -306,10 +306,10 @@ SpaceShip * SpaceShip::fromJson(nlohmann::json::const_reference json) {
 	SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(json["blueprint_path"]);
 
 	std::vector<Entity * > loaded_entities = {};
-	for (auto entity_entry: json["entities"]) {
+	for (const auto& entity_entry: json["entities"]) {
 		loaded_entities.push_back(EntityLoading::fromJson(entity_entry));
 	}
-	SpaceShip * space_ship = new SpaceShip(blueprint,loaded_entities);
+	auto * space_ship = new SpaceShip(blueprint,loaded_entities);
 
 	delete blueprint;
 

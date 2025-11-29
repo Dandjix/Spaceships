@@ -72,7 +72,9 @@ add_library(SpaceshipsLib ${SOURCES}
         behavior/BehavioredEntity.h
         shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.cpp
         shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.h
-        entities/ShortLivedEntity.h)
+        entities/ShortLivedEntity.h
+        LoadGame/GameState.cpp
+        LoadGame/GameState.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

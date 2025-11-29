@@ -15,7 +15,9 @@ public:
     /// </summary>
     /// <param name="p">Pointer to the player entity</param>
     Camera(Vector2Int position, float angle, float scale) : Entity(position,angle),scale(scale) {}
-    
+
+    SpaceShip * working_spaceship = nullptr;
+
     /// <summary>
     /// Set the player entity that the camera follows.
     /// </summary>
@@ -29,12 +31,12 @@ public:
     void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context) override {
         if (event.type == SDL_EVENT_MOUSE_WHEEL) {
             float zoomFactor = 0.1f; // Adjust zoom speed
-            float scale = getScale() + event.wheel.y * zoomFactor;
+            float scale_value= getScale() + event.wheel.y * zoomFactor;
 
             // Clamp scale
-            scale = std::clamp(scale, 0.5f,5.0f);
+            scale_value = std::clamp(scale_value, 0.5f,5.0f);
 
-            setScale(scale);
+            setScale(scale_value);
         }
     }
 
@@ -56,9 +58,9 @@ public:
         return scale;
     }
 
-    void setScreenDimensions(Vector2Int screenDimensions)
+    void setScreenDimensions(Vector2Int value)
     {
-        this->screenDimensions = screenDimensions;
+        this->screenDimensions = value;
     }
 
 
@@ -70,10 +72,9 @@ public:
     /// <summary>
     /// Update the camera's position to follow the player.
     /// </summary>
-    /// <param name="deltaTime">Delta time for smooth movement</param>
     void update(const UpdateContext & context) override {
         setPosition(player->getPosition());  // Update camera's position based on the player's position
-        const bool* state = SDL_GetKeyboardState(NULL);
+        const bool* state = SDL_GetKeyboardState(nullptr);
         float deltaAngle = 0;
         if (state[SDL_SCANCODE_PAGEUP]) {
             deltaAngle -= 180* context.deltaTime;
@@ -99,8 +100,17 @@ public:
         return new Camera(Vector2Int::fromJson(json["position"]),json["angle"],json["scale"]);
     }
 
+    void registerInSpaceship(SpaceShip *space_ship) override {
+        Entity::registerInSpaceship(space_ship);
+        space_ship->cameras.push_back(this);
+    }
 
-    //Vector2Float worldToScreenPoint(Vector2Int worldPosition) const {
-    //use the context method for that. If you are sad that this method does not exist, just stop being sad. It's that simple folks.
-    //}
+    void unregisterInSpacehip(SpaceShip *space_ship) override {
+        Entity::unregisterInSpacehip(space_ship);
+        space_ship->cameras.erase(std::find(space_ship->cameras.begin(),space_ship->cameras.end(),this));
+    }
+
+    void onRegistered(SpaceShip *newSpaceship) override {
+        working_spaceship = newSpaceship;
+    }
 };

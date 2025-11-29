@@ -11,34 +11,6 @@
 #include "userInterface/GUI.h"
 #include "userInterface/elements/GUI/GUIList.h"
 
-std::vector<SpaceShip *> LoadSavedGame::SavedGameData::load_spaceships() {
-    std::ifstream file(save_path);
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return loads_spaceships(buffer.str());
-}
-
-std::vector<SpaceShip *> LoadSavedGame::SavedGameData::loads_spaceships(const std::string& from)
-{
-    nlohmann::json json = nlohmann::json::parse(from);
-
-    nlohmann::json ships = json["ships"];
-
-    std::vector<SpaceShip *> space_ships = {};
-
-    for (const nlohmann::json& ship_entry: ships) {
-        SpaceShip * ship =  SpaceShip::fromJson(ship_entry);
-        space_ships.push_back(ship);
-    }
-    //
-    // std::string pathToExterior = dict["pathToExterior"];
-    // std::vector<std::vector<Tile>> tiles = dict["tiles"];
-    // SpaceshipHooks hooks = SpaceshipHooks::fromJson(dict["hooks"]);
-    //
-    // return { name, pathToExterior, tiles, hooks };
-
-    return space_ships;
-}
 
 MenuNavigation::Navigation LoadSavedGame::SavePickerPage(SDL_Renderer *renderer, SDL_Window *window, std::filesystem::path *save_to_load) {
 

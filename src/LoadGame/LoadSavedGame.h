@@ -22,15 +22,7 @@ namespace LoadSavedGame {
         time_t last_date_saved;
     };
 
-    class SavedGameData {
-    public:
-        explicit SavedGameData(std::filesystem::path save_path) : save_path(std::move(save_path)) {  }
 
-        std::filesystem::path save_path;
-        std::vector<SpaceShip *> load_spaceships();
-    private:
-        static std::vector<SpaceShip *> loads_spaceships(const std::string& from);
-    };
 
     MenuNavigation::Navigation SavePickerPage(SDL_Renderer *renderer, SDL_Window *window, std::filesystem::path *save_to_load);
 

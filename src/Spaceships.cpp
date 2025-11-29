@@ -5,6 +5,7 @@
 #include "userInterface/MainMenu.h"
 #include "game/Game.h"
 #include "LoadGame/LoadSavedGame.h"
+#include "NewGame/NewGame.h"
 #include "shipEditor/ShipEditor.h"
 #include "userInterface/fonts.h"
 #include "userInterface/elements/GUI/GUIList.h"
@@ -56,9 +57,11 @@ int main(int argc, char* argv[]) {
         case MenuNavigation::Game:
             navigation = RunGame(renderer, window,save_to_load);
             break;
-        case MenuNavigation::NewGame:
-            navigation = RunGame(renderer,window, ENV_PROJECT_ROOT"assets/newGame/start.save.json");
+        case MenuNavigation::NewGame: {
+            auto path = NewGame::ConstructNewGame();
+            navigation = RunGame(renderer,window, path);
             break;
+        }
         case MenuNavigation::LoadGame:
             navigation = LoadSavedGame::SavePickerPage(renderer,window,&save_to_load);
             break;

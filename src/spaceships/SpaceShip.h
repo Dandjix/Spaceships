@@ -9,6 +9,7 @@
 
 #include "spaceshipTiles/SpaceshipTiles.h"
 
+class Camera;
 class PhysicsEntity;
 class Entity;
 
@@ -57,6 +58,7 @@ public:
   std::filesystem::path blueprint_path;
   std::unordered_set<Entity *> entities;
   std::unordered_set<PhysicsEntity *> physics_entities;
+  std::vector<Camera *> cameras;
 
   SpaceshipHooks hooks;
 
