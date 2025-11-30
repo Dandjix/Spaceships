@@ -23,6 +23,8 @@ public:
 
     Event<> on_die;
 
+    Event<Entity*> on_ownership_change;
+
 
     /// <summary>
     /// creates an entity

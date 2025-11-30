@@ -19,6 +19,7 @@ void Vehicle::startPiloting(Humanoid *newPilot) {
     }
 
     pilot->on_start_piloting_vehicle.emit(this);
+    pilot->on_ownership_change.emit(this);
 }
 
 void Vehicle::stopPiloting() {
@@ -33,7 +34,10 @@ void Vehicle::stopPiloting() {
         spaceship->setPlayer(pilot);
     }
     pilot->on_stop_piloting_vehicle.emit(this);
+    auto old_pilot = pilot;
     pilot = nullptr;
+
+    on_ownership_change.emit(old_pilot);
 }
 
 bool Vehicle::canStartPiloting(Humanoid *newPilot) {

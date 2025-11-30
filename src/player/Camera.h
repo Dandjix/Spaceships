@@ -7,6 +7,8 @@ class Camera : public Entity {  // Inherit from Entity
 protected:
     Entity* player;  // Pointer to the player entity
     Vector2Int screenDimensions = Vector2Int(0, 0);
+
+    Events::Id player_ownership_changed_id = Events::null_id;
 private :
     float scale;
 public:
@@ -26,6 +28,11 @@ public:
     void setPlayer(Entity* p)
     {
         player = p;
+        player_ownership_changed_id = player->on_ownership_change.subscribe(
+            [this](Entity * new_owner) {
+                player->on_ownership_change.unsubscribe(this->player_ownership_changed_id);
+                setPlayer(new_owner);
+            });
         setPosition(p->getPosition());  // Set the camera's position to follow the player initially
     }
 
