@@ -26,5 +26,6 @@ public:
 
     constexpr std::string getJsonType() override;
 
+    std::string getVehicleName() override {return "Combat Outfit";}
 };
 

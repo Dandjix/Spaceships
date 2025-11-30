@@ -2,8 +2,11 @@
 #include <utility>
 
 #include "gameEvent/GameEvent.h"
+#include "gameEvent/GetMousePositionType.h"
 #include "LoadGame/GameState.h"
 #include "LoadGame/LoadSavedGame.h"
+#include "player/VehicleEnter.h"
+#include "userInterface/elements/GUI/GUILabel.h"
 
 #ifndef ENV_PROJECT_ROOT
 #define ENV_PROJECT_ROOT ""
@@ -55,9 +58,6 @@ std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer *renderer, Vect
 
 void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<ParallaxObject> parallax_objects,
                      const RenderingContext &renderingContext) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
-    SDL_RenderClear(renderer);
-
     renderSpaceBackground();
     renderPlanets();
     renderParallax(renderer, renderingContext, std::move(parallax_objects));
@@ -71,29 +71,40 @@ void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<Parall
     //render
     ship->renderEntities(renderer, renderingContext);
 
-    SDL_RenderPresent(renderer);
 }
 
 
-MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, const std::filesystem::path &path_to_save,
+MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
+                                   const std::filesystem::path &path_to_save,
                                    float target_delta_time) // target_delta_time = 1.0/60.0
 {
-
-
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);
     Tiles::loadAll(renderer);
 
-    GameState::GameState game_state = GameState::loadGameState(path_to_save);
 
+    GameState::GameState game_state = GameState::loadGameState(path_to_save);
+    // Setup -----------------------------------------------------------------------------------------------------------
     Camera *camera = game_state.getCamera();
-    Entity * player = game_state.getPlayer();
-    SpaceShip * player_spaceship = game_state.getPlayerSpaceship();
+    Entity *player = game_state.getPlayer();
+    SpaceShip *player_spaceship = game_state.getPlayerSpaceship();
     camera->setPlayer(player);
     player_spaceship->setPlayer(player);
 
+    // GUI elements ----------------------------------------------------------------------------------------------------
+    auto *tooltip = new GUITooltip({0, 0}, false);
+    // auto *label = new GUILabel(Anchor::Center,{0,0},100,50,"test",{255,255,255,255},fonts["lg"]);
+    std::vector<GUIRect *> gui_elements = {tooltip};
+
+    // Short lived entities --------------------------------------------------------------------------------------------
+    auto *vehicle_enter = new Player::VehicleEnter(player, tooltip);
+    player_spaceship->registerEntities({vehicle_enter});
+
+
+    // Parallax --------------------------------------------------------------------------------------------------------
     std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer, {0, 0});
 
+    // Game loop -------------------------------------------------------------------------------------------------------
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
     float deltaTime = 0.0f;
@@ -114,8 +125,9 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, c
             SDL_Delay(ms_to_wait);
         }
 
-        // if (deltaTime != target_delta_time)
-        //     std::cout << "fps : " << std::fixed << std::setprecision(6) << deltaTime << "(" << 1.0f/deltaTime << " fps)" << "\n";
+        float mouse_x,mouse_y;
+        SDL_GetMouseState(&mouse_x,&mouse_y);
+
         GameEvent::GameEventContext event_context =
         {
             {
@@ -124,7 +136,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, c
                 screenDimensions,
                 camera->getScale()
             },
-            GameEvent::MousePositionType::Game,
+            GameEvent::getMousePositionType(gui_elements, {mouse_x,mouse_y}),
             window
         };
 
@@ -135,6 +147,9 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, c
                     destination = MenuNavigation::Quit;
                 }
                 space_ship->eventHandling(event, event_context);
+            }
+            for (auto gui_element: gui_elements) {
+                gui_element->handleEvent(event,event_context);
             }
         }
         // UPDATE ------------------------------------------------------------------------------------------------------
@@ -153,13 +168,45 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window, c
             ship->physicsHandling(target_delta_time);
         }
 
+        GUI_UpdateContext gui_update_context = {
+            {
+                camera->getPosition(),
+                camera->getAngle(),
+                screenDimensions,
+                camera->getScale()
+            },
+            deltaTime
+        };
+        for (auto gui_element: gui_elements) {
+            gui_element->update(gui_update_context);
+        }
+
         // RENDERING ---------------------------------------------------------------------------------------------------
         RenderingContext renderingContext = {
             {
                 camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()
             }
         };
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
+        SDL_RenderClear(renderer);
+
         RenderingHandle(renderer, camera->working_spaceship, parallax_objects, renderingContext);
+
+        // GUI RENDERING -----------------------------------------------------------------------------------------------
+        GUI_RenderingContext gui_rendering_context = {
+            {
+                camera->getPosition(),
+                camera->getAngle(),
+                screenDimensions,
+                camera->getScale()
+            }
+        };
+        for (auto gui_element: gui_elements) {
+            gui_element->render(renderer, gui_rendering_context);
+        }
+
+        SDL_RenderPresent(renderer);
+
     }
     return destination;
 }

@@ -21,6 +21,8 @@ public:
         delete pilot;
     }
 
+    virtual std::string getVehicleName()=0;
+
 protected:
     virtual void assumeControl(Humanoid * pilot) = 0;
     virtual void relinquishControl() = 0;
@@ -37,6 +39,8 @@ public:
     void startPiloting(Humanoid *newPilot);
 
     void stopPiloting();
+
+    bool canStartPiloting(Humanoid * newPilot);
 
     nlohmann::json toJson() override;
 

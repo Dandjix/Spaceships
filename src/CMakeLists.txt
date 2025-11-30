@@ -74,7 +74,9 @@ add_library(SpaceshipsLib ${SOURCES}
         shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.h
         entities/ShortLivedEntity.h
         LoadGame/GameState.cpp
-        LoadGame/GameState.h)
+        LoadGame/GameState.h
+        userInterface/elements/entities/GUITooltip.cpp
+        userInterface/elements/entities/GUITooltip.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
@@ -102,6 +104,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         vehicles/combatOutfit/CombatOutfit.h
         vehicles/combatOutfit/CombatOutfit.cpp
         vehicles/Vechicle.cpp
+        player/VehicleEnter.h
+        player/VehicleEnter.cpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

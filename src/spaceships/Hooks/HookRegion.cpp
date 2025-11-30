@@ -6,7 +6,7 @@
 
 void HookRegion::registerEntity(Entity* entity)
 {
-    uint64_t id = entity->on_die.subscribe([this,entity]{
+    Events::Id id = entity->on_die.subscribe([this,entity]{
         unRegisterEntity(entity);
     });
     entities_inside.insert({entity,id});

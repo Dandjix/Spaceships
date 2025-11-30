@@ -9,14 +9,18 @@
 #include "physics/RoundPhysicsShape.h"
 #include "textures/Textures.h"
 
+class Vehicle;
+
 class Humanoid : public BehavioredEntity{
 private:
     SDL_Texture * texture;
-
+public:
+    Event<Vehicle*> on_start_piloting_vehicle;
+    Event<Vehicle*> on_stop_piloting_vehicle;
 protected:
     float radius;
-
 public:
+
     Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior) :
         BehavioredEntity(position,angle,new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f)),behavior)
     {

@@ -12,8 +12,6 @@ std::filesystem::path NewGame::ConstructNewGame() {
 
     auto player = new Humanoid(Vector2Int{128,128}.scaleToWorldPosition(),45,new PlayerBehavior());
     auto camera =  new Camera(Vector2Int(0,0),0,1);
-
-
     camera->setPlayer(player);
 
     std::vector<Entity * > entities = {

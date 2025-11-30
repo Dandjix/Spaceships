@@ -7,20 +7,24 @@
 #include <unordered_map>
 #include <cstdint>
 
+namespace Events {
+    using Id = uint64_t;
+    constexpr Id null_id = 0;
+}
+
 template <typename... Args>
 class Event
 {
 public:
     using Callback = std::function<void(Args...)>;
-
     /**
      * Subscribes a callback to this event
      * @param cb the callback to subscribe
      * @return the id of the callback, used for unsubscribing
      */
-    uint64_t subscribe(Callback cb)
+    Events::Id subscribe(Callback cb)
     {
-        uint64_t id = next_id++;
+        Events::Id id = next_id++;
         subscribers[id] = std::move(cb);
         return id;
     }
@@ -29,7 +33,7 @@ public:
      * Unsubscribes an event using
      * @param id the id that was returned from subscribe
      */
-    void unsubscribe(uint64_t id)
+    void unsubscribe(Events::Id id)
     {
         subscribers.erase(id);
     }
@@ -56,6 +60,6 @@ public:
     }
 
 private:
-    uint64_t next_id = 0;
-    std::unordered_map<uint64_t, Callback> subscribers;
+    Events::Id next_id = Events::null_id+1;
+    std::unordered_map<Events::Id, Callback> subscribers;
 };

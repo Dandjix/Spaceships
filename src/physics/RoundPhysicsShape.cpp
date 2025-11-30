@@ -21,3 +21,7 @@ BoundingBox<int> RoundPhysicsShape::getBoundingBox()
 
     return BoundingBox<int>(TL,dimensions);
 }
+
+bool RoundPhysicsShape::is_inside(Vector2Int world_position) {
+    return (owner_entity->getPosition() - world_position).sqrLength() <= radius*radius;
+}

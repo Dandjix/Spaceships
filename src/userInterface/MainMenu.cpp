@@ -36,7 +36,12 @@ MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *windo
         SDL_GetWindowSize(window, &win_x, &win_y);
 
         GUI_RenderingContext rendering_context = {
-            {win_x, win_y},
+            {
+                {0, 0},
+                0,
+                {win_x, win_y},
+                1
+            }
         };
 
         menu.render(renderer, rendering_context);
@@ -56,16 +61,16 @@ MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *windo
 
         GameEvent::GameEventContext game_event_context = {
             {
-                {0,0},
+                {0, 0},
                 0,
-                {win_x,win_y}
+                {win_x, win_y}
             },
             GameEvent::UI,
             window
         };
 
         while (SDL_PollEvent(&event)) {
-            menu.handleEvent(event,game_event_context);
+            menu.handleEvent(event, game_event_context);
             if (event.type == SDL_EVENT_QUIT) {
                 return MenuNavigation::Quit;
             }

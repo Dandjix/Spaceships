@@ -1,4 +1,6 @@
 #include "Physics.h"
+
+#include "PhysicsEntity.h"
 #include "../spaceships/SpaceShip.h"
 #include "../math/Vectors.h"
 #include "../spaceships/spaceshipTiles/SpaceshipTiles.h"
@@ -160,4 +162,17 @@ Physics::RaycastHitInfo Physics::RayCast(
 
     return RaycastHitInfo(false,{0,0},checked_positions);
 
+}
+
+std::vector<PhysicsEntity *> Physics::EntityPointCast(Vector2Int world_position, SpaceShip *space_ship) {
+    std::vector<PhysicsEntity * > all = space_ship->getPhysicsEntities(RoomDistance::All);
+    std::vector<PhysicsEntity * > hit = {};
+    for (auto entity: all) {
+        if (entity->shape == nullptr)
+            continue;
+        if (entity->shape->getBoundingBox().is_inside(world_position) && entity->shape->is_inside(world_position)) {
+            hit.push_back(entity);
+        }
+    }
+    return hit;
 }

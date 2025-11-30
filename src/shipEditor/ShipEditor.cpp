@@ -311,7 +311,13 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
             entity->debugRender(renderer,renderingContext);
         }
 
-        GUI_RenderingContext GUI_renderingContext(screenDimensions);
+        GUI_RenderingContext GUI_renderingContext(
+            {
+                {0,0},
+                0,
+                screenDimensions,
+                1
+            });
 
         //GUI render
         for (GUIRect * element : editorGUIElements)

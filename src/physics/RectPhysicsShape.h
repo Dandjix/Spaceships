@@ -28,6 +28,8 @@ public:
 
     RectPhysicsShape(PhysicsEntity * owner_entity, Vector2Float dimensions) : PhysicsShape(owner_entity), dimensions(dimensions) {  }
 
+    bool is_inside(Vector2Int world_position) override;
+
 private:
 };
 

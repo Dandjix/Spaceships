@@ -50,7 +50,12 @@ MenuNavigation::Navigation LoadSavedGame::SavePickerPage(SDL_Renderer *renderer,
         SDL_GetWindowSize(window, &win_x, &win_y);
 
         GUI_RenderingContext rendering_context = {
+            {
+                {0,0},
+                0,
             {win_x, win_y},
+                1.0
+            }
         };
 
         menu.render(renderer, rendering_context);

@@ -40,3 +40,7 @@ BoundingBox<int> RectPhysicsShape::getBoundingBox()
     return BoundingBox<int>({min_x,min_y},{max_x-min_x,max_y-min_y});
     // TODO : implement this when implementing rects
 }
+
+bool RectPhysicsShape::is_inside(Vector2Int world_position) {
+    // TODO: implement
+}

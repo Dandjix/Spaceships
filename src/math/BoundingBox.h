@@ -48,4 +48,12 @@ public:
 
         return true;
     }
+
+    bool is_inside(Vector2Int world_position) {
+        return
+        (world_position.x >= topLeftCorner.x && world_position.x <= topLeftCorner.x + boundingBoxDimensions.x)
+        &&
+        (world_position.y >= topLeftCorner.y && world_position.y <= topLeftCorner.y + boundingBoxDimensions.y);
+
+    }
 };

@@ -1,4 +1,6 @@
 #pragma once
+#include <utility>
+
 #include "../math/Vectors.h"
 #include "game/CameraTransformations.h"
 
@@ -20,10 +22,7 @@ enum Fill
 
 struct GUI_RenderingContext
 {
-	const Vector2Int screenDimensions;
-
-	GUI_RenderingContext(Vector2Int dimensions)
-		: screenDimensions(dimensions) {}
+	CameraTransformations::CameraInfo camera_info;
 };
 
 struct GUI_UpdateContext

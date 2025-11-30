@@ -41,5 +41,5 @@ public:
 
     virtual BoundingBox<int> getBoundingBox()=0;
 
-
+    virtual bool is_inside(Vector2Int world_position)=0;
 };

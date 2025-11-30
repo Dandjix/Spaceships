@@ -10,13 +10,15 @@ void Vehicle::onRegistered(SpaceShip *newSpaceship) {
 
 void Vehicle::startPiloting(Humanoid *newPilot) {
     stopPiloting();
-
-    spaceship->unregisterEntities({pilot});
+    
     pilot = newPilot;
+    spaceship->unregisterEntities({pilot});
 
     if (is_player()) {
         spaceship->setPlayer(this);
     }
+
+    pilot->on_start_piloting_vehicle.emit(this);
 }
 
 void Vehicle::stopPiloting() {
@@ -30,8 +32,23 @@ void Vehicle::stopPiloting() {
     if (pilot->is_player()) {
         spaceship->setPlayer(pilot);
     }
-
+    pilot->on_stop_piloting_vehicle.emit(this);
     pilot = nullptr;
+}
+
+bool Vehicle::canStartPiloting(Humanoid *newPilot) {
+    float distance = (newPilot->getPosition() - position).length();
+    float max_distance = Scaling::scaleToWorld(128.0f);
+
+    if (distance > max_distance || pilot != nullptr){
+        return false;
+    }
+
+    auto raycast_hit = Physics::RayCast(newPilot->getPosition(),Vectors::toVector2Float(position - newPilot->getPosition()),spaceship,distance);
+    if (raycast_hit.hit) {
+        return false;
+    }
+    return true;
 }
 
 nlohmann::json Vehicle::toJson() {
