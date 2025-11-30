@@ -9,6 +9,7 @@
 #include "json.hpp"
 
 
+class BehavioredEntity;
 class Entity;
 class Camera;
 class SpaceShip;
@@ -18,7 +19,8 @@ namespace GameState {
         explicit GameState(const std::vector<SpaceShip *> & space_ships) : space_ships(space_ships) {  }
         std::vector<SpaceShip * >space_ships;
         Camera * getCamera();
-        Entity * getPlayer();
+
+        BehavioredEntity *getPlayer();
         SpaceShip * getPlayerSpaceship();
 
         void after_deserialized(nlohmann::json json);

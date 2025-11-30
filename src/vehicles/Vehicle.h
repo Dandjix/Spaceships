@@ -3,7 +3,7 @@
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShip.h"
 
-class Vehicle : public PhysicsEntity
+class Vehicle : public BehavioredEntity
 {
 protected:
     Humanoid *pilot;
@@ -12,7 +12,7 @@ protected:
 
 public:
     Vehicle(const Vector2Int &position, const std::optional<float> &angle, PhysicsShape *shape,Humanoid *pilot = nullptr)
-        : PhysicsEntity(position, angle, shape),
+        : BehavioredEntity(position, angle, shape),
           pilot(pilot)
     {
     }
@@ -49,6 +49,10 @@ public:
     void update(const UpdateContext &context) override;
 
     void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
+
+    void setBehavior(Behavior *value) override;
+
+    Behavior * getBehavior() const override;
 };
 
 

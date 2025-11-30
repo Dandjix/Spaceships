@@ -6,31 +6,36 @@
 #include "physics/PhysicsEntity.h"
 
 class BehavioredEntity : public PhysicsEntity {
-protected:
-    Behavior * behavior;
 
 public:
-    BehavioredEntity(const Vector2Int &position, const std::optional<float> &angle, PhysicsShape *shape, Behavior * behavior)
-        : PhysicsEntity(position, angle, shape),behavior(behavior) {
+    BehavioredEntity(const Vector2Int &position, const std::optional<float> &angle, PhysicsShape *shape)
+        : PhysicsEntity(position, angle, shape) {
     }
 
-    void setBehavior(Behavior * value) {
-        behavior = value;
-    }
+    /**
+     * @return true if the entity is the player, or a vehicle manned by the player
+     */
+    virtual constexpr bool is_player();
 
-    Behavior * getBehavior() {
-        return behavior;
-    }
+    virtual void setBehavior(Behavior * value)= 0;
+
+    virtual Behavior * getBehavior() const = 0;
 
     void update(const UpdateContext &context) override {
-        if (behavior != nullptr) {
-            behavior->update(context,this);
+        if (getBehavior() != nullptr) {
+            getBehavior()->update(context,this);
         }
     }
 
     void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override {
-        if (behavior != nullptr) {
-            behavior->handleEvent(event,context,this);
+        if (getBehavior() != nullptr) {
+            getBehavior()->handleEvent(event,context,this);
         }
     }
 };
+
+constexpr bool BehavioredEntity::is_player() {
+    if (getBehavior() ==nullptr)
+        return false;
+    return getBehavior()->isPlayerBehavior();
+}

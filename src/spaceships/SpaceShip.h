@@ -9,6 +9,7 @@
 
 #include "spaceshipTiles/SpaceshipTiles.h"
 
+class BehavioredEntity;
 class Camera;
 class PhysicsEntity;
 class Entity;
@@ -95,6 +96,8 @@ public:
   /// well since this will snap the other ship. Undocking is future me's problem
   /// </summary>
   /// <param name="other"> The other ship</param>
+
+  std::vector<BehavioredEntity * > getBehavioredEntities(RoomDistance queue, Room* reference_room = nullptr) const;
   void Dock(SpaceShip other);
 
 

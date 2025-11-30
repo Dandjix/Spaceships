@@ -245,6 +245,17 @@ std::vector<PhysicsEntity*> SpaceShip::getPhysicsEntities(RoomDistance queue, Ro
 	return vec;
 }
 
+std::vector<BehavioredEntity *> SpaceShip::getBehavioredEntities(RoomDistance queue, Room *reference_room) const {
+	//TODO if in need of performance, store in its own variable
+	std::vector<BehavioredEntity *> to_return = {};
+	for (auto entity: entities) {
+		if (auto behaviored = dynamic_cast<BehavioredEntity *>(entity)) {
+			to_return.push_back(behaviored);
+		}
+	}
+	return to_return;
+}
+
 void SpaceShip::Dock(SpaceShip other)
 {
 

@@ -19,10 +19,13 @@ public:
     Event<Vehicle*> on_stop_piloting_vehicle;
 protected:
     float radius;
+
+    Behavior * behavior;
+
 public:
 
     Humanoid(Vector2Int position,std::optional<float> angle, Behavior * behavior) :
-        BehavioredEntity(position,angle,new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f)),behavior)
+        BehavioredEntity(position,angle,new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f))),behavior(behavior)
     {
         radius = 20;
         texture = nullptr;
@@ -68,9 +71,7 @@ public:
 
     constexpr std::string getJsonType() override{return "humanoid";}
 
-    constexpr bool is_player() override {
-        if (behavior ==nullptr)
-            return false;
-        return behavior->isPlayerBehavior();
-    }
+    void setBehavior(Behavior *value) override {behavior = value;}
+
+    Behavior * getBehavior() const override {return behavior;}
 };

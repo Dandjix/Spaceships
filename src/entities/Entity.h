@@ -109,9 +109,4 @@ public:
     virtual void movePosition(Vector2Float delta, SpaceShip * space_ship);
 
     virtual void after_deserialized(GameState::GameState * game_state) {}
-
-    /**
-     * @return true if the entity is the player, or a vehicle manned by the player
-     */
-    virtual constexpr bool is_player(){return false;}
 };

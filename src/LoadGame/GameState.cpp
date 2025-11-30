@@ -7,7 +7,7 @@
 #include <fstream>
 
 #include "json.hpp"
-#include "entities/Entity.h"
+#include "behavior/BehavioredEntity.h"
 #include "spaceships/SpaceShip.h"
 
 
@@ -46,9 +46,9 @@ Camera *GameState::GameState::getCamera() {
     return nullptr;
 }
 
-Entity *GameState::GameState::getPlayer() {
+BehavioredEntity *GameState::GameState::getPlayer() {
     for (auto space_ship: space_ships) {
-        for (auto entity: space_ship->entities) {
+        for (auto entity: space_ship->getBehavioredEntities(RoomDistance::All)) {
             if (entity->is_player()) {
                 return entity;
             }

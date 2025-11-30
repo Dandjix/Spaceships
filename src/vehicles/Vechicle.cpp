@@ -79,6 +79,20 @@ void Vehicle::handleEvent(const SDL_Event &event, const GameEvent::GameEventCont
     pilot->getBehavior()->handleEvent(event,context,this);
 }
 
+void Vehicle::setBehavior(Behavior *value) {
+    if (pilot == nullptr) {
+        throw std::runtime_error("Tried to set behavior on vehicle without a pilot : this won't work");
+    }
+    pilot->setBehavior(value);
+}
+
+Behavior * Vehicle::getBehavior() const {
+    if (pilot != nullptr) {
+        return pilot->getBehavior();
+    }
+    return nullptr;
+}
+
 constexpr bool Vehicle::is_player() {
     if (pilot == nullptr)
         return false;
