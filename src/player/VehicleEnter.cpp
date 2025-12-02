@@ -5,50 +5,8 @@
 
 #include "VehicleEnter.h"
 
-inline void Player::VehicleEnter::determinePlayerAndVehicle(Entity *new_player) {
-    player = nullptr;
-    vehicle = nullptr;
+#include "PlayerVehicleTracker.h"
 
-    if (auto humanoid = dynamic_cast<Humanoid *>(new_player)) {
-        player = humanoid;
-        setStatus();
-        return;
-    }
-
-    if (auto player_vehicle = dynamic_cast<Vehicle *>(new_player)) {
-        player = player_vehicle->getPilot();
-        vehicle = player_vehicle;
-        setStatus();
-        return;
-    }
-
-    throw std::invalid_argument(
-        "variable pointer " + std::to_string(reinterpret_cast<uintptr_t>(new_player)) +
-        " is neither a humanoid nor a vehicle"
-    );
-}
-
-void Player::VehicleEnter::subscribeEvents() {
-    start_piloting_event_id = player->on_start_piloting_vehicle.subscribe([this](Vehicle *started) {
-        player_status_changed(started);
-    });
-    stop_piloting_event_id = player->on_stop_piloting_vehicle.subscribe([this](Vehicle *_) {
-        player_status_changed(this->player);
-    });
-}
-
-void Player::VehicleEnter::unsubscribeEvents() const {
-    player->on_start_piloting_vehicle.unsubscribe(start_piloting_event_id);
-    player->on_stop_piloting_vehicle.unsubscribe(stop_piloting_event_id);
-}
-
-void Player::VehicleEnter::player_status_changed(Entity *player_or_vehicle) {
-    unsubscribeEvents();
-
-    determinePlayerAndVehicle(player_or_vehicle);
-
-    subscribeEvents();
-}
 
 void Player::VehicleEnter::enable() {
     enabled = true;
@@ -59,14 +17,15 @@ void Player::VehicleEnter::disable() {
     tooltip->disable();
 }
 
-void Player::VehicleEnter::setStatus() {
-    if (vehicle == nullptr) {
-        enable();
-    }
-    else {
+void Player::VehicleEnter::onEnterOrLeaveVehicle(bool in_vehicle) {
+    if (in_vehicle) {
         disable();
     }
+    else {
+        enable();
+    }
 }
+
 
 void Player::VehicleEnter::render(SDL_Renderer *renderer, const RenderingContext &context) {
 }
@@ -87,7 +46,7 @@ Vehicle *Player::VehicleEnter::getVehicleUnderMouse(const UpdateContext &context
 }
 
 void Player::VehicleEnter::update(const UpdateContext &context) {
-    if (vehicle!=nullptr || player==nullptr) {
+    if (player_vehicle_tracker->player_is_in_vehicle) {
         vehicle_under_mouse = nullptr;
         return;
     }
@@ -97,7 +56,7 @@ void Player::VehicleEnter::update(const UpdateContext &context) {
     if (vehicle_under_mouse != nullptr) {
         tooltip->enable();
         tooltip->setPosition(context.camera_info.worldToScreenPoint(vehicle_under_mouse->getPosition()));
-        SDL_Color text_color = vehicle_under_mouse->canStartPiloting(player) ? SDL_Color(200,200,255,255) : SDL_Color(125,125,125,255);
+        SDL_Color text_color = vehicle_under_mouse->canStartPiloting(player_vehicle_tracker->player) ? SDL_Color(200,200,255,255) : SDL_Color(125,125,125,255);
         tooltip->setTextColor(text_color);
         tooltip->setText("[E] Enter "+vehicle_under_mouse->getVehicleName());
     }
@@ -108,7 +67,7 @@ void Player::VehicleEnter::update(const UpdateContext &context) {
 
 
 void Player::VehicleEnter::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
-    if (vehicle!=nullptr || player==nullptr) {
+    if (player_vehicle_tracker->player_is_in_vehicle) {
         vehicle_under_mouse = nullptr;
         return;
     }
@@ -118,8 +77,8 @@ void Player::VehicleEnter::handleEvent(const SDL_Event &event, const GameEvent::
 
 
     if (event.type == SDL_EVENT_KEY_DOWN) {
-        if (event.key.key == SDLK_E && vehicle_under_mouse->canStartPiloting(player)) {
-            vehicle_under_mouse->startPiloting(player);
+        if (event.key.key == SDLK_E && vehicle_under_mouse->canStartPiloting(player_vehicle_tracker->player)) {
+            vehicle_under_mouse->startPiloting(player_vehicle_tracker->player);
         }
     }
 }

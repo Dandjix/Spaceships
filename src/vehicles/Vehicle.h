@@ -3,36 +3,34 @@
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShip.h"
 
-class Vehicle : public BehavioredEntity
-{
+class Vehicle : public BehavioredEntity {
 protected:
     Humanoid *pilot;
 
     SpaceShip *spaceship = nullptr;
 
 public:
-    Vehicle(const Vector2Int &position, const std::optional<float> &angle, PhysicsShape *shape,Humanoid *pilot = nullptr)
+    Vehicle(const Vector2Int &position, const std::optional<float> &angle, PhysicsShape *shape,
+            Humanoid *pilot = nullptr)
         : BehavioredEntity(position, angle, shape),
-          pilot(pilot)
-    {
+          pilot(pilot) {
     }
 
     ~Vehicle() override {
         delete pilot;
     }
 
-    virtual std::string getVehicleName()=0;
+    virtual std::string getVehicleName() =0;
 
 protected:
-    virtual void assumeControl(Humanoid * pilot) = 0;
+    virtual void assumeControl(Humanoid *pilot) = 0;
+
     virtual void relinquishControl() = 0;
 
 public:
-    
-    void onRegistered(SpaceShip * newSpaceship) override;
+    void onRegistered(SpaceShip *newSpaceship) override;
 
-    Humanoid * getPilot()
-    {
+    Humanoid *getPilot() {
         return pilot;
     }
 
@@ -40,7 +38,9 @@ public:
 
     void stopPiloting();
 
-    bool canStartPiloting(Humanoid * newPilot);
+    virtual bool canStartPiloting(Humanoid *newPilot);
+
+    virtual bool canStopPiloting();
 
     nlohmann::json toJson() override;
 
@@ -52,8 +52,5 @@ public:
 
     void setBehavior(Behavior *value) override;
 
-    Behavior * getBehavior() const override;
+    Behavior *getBehavior() const override;
 };
-
-
-

@@ -5,7 +5,9 @@
 #include "gameEvent/GetMousePositionType.h"
 #include "LoadGame/GameState.h"
 #include "LoadGame/LoadSavedGame.h"
+#include "player/PlayerVehicleTracker.h"
 #include "player/VehicleEnter.h"
+#include "player/VehicleLeave.h"
 #include "userInterface/elements/GUI/GUILabel.h"
 
 #ifndef ENV_PROJECT_ROOT
@@ -70,7 +72,6 @@ void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<Parall
 
     //render
     ship->renderEntities(renderer, renderingContext);
-
 }
 
 
@@ -97,8 +98,11 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     std::vector<GUIRect *> gui_elements = {tooltip};
 
     // Short lived entities --------------------------------------------------------------------------------------------
-    auto *vehicle_enter = new Player::VehicleEnter(player, tooltip);
-    player_spaceship->registerEntities({vehicle_enter});
+    auto *vehicle_tracker = new Player::PlayerVehicleTracker(player);
+    auto *vehicle_enter = new Player::VehicleEnter(tooltip, vehicle_tracker);
+    auto *vehicle_leave = new Player::VehicleLeave(vehicle_tracker);
+
+    player_spaceship->registerEntities({vehicle_tracker, vehicle_enter, vehicle_leave});
 
 
     // Parallax --------------------------------------------------------------------------------------------------------
@@ -125,8 +129,8 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             SDL_Delay(ms_to_wait);
         }
 
-        float mouse_x,mouse_y;
-        SDL_GetMouseState(&mouse_x,&mouse_y);
+        float mouse_x, mouse_y;
+        SDL_GetMouseState(&mouse_x, &mouse_y);
 
         GameEvent::GameEventContext event_context =
         {
@@ -136,7 +140,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 screenDimensions,
                 camera->getScale()
             },
-            GameEvent::getMousePositionType(gui_elements, {mouse_x,mouse_y}),
+            GameEvent::getMousePositionType(gui_elements, {mouse_x, mouse_y}),
             window
         };
 
@@ -149,7 +153,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 space_ship->eventHandling(event, event_context);
             }
             for (auto gui_element: gui_elements) {
-                gui_element->handleEvent(event,event_context);
+                gui_element->handleEvent(event, event_context);
             }
         }
         // UPDATE ------------------------------------------------------------------------------------------------------
@@ -206,7 +210,6 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         }
 
         SDL_RenderPresent(renderer);
-
     }
     return destination;
 }

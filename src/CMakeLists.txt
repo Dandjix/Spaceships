@@ -76,7 +76,11 @@ add_library(SpaceshipsLib ${SOURCES}
         LoadGame/GameState.cpp
         LoadGame/GameState.h
         userInterface/elements/entities/GUITooltip.cpp
-        userInterface/elements/entities/GUITooltip.h)
+        userInterface/elements/entities/GUITooltip.h
+        player/VehicleLeave.cpp
+        player/VehicleLeave.h
+        player/PlayerVehicleTracker.cpp
+        player/PlayerVehicleTracker.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

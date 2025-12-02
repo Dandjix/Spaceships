@@ -55,6 +55,10 @@ bool Vehicle::canStartPiloting(Humanoid *newPilot) {
     return true;
 }
 
+bool Vehicle::canStopPiloting() {
+    return true;
+}
+
 nlohmann::json Vehicle::toJson() {
     auto json = PhysicsEntity::toJson();
     if (pilot != nullptr) {
