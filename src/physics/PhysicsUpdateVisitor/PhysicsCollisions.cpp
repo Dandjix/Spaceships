@@ -1,6 +1,5 @@
 //
 // Created by timon on 11/18/25.
-//
 
 #include "PhysicsCollisions.h"
 
@@ -8,6 +7,11 @@
 
 #include "math/Vectors.h"
 #include "physics/RoundPhysicsShape.h"
+
+/**
+ * This is applied to two entities that are at the same position to unstuck them
+ */
+const float jolt = 3;
 
 namespace PhysicsCollisions
 {
@@ -21,10 +25,22 @@ namespace PhysicsCollisions
         // std::cout << "rect on round collision" << std::endl;
     }
 
+    void applyJolt(RoundPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
+        float random_angle = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))*360;
+
+        Vector2Float jolt_vector = Vector2Float(jolt,0.0f).rotate(random_angle);
+
+        shape1->owner_entity->movePosition(jolt_vector,space_ship);
+        shape2->owner_entity->movePosition(-jolt_vector,space_ship);
+    }
+
     void visitRounds(RoundPhysicsShape* shape1, RoundPhysicsShape* shape2, SpaceShip* space_ship)
     {
         // std::cout << "round on round collision" << std::endl;
+        if (shape1->owner_entity->getPosition() == shape2->owner_entity->getPosition()) {
 
+            applyJolt(shape1, shape2, space_ship);
+        }
 
         Vector2Int diff = shape1->owner_entity->getPosition() - shape2->owner_entity->getPosition();
 
