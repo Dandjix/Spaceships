@@ -146,6 +146,10 @@ struct Vector2 {
         return *this;
     }
 
+    Vector2<T> operator-() {
+        return {-x,-y};
+    }
+
     [[nodiscard]] Vector2<float> normalized() const
     {
         Vector2<float> result = *this;
