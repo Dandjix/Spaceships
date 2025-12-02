@@ -11,12 +11,14 @@ inline void Player::VehicleEnter::determinePlayerAndVehicle(Entity *new_player) 
 
     if (auto humanoid = dynamic_cast<Humanoid *>(new_player)) {
         player = humanoid;
+        setStatus();
         return;
     }
 
     if (auto player_vehicle = dynamic_cast<Vehicle *>(new_player)) {
         player = player_vehicle->getPilot();
         vehicle = player_vehicle;
+        setStatus();
         return;
     }
 
@@ -40,6 +42,32 @@ void Player::VehicleEnter::unsubscribeEvents() const {
     player->on_stop_piloting_vehicle.unsubscribe(stop_piloting_event_id);
 }
 
+void Player::VehicleEnter::player_status_changed(Entity *player_or_vehicle) {
+    unsubscribeEvents();
+
+    determinePlayerAndVehicle(player_or_vehicle);
+
+    subscribeEvents();
+}
+
+void Player::VehicleEnter::enable() {
+    enabled = true;
+}
+
+void Player::VehicleEnter::disable() {
+    enabled = false;
+    tooltip->disable();
+}
+
+void Player::VehicleEnter::setStatus() {
+    if (vehicle == nullptr) {
+        enable();
+    }
+    else {
+        disable();
+    }
+}
+
 void Player::VehicleEnter::render(SDL_Renderer *renderer, const RenderingContext &context) {
 }
 
@@ -51,7 +79,7 @@ Vehicle *Player::VehicleEnter::getVehicleUnderMouse(const UpdateContext &context
     auto hit = Physics::EntityPointCast(world_position,context.spaceShip);
 
     for (auto entity: hit) {
-        if (Vehicle * vehicle_under_mouse = dynamic_cast<Vehicle *>(entity)) {
+        if (auto * vehicle_under_mouse = dynamic_cast<Vehicle *>(entity)) {
             return vehicle_under_mouse;
         }
     }

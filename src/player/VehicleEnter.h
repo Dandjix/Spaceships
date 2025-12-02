@@ -25,31 +25,35 @@ namespace Player {
         Events::Id start_piloting_event_id = Events::null_id;
         Events::Id stop_piloting_event_id = Events::null_id;
 
+        bool enabled;
+
         void determinePlayerAndVehicle(Entity *new_player);
 
         void subscribeEvents();
 
         void unsubscribeEvents() const;
 
-        void player_status_changed(Entity *player_or_vehicle) {
-            unsubscribeEvents();
+        void player_status_changed(Entity *player_or_vehicle);
 
-            determinePlayerAndVehicle(player_or_vehicle);
+        void enable();
 
-            subscribeEvents();
-        }
+        void disable();
+
+        void setStatus();
 
     public:
-        explicit VehicleEnter(Entity *player_or_vehicle, GUITooltip * tooltip)
+
+        explicit VehicleEnter(Entity *player_or_vehicle, GUITooltip * tooltip, bool enabled = true)
             : ShortLivedEntity({0, 0}, 0), tooltip(tooltip) {
 
             determinePlayerAndVehicle(player_or_vehicle);
             subscribeEvents();
+            setStatus();
         }
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-        Vehicle *getVehicleUnderMouse(const UpdateContext &context);
+        static Vehicle *getVehicleUnderMouse(const UpdateContext &context);
 
         void update(const UpdateContext &context) override;
 

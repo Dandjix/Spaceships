@@ -43,5 +43,5 @@ BoundingBox<int> RectPhysicsShape::getBoundingBox()
 
 bool RectPhysicsShape::is_inside(Vector2Int world_position) {
     // TODO: implement
-    throw std::logic_error("function not implemented");
+    return false;
 }

@@ -19,7 +19,8 @@ std::filesystem::path NewGame::ConstructNewGame() {
         camera,
         new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
         new CargoContainer(Vector2Int{96,96}.scaleToWorldPosition(),22),
-        new CombatOutfit(Vector2Int{196,128}.scaleToWorldPosition(),35)
+        new CombatOutfit(Vector2Int{196,128}.scaleToWorldPosition(),35),
+        new CombatOutfit(Vector2Int{256,128}.scaleToWorldPosition(),35)
     };
 
     auto * space_ship = new SpaceShip(blueprint,entities);
