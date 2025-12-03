@@ -42,8 +42,8 @@ public:
 
 	virtual void handleEvent(const SDL_Event & event, const GameEvent::GameEventContext & context){}
 
-	virtual unsigned short int getQueueOrder() {
-		return 1000;
+	virtual QueueOrder::Value getQueueOrder() {
+		return QueueOrder::MIDDLE;
 	}
 };
 

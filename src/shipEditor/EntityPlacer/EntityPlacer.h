@@ -51,7 +51,7 @@ private:
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-        unsigned short getQueueOrder() override {return 1000;}
+        QueueOrder::Value getQueueOrder() override {return QueueOrder::MIDDLE;}
     };
 
 }

@@ -4,6 +4,8 @@
 
 #include "PauseMenu.h"
 
+#include "userInterface/elements/GUI/GUIColoredRect.h"
+
 std::vector<std::string> PauseMenu::get_option_keys(std::map<std::string, std::function<void()>> m) {
     std::vector<std::string> keys;
     for (auto it = m.begin(); it != m.end(); ++it) {
@@ -28,7 +30,8 @@ PauseMenu::PauseMenu(PauseManager *pause_manager, const std::map<std::string, st
                     new GUIList(Anchor::Center, {0, 0}, 500, 600, get_option_keys(actions),
                                 [actions](const std::string &option) {
                                     actions.at(option)();
-                                },true))
+                                },true)),
+                static_cast<GUIRect *>(new GUIColoredRect(Anchor::Center,{0,0},GUI_Fill,GUI_Fill,{0,0,0,150},QueueOrder::MIDDLE + 50) )
             };
 }
 

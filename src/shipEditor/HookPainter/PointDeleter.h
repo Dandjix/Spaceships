@@ -47,7 +47,7 @@ namespace HookDeleter{
 
         void disable();
 
-        unsigned short getQueueOrder() override {return 100;}
+        QueueOrder::Value getQueueOrder() override {return 100;}
     };
 
 }

@@ -49,9 +49,9 @@ public:
         }
     }
 
-    unsigned short getQueueOrder() override
+    QueueOrder::Value getQueueOrder() override
     {
-        return UINT16_MAX;
+        return QueueOrder::LAST;
     }
     
     void setScale(float s)

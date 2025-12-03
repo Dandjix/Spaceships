@@ -89,7 +89,9 @@ add_library(SpaceshipsLib ${SOURCES}
         entities/scripts/ActiveWhenPausedEntity.cpp
         entities/scripts/ActiveWhenPausedEntity.h
         game/PauseManager.cpp
-        game/PauseManager.h)
+        game/PauseManager.h
+        userInterface/elements/GUI/GUIColoredRect.cpp
+        userInterface/elements/GUI/GUIColoredRect.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

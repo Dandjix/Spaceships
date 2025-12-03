@@ -62,8 +62,8 @@ public:
 
     void render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const override;
 
-    unsigned short int getQueueOrder() override {
-        return 1;
+    QueueOrder::Value getQueueOrder() override {
+        return QueueOrder::FIRST;
     }
 
     void update(const GUI_UpdateContext &context) override;

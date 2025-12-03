@@ -10,6 +10,13 @@
 #include "events/Event.h"
 #include "LoadGame/GameState.h"
 
+namespace QueueOrder {
+    using Value = unsigned short;
+
+    constexpr unsigned short FIRST = 0;
+    constexpr unsigned short MIDDLE = USHRT_MAX*0.5F;
+    constexpr unsigned short LAST = USHRT_MAX;
+}
 
 class Entity
 {
@@ -55,9 +62,9 @@ public:
     /// lowest values first ! put something early neear the start, something late near the end. Base value is around 30000
     /// </summary>
     /// <returns></returns>
-    virtual unsigned short int getQueueOrder()
+    virtual QueueOrder::Value getQueueOrder()
     {
-        return UINT16_MAX / 2;
+        return QueueOrder::MIDDLE;
     }
 
     [[nodiscard]] Vector2Int getPosition() const

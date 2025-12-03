@@ -128,7 +128,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}}
     },&gui_elements);
     pause_manager->on_paused_change.subscribe([](bool paused) {
-        std::cout << "paused set to : " << paused << std::endl;
+        // std::cout << "paused set to : " << paused << std::endl;
     });
 
     player_spaceship->registerEntities({vehicle_tracker, vehicle_enter, vehicle_leave, pause_manager});
@@ -235,6 +235,9 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 camera->getScale()
             }
         };
+        std::ranges::stable_sort(gui_elements,[](GUIRect * first, GUIRect * second) {
+            return first->getQueueOrder() > second->getQueueOrder();
+        });
         for (auto gui_element: gui_elements) {
             gui_element->render(renderer, gui_rendering_context);
         }
