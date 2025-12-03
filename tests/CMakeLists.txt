@@ -17,7 +17,8 @@ include_directories(
 file(GLOB_RECURSE TEST_SOURCES *.cpp)
 
 add_library(GTest::GTest INTERFACE IMPORTED
-        shipEditor/shipEditorModes/ModeStateMachineTests.cpp)
+        shipEditor/shipEditorModes/ModeStateMachineTests.cpp
+        LoadGame/LoadGameTests.cpp)
 
 target_link_libraries(
         GTest::GTest

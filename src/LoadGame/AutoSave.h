@@ -58,7 +58,7 @@ namespace Saves {
     }
     inline unsigned long getNextAutosaveNumber(const std::filesystem::path  &saves_folder) {
         unsigned long greatest_autosave_number = 0;
-        for (auto file: std::filesystem::directory_iterator(saves_folder)) {
+        for (const auto& file: std::filesystem::directory_iterator(saves_folder)) {
             if (!file.is_regular_file())
                 continue;
             if (isAutosave(file.path().filename())) {
@@ -72,14 +72,14 @@ namespace Saves {
         return greatest_autosave_number + 1;
     }
 
-    std::filesystem::path getSavesPath() {
+    inline std::filesystem::path getSavesPath() {
         return ENV_PROJECT_ROOT"saves";
     }
 
-    inline std::filesystem::path newAutoSavePath(const std::filesystem::path &saves_folder) {
+    inline std::filesystem::path newAutoSavePath(const std::filesystem::path &saves_folder = getSavesPath()) {
 
         auto number = getNextAutosaveNumber(saves_folder);
 
-        return "autosave_"+std::to_string(number)+".save.json";
+        return getSavesPath() / ("autosave_"+std::to_string(number)+".save.json");
     }
 }

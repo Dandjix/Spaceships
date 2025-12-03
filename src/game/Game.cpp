@@ -4,6 +4,7 @@
 #include "PauseManager.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
+#include "LoadGame/AutoSave.h"
 #include "LoadGame/GameState.h"
 #include "LoadGame/LoadSavedGame.h"
 #include "player/PlayerVehicleTracker.h"
@@ -83,6 +84,14 @@ void guiUpdateHandling(std::vector<GUIRect *> gui_elements, GUI_UpdateContext gu
     }
 }
 
+enum GameNavigation{
+    Game,
+    SaveAndDesktop,
+    SaveAndMainMenu,
+    NoSaveAndDesktop,
+    NoSaveAndMainMenu
+};
+
 MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                                    const std::filesystem::path &path_to_save,
                                    float target_delta_time) // target_delta_time = 1.0/60.0
@@ -92,7 +101,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
     float deltaTime = 0.0f;
-    MenuNavigation::Navigation destination = MenuNavigation::Game;
+    GameNavigation destination = Game;
     // -----------------------------------------------------------------------------------------------------------------
 
     CargoContainer::LoadTextures(renderer);
@@ -125,7 +134,12 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto *vehicle_leave = new Player::VehicleLeave(vehicle_tracker);
     auto *pause_manager = new PauseManager(&paused);
     auto *pause_menu = new PauseMenu(pause_manager,{
-        {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}}
+        {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}},
+        {"Quick Save",[](){std::cout << "quick save not implemented yet";}},
+        {"Save and Quit to Main Menu",[&destination](){destination = SaveAndMainMenu;}},
+        {"Save and Quit to Desktop",[&destination](){destination = SaveAndDesktop;}},
+        {"Quit without saving to Main Menu",[&destination](){destination = NoSaveAndMainMenu;}},
+        {"Quit without saving to Desktop",[&destination](){destination = NoSaveAndDesktop;}},
     },&gui_elements);
     pause_manager->on_paused_change.subscribe([](bool paused) {
         // std::cout << "paused set to : " << paused << std::endl;
@@ -139,7 +153,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
 
 
-    while (destination == MenuNavigation::Game) {
+    while (destination == Game) {
         last = now;
         now = SDL_GetTicks();
         deltaTime = static_cast<float>(now - last) / 1000.0f; // Convert ms to seconds
@@ -173,7 +187,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         while (SDL_PollEvent(&event)) {
             for (auto space_ship: space_ships) {
                 if (event.type == SDL_EVENT_QUIT) {
-                    destination = MenuNavigation::Quit;
+                    destination = NoSaveAndDesktop;
                 }
                 space_ship->eventHandling(event, event_context, paused);
             }
@@ -245,5 +259,19 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         SDL_RenderPresent(renderer);
     }
     delete pause_menu;
-    return destination;
+
+    if (destination == SaveAndDesktop || destination == SaveAndMainMenu) {
+        auto game_state = GameState::GameState(
+            space_ships
+        );
+        GameState::dumpGameState(game_state,Saves::newAutoSavePath());
+        std::cout << "saved !" << std::endl;
+    }
+
+    if (destination == SaveAndMainMenu || destination == NoSaveAndMainMenu) {
+        return MenuNavigation::MainMenu;
+    }
+
+    // if (destination == SaveAndDesktop || destination == NoSaveAndDesktop
+    return MenuNavigation::Quit;
 }

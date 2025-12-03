@@ -91,7 +91,9 @@ add_library(SpaceshipsLib ${SOURCES}
         game/PauseManager.cpp
         game/PauseManager.h
         userInterface/elements/GUI/GUIColoredRect.cpp
-        userInterface/elements/GUI/GUIColoredRect.h)
+        userInterface/elements/GUI/GUIColoredRect.h
+        LoadGame/AutoSave.cpp
+        LoadGame/AutoSave.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

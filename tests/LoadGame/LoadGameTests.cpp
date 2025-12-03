@@ -22,9 +22,3 @@ TEST(AutosaveTests,SplitStringTest) {
         ASSERT_EQ(split[3],"example.save.json");
     }
 }
-
-TEST(AutosaveTests,GetFileNamesTest) {
-    std::cout << "testing ..." << std::endl;
-    auto path = Saves::newAutoSavePath("/home/timon/Projects/Spaceships/saves");
-    std::cout << "done : "<<path << std::endl;
-}
