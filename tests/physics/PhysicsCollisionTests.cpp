@@ -21,6 +21,14 @@ public:
     }
 
     void render(SDL_Renderer* renderer, const RenderingContext& context) override {}
+
+    nlohmann::json toJson() override {
+        throw std::logic_error("not implemented");
+    }
+
+    constexpr std::string getJsonType() override {
+        return "mock_sphere";
+    }
 };
 
 bool are_vectors_close(Vector2Int a, Vector2Int b, int tolerance = 10)
