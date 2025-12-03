@@ -9,6 +9,7 @@
 
 #include "spaceshipTiles/SpaceshipTiles.h"
 
+class ActiveWhenPausedEntity;
 class BehavioredEntity;
 class Camera;
 class PhysicsEntity;
@@ -61,6 +62,7 @@ public:
   std::unordered_set<Entity *> entities;
   std::unordered_set<PhysicsEntity *> physics_entities;
   std::unordered_set<LateUpdateEntity *> late_update_entities;
+  std::unordered_set<ActiveWhenPausedEntity *> active_when_paused_entities;
   std::vector<Camera *> cameras;
 
   SpaceshipHooks hooks;
@@ -113,11 +115,13 @@ public:
 
   void renderEntities(SDL_Renderer *renderer, RenderingContext renderingContext);
 
-  void eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context);
+  void eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context, bool paused);
 
-  void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type);
+  void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type, bool
+                      paused);
 
-  void lateUpdateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type);
+  void lateUpdateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type, bool
+                          paused);
 
 
   /// <summary>

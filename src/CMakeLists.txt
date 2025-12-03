@@ -85,7 +85,11 @@ add_library(SpaceshipsLib ${SOURCES}
         entities/scripts/LateUpdateEntity.h
         physics/shapes/RoundStaticPhysicsShape.cpp
         physics/shapes/RoundStaticPhysicsShape.h
-        physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorStaticRound.h)
+        physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorStaticRound.h
+        entities/scripts/ActiveWhenPausedEntity.cpp
+        entities/scripts/ActiveWhenPausedEntity.h
+        game/PauseManager.cpp
+        game/PauseManager.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
@@ -118,6 +122,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         vehicles/spaceship/PilotSeat.cpp
         vehicles/spaceship/PilotSeat.h
         physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorStaticRound.h
+        userInterface/pauseMenu/PauseMenu.cpp
+        userInterface/pauseMenu/PauseMenu.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

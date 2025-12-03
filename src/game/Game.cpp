@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <utility>
 
+#include "PauseManager.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
 #include "LoadGame/GameState.h"
@@ -9,6 +10,7 @@
 #include "player/VehicleEnter.h"
 #include "player/VehicleLeave.h"
 #include "userInterface/elements/GUI/GUILabel.h"
+#include "userInterface/pauseMenu/PauseMenu.h"
 
 #ifndef ENV_PROJECT_ROOT
 #define ENV_PROJECT_ROOT ""
@@ -75,25 +77,45 @@ void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<Parall
 }
 
 
+void guiUpdateHandling(std::vector<GUIRect *> gui_elements, GUI_UpdateContext gui_update_context, bool paused) {
+    for (auto gui_element: gui_elements) {
+        gui_element->update(gui_update_context);
+    }
+}
+
 MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                                    const std::filesystem::path &path_to_save,
                                    float target_delta_time) // target_delta_time = 1.0/60.0
 {
+    // Game loop setup -------------------------------------------------------------------------------------------------
+    bool paused = false;
+    Uint64 now = SDL_GetTicks();
+    Uint64 last = 0;
+    float deltaTime = 0.0f;
+    MenuNavigation::Navigation destination = MenuNavigation::Game;
+    // -----------------------------------------------------------------------------------------------------------------
+
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);
     Tiles::loadAll(renderer);
 
-
-    GameState::GameState game_state = GameState::loadGameState(path_to_save);
     // Setup -----------------------------------------------------------------------------------------------------------
-    Camera *camera = game_state.getCamera();
-    Entity *player = game_state.getPlayer();
-    SpaceShip *player_spaceship = game_state.getPlayerSpaceship();
+    Camera *camera;
+    BehavioredEntity *player;
+    SpaceShip *player_spaceship;
+    std::vector<SpaceShip *> space_ships;
+    {
+        GameState::GameState game_state = GameState::loadGameState(path_to_save);
+        camera = game_state.getCamera();
+        player = game_state.getPlayer();
+        player_spaceship = game_state.getPlayerSpaceship();
+        space_ships = game_state.space_ships;
+    }
     camera->setPlayer(player);
     player_spaceship->setPlayer(player);
 
     // GUI elements ----------------------------------------------------------------------------------------------------
-    auto *tooltip = new GUITooltip({0, 0}, false);
+    auto tooltip = new GUITooltip({0, 0}, false);
     // auto *label = new GUILabel(Anchor::Center,{0,0},100,50,"test",{255,255,255,255},fonts["lg"]);
     std::vector<GUIRect *> gui_elements = {tooltip};
 
@@ -101,18 +123,21 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto *vehicle_tracker = new Player::PlayerVehicleTracker(player);
     auto *vehicle_enter = new Player::VehicleEnter(tooltip, vehicle_tracker);
     auto *vehicle_leave = new Player::VehicleLeave(vehicle_tracker);
+    auto *pause_manager = new PauseManager(&paused);
+    auto *pause_menu = new PauseMenu(pause_manager,{
+        {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}}
+    },&gui_elements);
+    pause_manager->on_paused_change.subscribe([](bool paused) {
+        std::cout << "paused set to : " << paused << std::endl;
+    });
 
-    player_spaceship->registerEntities({vehicle_tracker, vehicle_enter, vehicle_leave});
+    player_spaceship->registerEntities({vehicle_tracker, vehicle_enter, vehicle_leave, pause_manager});
 
 
     // Parallax --------------------------------------------------------------------------------------------------------
     std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer, {0, 0});
 
-    // Game loop -------------------------------------------------------------------------------------------------------
-    Uint64 now = SDL_GetTicks();
-    Uint64 last = 0;
-    float deltaTime = 0.0f;
-    MenuNavigation::Navigation destination = MenuNavigation::Game;
+
 
     while (destination == MenuNavigation::Game) {
         last = now;
@@ -138,19 +163,19 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 camera->getPosition(),
                 camera->getAngle(),
                 screenDimensions,
-                camera->getScale()
+                camera->getScale(),
             },
             GameEvent::getMousePositionType(gui_elements, {mouse_x, mouse_y}),
-            window
+            window,
         };
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            for (auto space_ship: game_state.space_ships) {
+            for (auto space_ship: space_ships) {
                 if (event.type == SDL_EVENT_QUIT) {
                     destination = MenuNavigation::Quit;
                 }
-                space_ship->eventHandling(event, event_context);
+                space_ship->eventHandling(event, event_context, paused);
             }
             for (auto gui_element: gui_elements) {
                 gui_element->handleEvent(event, event_context);
@@ -160,20 +185,23 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
         camera->setScreenDimensions(screenDimensions);
 
-        for (auto ship: game_state.space_ships) {
+
+        for (auto ship: space_ships) {
             ship->updateHandling(
                 {camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()},
                 deltaTime,
-                GameEvent::Game);
-            // QUEUE DELETION ----------------------------------------------------------------------------------------------
+                GameEvent::Game,
+                paused);
+            // QUEUE DELETION ------------------------------------------------------------------------------------------
             ship->handleQueueDeletion();
-            // PHYSICS -----------------------------------------------------------------------------------------------------
+            // PHYSICS -------------------------------------------------------------------------------------------------
             ship->physicsHandling(target_delta_time);
 
             ship->lateUpdateHandling(
                 {camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()},
                 deltaTime,
-                GameEvent::Game);
+                GameEvent::Game,
+                paused);
         }
 
         GUI_UpdateContext gui_update_context = {
@@ -185,9 +213,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             },
             deltaTime
         };
-        for (auto gui_element: gui_elements) {
-            gui_element->update(gui_update_context);
-        }
+        guiUpdateHandling(gui_elements, gui_update_context,paused);
 
         // RENDERING ---------------------------------------------------------------------------------------------------
         RenderingContext renderingContext = {
@@ -215,5 +241,6 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
         SDL_RenderPresent(renderer);
     }
+    delete pause_menu;
     return destination;
 }

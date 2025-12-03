@@ -5,6 +5,7 @@
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
+#include "entities/scripts/ActiveWhenPausedEntity.h"
 #include "EntityData/EntityLoading.h"
 #include "physics/PhysicsEntity.h"
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
@@ -412,14 +413,21 @@ void SpaceShip::renderEntities(SDL_Renderer* renderer, RenderingContext renderin
     }
 }
 
-void SpaceShip::eventHandling(const SDL_Event & event, const GameEvent::GameEventContext & event_context) {
-	for (Entity * entity : getEntities(RoomDistance::All))
-	{
-		entity->handleEvent(event,event_context);
+void SpaceShip::eventHandling(const SDL_Event & event, const GameEvent::GameEventContext & event_context, bool paused) {
+	if (!paused) {
+		for (Entity * entity : getEntities(RoomDistance::All))
+		{
+			entity->handleEvent(event,event_context);
+		}
+	}
+	else {
+		for (auto entity: active_when_paused_entities) {
+			entity->handleEvent(event,event_context);
+		}
 	}
 }
 
-void SpaceShip::updateHandling(const CameraTransformations::CameraInfo & camera_info, float deltaTime,GameEvent::MousePositionType mouse_position_type)
+void SpaceShip::updateHandling(const CameraTransformations::CameraInfo & camera_info, float deltaTime,GameEvent::MousePositionType mouse_position_type, bool paused)
 {
 	UpdateContext updateContext = {
 		camera_info,
@@ -428,19 +436,29 @@ void SpaceShip::updateHandling(const CameraTransformations::CameraInfo & camera_
 		mouse_position_type
 	};
 
-    // update
-    for (Entity * entity : getEntities(RoomDistance::All))
-    {
-        entity->update(updateContext);
-    }
+	if (!paused) {
+	    // update
+	    for (Entity * entity : getEntities(RoomDistance::All))
+	    {
+	        entity->update(updateContext);
+	    }
+		hooks.update(updateContext);
+	}
+	else {
+		for (auto entity: active_when_paused_entities) {
+			entity->update(updateContext);
+		}
+	}
 
-	hooks.update(updateContext);
 
     update(updateContext);
 }
 
 void SpaceShip::lateUpdateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime,
-	GameEvent::MousePositionType mouse_position_type) {
+	GameEvent::MousePositionType mouse_position_type, bool paused) {
+
+	if (paused)
+		return;
 
 	UpdateContext updateContext = {
 		camera_info,
