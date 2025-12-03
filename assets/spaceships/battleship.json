@@ -2,6 +2,13 @@
     "hooks": {
         "points": [
             {
+                "name": "pilot_seat",
+                "position": {
+                    "x": 81920,
+                    "y": 40960
+                }
+            },
+            {
                 "name": "hangar_center",
                 "position": {
                     "x": 24576,

@@ -7,7 +7,7 @@
 
 #include "math/Vectors.h"
 #include "../shapes/RoundPhysicsShape.h"
-
+#include "physics/shapes/RoundStaticPhysicsShape.h"
 /**
  * This is applied to two entities that are at the same position to unstuck them
  */
@@ -23,6 +23,10 @@ namespace PhysicsCollisions
     void visitRectRound(RectPhysicsShape* shape1, RoundPhysicsShape* shape2, SpaceShip* space_ship)
     {
         // std::cout << "rect on round collision" << std::endl;
+    }
+
+    void visitStaticRoundRect(RoundStaticPhysicsShape *shape1, RectPhysicsShape *shape2, SpaceShip *space_ship) {
+
     }
 
     void applyJolt(RoundPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
@@ -68,8 +72,34 @@ namespace PhysicsCollisions
 
     }
 
+    void visitStaticRoundRound(RoundStaticPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
+        // std::cout << "round on round collision" << std::endl;
+        if (shape1->owner_entity->getPosition() == shape2->owner_entity->getPosition()) {
+            float random_angle = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX))*360;
 
-void visitRoundWall(RoundPhysicsShape* shape1, SpaceShip* space_ship)
+            Vector2Float jolt_vector = Vector2Float(jolt,0.0f).rotate(random_angle);
+
+            shape2->owner_entity->movePosition(jolt_vector,space_ship);
+        }
+
+        Vector2Int diff = shape1->owner_entity->getPosition() - shape2->owner_entity->getPosition();
+
+        float force_value = shape1->radius + shape2->radius  - diff.length();
+
+        if (force_value <= 0)
+        {
+            return;
+        }
+
+        float force_e2 = force_value;
+
+        auto delta_e2 = (Vectors::toVector2Float(shape2->owner_entity->getPosition()-shape1->owner_entity->getPosition()).normalized() * force_e2);
+
+        shape2->owner_entity->movePosition(delta_e2,space_ship);
+    }
+
+
+    void visitRoundWall(RoundPhysicsShape* shape1, SpaceShip* space_ship)
 {
     Vector2Int tilesStart;
     Vector2Int tilesEnd;

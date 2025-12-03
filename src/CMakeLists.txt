@@ -82,7 +82,10 @@ add_library(SpaceshipsLib ${SOURCES}
         player/PlayerVehicleTracker.cpp
         player/PlayerVehicleTracker.h
         entities/scripts/LateUpdateEntity.cpp
-        entities/scripts/LateUpdateEntity.h)
+        entities/scripts/LateUpdateEntity.h
+        physics/shapes/RoundStaticPhysicsShape.cpp
+        physics/shapes/RoundStaticPhysicsShape.h
+        physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorStaticRound.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
@@ -112,6 +115,9 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         vehicles/Vechicle.cpp
         player/VehicleEnter.h
         player/VehicleEnter.cpp
+        vehicles/spaceship/PilotSeat.cpp
+        vehicles/spaceship/PilotSeat.h
+        physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorStaticRound.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

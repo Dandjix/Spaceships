@@ -35,4 +35,8 @@ public:
     {
         PhysicsCollisions::visitRectWall(e1,space_ship);
     }
+
+    void visitStaticRound(RoundStaticPhysicsShape *e2, SpaceShip *space_ship) override {
+        return PhysicsCollisions::visitStaticRoundRect(e2,e1,space_ship);
+    }
 };

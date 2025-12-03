@@ -42,7 +42,7 @@ public:
 
     virtual bool canStopPiloting();
 
-    nlohmann::json toJson() override;
+    nlohmann::json toJson() override = 0;
 
     constexpr bool is_player() override;
 

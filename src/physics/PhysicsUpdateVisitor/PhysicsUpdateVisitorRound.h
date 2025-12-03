@@ -8,33 +8,33 @@
 #include "PhysicsCollisions.h"
 #include "PhysicsUpdateVisitor.h"
 
+class RoundStaticPhysicsShape;
 class PhysicsEntity;
 class RoundPhysicsShape;
 class RectPhysicsShape;
 class SpaceShip;
 
-class PhysicsUpdateVisitorRound : public PhysicsUpdateVisitor
-{
+class PhysicsUpdateVisitorRound : public PhysicsUpdateVisitor {
 protected:
-    RoundPhysicsShape * e1;
+    RoundPhysicsShape *e1;
 
 public:
-    explicit PhysicsUpdateVisitorRound(RoundPhysicsShape * e1) : PhysicsUpdateVisitor(), e1(e1) {  }
-
-    void visitRect(RectPhysicsShape* e2, SpaceShip* space_ship) override
-    {
-        PhysicsCollisions::visitRectRound(e2,e1,space_ship);
+    explicit PhysicsUpdateVisitorRound(RoundPhysicsShape *e1) : PhysicsUpdateVisitor(), e1(e1) {
     }
 
-    void visitRound(RoundPhysicsShape* e2, SpaceShip* space_ship) override
-    {
-        PhysicsCollisions::visitRounds(e1,e2,space_ship);
+    void visitRect(RectPhysicsShape *e2, SpaceShip *space_ship) override {
+        PhysicsCollisions::visitRectRound(e2, e1, space_ship);
     }
 
-    void visitWall(SpaceShip* space_ship) override
-    {
-        PhysicsCollisions::visitRoundWall(e1,space_ship);
+    void visitRound(RoundPhysicsShape *e2, SpaceShip *space_ship) override {
+        PhysicsCollisions::visitRounds(e1, e2, space_ship);
+    }
+
+    void visitWall(SpaceShip *space_ship) override {
+        PhysicsCollisions::visitRoundWall(e1, space_ship);
+    }
+
+    void visitStaticRound(RoundStaticPhysicsShape *e2, SpaceShip *space_ship) override {
+        PhysicsCollisions::visitStaticRoundRound(e2, e1, space_ship);
     }
 };
-
-

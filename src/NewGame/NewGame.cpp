@@ -4,7 +4,9 @@
 
 #include "NewGame.h"
 
+#include "spaceships/Hooks/HookPoint.h"
 #include "vehicles/combatOutfit/CombatOutfit.h"
+#include "vehicles/spaceship/PilotSeat.h"
 
 std::filesystem::path NewGame::ConstructNewGame() {
 
@@ -14,13 +16,15 @@ std::filesystem::path NewGame::ConstructNewGame() {
     auto camera =  new Camera(Vector2Int(0,0),0,1);
     camera->setPlayer(player);
 
+
     std::vector<Entity * > entities = {
         player,
         camera,
         new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
         new CargoContainer(Vector2Int{96,96}.scaleToWorldPosition(),22),
         new CombatOutfit(Vector2Int{196,128}.scaleToWorldPosition(),35),
-        new CombatOutfit(Vector2Int{256,128}.scaleToWorldPosition(),35)
+        new CombatOutfit(Vector2Int{256,128}.scaleToWorldPosition(),35),
+        new PilotSeat(blueprint->hooks.getPoint("pilot_seat")->position,0)
     };
 
     auto * space_ship = new SpaceShip(blueprint,entities);
