@@ -74,6 +74,11 @@ struct Vector2 {
         return x == other.x && y == other.y;
     }
 
+    /**
+     * rotates the vector
+     * @param degrees the angle in degrees
+     * @return the rotated vector
+     */
     Vector2<T> rotate(float degrees) const {
         if constexpr (std::is_same_v<T, float>) {
             float radians = degrees * (3.14159265f / 180.0f);
