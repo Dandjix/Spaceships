@@ -13,6 +13,7 @@ class BehavioredEntity;
 class Camera;
 class PhysicsEntity;
 class Entity;
+class LateUpdateEntity;
 
 enum class RoomDistance {
   All,
@@ -59,6 +60,7 @@ public:
   std::filesystem::path blueprint_path;
   std::unordered_set<Entity *> entities;
   std::unordered_set<PhysicsEntity *> physics_entities;
+  std::unordered_set<LateUpdateEntity *> late_update_entities;
   std::vector<Camera *> cameras;
 
   SpaceshipHooks hooks;
@@ -114,6 +116,9 @@ public:
   void eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context);
 
   void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type);
+
+  void lateUpdateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type);
+
 
   /// <summary>
   /// adds one or more entries to the entities map

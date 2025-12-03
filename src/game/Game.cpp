@@ -168,8 +168,12 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             // QUEUE DELETION ----------------------------------------------------------------------------------------------
             ship->handleQueueDeletion();
             // PHYSICS -----------------------------------------------------------------------------------------------------
-
             ship->physicsHandling(target_delta_time);
+
+            ship->lateUpdateHandling(
+                {camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()},
+                deltaTime,
+                GameEvent::Game);
         }
 
         GUI_UpdateContext gui_update_context = {

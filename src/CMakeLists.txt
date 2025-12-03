@@ -80,7 +80,9 @@ add_library(SpaceshipsLib ${SOURCES}
         player/VehicleLeave.cpp
         player/VehicleLeave.h
         player/PlayerVehicleTracker.cpp
-        player/PlayerVehicleTracker.h)
+        player/PlayerVehicleTracker.h
+        entities/scripts/LateUpdateEntity.cpp
+        entities/scripts/LateUpdateEntity.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

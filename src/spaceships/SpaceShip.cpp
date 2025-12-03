@@ -9,6 +9,7 @@
 #include "physics/PhysicsEntity.h"
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
+#include "entities/scripts/LateUpdateEntity.h"
 
 bool EntityComparison::compareEntities(Entity* e1, Entity* e2)
 {
@@ -436,4 +437,21 @@ void SpaceShip::updateHandling(const CameraTransformations::CameraInfo & camera_
 	hooks.update(updateContext);
 
     update(updateContext);
+}
+
+void SpaceShip::lateUpdateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime,
+	GameEvent::MousePositionType mouse_position_type) {
+
+	UpdateContext updateContext = {
+		camera_info,
+		deltaTime,
+		this,
+		mouse_position_type
+	};
+
+	// late update
+	for (LateUpdateEntity * entity : late_update_entities)
+	{
+		entity->lateUpdate(updateContext);
+	}
 }

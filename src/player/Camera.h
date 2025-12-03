@@ -2,8 +2,9 @@
 #include "../entities/scripts/Entity.h"
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
+#include "entities/scripts/LateUpdateEntity.h"
 
-class Camera : public Entity {  // Inherit from Entity
+class Camera : public LateUpdateEntity {  // Inherit from Entity
 protected:
     Entity* player;  // Pointer to the player entity
     Vector2Int screenDimensions = Vector2Int(0, 0);
@@ -16,7 +17,7 @@ public:
     /// Creates a Camera that follows the player.
     /// </summary>
     /// <param name="p">Pointer to the player entity</param>
-    Camera(Vector2Int position, float angle, float scale) : Entity(position, angle), player(nullptr), scale(scale) {
+    Camera(Vector2Int position, float angle, float scale) : LateUpdateEntity(position, angle), player(nullptr), scale(scale) {
     }
 
     SpaceShip * working_spaceship = nullptr;
@@ -98,23 +99,27 @@ public:
         //}
     }
 
+    void lateUpdate(const UpdateContext &context) override {
+        setPosition(player->getPosition());  // Again in late update so that the camera position is synced with the physics
+    }
+
     nlohmann::json toJson() override {
         auto json = Entity::toJson();
         json["scale"] = scale;
         return json;
     }
 
-    static Entity * fromJson(nlohmann::json json) {
+    static Camera *fromJson(nlohmann::json json) {
         return new Camera(Vector2Int::fromJson(json["position"]),json["angle"],json["scale"]);
     }
 
     void registerInSpaceship(SpaceShip *space_ship) override {
-        Entity::registerInSpaceship(space_ship);
+        LateUpdateEntity::registerInSpaceship(space_ship);
         space_ship->cameras.push_back(this);
     }
 
     void unregisterInSpacehip(SpaceShip *space_ship) override {
-        Entity::unregisterInSpacehip(space_ship);
+        LateUpdateEntity::unregisterInSpacehip(space_ship);
         space_ship->cameras.erase(std::find(space_ship->cameras.begin(),space_ship->cameras.end(),this));
     }
 
