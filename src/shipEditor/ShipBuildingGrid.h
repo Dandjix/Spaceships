@@ -1,11 +1,11 @@
 #pragma once
-#include "../entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 #include "../game/Rendering.h"
 #include <SDL3/SDL.h>
 #include "../player/Camera.h"
 #include <functional>
 
-#include "entities/ShortLivedEntity.h"
+#include "../entities/scripts/ShortLivedEntity.h"
 
 class ShipBuildingGrid : public ShortLivedEntity
 {

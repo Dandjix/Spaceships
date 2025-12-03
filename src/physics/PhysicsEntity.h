@@ -1,6 +1,6 @@
 #pragma once
 #include "PhysicsShape.h"
-#include "../entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 #include "../physics/Physics.h"
 
 class PhysicsShape;

@@ -1,5 +1,5 @@
 #pragma once
-#include "../entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
 

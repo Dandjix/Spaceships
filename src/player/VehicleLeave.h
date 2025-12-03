@@ -4,7 +4,7 @@
 
 #pragma once
 #include "PlayerVehicleTracker.h"
-#include "entities/ShortLivedEntity.h"
+#include "../entities/scripts/ShortLivedEntity.h"
 
 namespace Player {
     class VehicleLeave : public ShortLivedEntity {

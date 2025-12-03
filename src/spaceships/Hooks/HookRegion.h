@@ -7,7 +7,7 @@
 #include <optional>
 #include <utility>
 
-#include "entities/Entity.h"
+#include "../../entities/scripts/Entity.h"
 #include "math/Vectors.h"
 #include "events/Event.h"
 

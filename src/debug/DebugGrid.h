@@ -1,4 +1,4 @@
-#include "entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 
 class DebugGrid : public Entity
 {

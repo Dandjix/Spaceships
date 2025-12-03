@@ -1,6 +1,6 @@
 #pragma once
-#include "../entities/Entity.h"
-#include "entities/ShortLivedEntity.h"
+#include "../entities/scripts/Entity.h"
+#include "../entities/scripts/ShortLivedEntity.h"
 
 class BlueprintEditorAppearance : public ShortLivedEntity
 {

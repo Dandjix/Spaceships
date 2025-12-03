@@ -4,7 +4,7 @@
 
 #pragma once
 #include "entities/Humanoid.h"
-#include "entities/ShortLivedEntity.h"
+#include "../entities/scripts/ShortLivedEntity.h"
 #include "vehicles/Vehicle.h"
 
 namespace Player {

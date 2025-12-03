@@ -1,8 +1,8 @@
 #pragma once
-#include "../entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 #include "../player/Camera.h"
 #include "../math/Vectors.h"
-#include "entities/ShortLivedEntity.h"
+#include "../entities/scripts/ShortLivedEntity.h"
 
 class RayCaster : public ShortLivedEntity
 {

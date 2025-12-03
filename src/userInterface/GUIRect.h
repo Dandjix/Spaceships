@@ -5,7 +5,7 @@
 
 #include "GUI.h"
 #include "../math/Vectors.h"
-#include "entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 
 class GUIRect {
 protected :

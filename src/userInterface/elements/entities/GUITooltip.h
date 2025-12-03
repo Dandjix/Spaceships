@@ -5,7 +5,7 @@
 #pragma once
 #include <utility>
 
-#include "entities/ShortLivedEntity.h"
+#include "../../../entities/scripts/ShortLivedEntity.h"
 #include "userInterface/GUIRect.h"
 
 

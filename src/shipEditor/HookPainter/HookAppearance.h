@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "entities/ShortLivedEntity.h"
+#include "../../entities/scripts/ShortLivedEntity.h"
 
 
 class HookAppearance : public ShortLivedEntity {

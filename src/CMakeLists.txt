@@ -72,7 +72,7 @@ add_library(SpaceshipsLib ${SOURCES}
         behavior/BehavioredEntity.h
         shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.cpp
         shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.h
-        entities/ShortLivedEntity.h
+        entities/scripts/ShortLivedEntity.h
         LoadGame/GameState.cpp
         LoadGame/GameState.h
         userInterface/elements/entities/GUITooltip.cpp

@@ -5,7 +5,7 @@
 #include "Behavior.h"
 
 #include "PlayerBehavior.h"
-#include "../entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 
 class Entity;
 

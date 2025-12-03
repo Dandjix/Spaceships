@@ -7,7 +7,7 @@
 #include <functional>
 #include <variant>
 
-#include "entities/Entity.h"
+#include "../../../entities/scripts/Entity.h"
 
 namespace EntityPlacement {
 

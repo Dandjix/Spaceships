@@ -1,5 +1,5 @@
 #pragma once
-#include "../entities/Entity.h"
+#include "../entities/scripts/Entity.h"
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShip.h"
 

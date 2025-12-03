@@ -7,7 +7,7 @@
 
 #include "PlayerVehicleTracker.h"
 #include "entities/Humanoid.h"
-#include "entities/ShortLivedEntity.h"
+#include "../entities/scripts/ShortLivedEntity.h"
 #include "userInterface/elements/entities/GUITooltip.h"
 #include "vehicles/Vehicle.h"
 

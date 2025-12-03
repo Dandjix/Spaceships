@@ -4,7 +4,7 @@
 
 #pragma once
 #include "entities/CargoContainer.h"
-#include "entities/Entity.h"
+#include "../../entities/scripts/Entity.h"
 #include "entities/Humanoid.h"
 #include "entities/Sphere.h"
 #include "math/Vectors.h"

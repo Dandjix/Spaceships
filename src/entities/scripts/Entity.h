@@ -2,11 +2,11 @@
 #include <SDL3/SDL.h>
 #include <optional>
 
-#include "../behavior/Behavior.h"
-#include "../math/Vectors.h"
-#include "../game/Rendering.h"
-#include "../game/Update.h"
-#include  "../spaceships/SpaceShip.h"
+#include "../../behavior/Behavior.h"
+#include "../../math/Vectors.h"
+#include "../../game/Rendering.h"
+#include "../../game/Update.h"
+#include "../../spaceships/SpaceShip.h"
 #include "events/Event.h"
 #include "LoadGame/GameState.h"
 

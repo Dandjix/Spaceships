@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 
-#include "../../entities/Entity.h"
+#include "../../entities/scripts/Entity.h"
 #include "../../math/Vectors.h"
 #include "../../game/Update.h"
 #include "../../spaceships/SpaceShipBlueprint.h"

@@ -5,7 +5,7 @@
 #include "Entity.h"
 
 void Entity::renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture,
-    Vector2Float destSize) const {
+                           Vector2Float destSize) const {
     destSize = destSize / context.camera_info.cameraScale;
 
     Vector2Float center = context.camera_info.worldToScreenPoint(position);
