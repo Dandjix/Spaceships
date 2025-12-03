@@ -4,7 +4,7 @@
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
 #include "physics/PhysicsEntity.h"
-#include "physics/RectPhysicsShape.h"
+#include "../physics/shapes/RectPhysicsShape.h"
 
 class CargoContainer : public PhysicsEntity {
 public:

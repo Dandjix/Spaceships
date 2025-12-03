@@ -6,7 +6,7 @@
 
 #include "behavior/BehavioredEntity.h"
 #include "physics/PhysicsEntity.h"
-#include "physics/RoundPhysicsShape.h"
+#include "../physics/shapes/RoundPhysicsShape.h"
 #include "textures/Textures.h"
 
 class Vehicle;

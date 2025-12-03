@@ -1,5 +1,5 @@
 #pragma once
-#include "PhysicsShape.h"
+#include "shapes/PhysicsShape.h"
 #include "../entities/scripts/Entity.h"
 #include "../physics/Physics.h"
 

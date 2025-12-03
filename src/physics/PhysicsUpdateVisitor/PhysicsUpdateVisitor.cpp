@@ -5,7 +5,7 @@
 #include "PhysicsUpdateVisitor.h"
 
 #include <iostream>
-#include "physics/RectPhysicsShape.h"
-#include "physics/RoundPhysicsShape.h"
+#include "../shapes/RectPhysicsShape.h"
+#include "../shapes/RoundPhysicsShape.h"
 
 

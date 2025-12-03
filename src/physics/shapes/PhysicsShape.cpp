@@ -4,7 +4,7 @@
 
 #include "PhysicsShape.h"
 
-#include "PhysicsEntity.h"
+#include "../PhysicsEntity.h"
 
 
 void PhysicsShape::physicsUpdate(const PhysicsUpdateContext& context)

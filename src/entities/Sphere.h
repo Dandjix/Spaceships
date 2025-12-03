@@ -5,7 +5,7 @@
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
 #include "physics/PhysicsEntity.h"
-#include "physics/RoundPhysicsShape.h"
+#include "../physics/shapes/RoundPhysicsShape.h"
 
 class Sphere : public PhysicsEntity {
 private:

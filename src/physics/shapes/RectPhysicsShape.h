@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#include "PhysicsEntity.h"
+#include "../PhysicsEntity.h"
 #include "PhysicsShape.h"
-#include "PhysicsUpdateVisitor/PhysicsUpdateVisitorRect.h"
+#include "../PhysicsUpdateVisitor/PhysicsUpdateVisitorRect.h"
 
 
 class RectPhysicsShape : public PhysicsShape

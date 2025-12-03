@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "../../src/spaceships/SpaceShip.h"
 #include "physics/PhysicsEntity.h"
-#include "physics/RoundPhysicsShape.h"
+#include "../../src/physics/shapes/RoundPhysicsShape.h"
 
 class MockRoundPhysicsEntity : public PhysicsEntity
 {

@@ -1,7 +1,7 @@
 #pragma once
-#include "PhysicsEntity.h"
+#include "../PhysicsEntity.h"
 #include "PhysicsShape.h"
-#include "PhysicsUpdateVisitor/PhysicsUpdateVisitorRound.h"
+#include "../PhysicsUpdateVisitor/PhysicsUpdateVisitorRound.h"
 
 class RoundPhysicsShape : public PhysicsShape
 {

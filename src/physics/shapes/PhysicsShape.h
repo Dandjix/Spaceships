@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#include "Physics.h"
-#include "PhysicsEntity.h"
+#include "../Physics.h"
+#include "../PhysicsEntity.h"
 #include "math/BoundingBox.h"
 #include "spaceships/SpaceShip.h"
 
