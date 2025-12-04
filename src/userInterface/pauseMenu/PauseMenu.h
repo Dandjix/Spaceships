@@ -15,14 +15,16 @@ private:
     std::vector<GUIRect *> pause_menu_elements;
     std::vector<GUIRect *> *gui_elements;
 
-    std::vector<std::string> get_option_keys(std::map<std::string, std::function<void()> > m);
+    std::vector<std::string> get_option_keys(std::vector<std::pair<std::string, std::function<void()>>> options);
+
+    void execute_action(const std::string &value);
 
 public:
-    std::map<std::string, std::function<void()> > actions;
+    std::vector<std::pair<std::string, std::function<void()>>> actions;
 
     explicit PauseMenu(
         PauseManager *pause_manager,
-        const std::map<std::string, std::function<void()> >& actions,
+        const std::vector<std::pair<std::string, std::function<void()>>>& actions,
         std::vector<GUIRect *> * gui_elements
     );
 
