@@ -6,7 +6,7 @@
 #include "MenuNavigation.h"
 #include "fonts.h"
 #include "elements/GUI/GUIList.h"
-#include "LoadGame/AutoSave.h"
+#include "loadGame/AutoSave.h"
 
 
 MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *window) {

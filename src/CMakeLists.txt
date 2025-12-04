@@ -73,8 +73,8 @@ add_library(SpaceshipsLib ${SOURCES}
         shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.cpp
         shipEditor/EntityPlacer/EntityRegistry/EntityPlacement.h
         entities/scripts/ShortLivedEntity.h
-        LoadGame/GameState.cpp
-        LoadGame/GameState.h
+        loadGame/GameState.cpp
+        loadGame/GameState.h
         userInterface/elements/entities/GUITooltip.cpp
         userInterface/elements/entities/GUITooltip.h
         player/VehicleLeave.cpp
@@ -92,8 +92,8 @@ add_library(SpaceshipsLib ${SOURCES}
         game/PauseManager.h
         userInterface/elements/GUI/GUIColoredRect.cpp
         userInterface/elements/GUI/GUIColoredRect.h
-        LoadGame/AutoSave.cpp
-        LoadGame/AutoSave.h)
+        loadGame/AutoSave.cpp
+        loadGame/AutoSave.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
@@ -113,8 +113,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         textures/Textures.cpp
         textures/Textures.h
         spaceships/EntityData/EntityLoading.h
-        LoadGame/LoadSavedGame.cpp
-        LoadGame/LoadSavedGame.h
+        loadGame/LoadSavedGame.cpp
+        loadGame/LoadSavedGame.h
         NewGame/NewGame.cpp
         NewGame/NewGame.h
         vehicles/Vehicle.h

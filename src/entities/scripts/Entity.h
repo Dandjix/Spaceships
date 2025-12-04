@@ -8,7 +8,7 @@
 #include "../../game/Update.h"
 #include "../../spaceships/SpaceShip.h"
 #include "events/Event.h"
-#include "LoadGame/GameState.h"
+#include "loadGame/GameState.h"
 
 namespace QueueOrder {
     using Value = unsigned short;

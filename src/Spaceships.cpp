@@ -4,8 +4,8 @@
 
 #include "userInterface/MainMenu.h"
 #include "game/Game.h"
-#include "LoadGame/AutoSave.h"
-#include "LoadGame/LoadSavedGame.h"
+#include "loadGame/AutoSave.h"
+#include "loadGame/LoadSavedGame.h"
 #include "NewGame/NewGame.h"
 #include "shipEditor/ShipEditor.h"
 #include "userInterface/fonts.h"

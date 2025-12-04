@@ -8,7 +8,7 @@
 #include "behavior/PlayerBehavior.h"
 #include "entities/CargoContainer.h"
 #include "entities/Humanoid.h"
-#include "LoadGame/GameState.h"
+#include "loadGame/GameState.h"
 #include "spaceships/SaveAndLoadShips.h"
 #include "spaceships/SpaceShip.h"
 

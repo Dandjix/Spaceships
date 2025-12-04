@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "LoadGame/AutoSave.h"
+#include "loadGame/AutoSave.h"
 
 TEST(AutosaveTests,SplitStringTest) {
     {
