@@ -258,7 +258,8 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
         SDL_RenderPresent(renderer);
     }
-    delete pause_menu;
+
+    MenuNavigation::Navigation navigation;
 
     if (destination == SaveAndDesktop || destination == SaveAndMainMenu) {
         auto game_state = GameState::GameState(
@@ -268,13 +269,16 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     }
 
     if (destination == SaveAndMainMenu || destination == NoSaveAndMainMenu) {
-        return MenuNavigation::MainMenu;
+        navigation = MenuNavigation::MainMenu;
+    }
+    else {
+        navigation = MenuNavigation::Quit;
     }
 
+    delete pause_menu;
     for (auto space_ship: space_ships) {
         delete space_ship;
     }
 
-    // if (destination == SaveAndDesktop || destination == NoSaveAndDesktop
-    return MenuNavigation::Quit;
+    return navigation;
 }
