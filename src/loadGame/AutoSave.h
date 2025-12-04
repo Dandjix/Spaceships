@@ -76,7 +76,7 @@ namespace Saves {
         return ENV_PROJECT_ROOT"saves";
     }
 
-    inline std::filesystem::path newAutoSavePath(const std::filesystem::path &saves_folder = getSavesPath()) {
+    inline std::filesystem::path getNewAutosavePath(const std::filesystem::path &saves_folder = getSavesPath()) {
 
         auto number = getNextAutosaveNumber(saves_folder);
 

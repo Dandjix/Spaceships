@@ -41,6 +41,10 @@ void renderParallax(SDL_Renderer *renderer, const RenderingContext &context, std
     }
 }
 
+void quickSave(const GameState::GameState &game_state) {
+    dumpGameState(game_state, Saves::getNewAutosavePath());
+}
+
 std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer *renderer, Vector2Int base_origin) {
     auto roid_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/environment/parallax/roid.png");
 
@@ -135,7 +139,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto *pause_manager = new PauseManager(&paused);
     auto *pause_menu = new PauseMenu(pause_manager,{
         {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}},
-        {"Quick Save",[](){std::cout << "quick save not implemented yet";}},
+        {"Quick Save",[space_ships](){quickSave(GameState::GameState(space_ships));}},
         {"Save and Quit to Main Menu",[&destination](){destination = SaveAndMainMenu;}},
         {"Save and Quit to Desktop",[&destination](){destination = SaveAndDesktop;}},
         {"Quit without saving to Main Menu",[&destination](){destination = NoSaveAndMainMenu;}},
@@ -265,7 +269,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         auto game_state = GameState::GameState(
             space_ships
         );
-        GameState::dumpGameState(game_state,Saves::newAutoSavePath());
+        GameState::dumpGameState(game_state,Saves::getNewAutosavePath());
     }
 
     if (destination == SaveAndMainMenu || destination == NoSaveAndMainMenu) {
