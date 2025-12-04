@@ -128,6 +128,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorStaticRound.h
         userInterface/pauseMenu/PauseMenu.cpp
         userInterface/pauseMenu/PauseMenu.h
+        userInterface/elements/notification/Snackbar.cpp
+        userInterface/elements/notification/Snackbar.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

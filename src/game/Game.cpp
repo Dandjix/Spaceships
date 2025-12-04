@@ -155,6 +155,16 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     // Parallax --------------------------------------------------------------------------------------------------------
     std::vector<ParallaxObject> parallax_objects = generateParallaxObjects(renderer, {0, 0});
 
+    // GUI Testing -----------------------------------------------------------------------------------------------------
+    // gui_elements.push_back(new GUILabel(Anchor::TL,{0,0},100,25,"TL",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::TR,{0,0},100,25,"TR",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::BL,{0,0},100,25,"BL",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::BR,{0,0},100,25,"BR",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::Center,{0,0},100,25,"Center",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::CenterLeft,{0,0},100,25,"CenterLeft",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::CenterRight,{0,0},100,25,"CenterRight",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::TopCenter,{0,0},100,25,"TopCenter",{255,255,255,255},fonts["sm"]));
+    // gui_elements.push_back(new GUILabel(Anchor::BottomCenter,{0,0},100,25,"BottomCenter",{255,255,255,255},fonts["sm"]));
 
 
     while (destination == Game) {

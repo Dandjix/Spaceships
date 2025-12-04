@@ -10,9 +10,11 @@ enum class Anchor
 	TR,
 	BR,
 	BL,
-	CenterX,
-	CenterY,
-	Center
+	Center,
+	BottomCenter,
+	TopCenter,
+	CenterLeft,
+	CenterRight
 };
 
 enum Fill
