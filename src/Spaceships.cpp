@@ -15,6 +15,11 @@ void main_menu() {
 }
 
 int main(int argc, char *argv[]) {
+
+    if (!std::filesystem::is_directory(ENV_PROJECT_ROOT"saves")) {
+        std::filesystem::create_directory(ENV_PROJECT_ROOT"saves");
+    }
+
     if (!TTF_Init()) {
         std::cout << "Failed to initialize SDL_ttf" << std::endl;
         // handle error
