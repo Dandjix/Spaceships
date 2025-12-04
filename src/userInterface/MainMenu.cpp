@@ -6,18 +6,32 @@
 #include "MenuNavigation.h"
 #include "fonts.h"
 #include "elements/GUI/GUIList.h"
+#include "LoadGame/AutoSave.h"
 
 
 MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *window) {
     MenuNavigation::Navigation navigation = MenuNavigation::MainMenu;
 
-    auto menu = GUIList(Anchor::Center, {0, 0}, GUI_Fill, GUI_Fill, {
-                            "New Game",
-                            "Load Save",
-                            "Ship Editor",
-                            "Exit to desktop"
-                        }, [renderer,window,&navigation](const std::string &selected) {
-                            if (selected == "New Game") {
+    std::vector<std::string> options = {};
+
+    {
+        auto latest_save = Saves::pathToLatestAutoSave();
+        if (!latest_save.empty()) {
+            options.emplace_back("Continue Playing");
+        }
+
+    }
+    options.emplace_back("New Game");
+    options.emplace_back("Load Save");
+    options.emplace_back("Ship Editor");
+    options.emplace_back("Exit to Desktop");
+
+
+    auto menu = GUIList(Anchor::Center, {0, 0}, GUI_Fill, GUI_Fill, options,
+                        [&navigation](const std::string &selected) {
+                            if (selected == "Continue Playing") {
+                                navigation = MenuNavigation::LoadLatest;
+                            } else if (selected == "New Game") {
                                 navigation = MenuNavigation::NewGame;
                             } else if (selected == "Load Save") {
                                 navigation = MenuNavigation::LoadGame;

@@ -189,6 +189,12 @@ SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})),hooks({},{}), bluep
 	populateRooms();
 }
 
+SpaceShip::~SpaceShip() {
+	for (auto entity: entities) {
+		delete entity;
+	}
+}
+
 const SpaceshipTiles & SpaceShip::getSpaceshipTiles() const
 {
 	return spaceship_tiles;

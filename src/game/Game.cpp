@@ -265,11 +265,14 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             space_ships
         );
         GameState::dumpGameState(game_state,Saves::newAutoSavePath());
-        std::cout << "saved !" << std::endl;
     }
 
     if (destination == SaveAndMainMenu || destination == NoSaveAndMainMenu) {
         return MenuNavigation::MainMenu;
+    }
+
+    for (auto space_ship: space_ships) {
+        delete space_ship;
     }
 
     // if (destination == SaveAndDesktop || destination == NoSaveAndDesktop

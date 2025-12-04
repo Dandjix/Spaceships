@@ -5,6 +5,7 @@ namespace MenuNavigation {
 	{
 		NewGame,
 		LoadGame,
+		LoadLatest,
 		Game,
 		MainMenu,
 		ShipEditor,

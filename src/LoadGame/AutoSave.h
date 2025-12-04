@@ -82,4 +82,23 @@ namespace Saves {
 
         return getSavesPath() / ("autosave_"+std::to_string(number)+".save.json");
     }
+
+    inline std::filesystem::path pathToLatestAutoSave(const std::filesystem::path &saves_folder = getSavesPath()) {
+        unsigned long greatest_autosave_number = 0;
+        std::string latest_autosave;
+        for (const auto& file: std::filesystem::directory_iterator(saves_folder)) {
+            if (!file.is_regular_file())
+                continue;
+            const std::filesystem::path& save_name = file.path().filename();
+            if (isAutosave(save_name)) {
+                auto filename_parts = splitString(file.path().filename(),"_");
+                unsigned long autosave_number = std::stoul( splitString(filename_parts[1],".")[0]);
+                if (autosave_number > greatest_autosave_number) {
+                    greatest_autosave_number = autosave_number;
+                    latest_autosave = file.path();
+                }
+            }
+        }
+        return latest_autosave;
+    }
 }

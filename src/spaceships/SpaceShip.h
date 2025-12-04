@@ -71,6 +71,8 @@ public:
   explicit SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities);
   explicit SpaceShip();
 
+  ~SpaceShip();
+
   const SpaceshipTiles &getSpaceshipTiles() const;
 
   /// <summary>
