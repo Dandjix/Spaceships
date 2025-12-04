@@ -6,7 +6,7 @@
 #include "game/Game.h"
 #include "loadGame/AutoSave.h"
 #include "loadGame/LoadSavedGame.h"
-#include "NewGame/NewGame.h"
+#include "newGame/NewGame.h"
 #include "shipEditor/ShipEditor.h"
 #include "userInterface/fonts.h"
 #include "userInterface/elements/GUI/GUIList.h"

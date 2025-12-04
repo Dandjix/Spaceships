@@ -115,8 +115,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         spaceships/EntityData/EntityLoading.h
         loadGame/LoadSavedGame.cpp
         loadGame/LoadSavedGame.h
-        NewGame/NewGame.cpp
-        NewGame/NewGame.h
+        newGame/NewGame.cpp
+        newGame/NewGame.h
         vehicles/Vehicle.h
         vehicles/combatOutfit/CombatOutfit.h
         vehicles/combatOutfit/CombatOutfit.cpp
