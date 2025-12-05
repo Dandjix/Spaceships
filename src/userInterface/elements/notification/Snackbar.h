@@ -30,7 +30,7 @@ namespace GUI {
 
     public:
         void addMessage(const std::string &text, int ms_to_live = 4000, SDL_Color color = {255, 255, 255, 255}) {
-            auto label = new GUI::FramedLabel(anchor, {0, 0}, 240, 55, text, color, fonts["sm"]);
+            auto label = new GUI::FramedLabel(anchor, {0, 0}, width, height, text, color, fonts["sm"]);
             messages.push_back({
                 ms_to_live,
                 label

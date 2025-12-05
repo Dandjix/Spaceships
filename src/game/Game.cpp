@@ -43,8 +43,12 @@ void renderParallax(SDL_Renderer *renderer, const RenderingContext &context, std
     }
 }
 
-void quickSave(const GameState::GameState &game_state) {
-    dumpGameState(game_state, Saves::getNewAutosavePath());
+void quickSave(const GameState::GameState &game_state, std::string *save_name = nullptr) {
+    auto new_save_path = Saves::getNewAutosavePath();
+    if (save_name != nullptr) {
+        *save_name = new_save_path.filename();
+    }
+    dumpGameState(game_state, new_save_path);
 }
 
 std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer *renderer, Vector2Int base_origin) {
@@ -137,7 +141,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto tooltip = new GUITooltip({0, 0}, false);
     gui_elements.add(tooltip);
 
-    auto snackbar = new GUI::Snackbar(&gui_elements,&gui_elements_deletion_queue);
+    auto snackbar = new GUI::Snackbar(&gui_elements,&gui_elements_deletion_queue,Anchor::BottomCenter,{0,0},GUI_Fill,55,QueueOrder::FIRST);
     gui_elements.add(snackbar);
 
     // Short lived entities --------------------------------------------------------------------------------------------
@@ -148,8 +152,9 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto *pause_menu = new PauseMenu(pause_manager,{
         {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}},
         {"Quick Save",[space_ships,&snackbar]() {
-            quickSave(GameState::GameState(space_ships));
-            snackbar->addMessage("Quick save successful !",1000);
+            std::string save_name;
+            quickSave(GameState::GameState(space_ships), &save_name);
+            snackbar->addMessage(std::format("Successfully saved game to : {}",save_name),1000);
         }},
         {"Save and Quit to Main Menu",[&destination](){destination = SaveAndMainMenu;}},
         {"Save and Quit to Desktop",[&destination](){destination = SaveAndDesktop;}},
