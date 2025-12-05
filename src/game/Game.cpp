@@ -84,10 +84,12 @@ void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<Parall
 }
 
 
-void guiUpdateHandling(std::vector<GUIRect *> gui_elements, GUI_UpdateContext gui_update_context, bool paused) {
-    for (auto gui_element: gui_elements) {
+void guiUpdateHandling(ElementContainer<GUIRect *> &gui_elements, ElementContainer<GUIRect*>& gui_elements_deletion_queue, const GUI_UpdateContext &gui_update_context, bool paused) {
+    for (auto gui_element: gui_elements.get()) {
         gui_element->update(gui_update_context);
     }
+    gui_elements.removeAndDelete(gui_elements_deletion_queue.get());
+    gui_elements_deletion_queue.clear();
 }
 
 enum GameNavigation{
@@ -131,10 +133,11 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
     // GUI elements ----------------------------------------------------------------------------------------------------
     ElementContainer<GUIRect *> gui_elements;
+    ElementContainer<GUIRect *> gui_elements_deletion_queue;
     auto tooltip = new GUITooltip({0, 0}, false);
     gui_elements.add(tooltip);
 
-    auto snackbar = new GUI::Snackbar(&gui_elements);
+    auto snackbar = new GUI::Snackbar(&gui_elements,&gui_elements_deletion_queue);
     gui_elements.add(snackbar);
 
     // Short lived entities --------------------------------------------------------------------------------------------
@@ -249,7 +252,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             },
             deltaTime
         };
-        guiUpdateHandling(gui_elements.get(), gui_update_context,paused);
+        guiUpdateHandling(gui_elements,gui_elements_deletion_queue , gui_update_context,paused);
 
         // RENDERING ---------------------------------------------------------------------------------------------------
         RenderingContext renderingContext = {

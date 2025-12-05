@@ -7,7 +7,7 @@
 
 void GUILabel::render(SDL_Renderer* renderer, const GUI_RenderingContext& context) const
 {
-      SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), text.length(), color);
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), text.length(), color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
     SDL_FRect textRect;
