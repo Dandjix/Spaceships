@@ -33,6 +33,4 @@ public:
         }
         return new PilotSeat(Vector2Int::fromJson(json["position"]),json["angle"]);
     }
-
-    void movePosition(Vector2Float delta, SpaceShip *space_ship) override{}
 };
