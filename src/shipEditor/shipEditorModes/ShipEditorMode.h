@@ -15,24 +15,14 @@ namespace ShipEditorModes {
     class ShipEditorMode {
     protected:
 
+        void addActiveEntities(const std::vector<Entity * > &to_add) const;
+
+        void removeActiveEntities(const std::vector<Entity * > &to_remove) const;
 
 
-        template <typename T>
-        void addItems(std::vector<T>* active,
-            const std::vector<T>& to_add) {
-            for (auto e: to_add) {
-                active->push_back(e);
-            }
-        }
+        void addGUIElements(const std::vector<GUIRect * > &to_add) const;
 
-        void addActiveEntities(const std::vector<Entity * > &to_add);
-
-        void removeActiveEntities(const std::vector<Entity * > &to_remove);
-
-
-        void addGUIElements(const std::vector<GUIRect * > &to_add);
-
-        void removeGUIElements(const std::vector<GUIRect * > &to_remove);
+        void removeGUIElements(const std::vector<GUIRect * > &to_remove) const;
 
     public:
         virtual ~ShipEditorMode() = default;

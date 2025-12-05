@@ -27,7 +27,7 @@ void PauseMenu::execute_action(const std::string &value) {
 }
 
 PauseMenu::PauseMenu(PauseManager *pause_manager, const std::vector<std::pair<std::string, std::function<void()>>> &actions,
-                     std::vector<GUIRect *> *gui_elements): actions(actions), gui_elements(gui_elements) {
+                     ElementContainer<GUIRect*> *gui_elements): actions(actions), gui_elements(gui_elements) {
     pause_manager->on_paused_change.subscribe([this](bool paused) {
         if (paused)
             show();
@@ -48,13 +48,9 @@ PauseMenu::PauseMenu(PauseManager *pause_manager, const std::vector<std::pair<st
 }
 
 void PauseMenu::show() {
-    for (auto to_add: pause_menu_elements) {
-        gui_elements->push_back(to_add);
-    }
+    gui_elements->add(pause_menu_elements);
 }
 
 void PauseMenu::hide() {
-    for (auto to_remove: pause_menu_elements) {
-        gui_elements->erase(std::remove(gui_elements->begin(), gui_elements->end(), to_remove), gui_elements->end());
-    }
+    gui_elements->remove(pause_menu_elements);
 }

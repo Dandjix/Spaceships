@@ -93,7 +93,8 @@ add_library(SpaceshipsLib ${SOURCES}
         userInterface/elements/GUI/GUIColoredRect.cpp
         userInterface/elements/GUI/GUIColoredRect.h
         loadGame/AutoSave.cpp
-        loadGame/AutoSave.h)
+        loadGame/AutoSave.h
+        game/ElementContainer.h)
 
 target_compile_definitions(SpaceshipsLib PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"

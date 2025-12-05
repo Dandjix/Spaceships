@@ -12,7 +12,13 @@ protected :
 	int width; int height;
 	Vector2Int offset;
 	Anchor anchor;
-
+public:
+	[[nodiscard]] int getWidth() const {return width;}
+	[[nodiscard]] int getHeight() const {return height;}
+	[[nodiscard]] Vector2Int getOffset() const {return offset;}
+	void setOffset(Vector2Int value) {offset = value;}
+	[[nodiscard]] Anchor getAnchor() const {return anchor;}
+protected:
 	/**
 	 * position of the top left corner of the element
 	 */

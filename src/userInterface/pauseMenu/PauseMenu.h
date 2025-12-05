@@ -10,10 +10,12 @@
 #include "userInterface/elements/GUI/GUIList.h"
 #include <algorithm>
 
+#include "game/ElementContainer.h"
+
 class PauseMenu {
 private:
     std::vector<GUIRect *> pause_menu_elements;
-    std::vector<GUIRect *> *gui_elements;
+    ElementContainer<GUIRect*> *gui_elements;
 
     std::vector<std::string> get_option_keys(std::vector<std::pair<std::string, std::function<void()>>> options);
 
@@ -25,7 +27,7 @@ public:
     explicit PauseMenu(
         PauseManager *pause_manager,
         const std::vector<std::pair<std::string, std::function<void()>>>& actions,
-        std::vector<GUIRect *> * gui_elements
+        ElementContainer<GUIRect*> * gui_elements
     );
 
     void show();

@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <utility>
 
+#include "ElementContainer.h"
 #include "PauseManager.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
@@ -11,6 +12,7 @@
 #include "player/VehicleEnter.h"
 #include "player/VehicleLeave.h"
 #include "userInterface/elements/GUI/GUILabel.h"
+#include "userInterface/elements/notification/Snackbar.h"
 #include "userInterface/pauseMenu/PauseMenu.h"
 
 #ifndef ENV_PROJECT_ROOT
@@ -25,7 +27,7 @@
 #include "../entities/Sphere.h"
 #include "../debug/DebugGrid.h"
 #include "../spaceships/SpaceShip.h"
-
+#include "game/ElementContainer.h"
 #include "../parallax/ParallaxObject.h"
 
 void renderSpaceBackground() {
@@ -128,9 +130,12 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     player_spaceship->setPlayer(player);
 
     // GUI elements ----------------------------------------------------------------------------------------------------
+    ElementContainer<GUIRect *> gui_elements;
     auto tooltip = new GUITooltip({0, 0}, false);
-    // auto *label = new GUILabel(Anchor::Center,{0,0},100,50,"test",{255,255,255,255},fonts["lg"]);
-    std::vector<GUIRect *> gui_elements = {tooltip};
+    gui_elements.add(tooltip);
+
+    auto snackbar = new GUI::Snackbar(&gui_elements);
+    gui_elements.add(snackbar);
 
     // Short lived entities --------------------------------------------------------------------------------------------
     auto *vehicle_tracker = new Player::PlayerVehicleTracker(player);
@@ -139,7 +144,10 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto *pause_manager = new PauseManager(&paused);
     auto *pause_menu = new PauseMenu(pause_manager,{
         {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}},
-        {"Quick Save",[space_ships](){quickSave(GameState::GameState(space_ships));}},
+        {"Quick Save",[space_ships,&snackbar]() {
+            quickSave(GameState::GameState(space_ships));
+            snackbar->addMessage("Quick save successful !",1000);
+        }},
         {"Save and Quit to Main Menu",[&destination](){destination = SaveAndMainMenu;}},
         {"Save and Quit to Desktop",[&destination](){destination = SaveAndDesktop;}},
         {"Quit without saving to Main Menu",[&destination](){destination = NoSaveAndMainMenu;}},
@@ -193,7 +201,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 screenDimensions,
                 camera->getScale(),
             },
-            GameEvent::getMousePositionType(gui_elements, {mouse_x, mouse_y}),
+            GameEvent::getMousePositionType(gui_elements.get(), {mouse_x, mouse_y}),
             window,
         };
 
@@ -205,7 +213,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 }
                 space_ship->eventHandling(event, event_context, paused);
             }
-            for (auto gui_element: gui_elements) {
+            for (auto gui_element: gui_elements.get()) {
                 gui_element->handleEvent(event, event_context);
             }
         }
@@ -241,7 +249,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             },
             deltaTime
         };
-        guiUpdateHandling(gui_elements, gui_update_context,paused);
+        guiUpdateHandling(gui_elements.get(), gui_update_context,paused);
 
         // RENDERING ---------------------------------------------------------------------------------------------------
         RenderingContext renderingContext = {
@@ -263,10 +271,11 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 camera->getScale()
             }
         };
-        std::ranges::stable_sort(gui_elements,[](GUIRect * first, GUIRect * second) {
+
+        gui_elements.sort([](GUIRect * first, GUIRect * second) {
             return first->getQueueOrder() > second->getQueueOrder();
         });
-        for (auto gui_element: gui_elements) {
+        for (auto gui_element: gui_elements.get()) {
             gui_element->render(renderer, gui_rendering_context);
         }
 

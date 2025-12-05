@@ -6,6 +6,7 @@
 #include "CommonEditorEntities.h"
 #include "ModeHookPainter.h"
 #include "ModeTilePainter.h"
+#include "game/ElementContainer.h"
 
 class GUIRect;
 class Entity;
@@ -32,19 +33,19 @@ namespace ShipEditorModes {
 
         CommonEditorObjects * common;
 
-        std::vector<Entity * > * activeEntities;
-        std::vector<Entity*> * activeEntitiesDeletionQueue;
+        ElementContainer<Entity * > * activeEntities;
+        ElementContainer<Entity*> * activeEntitiesDeletionQueue;
 
 
-        std::vector<GUIRect * > * editorGUIElements;
-        std::vector<GUIRect*> * editorGUIElementsDeletionQueue;
+        ElementContainer<GUIRect * > * editorGUIElements;
+        ElementContainer<GUIRect*> * editorGUIElementsDeletionQueue;
 
         explicit ShipEditorStateMachine(
             CommonEditorObjects * common,
-            std::vector<Entity * > * active,
-            std::vector<Entity * > * activeEntitiesDeletionQueue,
-            std::vector<GUIRect * > * GUIElements,
-            std::vector<GUIRect * > * editorGUIElementsDeletionQueue,
+            ElementContainer<Entity * > * active,
+            ElementContainer<Entity * > * activeEntitiesDeletionQueue,
+            ElementContainer<GUIRect * > * GUIElements,
+            ElementContainer<GUIRect * > * editorGUIElementsDeletionQueue,
             Mode initial,
             SDL_Window * window)
         :
