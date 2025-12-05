@@ -20,12 +20,14 @@ public:
         delete pilot;
     }
 
+    virtual constexpr Behavior::Control getControlType(){ return Behavior::PilotingVehicle;}
+
     virtual std::string getVehicleName() =0;
 
 protected:
-    virtual void assumeControl(Humanoid *pilot) = 0;
+    void assumeControl(Humanoid * new_pilot);
 
-    virtual void relinquishControl() = 0;
+    void relinquishControl(Humanoid * old_pilot);
 
 public:
     void onRegistered(SpaceShip *newSpaceship) override;

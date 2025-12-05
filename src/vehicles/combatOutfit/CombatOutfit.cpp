@@ -5,13 +5,6 @@
 #include "CombatOutfit.h"
 
 
-void CombatOutfit::assumeControl(Humanoid *new_pilot) {
-
-}
-
-void CombatOutfit::relinquishControl() {
-}
-
 nlohmann::json CombatOutfit::toJson() {
     return Vehicle::toJson();
 }

@@ -11,12 +11,6 @@ public:
     {
 
     }
-
-protected:
-    void assumeControl(Humanoid * pilot) override;
-
-    void relinquishControl() override;
-
 public:
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 

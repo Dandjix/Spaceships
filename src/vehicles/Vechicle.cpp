@@ -4,6 +4,16 @@
 
 #include "Vehicle.h"
 
+void Vehicle::assumeControl(Humanoid * new_pilot) {
+    if (new_pilot != nullptr && new_pilot->getBehavior() != nullptr)
+        new_pilot->getBehavior()->ChangeControl(getControlType());
+}
+
+void Vehicle::relinquishControl(Humanoid * old_pilot) {
+    if (old_pilot != nullptr && old_pilot->getBehavior() != nullptr)
+        old_pilot->getBehavior()->ChangeControl(Behavior::OnFoot);
+}
+
 void Vehicle::onRegistered(SpaceShip *newSpaceship) {
     spaceship = newSpaceship;
 }
@@ -18,6 +28,7 @@ void Vehicle::startPiloting(Humanoid *newPilot) {
         spaceship->setPlayer(this);
     }
 
+    assumeControl(pilot);
     pilot->on_start_piloting_vehicle.emit(this);
     pilot->on_ownership_change.emit(this);
 }
@@ -37,6 +48,7 @@ void Vehicle::stopPiloting() {
     auto old_pilot = pilot;
     pilot = nullptr;
 
+    relinquishControl(old_pilot);
     on_ownership_change.emit(old_pilot);
 }
 

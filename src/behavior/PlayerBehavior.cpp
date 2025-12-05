@@ -29,6 +29,26 @@ void PlayerBehavior::update(const UpdateContext &context, PhysicsEntity * owner)
     owner->movePosition(delta,context.spaceShip);
 }
 
+void PlayerBehavior::spaceshipControlUpdate(const UpdateContext &context, PhysicsEntity *owner, SpaceShip *space_ship) {
+
+}
+
+void PlayerBehavior::spaceshipControlHandleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context,
+    PhysicsEntity *owner, SpaceShip *space_ship) {
+
+    if (event.type == SDL_EVENT_KEY_DOWN) {
+        if (event.key.key == SDLK_0) {
+            std::cout << "Undocking" << std::endl;
+        }
+        if (event.key.key == SDLK_1) {
+            std::cout << "Docking to 1" << std::endl;
+        }
+        if (event.key.key == SDLK_2) {
+            std::cout << "Docking to 2" << std::endl;
+        }
+    }
+}
+
 void PlayerBehavior::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext & context, PhysicsEntity *owner) {
 }
 

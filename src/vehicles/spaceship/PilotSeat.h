@@ -19,11 +19,6 @@ public:
 
     std::string getVehicleName() override {return "Pilot Seat";}
 
-protected:
-    void assumeControl(Humanoid *pilot) override;
-
-    void relinquishControl() override;
-
 public:
     constexpr std::string getJsonType() override { return "pilot_seat";}
     nlohmann::json toJson() override {return Vehicle::toJson();}
@@ -33,4 +28,10 @@ public:
         }
         return new PilotSeat(Vector2Int::fromJson(json["position"]),json["angle"]);
     }
+
+    void update(const UpdateContext &context) override;
+
+    void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
+
+    constexpr Behavior::Control getControlType() override {return Behavior::PilotingSpaceship;}
 };
