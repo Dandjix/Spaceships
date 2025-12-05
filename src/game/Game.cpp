@@ -88,7 +88,9 @@ void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<Parall
 }
 
 
-void guiUpdateHandling(ElementContainer<GUIRect *> &gui_elements, ElementContainer<GUIRect*>& gui_elements_deletion_queue, const GUI_UpdateContext &gui_update_context, bool paused) {
+void guiUpdateHandling(ElementContainer<GUIRect *> &gui_elements,
+                       ElementContainer<GUIRect *> &gui_elements_deletion_queue,
+                       const GUI_UpdateContext &gui_update_context, bool paused) {
     for (auto gui_element: gui_elements.get()) {
         gui_element->update(gui_update_context);
     }
@@ -96,7 +98,7 @@ void guiUpdateHandling(ElementContainer<GUIRect *> &gui_elements, ElementContain
     gui_elements_deletion_queue.clear();
 }
 
-enum GameNavigation{
+enum GameNavigation {
     Game,
     SaveAndDesktop,
     SaveAndMainMenu,
@@ -141,7 +143,8 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto tooltip = new GUITooltip({0, 0}, false);
     gui_elements.add(tooltip);
 
-    auto snackbar = new GUI::Snackbar(&gui_elements,&gui_elements_deletion_queue,Anchor::BottomCenter,{0,0},GUI_Fill,55,QueueOrder::FIRST);
+    auto snackbar = new GUI::Snackbar(&gui_elements, &gui_elements_deletion_queue, Anchor::BottomCenter, {0, 0},
+                                      GUI_Fill, 55, QueueOrder::FIRST);
     gui_elements.add(snackbar);
 
     // Short lived entities --------------------------------------------------------------------------------------------
@@ -149,18 +152,40 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     auto *vehicle_enter = new Player::VehicleEnter(tooltip, vehicle_tracker);
     auto *vehicle_leave = new Player::VehicleLeave(vehicle_tracker);
     auto *pause_manager = new PauseManager(&paused);
-    auto *pause_menu = new PauseMenu(pause_manager,{
-        {"Resume Game",[pause_manager](){ pause_manager->setPaused(false);}},
-        {"Quick Save",[space_ships,&snackbar]() {
-            std::string save_name;
-            quickSave(GameState::GameState(space_ships), &save_name);
-            snackbar->addMessage(std::format("Successfully saved game to : {}",save_name),1000);
-        }},
-        {"Save and Quit to Main Menu",[&destination](){destination = SaveAndMainMenu;}},
-        {"Save and Quit to Desktop",[&destination](){destination = SaveAndDesktop;}},
-        {"Quit without saving to Main Menu",[&destination](){destination = NoSaveAndMainMenu;}},
-        {"Quit without saving to Desktop",[&destination](){destination = NoSaveAndDesktop;}},
-    },&gui_elements);
+    auto *pause_menu = new PauseMenu(pause_manager, {
+                                         {"Resume Game", [pause_manager]() { pause_manager->setPaused(false); }},
+                                         {
+                                             "Quick Save", [space_ships,&snackbar]() {
+                                                 std::string save_name;
+                                                 quickSave(GameState::GameState(space_ships), &save_name);
+                                                 snackbar->addMessage(
+                                                     std::format("Successfully saved game to : {}", save_name), 2000);
+
+                                                 unsigned long deleted_count = Saves::deleteOldAutosaves();
+                                                 if (deleted_count > 0) {
+                                                     snackbar->addMessage(
+                                                         std::format("Cleanup : deleted {} autosaves", deleted_count),
+                                                         2000);
+                                                 }
+                                             }
+                                         },
+                                         {
+                                             "Save and Quit to Main Menu",
+                                             [&destination]() { destination = SaveAndMainMenu; }
+                                         },
+                                         {
+                                             "Save and Quit to Desktop",
+                                             [&destination]() { destination = SaveAndDesktop; }
+                                         },
+                                         {
+                                             "Quit without saving to Main Menu",
+                                             [&destination]() { destination = NoSaveAndMainMenu; }
+                                         },
+                                         {
+                                             "Quit without saving to Desktop",
+                                             [&destination]() { destination = NoSaveAndDesktop; }
+                                         },
+                                     }, &gui_elements);
     pause_manager->on_paused_change.subscribe([](bool paused) {
         // std::cout << "paused set to : " << paused << std::endl;
     });
@@ -257,7 +282,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             },
             deltaTime
         };
-        guiUpdateHandling(gui_elements,gui_elements_deletion_queue , gui_update_context,paused);
+        guiUpdateHandling(gui_elements, gui_elements_deletion_queue, gui_update_context, paused);
 
         // RENDERING ---------------------------------------------------------------------------------------------------
         RenderingContext renderingContext = {
@@ -280,7 +305,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             }
         };
 
-        gui_elements.sort([](GUIRect * first, GUIRect * second) {
+        gui_elements.sort([](GUIRect *first, GUIRect *second) {
             return first->getQueueOrder() > second->getQueueOrder();
         });
         for (auto gui_element: gui_elements.get()) {
@@ -296,13 +321,13 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         auto game_state = GameState::GameState(
             space_ships
         );
-        GameState::dumpGameState(game_state,Saves::getNewAutosavePath());
+        GameState::dumpGameState(game_state, Saves::getNewAutosavePath());
+        Saves::deleteOldAutosaves();
     }
 
     if (destination == SaveAndMainMenu || destination == NoSaveAndMainMenu) {
         navigation = MenuNavigation::MainMenu;
-    }
-    else {
+    } else {
         navigation = MenuNavigation::Quit;
     }
 
