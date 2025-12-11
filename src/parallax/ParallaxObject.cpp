@@ -44,6 +44,9 @@ void ParallaxObject::render(SDL_Renderer* renderer, const ExteriorRenderingConte
 
     SDL_GetTextureSize(texture,&texture_w,&texture_h);
 
+    texture_w/=context.camera_info.cameraScale;
+    texture_h/=context.camera_info.cameraScale;
+
     SDL_FRect destRect = {
         center.x - texture_w * 0.5f,
         center.y - texture_h * 0.5f,

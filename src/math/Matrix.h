@@ -26,9 +26,15 @@ namespace Matrix {
             }};
         }
 
+
+        /**
+         * Rotates the matrix
+         * @param angle The angle in degrees
+         * @return
+         */
         static Mat3 rotation(float angle) {
-            float c = std::cos(angle);
-            float s = std::sin(angle);
+            float c = std::cos(angle * static_cast<float>(std::numbers::pi)/180);
+            float s = std::sin(angle * static_cast<float>(std::numbers::pi)/180);
             return { {
                 {c,-s,0},
                 {s, c,0},
