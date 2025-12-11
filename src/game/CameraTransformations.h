@@ -17,12 +17,12 @@ namespace CameraTransformations {
         const float cameraScale;
 
     private:
-        Matrix::Mat3 screenToWorldMatrix() const {
+        Matrix::Mat3<> screenToWorldMatrix() const {
             Vector2Float halfScreenDim = Vectors::toVector2Float(screenDimensions) / 2.0f;
 
             // Build transformation matrix (applied right to left):
             // 5. Translate by camera position
-            Matrix::Mat3 translateCamera = Matrix::Mat3::translation(
+            Matrix::Mat3 translateCamera = Matrix::Mat3<>::translation(
                 cameraPosition.x, cameraPosition.y
             );
 
@@ -30,16 +30,16 @@ namespace CameraTransformations {
             // Based on your commented code: scaleToWorldPosition()
             // You'll need to determine this scale factor from your Vector2Int/Float classes
             // For now, assuming it's defined somewhere as a constant
-            Matrix::Mat3 scaleToWorld = Matrix::Mat3::scale(Vectors::getFactor());
+            Matrix::Mat3 scaleToWorld = Matrix::Mat3<>::scale(Vectors::getFactor());
 
             // 3. Scale by camera scale
-            Matrix::Mat3 scaleCam = Matrix::Mat3::scale(cameraScale);
+            Matrix::Mat3 scaleCam = Matrix::Mat3<>::scale(cameraScale);
 
             // 2. Rotate by -cameraAngle
-            Matrix::Mat3 rotate = Matrix::Mat3::rotation(-cameraAngle);
+            Matrix::Mat3 rotate = Matrix::Mat3<>::rotation(-cameraAngle);
 
             // 1. Center the screen (translate by -halfScreen)
-            Matrix::Mat3 centerScreen = Matrix::Mat3::translation(
+            Matrix::Mat3 centerScreen = Matrix::Mat3<>::translation(
                 -halfScreenDim.x, -halfScreenDim.y
             );
 
@@ -47,26 +47,26 @@ namespace CameraTransformations {
             return translateCamera * scaleToWorld * scaleCam * rotate * centerScreen;
         }
 
-        Matrix::Mat3 worldToScreenMatrix() const {
+        Matrix::Mat3<> worldToScreenMatrix() const {
             Vector2Float halfScreenDim = Vectors::toVector2Float(screenDimensions) / 2.0f;
 
             // Inverse operations in reverse order:
             // 1. Translate by -camera position
-            Matrix::Mat3 translateCamera = Matrix::Mat3::translation(
+            Matrix::Mat3 translateCamera = Matrix::Mat3<>::translation(
                 -cameraPosition.x, -cameraPosition.y
             );
 
             // 2. Scale to screen position (inverse of scaleToWorld)
-            Matrix::Mat3 scaleToScreen = Matrix::Mat3::scale(1.0f / Vectors::getFactor());
+            Matrix::Mat3 scaleToScreen = Matrix::Mat3<>::scale(1.0f / Vectors::getFactor());
 
             // 3. Unscale by camera scale
-            Matrix::Mat3 unscaleCam = Matrix::Mat3::scale(1.0f / cameraScale);
+            Matrix::Mat3 unscaleCam = Matrix::Mat3<>::scale(1.0f / cameraScale);
 
             // 4. Rotate by +cameraAngle (inverse rotation)
-            Matrix::Mat3 rotate = Matrix::Mat3::rotation(cameraAngle);
+            Matrix::Mat3 rotate = Matrix::Mat3<>::rotation(cameraAngle);
 
             // 5. Uncenter the screen (translate by +halfScreen)
-            Matrix::Mat3 uncenterScreen = Matrix::Mat3::translation(
+            Matrix::Mat3 uncenterScreen = Matrix::Mat3<>::translation(
                 halfScreenDim.x, halfScreenDim.y
             );
 
@@ -163,27 +163,27 @@ namespace CameraTransformations {
 
             // Transformation chain (applied right to left):
             // 1. Center screen coordinates
-            Matrix::Mat3 centerScreen = Matrix::Mat3::translation(-halfScreenDim.x, -halfScreenDim.y);
+            Matrix::Mat3 centerScreen = Matrix::Mat3<>::translation(-halfScreenDim.x, -halfScreenDim.y);
 
             // 2. Rotate by -cameraAngle (undo camera rotation)
-            Matrix::Mat3 rotateCam = Matrix::Mat3::rotation(-cameraAngle);
+            Matrix::Mat3 rotateCam = Matrix::Mat3<>::rotation(-cameraAngle);
 
             // 3. Scale by cameraScale (undo zoom)
-            Matrix::Mat3 scaleCam = Matrix::Mat3::scale(cameraScale);
+            Matrix::Mat3 scaleCam = Matrix::Mat3<>::scale(cameraScale);
 
             // 4. Scale to world position
-            Matrix::Mat3 scaleToWorld = Matrix::Mat3::scale(Vectors::getFactor());
+            Matrix::Mat3 scaleToWorld = Matrix::Mat3<>::scale(Vectors::getFactor());
 
             // 5. Translate by camera position (relative to ship)
-            Matrix::Mat3 translateCam = Matrix::Mat3::translation(
+            Matrix::Mat3 translateCam = Matrix::Mat3<>::translation(
                 cameraPosition.x, cameraPosition.y
             );
 
             // 6. Rotate by spaceship angle (ship's local to world rotation)
-            Matrix::Mat3 rotateShip = Matrix::Mat3::rotation(spaceshipAngle);
+            Matrix::Mat3 rotateShip = Matrix::Mat3<>::rotation(spaceshipAngle);
 
             // 7. Translate by spaceship position (ship local to world position)
-            Matrix::Mat3 translateShip = Matrix::Mat3::translation(
+            Matrix::Mat3 translateShip = Matrix::Mat3<>::translation(
                 spaceshipPosition.x, spaceshipPosition.y
             );
 
@@ -199,36 +199,36 @@ namespace CameraTransformations {
 
             // Inverse operations in reverse order:
             // 1. Translate by -spaceship position
-            Matrix::Mat3 translateShip = Matrix::Mat3::translation(
+            Matrix::Mat3 translateShip = Matrix::Mat3<>::translation(
                 -spaceshipPosition.x, -spaceshipPosition.y
             );
 
             // 2. Rotate by -spaceship angle
-            Matrix::Mat3 rotateShip = Matrix::Mat3::rotation(-spaceshipAngle);
+            Matrix::Mat3 rotateShip = Matrix::Mat3<>::rotation(-spaceshipAngle);
 
             // 3. Translate by -camera position
-            Matrix::Mat3 translateCam = Matrix::Mat3::translation(
+            Matrix::Mat3 translateCam = Matrix::Mat3<>::translation(
                 -cameraPosition.x, -cameraPosition.y
             );
 
             // 4. Scale to screen position (inverse of scaleToWorld)
-            Matrix::Mat3 scaleToScreen = Matrix::Mat3::scale(1.0f / Vectors::getFactor());
+            Matrix::Mat3 scaleToScreen = Matrix::Mat3<>::scale(1.0f / Vectors::getFactor());
 
             // 5. Unscale by camera scale
-            Matrix::Mat3 unscaleCam = Matrix::Mat3::scale(1.0f / cameraScale);
+            Matrix::Mat3 unscaleCam = Matrix::Mat3<>::scale(1.0f / cameraScale);
 
             // 6. Rotate by +cameraAngle
-            Matrix::Mat3 rotateCam = Matrix::Mat3::rotation(cameraAngle);
+            Matrix::Mat3 rotateCam = Matrix::Mat3<>::rotation(cameraAngle);
 
             // 7. Uncenter screen
-            Matrix::Mat3 uncenterScreen = Matrix::Mat3::translation(
+            Matrix::Mat3 uncenterScreen = Matrix::Mat3<>::translation(
                 halfScreenDim.x, halfScreenDim.y
             );
 
             Matrix::Mat3 transform = uncenterScreen * rotateCam * unscaleCam * scaleToScreen * translateCam * rotateShip
                                      * translateShip;
 
-            return transform * Vectors::toVector2Float(world);
+            return Vectors::toVector2Float(transform * world);
         }
 
         [[nodiscard]] float getScreenObjectAngle(float world_angle) const {

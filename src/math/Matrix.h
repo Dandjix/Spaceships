@@ -7,8 +7,9 @@
 
 namespace Matrix {
 
+    template<typename MatrixType = double>
     struct Mat3 {
-        float m[3][3];
+        MatrixType m[3][3];
 
         static Mat3 identity() {
             return { {
@@ -18,7 +19,7 @@ namespace Matrix {
             }};
         }
 
-        static Mat3 translation(float x, float y) {
+        static Mat3 translation(MatrixType x, MatrixType y) {
             return { {
                 {1,0,x},
                 {0,1,y},
@@ -32,9 +33,9 @@ namespace Matrix {
          * @param angle The angle in degrees
          * @return
          */
-        static Mat3 rotation(float angle) {
-            float c = std::cos(angle * static_cast<float>(std::numbers::pi)/180);
-            float s = std::sin(angle * static_cast<float>(std::numbers::pi)/180);
+        static Mat3 rotation(MatrixType angle) {
+            MatrixType c = std::cos(angle * static_cast<MatrixType>(std::numbers::pi)/180);
+            MatrixType s = std::sin(angle * static_cast<MatrixType>(std::numbers::pi)/180);
             return { {
                 {c,-s,0},
                 {s, c,0},
@@ -42,7 +43,7 @@ namespace Matrix {
             }};
         }
 
-        static Mat3 scale(float s) {
+        static Mat3 scale(MatrixType s) {
             return { {
                 {s, 0,0},
                 {0, s,0},
@@ -57,10 +58,10 @@ namespace Matrix {
                     r.m[i][j] = m[i][0]*b.m[0][j] + m[i][1]*b.m[1][j] + m[i][2]*b.m[2][j];
             return r;
         }
-
-        Vector2Float operator*(Vector2Float v) const {
-            float x = m[0][0]*v.x + m[0][1]*v.y + m[0][2];
-            float y = m[1][0]*v.x + m[1][1]*v.y + m[1][2];
+        template <typename T>
+        Vector2<T> operator*(Vector2<T> v) const {
+            T x = m[0][0]*v.x + m[0][1]*v.y + m[0][2];
+            T y = m[1][0]*v.x + m[1][1]*v.y + m[1][2];
             return {x,y};
         }
     };
