@@ -34,8 +34,7 @@ TEST(CameraTransformationsTestSuite, ReversabilitySimple)
     ASSERT_EQ(back_to_world.y,0);
 }
 
-TEST(CameraTransformationsTestSuite, ReversabilityOffset)
-{
+TEST(CameraTransformationsTestSuite, ReversabilityOffset) {
     auto context = RenderingContext(
         {{500*Vectors::getFactor(),250*Vectors::getFactor()},0,{1000,500},2}
     );
@@ -51,4 +50,44 @@ TEST(CameraTransformationsTestSuite, ReversabilityOffset)
     std::cout << "back_to_screen : " << back_to_screen << std::endl;
     ASSERT_EQ(back_to_screen.x,500);
     ASSERT_EQ(back_to_screen.y,250);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+// Outside Camera transformations
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+
+TEST(ExteriorCameraTransformationsTestSuite, SimpleTest) {
+    auto exterior_camera_info  = CameraTransformations::ExteriorCameraInfo{
+        {0,0},
+        Vector2Int(-500,-500).scaleToWorldPosition(),
+        Vector2Int(0,0).scaleToWorldPosition(),
+        0,
+        0,
+        {1000,500},
+        1
+    };
+
+    auto res = exterior_camera_info.worldToScreenPoint(Vector2Int(0,0).scaleToWorldPosition());
+
+    ASSERT_EQ(res.x,0);
+    ASSERT_EQ(res.y,0);
+}
+
+TEST(ExteriorCameraTransformationsTestSuite, SimpleTest2) {
+    auto exterior_camera_info  = CameraTransformations::ExteriorCameraInfo{
+            {0,0},
+            Vector2Int(500,500).scaleToWorldPosition(),
+            Vector2Int(1000,1000).scaleToWorldPosition(),
+            0,
+            45,
+            {1000,500},
+            1
+        };
+
+    auto res = exterior_camera_info.worldToScreenPoint(Vector2Int(0,0).scaleToWorldPosition());
+
+    ASSERT_EQ(res.x,0);
+    ASSERT_EQ(res.y,0);
 }

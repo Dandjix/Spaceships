@@ -27,7 +27,7 @@ std::filesystem::path NewGame::ConstructNewGame() {
         new PilotSeat(blueprint->hooks.getPoint("pilot_seat")->position,0)
     };
 
-    auto * space_ship = new SpaceShip(blueprint,entities);
+    auto * space_ship = new SpaceShip(blueprint,entities,{0,0},0);
 
     GameState::GameState game_state = GameState::GameState{
         {space_ship}

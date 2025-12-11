@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "spaceships/SpaceShip.h"
+
 // Parallax position calculation:
 //
 // Let:
@@ -34,34 +36,13 @@ getCameraDistance(float field_of_view, float screenWidth)
     return O;
 }
 
-void ParallaxObject::render(SDL_Renderer* renderer, const RenderingContext& context)
-{
-    // P_parallax = C + (P - C) * s
+void ParallaxObject::render(SDL_Renderer* renderer, const ExteriorRenderingContext& context, SpaceShip * ship) const {
 
-    // depth : distance in world units to the entity plane.
-
-    auto cameraDistance = getCameraDistance(
-        120.0f,
-        static_cast<float>(context.camera_info.screenDimensions.x)*context.camera_info.cameraScale
-        );
-
-    float factor = cameraDistance / (cameraDistance + depth);
-    // Clamp to avoid weirdness
-    factor = std::clamp(factor, 0.0f, 1.0f);
-
-    Vector2Int parallax_position = context.camera_info.cameraPosition + (position - context.camera_info.cameraPosition)
-    * factor;
-
-
-    Vector2Float center  = context.camera_info.worldToScreenPoint(parallax_position);
+    Vector2Float center  = context.camera_info.worldToScreenPoint(position);
 
     float texture_w, texture_h;
 
     SDL_GetTextureSize(texture,&texture_w,&texture_h);
-
-    texture_w /= (context.camera_info.cameraScale / (cameraDistance / (cameraDistance + depth))) / sizeMultiplier;
-    texture_h /= (context.camera_info.cameraScale / (cameraDistance / (cameraDistance + depth))) / sizeMultiplier;
-
 
     SDL_FRect destRect = {
         center.x - texture_w * 0.5f,
@@ -70,7 +51,7 @@ void ParallaxObject::render(SDL_Renderer* renderer, const RenderingContext& cont
         texture_h
     };
 
-    SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, angle + context.camera_info.cameraAngle, nullptr, SDL_FLIP_NONE);
+SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, context.camera_info.getScreenObjectAngle(angle), nullptr, SDL_FLIP_NONE);
 }
 
 //

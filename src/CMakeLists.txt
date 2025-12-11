@@ -132,6 +132,7 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         userInterface/pauseMenu/PauseMenu.h
         userInterface/elements/notification/Snackbar.cpp
         userInterface/elements/notification/Snackbar.h
+        math/Matrix.h
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)

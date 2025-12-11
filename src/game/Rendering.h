@@ -11,6 +11,10 @@ struct RenderingContext
 	CameraTransformations::CameraInfo camera_info;
 };
 
+struct ExteriorRenderingContext {
+	CameraTransformations::ExteriorCameraInfo camera_info;
+};
+
 class Rendering
 {
 public :

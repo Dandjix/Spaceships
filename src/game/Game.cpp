@@ -36,10 +36,11 @@ void renderSpaceBackground() {
 void renderPlanets() {
 }
 
-void renderParallax(SDL_Renderer *renderer, const RenderingContext &context, std::vector<ParallaxObject> objects) {
+void renderParallax(SDL_Renderer *renderer, const ExteriorRenderingContext &context, SpaceShip *ship,
+                    std::vector<ParallaxObject> objects) {
     std::stable_sort(objects.begin(), objects.end());
     for (auto object: objects) {
-        object.render(renderer, context);
+        object.render(renderer, context, ship);
     }
 }
 
@@ -71,20 +72,37 @@ std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer *renderer, Vect
     return objects;
 }
 
-void RenderingHandle(SDL_Renderer *renderer, SpaceShip *ship, std::vector<ParallaxObject> parallax_objects,
-                     const RenderingContext &renderingContext) {
+void RenderingHandle(SDL_Renderer *renderer, Camera *camera, const Vector2Int &screenDimensions,
+                     std::vector<ParallaxObject> parallax_objects) {
     renderSpaceBackground();
     renderPlanets();
-    renderParallax(renderer, renderingContext, std::move(parallax_objects));
+
+    auto ship = camera->working_spaceship;
+
+
+    RenderingContext interiorContext = {
+        {
+            camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()
+        }
+    };
+
+    ExteriorRenderingContext exteriorContext = {
+        {
+            camera->getPosition(), ship->getPosition(), ship->getCenter(), camera->getAngle(), ship->getAngle(), screenDimensions,
+            camera->getScale()
+        }
+    };
+
+    renderParallax(renderer, exteriorContext, ship, std::move(parallax_objects));
 
     //the one place that hasn't been corrupted by capitalism (it is space)
-    ship->renderExterior(renderer, renderingContext);
+    // ship->renderExterior(renderer, exteriorContext);
 
     //current ship interior rendering
-    ship->renderInterior(renderer, renderingContext);
+    ship->renderInterior(renderer, interiorContext);
 
     //render
-    ship->renderEntities(renderer, renderingContext);
+    ship->renderEntities(renderer, interiorContext);
 }
 
 
@@ -285,15 +303,10 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         guiUpdateHandling(gui_elements, gui_elements_deletion_queue, gui_update_context, paused);
 
         // RENDERING ---------------------------------------------------------------------------------------------------
-        RenderingContext renderingContext = {
-            {
-                camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()
-            }
-        };
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
-        RenderingHandle(renderer, camera->working_spaceship, parallax_objects, renderingContext);
+        RenderingHandle(renderer, camera, screenDimensions, parallax_objects);
 
         // GUI RENDERING -----------------------------------------------------------------------------------------------
         GUI_RenderingContext gui_rendering_context = {

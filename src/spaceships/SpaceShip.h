@@ -31,7 +31,7 @@ inline static bool comparePhysicsEntities(PhysicsEntity *e1, PhysicsEntity *e2);
 class SpaceShip {
 private:
   void populateRooms();
-  bool roomsAreDone();
+  bool roomsAreDone() const;
 
   bool shouldSkipTile(int x, int y,
                       const std::vector<std::vector<bool>> &visited) const;
@@ -50,13 +50,24 @@ private:
   Entity *focusEntity = nullptr;
 
   void renderRooms(SDL_Renderer *renderer, const RenderingContext &context,
-                   const std::vector<Room *> &rooms);
+                   const std::vector<Room *> &to_render) const;
 
 protected:
   AdjacencyListGraph<Room *> rooms;
   SpaceshipTiles spaceship_tiles;
   std::vector<Entity*> deletion_queue;
+  Vector2Int position;
+public:
+  [[nodiscard]] Vector2Int getPosition() const {return  position;}
+  void setPosition(Vector2Int value){position = value;}
 
+  [[nodiscard]] Vector2Int getCenter() const;
+
+protected:
+  float angle;
+public:
+  [[nodiscard]] float getAngle() const {return angle;}
+  void setAngle(float value) {angle = value;}
 public:
   std::filesystem::path blueprint_path;
   std::unordered_set<Entity *> entities;
@@ -67,8 +78,7 @@ public:
 
   SpaceshipHooks hooks;
 
-  explicit SpaceShip(const SpaceShipBlueprint *blueprint);
-  explicit SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities);
+  explicit SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities, Vector2Int position, float angle);
   explicit SpaceShip();
 
   ~SpaceShip();

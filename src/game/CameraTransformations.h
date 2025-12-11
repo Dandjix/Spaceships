@@ -70,4 +70,73 @@ namespace CameraTransformations {
 				return screenPosition;
 		}
 	};
+
+	//this one doesnt work at all
+	struct ExteriorCameraInfo {
+	public:
+		/// <summary>
+		/// camera position in world units
+		/// </summary>
+		const Vector2Int cameraPosition;
+
+		/**
+		 * The center of the spaceship the camera is on
+		 */
+		const Vector2Int spaceshipPosition;
+		const Vector2Int spaceshipCenter;
+		const float cameraAngle;
+		const float spaceshipAngle;
+		const Vector2Int screenDimensions;
+		/**
+		 * scale of the camera. 1 is regular camera zoom, while 0 would be infinitely zoomed in and inf infinitely zoomed out
+		 */
+		const float cameraScale;
+
+
+
+		[[nodiscard]] Matrix::Mat3 screenToWorldMatrix() const {
+			Vector2Float half = Vectors::toVector2Float(screenDimensions) / 2;
+
+			Matrix::Mat3 T_center  = Matrix::Mat3::translation(-half.x, -half.y);
+			Matrix::Mat3 R_cam     = Matrix::Mat3::rotation(-cameraAngle);
+			Matrix::Mat3 S         = Matrix::Mat3::scale(cameraScale);
+
+			// spaceship transform
+			Matrix::Mat3 R_ship    = Matrix::Mat3::rotation(-spaceshipAngle);
+			Matrix::Mat3 T_ship    = Matrix::Mat3::translation(spaceshipPosition.x, spaceshipPosition.y);
+
+			Matrix::Mat3 T_cam     = Matrix::Mat3::translation(cameraPosition.x, cameraPosition.y);
+
+			// world = Cam * Ship * Scale * RotCam * Offset
+			return T_cam * T_ship * R_ship * S * R_cam * T_center;
+		}
+
+		[[nodiscard]] Matrix::Mat3 worldToScreenMatrix() const {
+			Vector2Float half = Vectors::toVector2Float(screenDimensions) / 2;
+
+			Matrix::Mat3 T_center  = Matrix::Mat3::translation(half.x, half.y);
+
+			// invert order + invert each
+			Matrix::Mat3 R_cam_inv   = Matrix::Mat3::rotation(cameraAngle);
+			Matrix::Mat3 S_inv       = Matrix::Mat3::scale(1.0f / cameraScale);
+			Matrix::Mat3 R_ship_inv  = Matrix::Mat3::rotation(spaceshipAngle);
+			Matrix::Mat3 T_ship_inv  = Matrix::Mat3::translation(-spaceshipPosition.x, -spaceshipPosition.y);
+			Matrix::Mat3 T_cam_inv   = Matrix::Mat3::translation(-cameraPosition.x, -cameraPosition.y);
+
+			return T_center * R_cam_inv * S_inv * R_ship_inv * T_ship_inv * T_cam_inv;
+		}
+
+		[[nodiscard]] Vector2Int screenToWorldPoint(Vector2Float screen) const {
+			auto w = screenToWorldMatrix() * screen;
+			return Vectors::toVector2Int(w);
+		}
+
+		[[nodiscard]] Vector2Float worldToScreenPoint(Vector2Int world) const {
+			return worldToScreenMatrix() * Vectors::toVector2Float(world);
+		}
+
+		[[nodiscard]] float getScreenObjectAngle(float world_angle) const {
+			return world_angle - cameraAngle + spaceshipAngle;
+		}
+	};
 }

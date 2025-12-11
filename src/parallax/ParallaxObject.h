@@ -4,6 +4,8 @@
 #include "game/Rendering.h"
 #include "math/Vectors.h"
 
+class SpaceShip;
+
 class ParallaxObject
 {
 private :
@@ -18,7 +20,7 @@ public:
     :
     position(objectPosition),angle(objectAngle),depth(objectDepth),sizeMultiplier(objectSizeMultiplier),texture(objectTexture){}
 
-    void render(SDL_Renderer * renderer, const RenderingContext & context);
+    void render(SDL_Renderer *renderer, const ExteriorRenderingContext &context, SpaceShip *ship) const;
 
     bool operator<(const ParallaxObject & other) const
     {
