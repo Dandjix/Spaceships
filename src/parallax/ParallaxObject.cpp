@@ -38,14 +38,27 @@ getCameraDistance(float field_of_view, float screenWidth)
 
 void ParallaxObject::render(SDL_Renderer* renderer, const ExteriorRenderingContext& context, SpaceShip * ship) const {
 
-    Vector2Float center  = context.camera_info.worldToScreenPoint(position);
+    auto cameraDistance = getCameraDistance(
+        120.0f,
+        static_cast<float>(context.camera_info.screenDimensions.x)*context.camera_info.cameraScale
+        );
+
+    float factor = cameraDistance / (cameraDistance + depth);
+    // Clamp to avoid weirdness
+    factor = std::clamp(factor, 0.0f, 1.0f);
+
+    Vector2Int parallax_position = context.camera_info.cameraPosition + (position - context.camera_info.cameraPosition)
+    * factor;
+
+
+    Vector2Float center  = context.camera_info.worldToScreenPoint(parallax_position);
 
     float texture_w, texture_h;
 
     SDL_GetTextureSize(texture,&texture_w,&texture_h);
 
-    texture_w/=context.camera_info.cameraScale;
-    texture_h/=context.camera_info.cameraScale;
+    texture_w /= (context.camera_info.cameraScale / (cameraDistance / (cameraDistance + depth))) / sizeMultiplier;
+    texture_h /= (context.camera_info.cameraScale / (cameraDistance / (cameraDistance + depth))) / sizeMultiplier;
 
     SDL_FRect destRect = {
         center.x - texture_w * 0.5f,
@@ -53,6 +66,9 @@ void ParallaxObject::render(SDL_Renderer* renderer, const ExteriorRenderingConte
         texture_w,
         texture_h
     };
+
+    SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, angle + context.camera_info.cameraAngle, nullptr, SDL_FLIP_NONE);
+
 
 SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, context.camera_info.getScreenObjectAngle(angle), nullptr, SDL_FLIP_NONE);
 }
