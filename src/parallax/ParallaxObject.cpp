@@ -47,10 +47,7 @@ void ParallaxObject::render(SDL_Renderer* renderer, const ExteriorRenderingConte
         // Clamp to avoid weirdness
         parallax_factor = std::clamp(parallax_factor, 0.0f, 1.0f);
 
-        // Apply parallax effect relative to spaceship center (or position)
-        // Objects farther away (higher depth) move less relative to the ship
-        Vector2Int parallax_position = context.camera_info.spaceshipCenter +
-            (position - context.camera_info.spaceshipCenter) * parallax_factor;
+        auto parallax_position = position;
 
         Vector2Float center = context.camera_info.worldToScreenPoint(parallax_position);
 

@@ -61,7 +61,7 @@ public:
   [[nodiscard]] Vector2Int getPosition() const {return  position;}
   void setPosition(Vector2Int value){position = value;}
 
-  [[nodiscard]] Vector2Int getCenter() const;
+  [[nodiscard]] Vector2Int getCenterOffset() const;
 
 protected:
   float angle;

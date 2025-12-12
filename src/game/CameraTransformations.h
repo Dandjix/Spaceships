@@ -147,9 +147,9 @@ namespace CameraTransformations {
          */
         const Vector2Int spaceshipPosition;
         /**
-         * The center of the spaceship the camera is on
+         * The center offset of the spaceship the camera is on. If a ship is 10x10 tiles, the offset is a vector from tile 0 0 to about tiles 5 5
          */
-        const Vector2Int spaceshipCenter;
+        const Vector2Int spaceshipCenterOffset;
         const float cameraAngle;
         const float spaceshipAngle;
         const Vector2Int screenDimensions;
@@ -158,40 +158,12 @@ namespace CameraTransformations {
          */
         const float cameraScale;
 
+        [[nodiscard]] Vector2Int getSpaceshipCenter() const {
+            return spaceshipPosition + spaceshipCenterOffset.rotate(spaceshipAngle);
+        }
+
         [[nodiscard]] Vector2Int screenToWorldPoint(Vector2Float screen) const {
-            Vector2Float halfScreenDim = Vectors::toVector2Float(screenDimensions) / 2.0f;
-
-            // Transformation chain (applied right to left):
-            // 1. Center screen coordinates
-            Matrix::Mat3 centerScreen = Matrix::Mat3<>::translation(-halfScreenDim.x, -halfScreenDim.y);
-
-            // 2. Rotate by -cameraAngle (undo camera rotation)
-            Matrix::Mat3 rotateCam = Matrix::Mat3<>::rotation(-cameraAngle);
-
-            // 3. Scale by cameraScale (undo zoom)
-            Matrix::Mat3 scaleCam = Matrix::Mat3<>::scale(cameraScale);
-
-            // 4. Scale to world position
-            Matrix::Mat3 scaleToWorld = Matrix::Mat3<>::scale(Vectors::getFactor());
-
-            // 5. Translate by camera position (relative to ship)
-            Matrix::Mat3 translateCam = Matrix::Mat3<>::translation(
-                cameraPosition.x, cameraPosition.y
-            );
-
-            // 6. Rotate by spaceship angle (ship's local to world rotation)
-            Matrix::Mat3 rotateShip = Matrix::Mat3<>::rotation(spaceshipAngle);
-
-            // 7. Translate by spaceship position (ship local to world position)
-            Matrix::Mat3 translateShip = Matrix::Mat3<>::translation(
-                spaceshipPosition.x, spaceshipPosition.y
-            );
-
-            Matrix::Mat3 transform = translateShip * rotateShip * translateCam * scaleToWorld * scaleCam * rotateCam *
-                                     centerScreen;
-
-            Vector2Float worldFloat = transform * screen;
-            return Vectors::toVector2Int(worldFloat);
+            throw std::logic_error("not implemented");
         }
 
         [[nodiscard]] Vector2Float worldToScreenPoint(Vector2Int world) const {
@@ -202,6 +174,11 @@ namespace CameraTransformations {
             Matrix::Mat3 translateShip = Matrix::Mat3<>::translation(
                 -spaceshipPosition.x, -spaceshipPosition.y
             );
+
+            Matrix::Mat3 translate_to_center = Matrix::Mat3<>::translation(
+                -spaceshipCenterOffset.x, -spaceshipCenterOffset.y);
+            Matrix::Mat3 translate_back_from_center = Matrix::Mat3<>::translation(
+                spaceshipCenterOffset.x, spaceshipCenterOffset.y);
 
             // 2. Rotate by -spaceship angle
             Matrix::Mat3 rotateShip = Matrix::Mat3<>::rotation(-spaceshipAngle);
@@ -225,8 +202,12 @@ namespace CameraTransformations {
                 halfScreenDim.x, halfScreenDim.y
             );
 
-            Matrix::Mat3 transform = uncenterScreen * rotateCam * unscaleCam * scaleToScreen * translateCam * rotateShip
-                                     * translateShip;
+
+            Matrix::Mat3 transform = uncenterScreen * rotateCam * unscaleCam * scaleToScreen * translateCam *
+                                     // translate_to_center *
+                                     rotateShip *
+                                     // translate_back_from_center *
+                                     translateShip;
 
             return Vectors::toVector2Float(transform * world);
         }

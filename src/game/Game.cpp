@@ -88,7 +88,7 @@ void RenderingHandle(SDL_Renderer *renderer, Camera *camera, const Vector2Int &s
 
     ExteriorRenderingContext exteriorContext = {
         {
-            camera->getPosition(), ship->getPosition(), ship->getCenter(), camera->getAngle(), ship->getAngle(), screenDimensions,
+            camera->getPosition(), ship->getPosition(), ship->getCenterOffset(), camera->getAngle(), ship->getAngle(), screenDimensions,
             camera->getScale()
         }
     };

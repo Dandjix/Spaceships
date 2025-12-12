@@ -149,12 +149,12 @@ void SpaceShip::renderRooms(SDL_Renderer *renderer, const RenderingContext &cont
     }
 }
 
-Vector2Int SpaceShip::getCenter() const {
-    Vector2Int center = {(
+Vector2Int SpaceShip::getCenterOffset() const {
+    Vector2Int center_offset = {(
         (spaceship_tiles.minimum_x() + spaceship_tiles.maximum_x())/2) * Tiles::tileSizePx,
         (spaceship_tiles.minimum_y() + spaceship_tiles.maximum_y()/2)* Tiles::tileSizePx
     };
-    return position + center.scaleToWorldPosition().rotate(angle);
+    return center_offset.scaleToWorldPosition();
 }
 
 SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities, Vector2Int position,
