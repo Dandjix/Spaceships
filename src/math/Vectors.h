@@ -24,7 +24,7 @@ struct Vector2 {
     Vector2(T x = 0, T y = 0) : x(x), y(y) {
     }
 
-    float length() const {
+    [[nodiscard]] float length() const {
         float l = std::sqrt(
             static_cast<float>(x) * static_cast<float>(x) + static_cast<float>(y) * static_cast<float>(y));
         if (std::isnan(l)) {
@@ -33,7 +33,7 @@ struct Vector2 {
         return l;
     }
 
-    float sqrLength() const {
+    [[nodiscard]] float sqrLength() const {
         return static_cast<float>(x) * static_cast<float>(x) + static_cast<float>(y) * static_cast<float>(y);
     }
 
@@ -78,7 +78,7 @@ struct Vector2 {
      * @param degrees the angle in degrees
      * @return the rotated vector
      */
-    Vector2<T> rotate(float degrees) const {
+    [[nodiscard]] Vector2<T> rotate(float degrees) const {
         if constexpr (std::is_same_v<T, float>) {
             float radians = degrees * (3.14159265358979323846f / 180.0f);
             float cosB = cosf(radians);
@@ -104,7 +104,7 @@ struct Vector2 {
     /// scales the screen position up to a world position.
     /// </summary>
     /// <returns></returns>
-    Vector2<T> scaleToWorldPosition() const {
+    [[nodiscard]] Vector2<T> scaleToWorldPosition() const {
         return Vector2<T>(x * factor, y * factor);
     }
 
@@ -112,7 +112,7 @@ struct Vector2 {
     /// scales the world position down to a screen position
     /// </summary>
     /// <returns></returns>
-    Vector2<T> scaleToScreenPosition() const {
+    [[nodiscard]] Vector2<T> scaleToScreenPosition() const {
         return Vector2<T>(x / factor, y / factor);
     }
 
@@ -167,6 +167,17 @@ struct Vector2 {
         entry["x"] = x;
         entry["y"] = y;
         return entry;
+    }
+
+    [[nodiscard]]static Vector2<T> lerp(Vector2<T> a, Vector2<T> b, float c) {
+
+        T x = static_cast<T>(static_cast<float>(a.x)*(1-c)+static_cast<float>(b.x)*(c));
+        T y = static_cast<T>(static_cast<float>(a.y)*(1-c)+static_cast<float>(b.y)*(c));
+
+        return Vector2<T>(
+            x,
+            y
+        );
     }
 
     static Vector2<T> fromJson(nlohmann::json entry) {

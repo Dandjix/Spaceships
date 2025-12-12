@@ -47,25 +47,27 @@ void ParallaxObject::render(SDL_Renderer* renderer, const ExteriorRenderingConte
         // Clamp to avoid weirdness
         parallax_factor = std::clamp(parallax_factor, 0.0f, 1.0f);
 
-        auto parallax_position = position;
 
-        Vector2Float center = context.camera_info.worldToScreenPoint(parallax_position);
+        Vector2Float foreground_position = context.camera_info.worldToScreenPoint(position);
+
+        Vector2Float screen_center = Vectors::toVector2Float(context.camera_info.screenDimensions) / 2;
+
+        Vector2Float parallax_position = Vector2Float::lerp(foreground_position,screen_center,1-parallax_factor);
 
         float texture_w, texture_h;
         SDL_GetTextureSize(texture, &texture_w, &texture_h);
 
-        // Apply size scaling based on parallax depth
-        texture_w /= (context.camera_info.cameraScale / (cameraDistance / (cameraDistance + depth))) / sizeMultiplier;
-        texture_h /= (context.camera_info.cameraScale / (cameraDistance / (cameraDistance + depth))) / sizeMultiplier;
+        // texture_w /= context.camera_info.cameraScale;
+        // texture_h /= context.camera_info.cameraScale;
+
 
         SDL_FRect destRect = {
-            center.x - texture_w * 0.5f,
-            center.y - texture_h * 0.5f,
+            parallax_position.x - texture_w * 0.5f,
+            parallax_position.y - texture_h * 0.5f,
             texture_w,
             texture_h
         };
 
-        // Use getScreenObjectAngle to convert world angle to screen angle
         SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect,
             context.camera_info.getScreenObjectAngle(angle), nullptr, SDL_FLIP_NONE);
 
