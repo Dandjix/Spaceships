@@ -54,7 +54,7 @@ void PlayerBehavior::spaceshipControlUpdate(const UpdateContext &context, Physic
         deltaAngle -=1;
     }
 
-    Vector2Float delta = Vector2Float(deltaX, deltaY).rotate(-context.camera_info.cameraAngle - space_ship->getAngle());
+    Vector2Float delta = Vector2Float(deltaX, deltaY).rotate(space_ship->getAngle());
 
     delta.normalize();
 
@@ -62,7 +62,7 @@ void PlayerBehavior::spaceshipControlUpdate(const UpdateContext &context, Physic
 
     delta = delta.scaleToWorldPosition();
 
-    space_ship->setPosition(space_ship->getPosition() + Vectors::toVector2Int(delta.rotate(-space_ship->getAngle())));
+    space_ship->setPosition(space_ship->getPosition() + Vectors::toVector2Int(delta));
     space_ship->setAngle(space_ship->getAngle()+deltaAngle);
 }
 
