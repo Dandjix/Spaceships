@@ -7,6 +7,7 @@
 #include <queue>
 #include <unordered_set>
 
+#include "exterior/SpaceShipExterior.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
 
 class ActiveWhenPausedEntity;
@@ -53,6 +54,7 @@ private:
                    const std::vector<Room *> &to_render) const;
 
 protected:
+  SpaceShipResources::Exterior * exterior;
   AdjacencyListGraph<Room *> rooms;
   SpaceshipTiles spaceship_tiles;
   std::vector<Entity*> deletion_queue;
@@ -88,7 +90,7 @@ public:
   /// <summary>
   /// renders the hull of the ship
   /// </summary>
-  void renderExterior(SDL_Renderer *renderer, const RenderingContext &context);
+  void renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context);
 
   /// <summary>
   /// renders the visible rooms of the ship

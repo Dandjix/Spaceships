@@ -11,6 +11,7 @@
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
 #include "entities/scripts/LateUpdateEntity.h"
+#include "exterior/exteriors/TestExterior.h"
 
 bool EntityComparison::compareEntities(Entity *e1, Entity *e2) {
     return e1->getQueueOrder() < e2->getQueueOrder();
@@ -125,7 +126,8 @@ Vector2Int SpaceShip::nextNonRoomCoords(int startX, int startY) {
     return Vector2Int(-1, -1);
 }
 
-void SpaceShip::renderRooms(SDL_Renderer *renderer, const RenderingContext &context, const std::vector<Room *> &to_render) const {
+void SpaceShip::renderRooms(SDL_Renderer *renderer, const RenderingContext &context,
+                            const std::vector<Room *> &to_render) const {
     for (const Room *room: to_render) {
         Vector2Int TL, BR;
         room->Encompassing(TL, BR);
@@ -150,9 +152,10 @@ void SpaceShip::renderRooms(SDL_Renderer *renderer, const RenderingContext &cont
 }
 
 Vector2Int SpaceShip::getCenterOffset() const {
-    Vector2Int center_offset = {(
-        (spaceship_tiles.minimum_x() + spaceship_tiles.maximum_x())/2) * Tiles::tileSizePx,
-        (spaceship_tiles.minimum_y() + spaceship_tiles.maximum_y()/2)* Tiles::tileSizePx
+    Vector2Int center_offset = {
+        (
+            (spaceship_tiles.minimum_x() + spaceship_tiles.maximum_x()) / 2) * Tiles::tileSizePx,
+        (spaceship_tiles.minimum_y() + spaceship_tiles.maximum_y() / 2) * Tiles::tileSizePx
     };
     return center_offset.scaleToWorldPosition();
 }
@@ -160,12 +163,14 @@ Vector2Int SpaceShip::getCenterOffset() const {
 SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities, Vector2Int position,
                      float angle)
     : spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks), blueprint_path(blueprint->path),
-      position(position), angle(angle) {
+      position(position), angle(angle),
+      exterior(new SpaceShipResources::TestExterior(Vector2Int(1024, 1024).scaleToWorldPosition())) {
     populateRooms();
     registerEntities(entities);
 }
 
-SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})), hooks({}, {}), blueprint_path("") {
+SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})), hooks({}, {}), blueprint_path(""), angle(0),
+                         exterior(new SpaceShipResources::TestExterior(Vector2Int(1024, 1024).scaleToWorldPosition())) {
     populateRooms();
 }
 
@@ -173,14 +178,15 @@ SpaceShip::~SpaceShip() {
     for (auto entity: entities) {
         delete entity;
     }
+    delete exterior;
 }
 
 const SpaceshipTiles &SpaceShip::getSpaceshipTiles() const {
     return spaceship_tiles;
 }
 
-void SpaceShip::renderExterior(SDL_Renderer *renderer, const RenderingContext &context) {
-    //TODO : do dis
+void SpaceShip::renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context) {
+    exterior->render(renderer,context,this);
 }
 
 void SpaceShip::renderInterior(SDL_Renderer *renderer, const RenderingContext &context) {
@@ -287,7 +293,7 @@ SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json) {
     for (const auto &entity_entry: json["entities"]) {
         loaded_entities.push_back(EntityLoading::fromJson(entity_entry));
     }
-    auto *space_ship = new SpaceShip(blueprint, loaded_entities,Vector2Int::fromJson(json["position"]),json["angle"]);
+    auto *space_ship = new SpaceShip(blueprint, loaded_entities, Vector2Int::fromJson(json["position"]), json["angle"]);
 
     delete blueprint;
 

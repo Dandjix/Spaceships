@@ -11,6 +11,8 @@
 #include "player/PlayerVehicleTracker.h"
 #include "player/VehicleEnter.h"
 #include "player/VehicleLeave.h"
+#include "spaceships/exterior/SpaceShipExterior.h"
+#include "spaceships/exterior/exteriors/TestExterior.h"
 #include "userInterface/elements/GUI/GUILabel.h"
 #include "userInterface/elements/notification/Snackbar.h"
 #include "userInterface/pauseMenu/PauseMenu.h"
@@ -96,7 +98,7 @@ void RenderingHandle(SDL_Renderer *renderer, Camera *camera, const Vector2Int &s
     renderParallax(renderer, exteriorContext, ship, std::move(parallax_objects));
 
     //the one place that hasn't been corrupted by capitalism (it is space)
-    // ship->renderExterior(renderer, exteriorContext);
+    ship->renderExterior(renderer, exteriorContext);
 
     //current ship interior rendering
     ship->renderInterior(renderer, interiorContext);
@@ -139,6 +141,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     CargoContainer::LoadTextures(renderer);
     Sphere::LoadTextures(renderer);
     Tiles::loadAll(renderer);
+    SpaceShipResources::TestExterior::loadAssets(renderer);
 
     // Setup -----------------------------------------------------------------------------------------------------------
     Camera *camera;
