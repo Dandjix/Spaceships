@@ -41,16 +41,7 @@ void ParallaxObject::render(SDL_Renderer *renderer, const ExteriorRenderingConte
         static_cast<float>(context.camera_info.screenDimensions.x) * context.camera_info.cameraScale
     );
 
-    float parallax_factor;
-    if (depth == 0) {
-        parallax_factor = 0;
-    }
-    else {
-        parallax_factor = depth / (cameraDistance + depth);
-    }
-    // Clamp to avoid weirdness
-    parallax_factor = std::clamp(parallax_factor, 0.0f, 1.0f);
-
+    float parallax_factor = depth / (cameraDistance + depth);
 
     Vector2Float foreground_position = context.camera_info.worldToScreenPoint(position);
 
