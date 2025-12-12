@@ -399,4 +399,6 @@ build.ninja
 Spaceships
 Spaceships.exe
 
+assets/newGame/newGame.save.json
+
 saves
