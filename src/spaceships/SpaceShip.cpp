@@ -160,6 +160,10 @@ Vector2Int SpaceShip::getCenterOffset() const {
     return center_offset.scaleToWorldPosition();
 }
 
+Vector2Int SpaceShip::getCenter() const {
+    return position + getCenterOffset().rotate(getAngle());
+}
+
 SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities, Vector2Int position,
                      float angle)
     : spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks), blueprint_path(blueprint->path),

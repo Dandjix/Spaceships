@@ -18,147 +18,172 @@ class Entity;
 class LateUpdateEntity;
 
 enum class RoomDistance {
-  All,
-  Immediate,
-  Close,
-  Far,
+    All,
+    Immediate,
+    Close,
+    Far,
 };
 
 namespace EntityComparison {
-inline static bool compareEntities(Entity *e1, Entity *e2);
-inline static bool comparePhysicsEntities(PhysicsEntity *e1, PhysicsEntity *e2);
+    inline static bool compareEntities(Entity *e1, Entity *e2);
+
+    inline static bool comparePhysicsEntities(PhysicsEntity *e1, PhysicsEntity *e2);
 }
 
 class SpaceShip {
 private:
-  void populateRooms();
-  bool roomsAreDone() const;
+    void populateRooms();
 
-  bool shouldSkipTile(int x, int y,
-                      const std::vector<std::vector<bool>> &visited) const;
-  std::unordered_set<Vector2Int>
-  collectConnectedFloorTiles(int startX, int startY,
-                             std::vector<std::vector<bool>> &visited) const;
+    bool roomsAreDone() const;
 
-  Room *createRoomFromTiles(const std::unordered_set<Vector2Int> &tiles) const;
+    bool shouldSkipTile(int x, int y,
+                        const std::vector<std::vector<bool> > &visited) const;
 
-  Vector2Int nextNonRoomCoords(int startX = 0, int startY = 0);
+    std::unordered_set<Vector2Int>
+    collectConnectedFloorTiles(int startX, int startY,
+                               std::vector<std::vector<bool> > &visited) const;
 
-  /// <summary>
-  /// the room which has focus. Generally the room the player is in.
-  /// </summary>
-  Room *focusRoom = nullptr;
-  Entity *focusEntity = nullptr;
+    Room *createRoomFromTiles(const std::unordered_set<Vector2Int> &tiles) const;
 
-  void renderRooms(SDL_Renderer *renderer, const RenderingContext &context,
-                   const std::vector<Room *> &to_render) const;
+    Vector2Int nextNonRoomCoords(int startX = 0, int startY = 0);
 
-protected:
-  SpaceShipResources::Exterior * exterior;
-  AdjacencyListGraph<Room *> rooms;
-  SpaceshipTiles spaceship_tiles;
-  std::vector<Entity*> deletion_queue;
-  Vector2Int position;
-public:
-  [[nodiscard]] Vector2Int getPosition() const {return  position;}
-  void setPosition(Vector2Int value){position = value;}
+    /// <summary>
+    /// the room which has focus. Generally the room the player is in.
+    /// </summary>
+    Room *focusRoom = nullptr;
+    Entity *focusEntity = nullptr;
 
-  [[nodiscard]] Vector2Int getCenterOffset() const;
+    void renderRooms(SDL_Renderer *renderer, const RenderingContext &context,
+                     const std::vector<Room *> &to_render) const;
 
 protected:
-  float angle;
+    SpaceShipResources::Exterior *exterior;
+    AdjacencyListGraph<Room *> rooms;
+    SpaceshipTiles spaceship_tiles;
+    std::vector<Entity *> deletion_queue;
+    Vector2Int position;
+
 public:
-  [[nodiscard]] float getAngle() const {return angle;}
-  void setAngle(float value) {angle = value;}
+    [[nodiscard]] Vector2Int getPosition() const { return position; }
+    void setPosition(Vector2Int value) { position = value; }
+
+    [[nodiscard]] Vector2Int getCenterOffset() const;
+
+    [[nodiscard]] Vector2Int getCenter() const;
+
+protected:
+    float angle;
+
 public:
-  std::filesystem::path blueprint_path;
-  std::unordered_set<Entity *> entities;
-  std::unordered_set<PhysicsEntity *> physics_entities;
-  std::unordered_set<LateUpdateEntity *> late_update_entities;
-  std::unordered_set<ActiveWhenPausedEntity *> active_when_paused_entities;
-  std::vector<Camera *> cameras;
+    [[nodiscard]] float getAngle() const { return angle; }
 
-  SpaceshipHooks hooks;
+    /**
+     * This sets the angle of the ship directly, but if you rotate the ship like this, it is going to get rotated around its top left corner. This is most likely not what you want, see setAngleAroundCenter
+     * @param value
+     */
+    void setAngle(float value) { angle = value; }
 
-  explicit SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities, Vector2Int position, float angle);
-  explicit SpaceShip();
+    void setAngleAroundCenter(float newAngle) {
+        Vector2 center = position + getCenterOffset().rotate(angle);
+        angle = newAngle;
+        position = center - getCenterOffset().rotate(angle);
+    }
 
-  ~SpaceShip();
+public:
+    std::filesystem::path blueprint_path;
+    std::unordered_set<Entity *> entities;
+    std::unordered_set<PhysicsEntity *> physics_entities;
+    std::unordered_set<LateUpdateEntity *> late_update_entities;
+    std::unordered_set<ActiveWhenPausedEntity *> active_when_paused_entities;
+    std::vector<Camera *> cameras;
 
-  const SpaceshipTiles &getSpaceshipTiles() const;
+    SpaceshipHooks hooks;
 
-  /// <summary>
-  /// renders the hull of the ship
-  /// </summary>
-  void renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context);
+    explicit SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities, Vector2Int position,
+                       float angle);
 
-  /// <summary>
-  /// renders the visible rooms of the ship
-  /// </summary>
-  void renderInterior(SDL_Renderer *renderer, const RenderingContext &context);
+    explicit SpaceShip();
 
-  /// <summary>
-  /// returns the entities (read only)
-  /// @param reference_room the room to which this is Immediate, close etc. By default (nullptr) this will be relative to the player
-  /// </summary>
-  /// <returns></returns>
-  std::vector<Entity *> getEntities(RoomDistance queue, Room* reference_room = nullptr) const;
+    ~SpaceShip();
 
-  /// <summary>
-  /// returns the physics entities (read only)
-  /// </summary>
-  /// <returns></returns>
-  std::vector<PhysicsEntity *> getPhysicsEntities(RoomDistance queue, Room* reference_room = nullptr) const;
-  /// <summary>
-  /// docks an other ship to this ship. You will want to align them relatively
-  /// well since this will snap the other ship. Undocking is future me's problem
-  /// </summary>
-  /// <param name="other"> The other ship</param>
+    const SpaceshipTiles &getSpaceshipTiles() const;
 
-  std::vector<BehavioredEntity * > getBehavioredEntities(RoomDistance queue, Room* reference_room = nullptr) const;
-  void Dock(SpaceShip other);
+    /// <summary>
+    /// renders the hull of the ship
+    /// </summary>
+    void renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context);
 
+    /// <summary>
+    /// renders the visible rooms of the ship
+    /// </summary>
+    void renderInterior(SDL_Renderer *renderer, const RenderingContext &context);
 
-  void queueDelete(Entity * entity) {
-    deletion_queue.push_back(entity);
-  }
+    /// <summary>
+    /// returns the entities (read only)
+    /// @param reference_room the room to which this is Immediate, close etc. By default (nullptr) this will be relative to the player
+    /// </summary>
+    /// <returns></returns>
+    std::vector<Entity *> getEntities(RoomDistance queue, Room *reference_room = nullptr) const;
 
-  void handleQueueDeletion();
+    /// <summary>
+    /// returns the physics entities (read only)
+    /// </summary>
+    /// <returns></returns>
+    std::vector<PhysicsEntity *> getPhysicsEntities(RoomDistance queue, Room *reference_room = nullptr) const;
 
-  void physicsHandling(float target_delta_time, int subdivisions = 2);
+    /// <summary>
+    /// docks an other ship to this ship. You will want to align them relatively
+    /// well since this will snap the other ship. Undocking is future me's problem
+    /// </summary>
+    /// <param name="other"> The other ship</param>
 
-  void renderEntities(SDL_Renderer *renderer, RenderingContext renderingContext);
+    std::vector<BehavioredEntity *> getBehavioredEntities(RoomDistance queue, Room *reference_room = nullptr) const;
 
-  void eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context, bool paused);
-
-  void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type, bool
-                      paused);
-
-  void lateUpdateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime, GameEvent::MousePositionType mouse_position_type, bool
-                          paused);
-
-
-  /// <summary>
-  /// adds one or more entries to the entities map
-  /// </summary>
-  void registerEntities(const std::vector<Entity *> &entities);
-
-  /// <summary>
-  /// removes one or more entries from the entities map. Used for when the
-  /// object is destroyed or if another ship undocks prolly idk
-  /// </summary>
-  /// <param name="entities"> the entiti(es) to unregister</param>
-  /// <returns></returns>
-  void unregisterEntities(const std::vector<Entity *> &entities);
-
-  bool has_entity(Entity * entity) const;
-
-  void update(const UpdateContext &context);
-
-  void setPlayer(Entity *entity);
+    void Dock(SpaceShip other);
 
 
-  static SpaceShip * fromJson(nlohmann::json::const_reference json);
+    void queueDelete(Entity *entity) {
+        deletion_queue.push_back(entity);
+    }
 
-  nlohmann::json toJson();
+    void handleQueueDeletion();
+
+    void physicsHandling(float target_delta_time, int subdivisions = 2);
+
+    void renderEntities(SDL_Renderer *renderer, RenderingContext renderingContext);
+
+    void eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context, bool paused);
+
+    void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime,
+                        GameEvent::MousePositionType mouse_position_type, bool
+                        paused);
+
+    void lateUpdateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime,
+                            GameEvent::MousePositionType mouse_position_type, bool
+                            paused);
+
+
+    /// <summary>
+    /// adds one or more entries to the entities map
+    /// </summary>
+    void registerEntities(const std::vector<Entity *> &entities);
+
+    /// <summary>
+    /// removes one or more entries from the entities map. Used for when the
+    /// object is destroyed or if another ship undocks prolly idk
+    /// </summary>
+    /// <param name="entities"> the entiti(es) to unregister</param>
+    /// <returns></returns>
+    void unregisterEntities(const std::vector<Entity *> &entities);
+
+    bool has_entity(Entity *entity) const;
+
+    void update(const UpdateContext &context);
+
+    void setPlayer(Entity *entity);
+
+
+    static SpaceShip *fromJson(nlohmann::json::const_reference json);
+
+    nlohmann::json toJson();
 };

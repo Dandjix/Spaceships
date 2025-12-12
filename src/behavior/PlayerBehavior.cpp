@@ -63,7 +63,7 @@ void PlayerBehavior::spaceshipControlUpdate(const UpdateContext &context, Physic
     delta = delta.scaleToWorldPosition();
 
     space_ship->setPosition(space_ship->getPosition() + Vectors::toVector2Int(delta));
-    space_ship->setAngle(space_ship->getAngle()+deltaAngle);
+    space_ship->setAngleAroundCenter(space_ship->getAngle()+deltaAngle);
 }
 
 void PlayerBehavior::spaceshipControlHandleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context,

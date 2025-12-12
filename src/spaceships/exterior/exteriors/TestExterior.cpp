@@ -14,9 +14,6 @@ void SpaceShipResources::TestExterior::loadAssets(SDL_Renderer *renderer) {
 }
 
 void SpaceShipResources::TestExterior::render(SDL_Renderer *renderer, const ExteriorRenderingContext &context, SpaceShip * space_ship) {
-
-    Vector2Int spaceship_center = space_ship->getPosition() + space_ship->getCenterOffset().rotate(space_ship->getAngle());
-
     SDL_Texture* texture = albedo;
 
     if (!texture) {
@@ -32,7 +29,7 @@ void SpaceShipResources::TestExterior::render(SDL_Renderer *renderer, const Exte
         Vector2Float destSize = Vectors::toVector2Float(dimensions).scaleToScreenPosition();
         destSize = destSize / context.camera_info.cameraScale;
 
-        Vector2Float center = context.camera_info.worldToScreenPoint(spaceship_center);
+        Vector2Float center = context.camera_info.worldToScreenPoint(space_ship->getCenter());
 
         SDL_FRect destRect = {
             center.x - destSize.x,
