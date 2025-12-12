@@ -4,37 +4,13 @@ include(FetchContent)
 
 # Fetch SDL3 if not found locally
 find_package(SDL3 QUIET CONFIG REQUIRED)
-if(NOT SDL3_FOUND)
-    message(STATUS "Fetching SDL3 from GitHub...")
-    FetchContent_Declare(
-            SDL3
-            GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-            GIT_TAG        release-3.2.18
-    )
-    FetchContent_MakeAvailable(SDL3)
-endif()
+
 
 find_package(SDL3_image QUIET CONFIG REQUIRED)
-if(NOT SDL3_image_FOUND)
-    # SDL3_image
-    FetchContent_Declare(
-            SDL3_image
-            GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
-            GIT_TAG        main  # Or a specific release when available
-    )
-    FetchContent_MakeAvailable(SDL3_image)
-endif()
+
 
 find_package(SDL3_ttf QUIET CONFIG REQUIRED)
-if(NOT SDL3_ttf_FOUND)
-    # SDL3_ttf
-    FetchContent_Declare(
-            SDL3_ttf
-            GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
-            GIT_TAG        main  # Or a specific release when available
-    )
-    FetchContent_MakeAvailable(SDL3_ttf)
-endif ()
+
 
 # Include headers
 include_directories(
@@ -103,36 +79,7 @@ target_compile_definitions(SpaceshipsLib PRIVATE
 
 # Create the executable from all your sources
 add_executable(${PROJECT_NAME} ${SOURCES}
-        gameEvent/GameEvent.h
-        shipEditor/shipEditorModes/ShipEditorMode.cpp
-        shipEditor/shipEditorModes/ShipEditorMode.h
-        userInterface/elements/prompts/GUITextPrompt.cpp
-        userInterface/elements/prompts/GUITextPrompt.h
-        shipEditor/HookPainter/PainterStates/PainterStates.cpp
-        shipEditor/HookPainter/PainterStates/PainterStates.h
-        shipEditor/EntityPlacer/EntityPlacer.cpp
-        shipEditor/EntityPlacer/EntityPlacer.h
-        textures/Textures.cpp
-        textures/Textures.h
-        spaceships/EntityData/EntityLoading.h
-        loadGame/LoadSavedGame.cpp
-        loadGame/LoadSavedGame.h
-        newGame/NewGame.cpp
-        newGame/NewGame.h
-        vehicles/Vehicle.h
-        vehicles/combatOutfit/CombatOutfit.h
-        vehicles/combatOutfit/CombatOutfit.cpp
-        vehicles/Vechicle.cpp
-        player/VehicleEnter.h
-        player/VehicleEnter.cpp
-        vehicles/spaceship/PilotSeat.cpp
-        vehicles/spaceship/PilotSeat.h
-        physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorStaticRound.h
-        userInterface/pauseMenu/PauseMenu.cpp
-        userInterface/pauseMenu/PauseMenu.h
-        userInterface/elements/notification/Snackbar.cpp
-        userInterface/elements/notification/Snackbar.h
-        math/Matrix.h
+
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE SDL_MAIN_HANDLED)
