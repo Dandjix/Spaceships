@@ -4,38 +4,10 @@
 
 #include "PainterStates.h"
 #include "Painter.h"
+#include "shipEditor/HookPainter/HookDebugRendering.h"
 
-void pointPreview(SDL_Renderer *renderer, const RenderingContext &context, Vector2Int snappedMousePosition) {
-    std::vector<Vector2Float> mouse_pos_corners = {
-        context.camera_info.worldToScreenPoint(snappedMousePosition + Vector2Int(32,32).scaleToWorldPosition()),
-        context.camera_info.worldToScreenPoint(snappedMousePosition + Vector2Int(-32,32).scaleToWorldPosition()),
-        context.camera_info.worldToScreenPoint(snappedMousePosition + Vector2Int(-32,-32).scaleToWorldPosition()),
-        context.camera_info.worldToScreenPoint(snappedMousePosition + Vector2Int(32,-32).scaleToWorldPosition())
 
-    };
-    SDL_SetRenderDrawColor(renderer,0,255,0,255);
-    for (int i = 0; i < mouse_pos_corners.size(); ++i) {
-        int next_i = (i+1)%mouse_pos_corners.size();
 
-        SDL_RenderLine(renderer,mouse_pos_corners[i].x,mouse_pos_corners[i].y,mouse_pos_corners[next_i].x,mouse_pos_corners[next_i].y);
-    }
-}
-
-void drawRegionPreview(SDL_Renderer *renderer, const RenderingContext &context, Vector2Int start, Vector2Int end) {
-    std::vector<Vector2Float> mouse_pos_corners = {
-        context.camera_info.worldToScreenPoint(start),
-        context.camera_info.worldToScreenPoint({start.x,end.y}),
-        context.camera_info.worldToScreenPoint(end),
-        context.camera_info.worldToScreenPoint({end.x, start.y})
-
-    };
-    SDL_SetRenderDrawColor(renderer,0,255,0,255);
-    for (int i = 0; i < mouse_pos_corners.size(); ++i) {
-        int next_i = (i+1)%mouse_pos_corners.size();
-
-        SDL_RenderLine(renderer,mouse_pos_corners[i].x,mouse_pos_corners[i].y,mouse_pos_corners[next_i].x,mouse_pos_corners[next_i].y);
-    }
-}
 
 void HookPainter::StateRegionsSelecting::render(HookPainter::Painter &painter, SDL_Renderer *r,
     const RenderingContext &ctx) {
@@ -46,7 +18,7 @@ void HookPainter::StateRegionsSelecting::render(HookPainter::Painter &painter, S
     auto start = painter.getStart();
 
     // draw rectangle preview
-    drawRegionPreview(r, ctx, start, end);
+    HookDebugRendering::drawAirlockPreview(r, ctx, start, end);
 }
 
 void HookPainter::StateRegionsSelecting::handleClick(HookPainter::Painter &painter, Vector2Int world_pos) {
@@ -60,7 +32,7 @@ void HookPainter::StatePoint::render(HookPainter::Painter &painter, SDL_Renderer
     auto world = ctx.camera_info.screenToWorldPoint({mx,my});
     Vector2Int snapped = painter.snapPosition(world);
 
-    pointPreview(r, ctx, snapped);
+    HookDebugRendering::pointPreview(r, ctx, snapped);
 }
 
 void HookPainter::StatePoint::handleClick(HookPainter::Painter &painter, Vector2Int world_pos) {
@@ -78,7 +50,7 @@ render(HookPainter::Painter &painter, SDL_Renderer *r, const RenderingContext &c
     Vector2Int snapped = painter.snapPosition(world);
     // Reuse your point-drawing logic
     // painter.renderPointHelper(...) - move that logic into a reusable fn
-    pointPreview(r, ctx, snapped);
+    HookDebugRendering::pointPreview(r, ctx, snapped);
 }
 
 void HookPainter::StateRegionsIdle::handleClick(HookPainter::Painter &painter, Vector2Int world_pos) {

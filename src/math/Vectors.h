@@ -162,7 +162,7 @@ struct Vector2 {
         return result;
     }
 
-    nlohmann::json toJson() {
+    [[nodiscard]] nlohmann::json toJson() const {
         nlohmann::json entry = {};
         entry["x"] = x;
         entry["y"] = y;

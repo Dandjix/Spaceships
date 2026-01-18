@@ -13,6 +13,7 @@
 #include "behavior/Behavior.h"
 
 
+class Airlock;
 class HookPoint;
 class HookRegion;
 struct UpdateContext;
@@ -22,13 +23,14 @@ class SpaceshipHooks
 public:
     std::unordered_map<std::string,HookRegion *> regions;
     std::unordered_map<std::string,HookPoint *> points;
-
+    std::unordered_map<std::string,Airlock *> airlocks;
 
     SpaceshipHooks(
         std::unordered_map<std::string,HookRegion *> regions,
-        std::unordered_map<std::string,HookPoint *> points)
+        std::unordered_map<std::string,HookPoint *> points,
+        std::unordered_map<std::string,Airlock *> airlocks)
     :
-    regions(std::move(regions)),points(std::move(points)) {  }
+    regions(std::move(regions)),points(std::move(points)),airlocks(std::move(airlocks)) {  }
 
     ~SpaceshipHooks();
 
@@ -47,6 +49,11 @@ public:
         points.insert({name,point});
 
     }
+    void addAirlock(const std::string & name, Airlock * airlock) {
+        airlocks.insert({name,airlock});
+    }
+
+
     void removePoint(const std::string &name) {
         points.erase(name);
     }
@@ -55,6 +62,11 @@ public:
     void update(const UpdateContext & context);
 
     [[nodiscard]] nlohmann::json toJson() const;
+
+    void removeAirlock(const std::string & name) {
+        airlocks.erase(name);
+    }
+
 
     static SpaceshipHooks fromJson(const nlohmann::json &entry);
 };

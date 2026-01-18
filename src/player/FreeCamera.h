@@ -8,6 +8,21 @@ protected:
 public:
     FreeCamera(Vector2Int position,float angle,float scale, float speed) : Camera(position,angle,scale),speed(speed) {}
 
+    void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context) override {
+        if (event.type != SDL_EVENT_MOUSE_WHEEL) return;
+        if ((SDL_GetModState() & SDL_KMOD_ALT)) return;
+
+
+
+        float zoomFactor = 0.1f; // Adjust zoom speed
+        float scale_value= getScale() + event.wheel.y * zoomFactor;
+
+        // Clamp scale
+        scale_value = std::clamp(scale_value, 0.5f,5.0f);
+
+        setScale(scale_value);
+    }
+
     void update(const UpdateContext & context) override {
         const bool* state = SDL_GetKeyboardState(nullptr);
         float deltaX = 0;

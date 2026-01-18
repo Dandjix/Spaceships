@@ -84,7 +84,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
 	    "",
 	    "",
 	    blueprintTiles,
-	    {{},{}}
+	    {{},{},{}}
 	);
 
     ShipBuildingGrid grid(
@@ -124,7 +124,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         "Load",
         "Exit",
         "Edit tiles",
-        "Edit hooks"
+        "Edit hooks",
+        "Edit airlocks"
     };
 
     std::string blueprint_name = "untitled.json";
@@ -173,6 +174,9 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
             }
             else if (option == "Edit hooks") {
                 state_machine.setMode(ShipEditorModes::HookPainter);
+            }
+            else if (option == "Edit airlocks") {
+                state_machine.setMode(ShipEditorModes::AirlockPainter);
             }
         }
        );

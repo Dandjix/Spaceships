@@ -6,11 +6,13 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include "HookDebugRendering.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "spaceships/Hooks/HookRegion.h"
+#include "spaceships/Hooks/airlock/Airlock.h"
 #include "userInterface/fonts.h"
 
-void displayLabel(SDL_Renderer *renderer, const RenderingContext &context, const std::string &name, Vector2Int world_position) {
+void displayRegionLa(SDL_Renderer *renderer, const RenderingContext &context, const std::string &name, Vector2Int world_position) {
     auto textColor = SDL_Color(0,255,0,255);
 
     SDL_Surface* surface = TTF_RenderText_Solid(fonts["lg"], name.c_str(), name.length(), textColor);
@@ -40,7 +42,7 @@ void displayLabel(SDL_Renderer *renderer, const RenderingContext &context, const
 
 void HookAppearance::render(SDL_Renderer *renderer, const RenderingContext &context) {
 
-    for (const auto [name,region]: hooks->regions) {
+    for (const auto& [name,region]: hooks->regions) {
         std::vector corners = {
             context.camera_info.worldToScreenPoint(region->TL),
             context.camera_info.worldToScreenPoint({region->TL.x, region->TL.y + region->dimensions.y}),
@@ -54,11 +56,11 @@ void HookAppearance::render(SDL_Renderer *renderer, const RenderingContext &cont
             SDL_RenderLine(renderer,corners[i].x,corners[i].y,corners[next_i].x,corners[next_i].y);
         }
 
-        displayLabel(renderer,context,name,region->TL + region->dimensions*0.5f);
+        displayRegionLa(renderer,context,name,region->TL + region->dimensions*0.5f);
 
     }
 
-    for (const auto [name,point]: hooks->points) {
+    for (const auto& [name,point]: hooks->points) {
 
         std::vector corners = {
             context.camera_info.worldToScreenPoint(point->position + Vector2Int(32,32).scaleToWorldPosition()),
@@ -75,7 +77,27 @@ void HookAppearance::render(SDL_Renderer *renderer, const RenderingContext &cont
 
 
 
-        displayLabel(renderer, context, name, point->position);
+        displayRegionLa(renderer, context, name, point->position);
+
+    }
+
+    for (const auto& [name,airlock]: hooks->airlocks) {
+        std::vector corners = {
+            context.camera_info.worldToScreenPoint(airlock->TL),
+            context.camera_info.worldToScreenPoint({airlock->TL.x, airlock->TL.y + airlock->dimensions.y}),
+            context.camera_info.worldToScreenPoint(airlock->TL + airlock->dimensions),
+            context.camera_info.worldToScreenPoint({airlock->TL.x + airlock->dimensions.x,airlock->TL.y})
+        };
+
+        SDL_SetRenderDrawColor(renderer,0,0,255,255);
+        for (int i = 0; i < corners.size(); ++i) {
+            int next_i = (i+1)%corners.size();
+            SDL_RenderLine(renderer,corners[i].x,corners[i].y,corners[next_i].x,corners[next_i].y);
+        }
+
+        HookDebugRendering::displayArrow(renderer,context,airlock->TL + airlock->dimensions*0.5f,airlock->orientation);
+
+        displayRegionLa(renderer,context,name,airlock->TL + airlock->dimensions*0.5f);
 
     }
 }

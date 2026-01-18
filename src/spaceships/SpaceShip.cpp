@@ -173,7 +173,7 @@ SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Enti
     registerEntities(entities);
 }
 
-SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})), hooks({}, {}), blueprint_path(""), angle(0),
+SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})), hooks({}, {}, {}), blueprint_path(""), angle(0),
                          exterior(new SpaceShipResources::TestExterior(Vector2Int(1024, 1024).scaleToWorldPosition())) {
     populateRooms();
 }

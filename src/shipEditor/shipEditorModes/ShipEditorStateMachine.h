@@ -4,6 +4,7 @@
 
 #pragma once
 #include "CommonEditorEntities.h"
+#include "ModeAirlockPainter.h"
 #include "ModeHookPainter.h"
 #include "ModeTilePainter.h"
 #include "game/ElementContainer.h"
@@ -12,11 +13,13 @@ class GUIRect;
 class Entity;
 
 namespace ShipEditorModes {
+    class ModeAirlockPainter;
     class ShipEditorMode;
 
     enum Mode {
         TilePainter,
-        HookPainter
+        HookPainter,
+        AirlockPainter
     };
 
     class ShipEditorStateMachine {
@@ -25,6 +28,7 @@ namespace ShipEditorModes {
         ShipEditorMode * current_mode;
         ModeTilePainter * tile_painter_mode;
         ModeHookPainter * hook_painter_mode;
+        ModeAirlockPainter * airlock_painter_mode;
 
     public:
         SDL_Window * window;
@@ -59,12 +63,16 @@ namespace ShipEditorModes {
         {
             tile_painter_mode = new ModeTilePainter(this);
             hook_painter_mode = new ModeHookPainter(this);
+            airlock_painter_mode = new ModeAirlockPainter(this);
             switch (initial) {
                 case TilePainter:
                     current_mode = tile_painter_mode;
                     break;
                 case HookPainter:
                     current_mode = hook_painter_mode;
+                    break;
+                case AirlockPainter:
+                    current_mode = airlock_painter_mode;
                     break;
             }
             current_mode->enter();
@@ -83,6 +91,9 @@ namespace ShipEditorModes {
                     break;
                 case HookPainter:
                     current_mode = hook_painter_mode;
+                    break;
+                case AirlockPainter:
+                    current_mode = airlock_painter_mode;
                     break;
             }
 
