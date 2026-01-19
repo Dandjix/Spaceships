@@ -4,6 +4,7 @@
 
 #pragma once
 #include "Vectors.h"
+#include "spaceships/Tile.h"
 
 
 template<typename T>
@@ -17,22 +18,22 @@ public:
     topLeftCorner(topLeftCorner),boundingBoxDimensions(boundingBoxDimensions)
     {}
 
-    Vector2<T> topLeft() const
+    [[nodiscard]] Vector2<T> topLeft() const
     {
         return topLeftCorner;
     }
 
-    Vector2<T> bottomRight() const
+    [[nodiscard]] Vector2<T> bottomRight() const
     {
         return topLeftCorner + boundingBoxDimensions;
     }
 
-    Vector2<T> dimensions() const
+    [[nodiscard]] Vector2<T> dimensions() const
     {
         return boundingBoxDimensions;
     }
 
-    bool intersects(BoundingBox other) const
+    [[nodiscard]] bool intersects(BoundingBox other) const
     {
         Vector2<T> aMin = topLeftCorner;
         Vector2<T> aMax = topLeftCorner + boundingBoxDimensions;
@@ -49,11 +50,37 @@ public:
         return true;
     }
 
-    bool is_inside(Vector2Int world_position) const {
+    [[nodiscard]] bool is_inside(Vector2Int world_position) const {
         return
         (world_position.x >= topLeftCorner.x && world_position.x <= topLeftCorner.x + boundingBoxDimensions.x)
         &&
         (world_position.y >= topLeftCorner.y && world_position.y <= topLeftCorner.y + boundingBoxDimensions.y);
 
+    }
+
+    void forEachCell(const std::function<void(int x,int y)>& callback) const {
+        int start_x = topLeft().x / Scaling::scaleToWorld(Tiles::tileSizePx);
+        int start_y = topLeft().y / Scaling::scaleToWorld(Tiles::tileSizePx);
+
+        // the minus one here makes it so that there is no bleed. If you remove it and stand against a wall south or west,
+        // the map is populated into the wall.
+        int end_x = (bottomRight().x-1) / Scaling::scaleToWorld(Tiles::tileSizePx);
+        int end_y = (bottomRight().y-1) / Scaling::scaleToWorld(Tiles::tileSizePx);
+
+        for (int i = start_x; i <= end_x; ++i) {
+            for (int j = start_y; j <= end_y; ++j) {
+                callback(i,j);
+            }
+        }
+    }
+
+    [[nodiscard]] std::vector<Vector2Int> getCells() const {
+        std::vector<Vector2Int> cells = {};
+
+        forEachCell([&cells](int x,int y) {
+            cells.emplace_back(x,y);
+        });
+
+        return cells;
     }
 };

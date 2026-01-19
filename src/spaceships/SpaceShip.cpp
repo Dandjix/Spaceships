@@ -338,21 +338,26 @@ void SpaceShip::physicsHandling(float target_delta_time, int subdivisions) {
 
         hash_proximity_map.populate(working_physics_entities);
 
-        for (int j = 0; j < working_physics_entities.size(); j++) {
-            for (int k = j + 1; k < working_physics_entities.size(); k++) {
-                const auto e1 = working_physics_entities.at(j);
-                auto e2 = working_physics_entities.at(k);
+        for (auto e1 : working_physics_entities) {
 
-                if (!e1->shape->getBoundingBox().intersects(e2->shape->getBoundingBox())) {
+            if (e1->shape == nullptr)
+                continue;
+
+            for (auto other_shape: hash_proximity_map.atCellRange(e1->shape->getBoundingBox().getCells())) {
+                if (e1 == other_shape->owner_entity)
                     continue;
-                }
+
+                if (!e1->shape->getBoundingBox().intersects(other_shape->getBoundingBox()))
+                    continue;
 
                 PhysicsUpdateVisitor *visitor = e1->shape->createVisitor();
 
-                e2->shape->consumeVisitor(visitor, this);
+                other_shape->consumeVisitor(visitor, this);
 
                 delete visitor;
             }
+
+
         }
     }
 

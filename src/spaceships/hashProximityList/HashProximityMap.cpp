@@ -25,6 +25,22 @@ std::vector<PhysicsShape *> HashProximityMap::at(Vector2Int world_position) cons
     return proximityMap.at(coordinates);
 }
 
+std::vector<PhysicsShape *> HashProximityMap::atCellRange(const std::vector<Vector2Int> &cell_range) const {
+    std::unordered_set<PhysicsShape *> shapes = {};
+
+    for (auto pos: cell_range) {
+        if (!proximityMap.contains(pos))
+            continue;
+
+        auto s = proximityMap.at(pos);
+        for (auto physics_shape: s) {
+            shapes.insert(physics_shape);
+        }
+    }
+
+    return {shapes.begin(), shapes.end()};
+}
+
 /**
  * Populates the map with all physics entities positions so that HashProximityMap::at may be called to get a unit's position.
  *
@@ -39,19 +55,9 @@ void HashProximityMap::populate(const std::vector<PhysicsEntity *> &entities){
         if (e->shape == nullptr)
             continue;
 
-        auto bb = e->shape->getBoundingBox();
-
-        int start_x = bb.topLeft().x / Scaling::scaleToWorld(Tiles::tileSizePx);
-        int start_y = bb.topLeft().y / Scaling::scaleToWorld(Tiles::tileSizePx);
-
-        int end_x = bb.bottomRight().x / Scaling::scaleToWorld(Tiles::tileSizePx);
-        int end_y = bb.bottomRight().y / Scaling::scaleToWorld(Tiles::tileSizePx);
-
-        for (int i = start_x; i <= end_x; ++i) {
-            for (int j = start_y; j <= end_y; ++j) {
-                proximityMap[{i,j}].push_back(e->shape);
-            }
-        }
+        e->shape->getBoundingBox().forEachCell([this, &e](int x, int y) {
+            proximityMap[{x,y}].push_back(e->shape);
+        });
     }
 }
 
