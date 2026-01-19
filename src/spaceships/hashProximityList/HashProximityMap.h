@@ -23,8 +23,6 @@ public:
 
     std::vector<PhysicsShape *> at(Vector2Int world_position) const;
 
-    std::vector<PhysicsShape *> atCellRange(const std::vector<Vector2Int> &cell_range) const;
-
     void render(SDL_Renderer *renderer, const RenderingContext &context) const;
 
     void populate(const std::vector<PhysicsEntity *> &entities);
