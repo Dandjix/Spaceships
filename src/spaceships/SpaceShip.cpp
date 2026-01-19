@@ -380,7 +380,7 @@ void SpaceShip::renderEntities(SDL_Renderer *renderer, RenderingContext renderin
         entity->shape->debugRender(renderer, renderingContext);
     }
     //render the hash_proximity_map for debugging purposes
-    hash_proximity_map.render(renderer,renderingContext);
+    // hash_proximity_map.render(renderer,renderingContext);
 }
 
 void SpaceShip::eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context, bool paused) {

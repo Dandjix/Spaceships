@@ -16,7 +16,7 @@ namespace Player {
 }
 
 namespace Player {
-    class VehicleEnter : public ShortLivedEntity {
+    class InteractableInteract : public ShortLivedEntity {
     private:
         GUITooltip * tooltip;
 
@@ -24,12 +24,12 @@ namespace Player {
 
         Events::Id on_player_in_vehicle_changed_id;
     protected:
-        Vehicle * vehicle_under_mouse = nullptr;
+        IInteractable * iinteractable_under_mouse = nullptr;
 
         bool enabled;
 
     public:
-        VehicleEnter(GUITooltip *tooltip,
+        InteractableInteract(GUITooltip *tooltip,
             PlayerVehicleTracker *player_vehicle_tracker)
             : ShortLivedEntity({0,0}, 0),
               tooltip(tooltip),
@@ -38,7 +38,7 @@ namespace Player {
             on_player_in_vehicle_changed_id = player_vehicle_tracker->on_player_in_vehicle_changed.subscribe([this](bool in_vehicle){onEnterOrLeaveVehicle(in_vehicle);});
         }
 
-        ~VehicleEnter() override {
+        ~InteractableInteract() override {
             // player_vehicle_tracker->on_player_in_vehicle_changed.unsubscribe(on_player_in_vehicle_changed_id); //We supposedly destroy both at the same time, no need for this nonsense
         }
 
@@ -55,7 +55,7 @@ namespace Player {
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-        static Vehicle *getVehicleUnderMouse(const UpdateContext &context);
+        static IInteractable *getIInteractableUnderMouse(const UpdateContext &context);
 
         void update(const UpdateContext &context) override;
 

@@ -2,8 +2,9 @@
 #include "../entities/scripts/Entity.h"
 #include "../entities/Humanoid.h"
 #include "../spaceships/SpaceShip.h"
+#include "entities/interactables/IInteractable.h"
 
-class Vehicle : public BehavioredEntity {
+class Vehicle : public BehavioredEntity, IInteractable {
 protected:
     Humanoid *pilot;
 
@@ -22,8 +23,6 @@ public:
 
     virtual constexpr Behavior::Control getControlType(){ return Behavior::PilotingVehicle;}
 
-    virtual std::string getVehicleName() =0;
-
 protected:
     void assumeControl(Humanoid * new_pilot);
 
@@ -36,12 +35,11 @@ public:
         return pilot;
     }
 
-    void startPiloting(Humanoid *newPilot);
+    void interact(Humanoid *activator) override;
+
+    bool is_interactable(Humanoid *activator) override;
 
     void stopPiloting();
-
-    virtual bool canStartPiloting(Humanoid *newPilot);
-
     virtual bool canStopPiloting();
 
     nlohmann::json toJson() override = 0;
@@ -55,4 +53,12 @@ public:
     void setBehavior(Behavior *value) override;
 
     Behavior *getBehavior() const override;
+
+    [[nodiscard]] PhysicsEntity * asEntity() override {return this;}
+
+    [[nodiscard]] IInteractable * asIInteractable() override {return this;}
+
+    [[nodiscard]] virtual std::string getVehicleName() const = 0;
+
+    [[nodiscard]] std::string getInteractionText() const override;
 };

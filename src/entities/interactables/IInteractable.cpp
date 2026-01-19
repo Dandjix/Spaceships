@@ -6,6 +6,10 @@
 
 #define MAX_INTERACTABLE_DISTANCE_PIXELS 128
 
-bool IInteractable::distance_check(Entity * interactable,Humanoid *activator) {
-    return (interactable->getPosition() - activator->getPosition()).sqrLength() <= Scaling::scaleToWorld(MAX_INTERACTABLE_DISTANCE_PIXELS);
+std::string IInteractable::getInteractionText() const {
+    return "[E]";
+}
+
+bool IInteractable::distance_check(const Entity * interactable, const Humanoid *activator) {
+    return (interactable->getPosition() - activator->getPosition()).sqrLength() <= static_cast<float>(Scaling::scaleToWorld(MAX_INTERACTABLE_DISTANCE_PIXELS));
 }

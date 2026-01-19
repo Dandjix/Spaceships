@@ -20,6 +20,6 @@ public:
 
     constexpr std::string getJsonType() override;
 
-    std::string getVehicleName() override {return "Combat Outfit";}
+    [[nodiscard]] std::string getVehicleName() const override {return "Combat Outfit";}
 };
 

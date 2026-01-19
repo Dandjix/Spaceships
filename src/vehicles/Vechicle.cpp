@@ -2,6 +2,8 @@
 // Created by timon on 11/29/25.
 //
 
+#include <format>
+
 #include "Vehicle.h"
 
 void Vehicle::assumeControl(Humanoid * new_pilot) {
@@ -18,10 +20,10 @@ void Vehicle::onRegistered(SpaceShip *newSpaceship) {
     spaceship = newSpaceship;
 }
 
-void Vehicle::startPiloting(Humanoid *newPilot) {
+void Vehicle::interact(Humanoid *activator) {
     stopPiloting();
-    
-    pilot = newPilot;
+
+    pilot = activator;
     spaceship->unregisterEntities({pilot});
 
     if (is_player()) {
@@ -52,15 +54,15 @@ void Vehicle::stopPiloting() {
     on_ownership_change.emit(old_pilot);
 }
 
-bool Vehicle::canStartPiloting(Humanoid *newPilot) {
-    float distance = (newPilot->getPosition() - position).length();
+bool Vehicle::is_interactable(Humanoid *activator) {
+    float distance = (activator->getPosition() - position).length();
     float max_distance = Scaling::scaleToWorld(128.0f);
 
     if (distance > max_distance || pilot != nullptr){
         return false;
     }
 
-    auto raycast_hit = Physics::RayCast(newPilot->getPosition(),Vectors::toVector2Float(position - newPilot->getPosition()),spaceship,distance);
+    auto raycast_hit = Physics::RayCast(activator->getPosition(),Vectors::toVector2Float(position - activator->getPosition()),spaceship,distance);
     if (raycast_hit.hit) {
         return false;
     }
@@ -107,6 +109,10 @@ Behavior * Vehicle::getBehavior() const {
         return pilot->getBehavior();
     }
     return nullptr;
+}
+
+std::string Vehicle::getInteractionText() const {
+    return std::format("[E] enter {}",getVehicleName());
 }
 
 constexpr bool Vehicle::is_player() {

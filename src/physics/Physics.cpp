@@ -165,13 +165,12 @@ Physics::RaycastHitInfo Physics::RayCast(
 }
 
 std::vector<PhysicsEntity *> Physics::EntityPointCast(Vector2Int world_position, SpaceShip *space_ship) {
-    std::vector<PhysicsEntity * > all = space_ship->getPhysicsEntities(RoomDistance::All);
+    std::vector<PhysicsShape * > shapes = space_ship->hash_proximity_map.at(world_position);
+    
     std::vector<PhysicsEntity * > hit = {};
-    for (auto entity: all) {
-        if (entity->shape == nullptr)
-            continue;
-        if (entity->shape->getBoundingBox().is_inside(world_position) && entity->shape->is_inside(world_position)) {
-            hit.push_back(entity);
+    for (auto shape: shapes) {
+        if (shape->getBoundingBox().is_inside(world_position) && shape->is_inside(world_position)) {
+            hit.push_back(shape->owner_entity);
         }
     }
     return hit;

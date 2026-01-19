@@ -3,6 +3,7 @@
 #include "../entities/scripts/Entity.h"
 #include "../physics/Physics.h"
 
+class IInteractable;
 class PhysicsShape;
 
 class PhysicsEntity : public Entity
@@ -22,6 +23,8 @@ public :
 	}
 
 	virtual float get_weight() { return 1.0f; }
+
+	[[nodiscard]] virtual IInteractable * asIInteractable(){return nullptr;}
 
 	void registerInSpaceship(SpaceShip* space_ship) override;
 

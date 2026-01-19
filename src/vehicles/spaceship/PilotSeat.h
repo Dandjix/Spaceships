@@ -17,7 +17,7 @@ public:
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-    std::string getVehicleName() override {return "Pilot Seat";}
+    [[nodiscard]] std::string getVehicleName() const override {return "Pilot Seat";}
 
 public:
     constexpr std::string getJsonType() override { return "pilot_seat";}

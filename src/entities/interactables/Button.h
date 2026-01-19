@@ -1,5 +1,5 @@
 //
-// Created by timon on 1/18/26.
+// Created by timon on 1/19/26.
 //
 
 #pragma once
@@ -26,4 +26,6 @@ public:
     void interact(Humanoid *activator) override;
 
     bool is_interactable(Humanoid *activator) override;
+
+    [[nodiscard]] PhysicsEntity *asEntity() override {return this;}
 };

@@ -9,7 +9,7 @@
 #include "loadGame/GameState.h"
 #include "loadGame/LoadSavedGame.h"
 #include "player/PlayerVehicleTracker.h"
-#include "player/VehicleEnter.h"
+#include "player/InteractableInteract.h"
 #include "player/VehicleLeave.h"
 #include "spaceships/exterior/SpaceShipExterior.h"
 #include "spaceships/exterior/exteriors/TestExterior.h"
@@ -170,7 +170,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
     // Short lived entities --------------------------------------------------------------------------------------------
     auto *vehicle_tracker = new Player::PlayerVehicleTracker(player);
-    auto *vehicle_enter = new Player::VehicleEnter(tooltip, vehicle_tracker);
+    auto *vehicle_enter = new Player::InteractableInteract(tooltip, vehicle_tracker);
     auto *vehicle_leave = new Player::VehicleLeave(vehicle_tracker);
     auto *pause_manager = new PauseManager(&paused);
     auto *pause_menu = new PauseMenu(pause_manager, {
