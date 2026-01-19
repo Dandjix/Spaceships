@@ -6,6 +6,9 @@
 #include "../../entities/scripts/Entity.h"
 #include "../../entities/scripts/ShortLivedEntity.h"
 
+class HookRegion;
+class SpaceshipHooks;
+
 namespace HookDeleter{
 
     class RegionDeleter : public ShortLivedEntity{

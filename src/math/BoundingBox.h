@@ -17,22 +17,22 @@ public:
     topLeftCorner(topLeftCorner),boundingBoxDimensions(boundingBoxDimensions)
     {}
 
-    Vector2<T> topLeft()
+    Vector2<T> topLeft() const
     {
         return topLeftCorner;
     }
 
-    Vector2<T> bottomRight()
+    Vector2<T> bottomRight() const
     {
         return topLeftCorner + boundingBoxDimensions;
     }
 
-    Vector2<T> dimensions()
+    Vector2<T> dimensions() const
     {
         return boundingBoxDimensions;
     }
 
-    bool intersects(BoundingBox other)
+    bool intersects(BoundingBox other) const
     {
         Vector2<T> aMin = topLeftCorner;
         Vector2<T> aMax = topLeftCorner + boundingBoxDimensions;
@@ -49,7 +49,7 @@ public:
         return true;
     }
 
-    bool is_inside(Vector2Int world_position) {
+    bool is_inside(Vector2Int world_position) const {
         return
         (world_position.x >= topLeftCorner.x && world_position.x <= topLeftCorner.x + boundingBoxDimensions.x)
         &&

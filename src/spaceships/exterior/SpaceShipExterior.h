@@ -22,7 +22,7 @@ namespace SpaceShipResources {
 
         static void loadAssets();
 
-        virtual void render(SDL_Renderer * renderer, const ExteriorRenderingContext & context, SpaceShip * space_ship) = 0;
+        virtual void render(SDL_Renderer * renderer, const ExteriorRenderingContext & context, const SpaceShip *space_ship) = 0;
     };
 }
 

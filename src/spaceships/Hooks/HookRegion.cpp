@@ -4,6 +4,8 @@
 
 #include "HookRegion.h"
 
+#include "spaceships/SpaceShip.h"
+
 void HookRegion::registerEntity(Entity* entity)
 {
     Events::Id id = entity->on_die.subscribe([this,entity]{

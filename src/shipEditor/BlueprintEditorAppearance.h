@@ -2,6 +2,9 @@
 #include "../entities/scripts/Entity.h"
 #include "../entities/scripts/ShortLivedEntity.h"
 
+enum class Tile;
+class SpaceShipBlueprint;
+
 class BlueprintEditorAppearance : public ShortLivedEntity
 {
 protected:

@@ -8,6 +8,7 @@
 #include <unordered_set>
 
 #include "exterior/SpaceShipExterior.h"
+#include "hashProximityList/HashProximityMap.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
 
 class ActiveWhenPausedEntity;
@@ -64,6 +65,8 @@ protected:
     Vector2Int position;
 
 public:
+    HashProximityMap hash_proximity_map;
+
     [[nodiscard]] Vector2Int getPosition() const { return position; }
     void setPosition(Vector2Int value) { position = value; }
 
@@ -111,12 +114,12 @@ public:
     /// <summary>
     /// renders the hull of the ship
     /// </summary>
-    void renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context);
+    void renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context) const;
 
     /// <summary>
     /// renders the visible rooms of the ship
     /// </summary>
-    void renderInterior(SDL_Renderer *renderer, const RenderingContext &context);
+    void renderInterior(SDL_Renderer *renderer, const RenderingContext &context) const;
 
     /// <summary>
     /// returns the entities (read only)

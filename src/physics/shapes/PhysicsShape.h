@@ -3,12 +3,16 @@
 //
 
 #pragma once
-#include "../Physics.h"
-#include "../PhysicsEntity.h"
+#include <SDL3/SDL_render.h>
+
 #include "math/BoundingBox.h"
-#include "spaceships/SpaceShip.h"
+#include "math/Vectors.h"
 
 
+class SpaceShip;
+struct RenderingContext;
+struct PhysicsUpdateContext;
+class PhysicsEntity;
 class PhysicsUpdateVisitor;
 
 class PhysicsShape

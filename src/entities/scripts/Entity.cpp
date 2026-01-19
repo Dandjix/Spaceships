@@ -4,6 +4,9 @@
 
 #include "Entity.h"
 
+#include "game/Rendering.h"
+#include "spaceships/SpaceShip.h"
+
 void Entity::renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture,
                            Vector2Float destSize) const {
     destSize = destSize / context.camera_info.cameraScale;

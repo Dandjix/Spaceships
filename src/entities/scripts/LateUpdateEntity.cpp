@@ -4,6 +4,8 @@
 
 #include "LateUpdateEntity.h"
 
+#include "spaceships/SpaceShip.h"
+
 LateUpdateEntity::LateUpdateEntity(const Vector2Int &position, const std::optional<float> &angle): Entity(position, angle) {
 }
 

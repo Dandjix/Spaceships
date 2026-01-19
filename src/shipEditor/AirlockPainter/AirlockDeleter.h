@@ -6,6 +6,9 @@
 #include "../../entities/scripts/Entity.h"
 #include "../../entities/scripts/ShortLivedEntity.h"
 
+class Airlock;
+class SpaceshipHooks;
+
 namespace AirlockDeleter{
 
     class AirlockDeleter : public ShortLivedEntity{

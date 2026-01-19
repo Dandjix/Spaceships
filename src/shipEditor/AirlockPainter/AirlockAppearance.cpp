@@ -6,7 +6,9 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include "game/Rendering.h"
 #include "shipEditor/HookPainter/HookDebugRendering.h"
+#include "spaceships/Hooks/SpaceshipHooks.h"
 #include "spaceships/Hooks/airlock/Airlock.h"
 #include "userInterface/fonts.h"
 

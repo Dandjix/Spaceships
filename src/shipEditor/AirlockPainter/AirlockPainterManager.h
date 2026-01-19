@@ -6,6 +6,9 @@
 #include "entities/scripts/ShortLivedEntity.h"
 
 
+class HookRegion;
+class SpaceshipHooks;
+
 class AirlockPainterManager : public ShortLivedEntity{
 private:
     SpaceshipHooks * hooks;

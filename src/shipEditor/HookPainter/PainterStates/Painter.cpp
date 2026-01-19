@@ -1,5 +1,6 @@
 #include "Painter.h"
 #include "PainterStates.h"
+#include "gameEvent/GameEvent.h"
 
 
 using namespace HookPainter;

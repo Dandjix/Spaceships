@@ -4,6 +4,8 @@
 
 #include "AirlockDeleter.h"
 
+#include "game/Rendering.h"
+#include "spaceships/Hooks/SpaceshipHooks.h"
 #include "spaceships/Hooks/airlock/Airlock.h"
 
 void AirlockDeleter::AirlockDeleter::renderAirlock(SDL_Renderer *renderer, const RenderingContext &context) const {

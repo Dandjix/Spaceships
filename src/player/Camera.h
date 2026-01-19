@@ -3,6 +3,7 @@
 #include "../math/Vectors.h"
 #include "../game/Rendering.h"
 #include "entities/scripts/LateUpdateEntity.h"
+#include "spaceships/SpaceShip.h"
 
 class Camera : public LateUpdateEntity {  // Inherit from Entity
 protected:

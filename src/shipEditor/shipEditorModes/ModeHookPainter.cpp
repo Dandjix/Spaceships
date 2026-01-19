@@ -10,6 +10,7 @@
 #include "shipEditor/HookPainter/HookAppearance.h"
 #include "shipEditor/HookPainter/PointDeleter.h"
 #include "shipEditor/HookPainter/PainterStates/Painter.h"
+#include "spaceships/SpaceShipBlueprint.h"
 #include "spaceships/Hooks/HookRegion.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "userInterface/elements/GUI/GUIList.h"

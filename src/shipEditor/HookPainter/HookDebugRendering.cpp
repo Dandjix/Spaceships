@@ -4,6 +4,8 @@
 
 #include "HookDebugRendering.h"
 
+#include "game/Rendering.h"
+
 
 void HookDebugRendering::displayArrow(SDL_Renderer * renderer, const RenderingContext & context,Vector2Int worldPosition, Airlock::Orientation orientation) {
     std::vector<Vector2Float> points = {

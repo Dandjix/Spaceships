@@ -13,7 +13,7 @@ void SpaceShipResources::TestExterior::loadAssets(SDL_Renderer *renderer) {
     albedo = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/spaceships/test.png");
 }
 
-void SpaceShipResources::TestExterior::render(SDL_Renderer *renderer, const ExteriorRenderingContext &context, SpaceShip * space_ship) {
+void SpaceShipResources::TestExterior::render(SDL_Renderer *renderer, const ExteriorRenderingContext &context, const SpaceShip *space_ship) {
     SDL_Texture* texture = albedo;
 
     if (!texture) {

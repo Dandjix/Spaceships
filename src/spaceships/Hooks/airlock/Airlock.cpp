@@ -4,6 +4,8 @@
 
 #include "Airlock.h"
 
+#include "spaceships/SpaceShip.h"
+
 
 void Airlock::registerEntity(Entity* entity)
 {

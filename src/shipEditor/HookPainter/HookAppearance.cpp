@@ -7,8 +7,10 @@
 #include <SDL3_ttf/SDL_ttf.h>
 
 #include "HookDebugRendering.h"
+#include "game/Rendering.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "spaceships/Hooks/HookRegion.h"
+#include "spaceships/Hooks/SpaceshipHooks.h"
 #include "spaceships/Hooks/airlock/Airlock.h"
 #include "userInterface/fonts.h"
 

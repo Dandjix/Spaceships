@@ -4,6 +4,8 @@
 
 #include "ActiveWhenPausedEntity.h"
 
+#include "spaceships/SpaceShip.h"
+
 inline void ActiveWhenPausedEntity::registerInSpaceship(SpaceShip *space_ship) {
     ShortLivedEntity::registerInSpaceship(space_ship);
     space_ship->active_when_paused_entities.insert(this);

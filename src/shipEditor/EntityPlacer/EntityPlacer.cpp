@@ -4,6 +4,8 @@
 
 #include "EntityPlacer.h"
 
+#include "gameEvent/GameEvent.h"
+
 void EntityPlacement::EntityPlacer::placeEntity(Vector2Int world_position, float angle, std::string to_place_key) {
     auto spawner = registry.spawners.at(to_place_key);
 }

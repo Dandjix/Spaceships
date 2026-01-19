@@ -4,8 +4,10 @@
 
 #include "RegionDeleter.h"
 
+#include "game/Rendering.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "spaceships/Hooks/HookRegion.h"
+#include "spaceships/Hooks/SpaceshipHooks.h"
 
 void HookDeleter::RegionDeleter::renderRegion(SDL_Renderer *renderer, const RenderingContext &context) const {
     std::vector corners = {

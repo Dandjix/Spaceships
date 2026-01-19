@@ -12,6 +12,7 @@
 
 #include "shipEditor/AirlockPainter/PainterStates/Painter.h"
 #include "shipEditor/HookPainter/HookAppearance.h"
+#include "spaceships/SpaceShipBlueprint.h"
 #include "spaceships/Hooks/airlock/Airlock.h"
 #include "userInterface/elements/GUI/GUILabel.h"
 #include "userInterface/elements/GUI/GUIList.h"

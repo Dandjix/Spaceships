@@ -19,7 +19,7 @@ namespace SpaceShipResources {
 
         static void loadAssets(SDL_Renderer * renderer);
 
-        void render(SDL_Renderer *renderer, const ExteriorRenderingContext &context, SpaceShip *space_ship) override;
+        void render(SDL_Renderer *renderer, const ExteriorRenderingContext &context, const SpaceShip *space_ship) override;
     };
 
 }

@@ -6,6 +6,8 @@
 #include "entities/scripts/ShortLivedEntity.h"
 
 
+class SpaceshipHooks;
+
 class AirlockAppearance : public ShortLivedEntity {
 private:
     SpaceshipHooks *hooks;

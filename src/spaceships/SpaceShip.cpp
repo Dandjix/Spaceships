@@ -168,6 +168,7 @@ SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Enti
                      float angle)
     : spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks), blueprint_path(blueprint->path),
       position(position), angle(angle),
+      hash_proximity_map({}),
       exterior(new SpaceShipResources::TestExterior(Vector2Int(1024, 1024).scaleToWorldPosition())) {
     populateRooms();
     registerEntities(entities);
@@ -189,11 +190,11 @@ const SpaceshipTiles &SpaceShip::getSpaceshipTiles() const {
     return spaceship_tiles;
 }
 
-void SpaceShip::renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context) {
-    exterior->render(renderer,context,this);
+void SpaceShip::renderExterior(SDL_Renderer *renderer, const ExteriorRenderingContext &context) const {
+    exterior->render(renderer, context, this);
 }
 
-void SpaceShip::renderInterior(SDL_Renderer *renderer, const RenderingContext &context) {
+void SpaceShip::renderInterior(SDL_Renderer *renderer, const RenderingContext &context) const {
     if (focusRoom) {
         auto visible = rooms.connected(focusRoom, 2);
         std::vector<Room *> visibleRoomsVector(visible.begin(), visible.end());
@@ -335,6 +336,8 @@ void SpaceShip::physicsHandling(float target_delta_time, int subdivisions) {
     for (int i = 0; i < subdivisions; ++i) {
         auto working_physics_entities = getPhysicsEntities(RoomDistance::Close);
 
+        hash_proximity_map.populate(working_physics_entities);
+
         for (int j = 0; j < working_physics_entities.size(); j++) {
             for (int k = j + 1; k < working_physics_entities.size(); k++) {
                 const auto e1 = working_physics_entities.at(j);
@@ -376,6 +379,8 @@ void SpaceShip::renderEntities(SDL_Renderer *renderer, RenderingContext renderin
     for (PhysicsEntity *entity: getPhysicsEntities(RoomDistance::Immediate)) {
         entity->shape->debugRender(renderer, renderingContext);
     }
+    //render the hash_proximity_map for debugging purposes
+    hash_proximity_map.render(renderer,renderingContext);
 }
 
 void SpaceShip::eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context, bool paused) {

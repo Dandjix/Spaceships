@@ -5,8 +5,10 @@
 
 #include "AirlockPainterManager.h"
 
+#include "game/Rendering.h"
+#include "game/Update.h"
 #include "spaceships/Hooks/HookRegion.h"
-#include "spaceships/Hooks/airlock/Airlock.h"
+#include "spaceships/Hooks/SpaceshipHooks.h"
 
 
 void AirlockPainterManager::renderRegion(SDL_Renderer *renderer, const RenderingContext &context) const {

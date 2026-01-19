@@ -1,14 +1,24 @@
 #pragma once
+#include <climits>
 #include <SDL3/SDL.h>
 #include <optional>
 
-#include "../../behavior/Behavior.h"
-#include "../../math/Vectors.h"
-#include "../../game/Rendering.h"
-#include "../../game/Update.h"
-#include "../../spaceships/SpaceShip.h"
 #include "events/Event.h"
-#include "loadGame/GameState.h"
+#include "math/Vectors.h"
+
+
+namespace GameState {
+    struct GameState;
+}
+
+class SpaceShip;
+
+namespace GameEvent {
+    struct GameEventContext;
+}
+
+struct UpdateContext;
+struct RenderingContext;
 
 namespace QueueOrder {
     using Value = unsigned short;

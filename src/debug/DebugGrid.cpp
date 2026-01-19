@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include "game/Rendering.h"
+
 DebugGrid::DebugGrid(int xOrigin, int yOrigin, int grid_step) : Entity(Vector2Int(0,0),0)
 {
     origin = {xOrigin, yOrigin};
