@@ -40,7 +40,7 @@ public:
     // Override render method
     void render(SDL_Renderer* renderer, const RenderingContext& context) override;
 
-    static Entity * fromJson(nlohmann::json::const_reference json) {
+    static Entity * fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
         return new CargoContainer(Vector2Int::fromJson(json["position"]),json["angle"],json["variation"],Vector2Float::fromJson(json["scale"]));
     }
     nlohmann::json toJson() override {

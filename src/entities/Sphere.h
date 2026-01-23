@@ -30,7 +30,7 @@ public:
     // Override update function (currently does nothing)
     void update(const UpdateContext & context) override;
 
-    static Entity * fromJson(nlohmann::json::const_reference json) {
+    static Entity * fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
         return new Sphere(Vector2Int::fromJson(json["position"]),json["radius"]);
     }
 

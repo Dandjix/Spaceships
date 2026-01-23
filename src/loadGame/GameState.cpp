@@ -8,6 +8,7 @@
 
 #include "json.hpp"
 #include "behavior/BehavioredEntity.h"
+#include "entities/entityId/IdentityId.h"
 #include "spaceships/SpaceShip.h"
 
 
@@ -28,9 +29,17 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json) {
 
     std::vector<SpaceShip *> ships = {};
 
+    GameState::transientGameState transient_load_game_state = {};
+
     for (const auto &ship_entry: json_ships) {
-        auto ship = SpaceShip::fromJson(ship_entry);
+        auto ship = SpaceShip::fromJson(ship_entry, transient_load_game_state);
         ships.push_back(ship);
+    }
+
+    for (auto ship: ships) {
+        for (auto entity: ship->entities) {
+            entity->finalizeJsonDeserialization(transient_load_game_state);
+        }
     }
 
     return GameState::GameState(
@@ -67,14 +76,6 @@ SpaceShip * GameState::GameState::getPlayerSpaceship() {
     return nullptr;
 }
 
-void GameState::GameState::after_deserialized(nlohmann::json json) {
-    for (auto space_ship: space_ships) {
-        for (auto entity: space_ship->entities) {
-            entity->after_deserialized(this);
-        }
-    }
-}
-
 void GameState::dumpGameState(const GameState &game_state, const std::filesystem::path &path) {
     std::string content = dumpsGameState(game_state);
 
@@ -109,6 +110,5 @@ GameState::GameState GameState::loadGameState(const std::filesystem::path &path)
 GameState::GameState GameState::loadsGameState(const std::string &content) {
     auto json = nlohmann::json::parse(content);
     auto game_state = gameStateFromJSON(json);
-    game_state.after_deserialized(json);
     return game_state;
 }

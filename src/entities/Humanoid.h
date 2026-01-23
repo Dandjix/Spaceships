@@ -7,7 +7,6 @@
 #include "behavior/BehavioredEntity.h"
 #include "physics/PhysicsEntity.h"
 #include "../physics/shapes/RoundPhysicsShape.h"
-#include "textures/Textures.h"
 
 class Vehicle;
 
@@ -46,7 +45,7 @@ public:
         return json;
     }
 
-    static Humanoid * fromJson(nlohmann::json::const_reference json) {
+    static Humanoid * fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
         std::optional<float> angle = std::nullopt;
         if (json.contains("angle")) {
             angle = json["angle"];

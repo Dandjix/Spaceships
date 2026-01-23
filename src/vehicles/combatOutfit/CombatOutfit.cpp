@@ -9,10 +9,10 @@ nlohmann::json CombatOutfit::toJson() {
     return Vehicle::toJson();
 }
 
-Entity * CombatOutfit::fromJson(nlohmann::json::const_reference json) {
+Entity * CombatOutfit::fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
 
     if (json.contains("pilot")) {
-        return new CombatOutfit(Vector2Int::fromJson(json["position"]),json["angle"],Humanoid::fromJson(json["pilot"]));
+        return new CombatOutfit(Vector2Int::fromJson(json["position"]),json["angle"],Humanoid::fromJson(json["pilot"], transient_game_state));
     }
     return new CombatOutfit(Vector2Int::fromJson(json["position"]),json["angle"],nullptr);
 }

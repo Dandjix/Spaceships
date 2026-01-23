@@ -11,5 +11,17 @@ std::string IInteractable::getInteractionText() const {
 }
 
 bool IInteractable::distance_check(const Entity * interactable, const Humanoid *activator) {
-    return (interactable->getPosition() - activator->getPosition()).sqrLength() <= static_cast<float>(Scaling::scaleToWorld(MAX_INTERACTABLE_DISTANCE_PIXELS));
+    float distance = (activator->getPosition() - interactable->getPosition()).length();
+    float max_distance = Scaling::scaleToWorld(128.0f);
+
+    if (distance > max_distance)
+        return false;
+
+    // auto raycast_hit = Physics::RayCast(activator->getPosition(),Vectors::toVector2Float(interactable->getPosition() - activator->getPosition()),spaceship,distance);
+    // if (raycast_hit.hit)
+    //     return false;
+
+    return true;
+
+    // return (interactable->getPosition() - activator->getPosition()).sqrLength() <= static_cast<float>(Scaling::scaleToWorld(MAX_INTERACTABLE_DISTANCE_PIXELS));
 }

@@ -22,9 +22,9 @@ public:
 public:
     constexpr std::string getJsonType() override { return "pilot_seat";}
     nlohmann::json toJson() override {return Vehicle::toJson();}
-    static PilotSeat * fromJson(nlohmann::json json) {
+    static PilotSeat * fromJson(nlohmann::json json, GameState::transientGameState &transient_game_state) {
         if (json.contains("pilot")) {
-            return new PilotSeat(Vector2Int::fromJson(json["position"]),json["angle"],Humanoid::fromJson(json["pilot"]));
+            return new PilotSeat(Vector2Int::fromJson(json["position"]),json["angle"],Humanoid::fromJson(json["pilot"], transient_game_state));
         }
         return new PilotSeat(Vector2Int::fromJson(json["position"]),json["angle"]);
     }

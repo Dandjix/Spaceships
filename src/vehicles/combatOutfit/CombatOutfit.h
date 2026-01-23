@@ -16,7 +16,7 @@ public:
 
     nlohmann::json toJson() override;
 
-    static Entity * fromJson(nlohmann::json::const_reference json);
+    static Entity * fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state);
 
     constexpr std::string getJsonType() override;
 

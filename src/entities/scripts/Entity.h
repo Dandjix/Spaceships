@@ -8,6 +8,10 @@
 
 
 namespace GameState {
+    struct transientGameState;
+}
+
+namespace GameState {
     struct GameState;
 }
 
@@ -57,6 +61,7 @@ public:
     }
 
     virtual nlohmann::json toJson()=0;
+    virtual void finalizeJsonDeserialization(const GameState::transientGameState &transient_game_state) {};
     virtual bool isJsonSerializable(){return true;}
     virtual constexpr std::string getJsonType()=0;
 
@@ -69,7 +74,7 @@ public:
     virtual void onUnRegistered(SpaceShip * oldSpaceship) {}
 
     /// <summary>
-    /// lowest values first ! put something early neear the start, something late near the end. Base value is around 30000
+    /// lowest values first ! put something early near the start, something late near the end. Base value is around 30000
     /// </summary>
     /// <returns></returns>
     virtual QueueOrder::Value getQueueOrder()
@@ -124,6 +129,4 @@ public:
      * @param space_ship the spaceship in which to move, used by physics (wall collisions notably)
      */
     virtual void movePosition(Vector2Float delta, SpaceShip * space_ship);
-
-    virtual void after_deserialized(GameState::GameState * game_state) {}
 };

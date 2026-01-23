@@ -110,7 +110,7 @@ public:
         return json;
     }
 
-    static Camera *fromJson(nlohmann::json json) {
+    static Camera *fromJson(nlohmann::json json, GameState::transientGameState &transient_game_state) {
         return new Camera(Vector2Int::fromJson(json["position"]),json["angle"],json["scale"]);
     }
 

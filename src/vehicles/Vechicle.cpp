@@ -55,18 +55,10 @@ void Vehicle::stopPiloting() {
 }
 
 bool Vehicle::is_interactable(Humanoid *activator) {
-    float distance = (activator->getPosition() - position).length();
-    float max_distance = Scaling::scaleToWorld(128.0f);
-
-    if (distance > max_distance || pilot != nullptr){
+    if (pilot != nullptr)
         return false;
-    }
 
-    auto raycast_hit = Physics::RayCast(activator->getPosition(),Vectors::toVector2Float(position - activator->getPosition()),spaceship,distance);
-    if (raycast_hit.hit) {
-        return false;
-    }
-    return true;
+    return IInteractable::distance_check(this,activator);
 }
 
 bool Vehicle::canStopPiloting() {

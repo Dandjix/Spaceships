@@ -5,6 +5,7 @@
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
+#include "entities/entityId/IdentityId.h"
 #include "entities/scripts/ActiveWhenPausedEntity.h"
 #include "EntityData/EntityLoading.h"
 #include "physics/PhysicsEntity.h"
@@ -12,6 +13,10 @@
 #include "spaceshipTiles/SpaceshipTiles.h"
 #include "entities/scripts/LateUpdateEntity.h"
 #include "exterior/exteriors/TestExterior.h"
+
+namespace GameState {
+    struct transientGameState;
+}
 
 bool EntityComparison::compareEntities(Entity *e1, Entity *e2) {
     return e1->getQueueOrder() < e2->getQueueOrder();
@@ -291,12 +296,12 @@ void SpaceShip::setPlayer(Entity *value) {
     focusEntity = value;
 }
 
-SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json) {
+SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json, GameState::transientGameState & transient_game_state) {
     SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"]);
 
     std::vector<Entity *> loaded_entities = {};
     for (const auto &entity_entry: json["entities"]) {
-        loaded_entities.push_back(EntityLoading::fromJson(entity_entry));
+        loaded_entities.push_back(EntityLoading::fromJson(entity_entry, transient_game_state));
     }
     auto *space_ship = new SpaceShip(blueprint, loaded_entities, Vector2Int::fromJson(json["position"]), json["angle"]);
 

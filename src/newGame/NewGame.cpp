@@ -4,27 +4,31 @@
 
 #include "NewGame.h"
 
+#include "entities/interactables/Button.h"
+#include "entities/toggleables/Lamp.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "vehicles/combatOutfit/CombatOutfit.h"
 #include "vehicles/spaceship/PilotSeat.h"
 
 std::filesystem::path NewGame::ConstructNewGame() {
-
     SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json");
 
     auto player = new Humanoid(Vector2Int{128,128}.scaleToWorldPosition(),45,new PlayerBehavior());
     auto camera =  new Camera(Vector2Int(0,0),0,1);
     camera->setPlayer(player);
 
+    auto lamp = new Lamp(Vector2Int{300,256}.scaleToWorldPosition(),0,EntityId::createEntityId(),true);
 
     std::vector<Entity * > entities = {
         player,
         camera,
+        lamp,
         new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
         new CargoContainer(Vector2Int{96,96}.scaleToWorldPosition(),22),
         new CombatOutfit(Vector2Int{196,128}.scaleToWorldPosition(),35),
         new CombatOutfit(Vector2Int{256,128}.scaleToWorldPosition(),35),
-        new PilotSeat(blueprint->hooks.getPoint("pilot_seat")->position,0)
+        new PilotSeat(blueprint->hooks.getPoint("pilot_seat")->position,0),
+        new Button(Vector2Int{256,256}.scaleToWorldPosition(),0,lamp)
     };
 
     auto * space_ship = new SpaceShip(blueprint,entities,{0,0},0);

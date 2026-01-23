@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "json.hpp"
+#include "entities/entityId/IdentityId.h"
 
 
 class BehavioredEntity;
@@ -15,6 +16,15 @@ class Camera;
 class SpaceShip;
 
 namespace GameState {
+
+    struct transientGameState {
+        std::unordered_map<Entity *,nlohmann::json> transient_data_per_entity;
+        std::unordered_map<EntityId::entityId,IdentifiedEntity *> identified_entities;
+
+        transientGameState() = default;
+    };
+
+
     struct GameState {
         explicit GameState(const std::vector<SpaceShip *> & space_ships) : space_ships(space_ships) {  }
         std::vector<SpaceShip * >space_ships;
@@ -22,9 +32,6 @@ namespace GameState {
 
         BehavioredEntity *getPlayer();
         SpaceShip * getPlayerSpaceship();
-
-        void after_deserialized(nlohmann::json json);
-
     };
 
     void dumpGameState(const GameState & game_state, const std::filesystem::path & path);
