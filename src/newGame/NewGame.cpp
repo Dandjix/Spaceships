@@ -4,6 +4,7 @@
 
 #include "NewGame.h"
 
+#include "entities/Sphere.h"
 #include "entities/interactables/Button.h"
 #include "entities/toggleables/Lamp.h"
 #include "spaceships/Hooks/HookPoint.h"
@@ -23,7 +24,8 @@ std::filesystem::path NewGame::ConstructNewGame() {
         player,
         camera,
         lamp,
-        new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
+        // new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
+        new Sphere(Vector2Int{128,128}.scaleToWorldPosition(),Scaling::scaleToWorld(45.0f)),
         new CargoContainer(Vector2Int{96,96}.scaleToWorldPosition(),22),
         new CombatOutfit(Vector2Int{196,128}.scaleToWorldPosition(),35),
         new CombatOutfit(Vector2Int{256,128}.scaleToWorldPosition(),35),

@@ -2,6 +2,8 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
 
+#include "textures/UsageMap.h"
+
 #include "userInterface/MainMenu.h"
 #include "game/Game.h"
 #include "loadGame/AutoSave.h"
@@ -50,9 +52,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    Textures::UsageMap::initialize(ENV_PROJECT_ROOT"assets/textures",renderer);
+
     MenuNavigation::Navigation navigation = MenuNavigation::MainMenu;
     std::filesystem::path save_to_load = "";
     while (navigation != MenuNavigation::Quit) {
+        // ReSharper disable once CppIncompleteSwitchStatement
         switch (navigation) {
             case MenuNavigation::Game:
                 navigation = RunGame(renderer, window, save_to_load);

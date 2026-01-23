@@ -1,26 +1,20 @@
 #pragma once
-#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-
-#include "../math/Vectors.h"
-#include "../game/Rendering.h"
 #include "physics/PhysicsEntity.h"
-#include "../physics/shapes/RoundPhysicsShape.h"
+
+
+namespace Textures {
+    struct TextureSet;
+}
 
 class Sphere : public PhysicsEntity {
 private:
-    static SDL_Texture* texture;  // Texture for the sphere
-    static bool texturesLoaded;   // Flag to check if textures are loaded
+    Textures::TextureSet * texture_set;  // Textures for the sphere
     float radius;
 public:
     // Constructor
-    Sphere(Vector2Int position, float radius)
-        : PhysicsEntity(position,  std::nullopt,new RoundPhysicsShape(this,radius)), radius(radius)
-    {
-    }
+    Sphere(Vector2Int position, float radius);
 
-    // Static function to load textures
-    static void LoadTextures(SDL_Renderer* renderer);
+    ~Sphere() override;
 
     float get_weight() override { return  5;}
 
@@ -40,5 +34,5 @@ public:
         return json;
     }
 
-    constexpr std::string getJsonType(){return "sphere";}
+    constexpr std::string getJsonType() override {return "sphere";}
 };

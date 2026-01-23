@@ -13,6 +13,7 @@
 #include "player/VehicleLeave.h"
 #include "spaceships/exterior/SpaceShipExterior.h"
 #include "spaceships/exterior/exteriors/TestExterior.h"
+#include "textures/UsageMap.h"
 #include "userInterface/elements/GUI/GUILabel.h"
 #include "userInterface/elements/notification/Snackbar.h"
 #include "userInterface/pauseMenu/PauseMenu.h"
@@ -136,10 +137,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     Uint64 last = 0;
     float deltaTime = 0.0f;
     GameNavigation destination = Game;
-    // -----------------------------------------------------------------------------------------------------------------
-
-    CargoContainer::LoadTextures(renderer);
-    Sphere::LoadTextures(renderer);
+    // Texture Setup ---------------------------------------------------------------------------------------------------
     Tiles::loadAll(renderer);
     SpaceShipResources::TestExterior::loadAssets(renderer);
 
