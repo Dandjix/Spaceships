@@ -16,7 +16,7 @@ class PhysicsShape;
 
 class HashProximityMap {
 private:
-    std::pmr::unordered_map<Vector2Int,std::vector<PhysicsShape *>> proximityMap;
+    std::unordered_map<Vector2Int,std::vector<PhysicsShape *>> proximityMap;
 
 public:
     HashProximityMap() = default;
