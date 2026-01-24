@@ -7,7 +7,7 @@
 #include "game/Rendering.h"
 #include "gameEvent/GameEvent.h"
 
-void EntityPlacement::EntityPlacer::placeEntity(Vector2Int world_position, float angle, std::string to_place_key) {
+void EntityPlacement::EntityPlacer::placeEntity(Vector2Int world_position, float angle, const std::string &to_place_key) {
     auto spawner = registry->spawners.at(to_place_key);
     auto entity = spawner.construct(world_position,angle);
     placed_entities->push_back(entity);

@@ -31,7 +31,7 @@ namespace EntityPlacement {
 
         Precision precision;
 
-        void placeEntity(Vector2Int world_position, float angle, std::string to_place_key);
+        void placeEntity(Vector2Int world_position, float angle, const std::string &to_place_key);
 
     public:
         explicit EntityPlacer(
