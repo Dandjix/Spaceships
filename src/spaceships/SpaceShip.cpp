@@ -176,7 +176,10 @@ SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Enti
       hash_proximity_map({}),
       exterior(new SpaceShipResources::TestExterior(Vector2Int(1024, 1024).scaleToWorldPosition())) {
     populateRooms();
-    registerEntities(entities);
+
+    std::vector<Entity *> all_entities = blueprint->entities;
+    all_entities.insert(all_entities.end(),entities.begin(),entities.end());
+    registerEntities(all_entities);
 }
 
 SpaceShip::SpaceShip() : spaceship_tiles(SpaceshipTiles({})), hooks({}, {}, {}), blueprint_path(""), angle(0),

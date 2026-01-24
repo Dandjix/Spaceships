@@ -7,15 +7,14 @@
 #include "entities/CargoContainer.h"
 #include "entities/Humanoid.h"
 
-std::map<std::string, EntityPlacement::EntitySpawner> EntityPlacement::Registry::populateSpawners() {
-    std::map<std::string, EntityPlacement::EntitySpawner> registry = {};
+[[nodiscard]]std::unordered_map<std::string, EntityPlacement::EntitySpawner> EntityPlacement::Registry::populateSpawners() {
+    std::unordered_map<std::string, EntitySpawner> registry = {};
 
 
     registry.insert(
         {
             "cargo_container",
             {
-                "cargo_container_",
                 [](Vector2Int position, float angle) {
                     return new CargoContainer(position, angle);
                 }
@@ -26,7 +25,6 @@ std::map<std::string, EntityPlacement::EntitySpawner> EntityPlacement::Registry:
     registry.insert({
         "humanoid",
         {
-            "human_",
             [](Vector2Int position, float angle) {
                 return new Humanoid(position, angle, nullptr);
             }
@@ -34,4 +32,12 @@ std::map<std::string, EntityPlacement::EntitySpawner> EntityPlacement::Registry:
     });
 
     return registry;
+}
+
+std::vector<std::string> EntityPlacement::Registry::getOptions() {
+    std::vector<std::string> options = {};
+    for (const std::string &key: spawners | std::views::keys) {
+        options.push_back(key);
+    }
+    return options;
 }

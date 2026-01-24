@@ -20,4 +20,7 @@ public:
 
 	void render(SDL_Renderer* renderer, const RenderingContext& context) override;
 
+	QueueOrder::Value getQueueOrder() override {
+		return QueueOrder::LAST;
+	}
 };

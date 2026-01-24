@@ -22,36 +22,31 @@
 #include "../userInterface/elements/GUI/GUICheckbox.h"
 #include "game/ElementContainer.h"
 
-const int gridSize = 64;
-
-void ResizeGrid(Vector2Int newSize)
-{
+void ResizeGrid(Vector2Int newSize) {
     std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
 }
+
 #include <string>
 
-int nthOccurrence(const std::string& str, const std::string& findMe, int nth)
-{
-    size_t  pos = 0;
-    int     cnt = 0;
+int nthOccurrence(const std::string &str, const std::string &findMe, int nth) {
+    size_t pos = 0;
+    int cnt = 0;
 
-    while( cnt != nth )
-    {
-        pos+=1;
+    while (cnt != nth) {
+        pos += 1;
         pos = str.find(findMe, pos);
-        if ( pos == std::string::npos )
+        if (pos == std::string::npos)
             return -1;
         cnt++;
     }
     return pos;
 }
 
-MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * window)
-{
+MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *window) {
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
-                                            // INITIAL SETUP
+    // INITIAL SETUP
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
@@ -63,11 +58,10 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
     // std::vector<Entity*> inactiveEntities = {};
 
     ElementContainer<GUIRect *> editorGUIElements = {};
-    ElementContainer<GUIRect*> editorGUIElementsDeletionQueue = {};
+    ElementContainer<GUIRect *> editorGUIElementsDeletionQueue = {};
 
 
-
-    auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1,600);
+    auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1, 600);
     activeEntities.add(camera);
 
     Uint64 now = SDL_GetTicks();
@@ -79,19 +73,18 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
 
     MenuNavigation::Navigation destination = MenuNavigation::ShipEditor;
 
-	std::vector<std::vector<Tile>> blueprintTiles(initialDimensions.x, std::vector<Tile>(initialDimensions.y, Tile::Void));
-	auto * blueprint = new SpaceShipBlueprint(
-	    "",
-	    "",
-	    blueprintTiles,
-	    {{},{},{}}
-	);
+    auto *blueprint = new SpaceShipBlueprint(
+        "",
+        "",
+        std::vector<std::vector<Tile> >(initialDimensions.x,std::vector<Tile>(initialDimensions.y, Tile::Void)),
+        {},
+        {{}, {}, {}}
+    );
 
     ShipBuildingGrid grid(
         initialDimensions,
-		camera,
-        [&blueprint](Vector2Int newDimensions)
-        {
+        camera,
+        [&blueprint](Vector2Int newDimensions) {
             //std::cout << "new dimensions : " << newDimensions.x << " : " << newDimensions.y << std::endl;
             blueprint->resize(newDimensions);
         }
@@ -105,7 +98,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         blueprint,
         &grid,
         &appearance,
-        &blueprintTiles
+        &blueprint->tiles,
+        &blueprint->entities
     };
 
     ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(
@@ -117,17 +111,6 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         ShipEditorModes::TilePainter,
         window);
 
-    std::vector<std::string>actionOptions =
-    {
-        "Resize",
-        "Save",
-        "Load",
-        "Exit",
-        "Edit tiles",
-        "Edit hooks",
-        "Edit airlocks"
-    };
-
     std::string blueprint_name = "untitled.json";
 
     GUIList actionsList(
@@ -135,18 +118,22 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         Vector2Int(0, 0),
         100,
         GUI_Fill,
-        actionOptions,
-        [&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string& option) {
-            if (option == "Resize")
-            {
+        {
+            "Resize",
+            "Save",
+            "Load",
+            "Exit",
+            "Edit tiles",
+            "Edit hooks",
+            "Edit airlocks",
+            "Edit entities"
+        },
+        [&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string &option) {
+            if (option == "Resize") {
                 grid.startResizing();
-            }
-            else if (option == "Save")
-            {
-                SaveShip(blueprint->dumps(),blueprint_name);
-            }
-            else if (option == "Load")
-            {
+            } else if (option == "Save") {
+                SaveShip(blueprint->dumps(), blueprint_name);
+            } else if (option == "Load") {
                 std::string path;
                 std::string content = LoadShip(&path);
 
@@ -159,34 +146,29 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
                 blueprint_name = path;
 
 
-
-                * blueprint = *loaded;
+                *blueprint = *loaded;
                 Vector2Int dimensions = Vector2Int(blueprint->tiles.size(), blueprint->tiles[0].size());
                 grid.setDimensions(dimensions);
-
-            }
-            else if (option == "Exit")
-            {
+            } else if (option == "Exit") {
                 destination = MenuNavigation::MainMenu;
-            }
-            else if (option =="Edit tiles") {
+            } else if (option == "Edit tiles") {
                 state_machine.setMode(ShipEditorModes::TilePainter);
-            }
-            else if (option == "Edit hooks") {
+            } else if (option == "Edit hooks") {
                 state_machine.setMode(ShipEditorModes::HookPainter);
-            }
-            else if (option == "Edit airlocks") {
+            } else if (option == "Edit airlocks") {
                 state_machine.setMode(ShipEditorModes::AirlockPainter);
+            } else if (option == "Edit entities") {
+                state_machine.setMode(ShipEditorModes::EntityPainter);
             }
         }
-       );
+    );
     editorGUIElements.add(&actionsList);
 
 
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
-                                                // EDITOR LOOP
+    // EDITOR LOOP
     // #================================================================================================================
     // #================================================================================================================
     // #================================================================================================================
@@ -197,9 +179,9 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         Vector2Int screenDimensions = Vector2Int(screenWidth, screenHeight);
 
         float mouse_x, mouse_y;
-        SDL_GetMouseState(&mouse_x,&mouse_y);
+        SDL_GetMouseState(&mouse_x, &mouse_y);
 
-        auto mouse_position_type = GameEvent::getMousePositionType(editorGUIElements.get(), {mouse_x,mouse_y});
+        auto mouse_position_type = GameEvent::getMousePositionType(editorGUIElements.get(), {mouse_x, mouse_y});
 
         GameEvent::GameEventContext event_context = {
             {
@@ -218,12 +200,10 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
             if (event.type == SDL_EVENT_QUIT) {
                 destination = MenuNavigation::Quit;
             }
-            for (Entity * entity : activeEntities.get())
-            {
+            for (Entity *entity: activeEntities.get()) {
                 entity->handleEvent(event, event_context);
             }
-            for (GUIRect * element : editorGUIElements.get())
-            {
+            for (GUIRect *element: editorGUIElements.get()) {
                 element->handleEvent(event, event_context);
             }
         }
@@ -248,8 +228,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         };
 
         // update
-        for (Entity * entity : activeEntities.get())
-        {
+        for (Entity *entity: activeEntities.get()) {
             entity->update(updateContext);
         }
 
@@ -265,8 +244,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         };
 
         //GUI update
-        for (GUIRect * element : editorGUIElements.get())
-        {
+        for (GUIRect *element: editorGUIElements.get()) {
             element->update(gui_updateContext);
         }
 
@@ -283,30 +261,32 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer * renderer, SDL_Window * w
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
-        //render
-        for (Entity * entity : activeEntities.get())
-        {
-            entity->render(renderer,renderingContext);
-        }
+        //Entities Rendering ------------------------------------------------------------------------------------
+        std::vector<Entity *> all_entities = activeEntities.get();
+        all_entities.insert(all_entities.begin(), blueprint->entities.begin(), blueprint->entities.end());
 
-        //render debug
-        for (Entity * entity : activeEntities.get())
-        {
-            entity->debugRender(renderer,renderingContext);
+        std::ranges::stable_sort(all_entities, [](Entity *a, Entity *b) {
+            return a->getQueueOrder() > b->getQueueOrder();
+        });
+
+        for (Entity *entity: all_entities) {
+            entity->render(renderer, renderingContext);
+        }
+        for (Entity *entity: all_entities) {
+            entity->debugRender(renderer, renderingContext);
         }
 
         GUI_RenderingContext GUI_renderingContext(
             {
-                {0,0},
+                {0, 0},
                 0,
                 screenDimensions,
                 1
             });
 
         //GUI render
-        for (GUIRect * element : editorGUIElements.get())
-        {
-            element->render(renderer,GUI_renderingContext);
+        for (GUIRect *element: editorGUIElements.get()) {
+            element->render(renderer, GUI_renderingContext);
         }
 
         SDL_RenderPresent(renderer);

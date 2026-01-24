@@ -29,16 +29,16 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json) {
 
     std::vector<SpaceShip *> ships = {};
 
-    GameState::transientGameState transient_load_game_state = {};
+    GameState::transientGameState transient_game_state = {};
 
     for (const auto &ship_entry: json_ships) {
-        auto ship = SpaceShip::fromJson(ship_entry, transient_load_game_state);
+        auto ship = SpaceShip::fromJson(ship_entry, transient_game_state);
         ships.push_back(ship);
     }
 
     for (auto ship: ships) {
         for (auto entity: ship->entities) {
-            entity->finalizeJsonDeserialization(transient_load_game_state);
+            entity->finalizeJsonDeserialization(transient_game_state);
         }
     }
 

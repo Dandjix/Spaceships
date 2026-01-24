@@ -2,32 +2,60 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <utility>
 
 #include "SpaceShipBlueprint.h"
 #include "../math/Vectors.h"
 #include "Tile.h"
+#include "entities/scripts/Entity.h"
+#include "EntityData/EntityLoading.h"
+#include "loadGame/GameState.h"
+
+
+nlohmann::json entitiesToJson(const std::vector<Entity *> & entities) {
+	nlohmann::json json =  nlohmann::json::array();
+	for (auto e: entities) {
+		if (e->isJsonSerializable()) {
+			json.push_back(e->toJson());
+		}
+	}
+	return json;
+}
+std::vector<Entity *> entitiesFromJson(const nlohmann::json & json) {
+	std::vector<Entity *> entities = {};
+	GameState::transientGameState transient_game_state = {};
+	for (const auto& e: json) {
+		entities.push_back(EntityLoading::fromJson(e,transient_game_state));
+	}
+	for (auto e: entities) {
+		e->finalizeJsonDeserialization(transient_game_state);
+	}
+	return entities;
+}
 
 
 std::string SpaceShipBlueprint::dumps() const
 {
-	nlohmann::json dict;
-	dict["pathToExterior"] = pathToExterior;
-	dict["tiles"] = tiles;
-	dict["hooks"] = hooks.toJson();
-	return dict.dump(4);
+	nlohmann::json json;
+	json["pathToExterior"] = pathToExterior;
+	json["tiles"] = tiles;
+	json["hooks"] = hooks.toJson();
+	json["entities"] = entitiesToJson(entities);
+	return json.dump(4);
 }
 
-SpaceShipBlueprint *SpaceShipBlueprint::loads(std::string from, std::filesystem::path path)
+SpaceShipBlueprint *SpaceShipBlueprint::loads(const std::string &from, std::filesystem::path path)
 {
 	nlohmann::json dict = nlohmann::json::parse(from);
 	std::string pathToExterior = dict["pathToExterior"];
 	std::vector<std::vector<Tile>> tiles = dict["tiles"];
 	SpaceshipHooks hooks = SpaceshipHooks::fromJson(dict["hooks"]);
+	std::vector<Entity*> entities = entitiesFromJson(dict["entities"]);
 
-	return new SpaceShipBlueprint{ path, pathToExterior, tiles, hooks };
+	return new SpaceShipBlueprint{ std::move(path), pathToExterior, tiles, entities,hooks };
 }
 
-SpaceShipBlueprint *SpaceShipBlueprint::load(std::filesystem::path path)
+SpaceShipBlueprint *SpaceShipBlueprint::load(const std::filesystem::path &path)
 {
 	std::ifstream file(path);
 	std::stringstream buffer;

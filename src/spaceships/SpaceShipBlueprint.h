@@ -11,6 +11,8 @@
 #include "Hooks/SpaceshipHooks.h"
 
 
+class Entity;
+
 /// <summary>
 /// contains the layout info of a spaceship as well as it's name, outside appearance and spawn points
 /// </summary>
@@ -20,11 +22,17 @@ class SpaceShipBlueprint
 		std::filesystem::path path;
 		std::string pathToExterior;
 		std::vector<std::vector<Tile>> tiles;
+		std::vector<Entity*> entities;
 		SpaceshipHooks hooks;
 
-		SpaceShipBlueprint(std::filesystem::path path,std::string pathToExterior,std::vector<std::vector<Tile>> tiles, const SpaceshipHooks& hooks)
+		SpaceShipBlueprint(
+			std::filesystem::path path,
+			std::string pathToExterior,
+			std::vector<std::vector<Tile>> tiles,
+			std::vector<Entity *> entities,
+			const SpaceshipHooks& hooks)
 		:
-		path(std::move(path)),pathToExterior(std::move(pathToExterior)),tiles(std::move(tiles)),hooks(hooks)
+		path(std::move(path)),pathToExterior(std::move(pathToExterior)),tiles(std::move(tiles)),entities(std::move(entities)),hooks(hooks)
 		{
 
 		}
@@ -35,7 +43,7 @@ class SpaceShipBlueprint
 
 		void paint(int x, int y, Tile tileToPaint);
 
-		static SpaceShipBlueprint *load(std::filesystem::path path);
-		static SpaceShipBlueprint *loads(std::string from, std::filesystem::path path);
+		static SpaceShipBlueprint *load(const std::filesystem::path &path);
+		static SpaceShipBlueprint *loads(const std::string &from, std::filesystem::path path);
 
 };

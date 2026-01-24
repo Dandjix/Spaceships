@@ -10,20 +10,18 @@
 #include "../../../entities/scripts/Entity.h"
 
 namespace EntityPlacement {
+    struct EntitySpawner {
+        std::function<Entity*(Vector2Int position, float angle)> construct;
+    };
 
+    class Registry {
+    public:
+        std::unordered_map<std::string, EntitySpawner> spawners;
 
-struct EntitySpawner {
-    std::string hook_point_prefix;
-    std::function<Entity*(Vector2Int position, float angle)> construct;
-};
+        static std::unordered_map<std::string, EntitySpawner> populateSpawners();
 
-class Registry {
+        std::vector<std::string> getOptions();
 
-public:
-    std::map<std::string,EntitySpawner> spawners;
-
-    static std::map<std::string,EntitySpawner> populateSpawners();
-
-    explicit Registry() : spawners(populateSpawners()) {}
-};
+        explicit Registry() : spawners(populateSpawners()) {}
+    };
 }

@@ -35,7 +35,7 @@ void SaveShip(const std::string &blueprint, const std::string& file_name)
 {
     const char* filePath = tinyfd_saveFileDialog(
         "Save Ship File",            // Title of the dialog
-        file_name.c_str(),             // Default filename
+        (std::filesystem::path(ENV_PROJECT_ROOT"assets/spaceships") / file_name).c_str(),             // Default filename
         1,                           // Number of file filters (1 for simplicity)
         new const char* { "*.json" }, // File filters (only allow JSON files)
         "Ship Files"                 // Filter description (e.g., "JSON Files")
@@ -59,7 +59,7 @@ std::string LoadShip(std::string * path)
 {
     const char* filePath = tinyfd_openFileDialog(
         "Open Ship File",            // Title of the dialog
-        "",                          // Initial directory (empty string means default)
+        std::filesystem::path(ENV_PROJECT_ROOT"assets/spaceships").c_str(),                          // Initial directory (empty string means default)
         1,                           // Number of file filters (set to 1 for simplicity)
         new const char* { "*.json" }, // File filters (only JSON files in this case)
         "Ship Files",                 // Filter description (e.g., "JSON Files")

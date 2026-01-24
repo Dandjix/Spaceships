@@ -16,5 +16,6 @@ namespace ShipEditorModes {
         ShipBuildingGrid * grid;
         BlueprintEditorAppearance * appearance;
         std::vector<std::vector<Tile>> * tiles;
+        std::vector<Entity *> * placed_entities;
     };
 }

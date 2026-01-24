@@ -11,7 +11,6 @@
 
 
 namespace EntityPlacement {
-
     enum Precision {
         Center,
         Half,
@@ -20,22 +19,36 @@ namespace EntityPlacement {
         Free
     };
 
-class EntityPlacer : ShortLivedEntity {
-private:
-    Registry registry;
+    class EntityPlacer : public ShortLivedEntity {
+    private:
+        const Registry * registry;
 
-    std::string to_place;
+        std::vector<Entity*> * placed_entities;
 
-    float angle_to_place_at = 0;
+        std::string to_place;
 
-    void placeEntity(Vector2Int world_position, float angle, std::string to_place_key);
+        float angle_to_place_at = 0;
+
+        Precision precision;
+
+        void placeEntity(Vector2Int world_position, float angle, std::string to_place_key);
 
     public:
-        explicit EntityPlacer(Registry registry, bool enabled) : ShortLivedEntity({0,0},0), registry(std::move(registry)), enabled(enabled) {
-            to_place = registry.spawners.begin()->first;
+        explicit EntityPlacer(
+            const Registry * registry,
+            std::vector<Entity*> * placed_entities,
+            Precision precision,
+            bool enabled
+        ) : ShortLivedEntity({0, 0}, 0),
+            registry(registry),placed_entities(placed_entities), enabled(enabled),precision(precision) {
+            to_place = registry->spawners.begin()->first;
         }
 
         bool enabled;
+
+        void setEntityToPlace(const std::string &option) {
+            to_place = option;
+        }
 
         void enable() {
             enabled = true;
@@ -45,13 +58,14 @@ private:
             enabled = false;
         }
 
+        void setPrecision(Precision value);
+
         void update(const UpdateContext &context) override;
 
         void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-        QueueOrder::Value getQueueOrder() override {return QueueOrder::MIDDLE;}
+        QueueOrder::Value getQueueOrder() override { return QueueOrder::MIDDLE; }
     };
-
 }
