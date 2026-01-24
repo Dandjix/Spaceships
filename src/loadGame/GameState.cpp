@@ -42,6 +42,13 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json) {
         }
     }
 
+    //this part determines the max entityId
+
+    //this part makes it so that entities placed in the editor with an id of 0 get a real entity id.
+    for (const auto & [key,entity]: transient_game_state.identified_entities) {
+        entity->makeReal();
+    }
+
     return GameState::GameState(
         ships
     );

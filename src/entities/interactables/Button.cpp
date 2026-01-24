@@ -5,20 +5,39 @@
 #include "Button.h"
 
 #include "loadGame/GameState.h"
+#include "textures/TextureSet.h"
+#include "textures/UsageMap.h"
+
+constexpr float button_size_px = 22.0f;
+
+Button::Button(Vector2Int position, float angle, Toggleable *linked_device)
+    : PhysicsEntity(
+          position,
+          angle,
+          new RoundStaticPhysicsShape(
+              this,
+              Scaling::scaleToWorld(button_size_px))),
+      linked_entity(linked_device) {
+    texture = Textures::UsageMap::getInstance().subscribe("objects/button")->at("idle");
+}
+
+Button::~Button() {
+    Textures::UsageMap::getInstance().unsubscribe("objects/button");
+}
 
 nlohmann::json Button::toJson() {
     auto json = PhysicsEntity::toJson();
 
     if (linked_entity != nullptr)
-        json["linked_entity_id"] = linked_entity->entity_id;
+        json["linked_entity_id"] = linked_entity->getEntityId();
     else
         json["linked_entity_id"] = "null";
 
     return json;
 }
 
-Button * Button::fromJson(const nlohmann::json &json,GameState::transientGameState & transient_game_state) {
-    auto button = new Button(Vector2Int::fromJson(json["position"]),json["angle"],nullptr);
+Button *Button::fromJson(const nlohmann::json &json, GameState::transientGameState &transient_game_state) {
+    auto button = new Button(Vector2Int::fromJson(json["position"]), json["angle"], nullptr);
     transient_game_state.transient_data_per_entity[button]["linked_entity_id"] = json["linked_entity_id"];
     return button;
 }
@@ -35,7 +54,7 @@ void Button::finalizeJsonDeserialization(const GameState::transientGameState &tr
 
 
 void Button::render(SDL_Renderer *renderer, const RenderingContext &context) {
-    //TODO : implement this
+    renderTexture(renderer, context, texture, Vector2Float{button_size_px, button_size_px});
 }
 
 void Button::interact(Humanoid *activator) {
@@ -46,5 +65,5 @@ void Button::interact(Humanoid *activator) {
 }
 
 bool Button::is_interactable(Humanoid *activator) {
-    return IInteractable::distance_check(this,activator);
+    return IInteractable::distance_check(this, activator);
 }

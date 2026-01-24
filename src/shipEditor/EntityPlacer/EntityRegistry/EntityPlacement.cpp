@@ -6,8 +6,11 @@
 
 #include "entities/CargoContainer.h"
 #include "entities/Humanoid.h"
+#include "entities/interactables/Button.h"
+#include "entities/toggleables/Lamp.h"
 
-[[nodiscard]]std::unordered_map<std::string, EntityPlacement::EntitySpawner> EntityPlacement::Registry::populateSpawners() {
+[[nodiscard]] std::unordered_map<std::string, EntityPlacement::EntitySpawner>
+EntityPlacement::Registry::populateSpawners() {
     std::unordered_map<std::string, EntitySpawner> registry = {};
 
 
@@ -21,15 +24,27 @@
             }
         }
     );
-
-    registry.insert({
-        "humanoid",
+    registry.insert(
         {
-            [](Vector2Int position, float angle) {
-                return new Humanoid(position, angle, nullptr);
+            "lamp",
+            {
+                [](Vector2Int position, float angle) {
+                    bool on = true; //TODO : find a way to ask the user what this should be
+                    return new Lamp(position, angle, EntityId::undefinedEntityId, on);
+                }
             }
         }
-    });
+    );
+    registry.insert(
+        {
+            "button",
+            {
+                [](Vector2Int position, float angle) {
+                    return new Button(position, angle, nullptr);
+                }
+            }
+        }
+    );
 
     return registry;
 }

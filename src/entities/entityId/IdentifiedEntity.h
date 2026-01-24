@@ -9,11 +9,14 @@
 class Humanoid;
 class Vehicle;
 class Toggleable;
+class Entity;
 
 class IdentifiedEntity {
 
 public:
     virtual ~IdentifiedEntity() = default;
+
+    virtual void makeReal()=0;
 
     [[nodiscard]] virtual Entity * asEntity() = 0;
 

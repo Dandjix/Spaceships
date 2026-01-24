@@ -11,8 +11,13 @@
  * could be turned on or off)
  */
 class Toggleable : public Entity, public virtual IdentifiedEntity {
+protected:
+    EntityId::entityId entity_id;
+
 public:
-    const EntityId::entityId entity_id;
+    EntityId::entityId getEntityId() const {
+        return entity_id;
+    }
 
     Toggleable(Vector2Int position,  std::optional<float> angle, EntityId::entityId entity_id)
         : Entity(position, angle),entity_id(entity_id) {
@@ -35,5 +40,11 @@ public:
         nlohmann::json json = Entity::toJson();
         json["entity_id"] = entity_id;
         return json;
+    }
+
+    void makeReal() override {
+        if (entity_id == EntityId::undefinedEntityId) {
+            entity_id = EntityId::createEntityId();
+        }
     }
 };

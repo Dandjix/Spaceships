@@ -113,23 +113,42 @@
             },
             "type": "cargo_container",
             "variation": 0
+        },
+        {
+            "angle": 50.0,
+            "linked_entity_id": "null",
+            "position": {
+                "x": 85592,
+                "y": 41017
+            },
+            "type": "button"
+        },
+        {
+            "angle": 270.0,
+            "entity_id": 0,
+            "on": true,
+            "position": {
+                "x": 85980,
+                "y": 57049
+            },
+            "type": "lamp"
         }
     ],
     "hooks": {
         "airlocks": [],
         "points": [
             {
-                "name": "pilot_seat",
-                "position": {
-                    "x": 81920,
-                    "y": 40960
-                }
-            },
-            {
                 "name": "hangar_center",
                 "position": {
                     "x": 24576,
                     "y": 24576
+                }
+            },
+            {
+                "name": "pilot_seat",
+                "position": {
+                    "x": 81920,
+                    "y": 40960
                 }
             }
         ],

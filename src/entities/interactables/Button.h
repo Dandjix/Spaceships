@@ -16,18 +16,14 @@ class Button : public PhysicsEntity, public IInteractable {
 private:
     Toggleable * linked_entity;
 
+    SDL_Texture * texture;
 public:
     Button(
         Vector2Int position,
         float angle,
-        Toggleable * linked_device)
+        Toggleable * linked_device);
 
-        : PhysicsEntity(
-              position,
-              angle,
-              new RoundStaticPhysicsShape(this,Scaling::scaleToWorld(22.0f))),
-          linked_entity(linked_device) {
-    }
+    ~Button() override;
 
     nlohmann::json toJson() override;
 
