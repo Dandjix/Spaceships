@@ -67,3 +67,11 @@ void Button::interact(Humanoid *activator) {
 bool Button::is_interactable(Humanoid *activator) {
     return IInteractable::distance_check(this, activator);
 }
+
+void Button::setLinkedEntity(Toggleable *entity_to_link) {
+    linked_entity = entity_to_link;
+}
+
+Toggleable * Button::getLinkedEntity() {
+    return linked_entity;
+}

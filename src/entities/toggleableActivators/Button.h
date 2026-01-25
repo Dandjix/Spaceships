@@ -3,16 +3,17 @@
 //
 
 #pragma once
-#include "IInteractable.h"
+#include "../interactables/IInteractable.h"
 #include "../toggleables/scripts/Toggleable.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
+#include "scripts/ToggleableActivator.h"
 
 
 namespace GameState {
     struct transientGameState;
 }
 
-class Button : public PhysicsEntity, public IInteractable {
+class Button : public PhysicsEntity, public IInteractable, public virtual ToggleableActivator{
 private:
     Toggleable * linked_entity;
 
@@ -38,11 +39,14 @@ public:
 
     bool is_interactable(Humanoid *activator) override;
 
-    [[nodiscard]] PhysicsEntity *asEntity() override { return this; }
+    [[nodiscard]] PhysicsEntity * asEntity() override { return this; }
+    [[nodiscard]] IInteractable * asIInteractable() override {return this;}
 
     [[nodiscard]] std::string getInteractionText() const override {
         return "[E] Toggle light";
     }
 
-    [[nodiscard]] IInteractable * asIInteractable() override {return this;}
+    void setLinkedEntity(Toggleable *entity_to_link) override;
+
+    [[nodiscard]] Toggleable * getLinkedEntity() override;
 };

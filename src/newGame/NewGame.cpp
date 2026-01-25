@@ -5,7 +5,7 @@
 #include "NewGame.h"
 
 #include "entities/Sphere.h"
-#include "entities/interactables/Button.h"
+#include "../entities/toggleableActivators/Button.h"
 // #include "entities/toggleables/Lamp.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "vehicles/combatOutfit/CombatOutfit.h"

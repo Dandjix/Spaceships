@@ -8,6 +8,7 @@
 #include "ModeEntityPainter.h"
 #include "ModeHookPainter.h"
 #include "ModeTilePainter.h"
+#include "ModeToggleableLinker.h"
 #include "game/ElementContainer.h"
 
 class GUIRect;
@@ -19,7 +20,8 @@ namespace ShipEditorModes {
         TilePainter,
         HookPainter,
         AirlockPainter,
-        EntityPainter
+        EntityPainter,
+        ToggleableLinker
     };
 
     class ShipEditorStateMachine {
@@ -30,6 +32,7 @@ namespace ShipEditorModes {
         ModeHookPainter * hook_painter_mode;
         ModeAirlockPainter * airlock_painter_mode;
         ModeEntityPainter * entity_painter_mode;
+        ModeToggleableLinker * toggleable_linker_mode;
 
     public:
         SDL_Window * window;
@@ -66,6 +69,7 @@ namespace ShipEditorModes {
             hook_painter_mode = new ModeHookPainter(this);
             airlock_painter_mode = new ModeAirlockPainter(this);
             entity_painter_mode = new ModeEntityPainter(this);
+            toggleable_linker_mode = new ModeToggleableLinker(this);
 
             switch (initial) {
                 case TilePainter:
@@ -79,6 +83,9 @@ namespace ShipEditorModes {
                     break;
                 case EntityPainter:
                     current_mode = entity_painter_mode;
+                    break;
+                case ToggleableLinker:
+                    current_mode = toggleable_linker_mode;
                     break;
             }
             current_mode->enter();
@@ -103,6 +110,9 @@ namespace ShipEditorModes {
                     break;
                 case EntityPainter:
                     current_mode = entity_painter_mode;
+                    break;
+                case ToggleableLinker:
+                    current_mode = toggleable_linker_mode;
                     break;
             }
 

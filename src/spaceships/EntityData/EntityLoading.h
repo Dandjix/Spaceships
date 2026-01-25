@@ -7,7 +7,7 @@
 #include "../../entities/scripts/Entity.h"
 #include "entities/Humanoid.h"
 #include "entities/Sphere.h"
-#include "entities/interactables/Button.h"
+#include "../../entities/toggleableActivators/Button.h"
 #include "entities/toggleables/Lamp.h"
 #include "math/Vectors.h"
 #include "player/Camera.h"

@@ -127,7 +127,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             "Edit tiles",
             "Edit hooks",
             "Edit airlocks",
-            "Edit entities"
+            "Edit entities",
+            "Link toggleables"
         },
         [&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string &option) {
             if (option == "Resize") {
@@ -160,6 +161,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 state_machine.setMode(ShipEditorModes::AirlockPainter);
             } else if (option == "Edit entities") {
                 state_machine.setMode(ShipEditorModes::EntityPainter);
+            } else if (option == "Link toggleables") {
+                state_machine.setMode(ShipEditorModes::ToggleableLinker);
             }
         }
     );

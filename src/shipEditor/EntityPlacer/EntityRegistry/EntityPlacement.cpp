@@ -6,7 +6,7 @@
 
 #include "entities/CargoContainer.h"
 #include "entities/Humanoid.h"
-#include "entities/interactables/Button.h"
+#include "../../../entities/toggleableActivators/Button.h"
 #include "entities/toggleables/Lamp.h"
 
 [[nodiscard]] std::unordered_map<std::string, EntityPlacement::EntitySpawner>
