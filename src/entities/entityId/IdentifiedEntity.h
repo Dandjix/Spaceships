@@ -20,7 +20,7 @@ public:
 
     virtual void makeReal()=0;
 
-    virtual EntityId::entityId getEntityId() const = 0;
+    [[nodiscard]] virtual EntityId::entityId getEntityId() const = 0;
 
     [[nodiscard]] virtual Entity * asEntity() = 0;
 
