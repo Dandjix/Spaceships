@@ -30,7 +30,7 @@ EntityPlacement::Registry::populateSpawners() {
             {
                 [](Vector2Int position, float angle) {
                     bool on = true; //TODO : find a way to ask the user what this should be
-                    return new Lamp(position, angle, EntityId::undefinedEntityId, on);
+                    return new Lamp(position, angle, EntityId::UNDEFINED_ENTITY_ID, on);
                 }
             }
         }

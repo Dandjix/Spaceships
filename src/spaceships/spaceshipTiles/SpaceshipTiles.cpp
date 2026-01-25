@@ -1,8 +1,6 @@
 //
 // Created by timon on 11/16/25.
 //
-#pragma once
-
 #include "SpaceshipTiles.h"
 
 

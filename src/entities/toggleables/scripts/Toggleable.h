@@ -15,7 +15,7 @@ protected:
     EntityId::entityId entity_id;
 
 public:
-    EntityId::entityId getEntityId() const {
+    EntityId::entityId getEntityId() const override {
         return entity_id;
     }
 
@@ -43,8 +43,9 @@ public:
     }
 
     void makeReal() override {
-        if (entity_id == EntityId::undefinedEntityId) {
-            entity_id = EntityId::createEntityId();
+        if (entity_id == EntityId::UNDEFINED_ENTITY_ID) {
+            entity_id = EntityId::Manager::getInstance().createEntityId();
+            std::cout << "entity at position : " << position << " has entity id : " << entity_id << std::endl;
         }
     }
 };

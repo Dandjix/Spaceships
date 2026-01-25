@@ -300,7 +300,7 @@ void SpaceShip::setPlayer(Entity *value) {
 }
 
 SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json, GameState::transientGameState & transient_game_state) {
-    SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"]);
+    SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"],transient_game_state,false);
 
     std::vector<Entity *> loaded_entities = {};
     for (const auto &entity_entry: json["entities"]) {

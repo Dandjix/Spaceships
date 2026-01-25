@@ -50,9 +50,6 @@ TEST(PhysicsCollisionTestSuite, RoundRoundSimpleTest)
 
     e2->shape->consumeVisitor(visitor,space_ship);
 
-    std::cout << "Mock collision positions : "<< std::endl << e1->getPosition() << std::endl;
-    std::cout << e2->getPosition() << std::endl << std::endl;
-
     // diagonal distance of about 45 (radius 50)
 
     ASSERT_TRUE(are_vectors_close(e1->getPosition(),{100-45,100-45}));

@@ -21,15 +21,12 @@ TEST(CameraTransformationsTestSuite, ReversabilitySimple)
 
     auto back_to_world = context.camera_info.screenToWorldPoint(back_to_screen);
 
-    std::cout << "world pos : " << world_pos << std::endl;
     ASSERT_EQ(world_pos.x,0);
     ASSERT_EQ(world_pos.y,0);
 
-    std::cout << "back_to_screen : " << back_to_screen << std::endl;
     ASSERT_EQ(back_to_screen.x,500);
     ASSERT_EQ(back_to_screen.y,250);
 
-    std::cout << "back to world : " << back_to_world << std::endl;
     ASSERT_EQ(back_to_world.x,0);
     ASSERT_EQ(back_to_world.y,0);
 }
@@ -42,12 +39,10 @@ TEST(CameraTransformationsTestSuite, ReversabilityOffset) {
     Vector2Float screenPos = {500,250};
 
     Vector2Int world_pos = context.camera_info.screenToWorldPoint(screenPos);
-    std::cout << "world pos : " << world_pos << std::endl;
     ASSERT_EQ(world_pos.x,500*Vectors::getFactor());
     ASSERT_EQ(world_pos.y,250*Vectors::getFactor());
 
     Vector2Float back_to_screen = context.camera_info.worldToScreenPoint(world_pos);
-    std::cout << "back_to_screen : " << back_to_screen << std::endl;
     ASSERT_EQ(back_to_screen.x,500);
     ASSERT_EQ(back_to_screen.y,250);
 }

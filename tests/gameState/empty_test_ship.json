@@ -1,0 +1,11 @@
+{
+    "entities": [
+    ],
+    "hooks": {
+        "airlocks": [],
+        "points": [],
+        "regions": []
+    },
+    "pathToExterior": "",
+    "tiles": []
+}

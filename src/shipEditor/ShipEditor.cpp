@@ -21,6 +21,7 @@
 #include "shipEditorModes/ShipEditorStateMachine.h"
 #include "../userInterface/elements/GUI/GUICheckbox.h"
 #include "game/ElementContainer.h"
+#include "loadGame/GameState.h"
 
 void ResizeGrid(Vector2Int newSize) {
     std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
@@ -140,8 +141,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 if (content.empty()) {
                     return;
                 }
-
-                auto loaded = SpaceShipBlueprint::loads(content, path);
+                GameState::transientGameState transient_game_state = {};
+                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,true);
 
                 blueprint_name = path;
 

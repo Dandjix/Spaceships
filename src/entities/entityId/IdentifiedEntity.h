@@ -5,6 +5,8 @@
 #pragma once
 #include <cstdint>
 
+#include "IdentityId.h"
+
 
 class Humanoid;
 class Vehicle;
@@ -17,6 +19,8 @@ public:
     virtual ~IdentifiedEntity() = default;
 
     virtual void makeReal()=0;
+
+    virtual EntityId::entityId getEntityId() const = 0;
 
     [[nodiscard]] virtual Entity * asEntity() = 0;
 

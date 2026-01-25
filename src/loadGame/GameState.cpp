@@ -43,9 +43,16 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json) {
     }
 
     //this part determines the max entityId
+    auto max_entity_id = EntityId::FIRST_USABLE_VALUE;
+    for (const auto & [key,entity]: transient_game_state.identified_entities) {
+        auto id = entity->getEntityId();
+        if (EntityId::isValidEntityId(id) && id >= max_entity_id)
+            max_entity_id = id;
+    }
+    EntityId::Manager::getInstance().setNextEntityId(max_entity_id+1);
 
     //this part makes it so that entities placed in the editor with an id of 0 get a real entity id.
-    for (const auto & [key,entity]: transient_game_state.identified_entities) {
+    for (auto & [key,entity]: transient_game_state.identified_entities) {
         entity->makeReal();
     }
 

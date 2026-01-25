@@ -4,7 +4,7 @@
 
 #pragma once
 #include <cstdint>
-
+#include <iostream>
 
 class IdentifiedEntity;
 class Toggleable;
@@ -17,25 +17,46 @@ namespace EntityId {
     //be stored in the save file. Decreasing this to a uint32 would be absolutely possible.
     using entityId = std::uint64_t;
 
-    static entityId max_entity_id = 1000;
+    constexpr entityId FIRST_USABLE_VALUE = 1000;
+    /**
+     * This entityId is reserved for editor placed entities
+     */
+    constexpr entityId UNDEFINED_ENTITY_ID = 0;
 
     /**
- * This entityId is reserved for editor placed entities
- */
-    inline EntityId::entityId undefinedEntityId = 0;
-
-
-    //I don't think every entity should have an identifier
-    static entityId createEntityId() {
-        max_entity_id++;
-        return max_entity_id-1;
+     * entity ids below 1000 are reserved for special purposes, namely UNDEFINED_ENTITY_ID
+     * @param id the id to check
+     * @return
+     */
+    inline bool isValidEntityId(EntityId::entityId id) {
+        return id >= FIRST_USABLE_VALUE;
     }
 
-    static void setMaxEntityId(entityId id) {
-        max_entity_id = id;
-    }
+    class Manager {
+    private:
+        entityId next_entity_id = FIRST_USABLE_VALUE;
 
-    static IdentifiedEntity * findIdentifiedEntity(entityId entity_id);
+    public:
+        Manager() = default;
 
+        Manager(const Manager&) = delete;
+        Manager& operator=(const Manager&) = delete;
 
+        entityId createEntityId() {
+            return next_entity_id++;
+        }
+
+        void setNextEntityId(entityId id) {
+            next_entity_id = id;
+        }
+
+        void printNextEntityId() const {
+            std::cout << "next entity id is : " << next_entity_id << std::endl;
+        }
+
+        static Manager& getInstance() {
+            static Manager instance;
+            return instance;
+        }
+    };
 }

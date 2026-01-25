@@ -1,0 +1,12 @@
+{
+    "entities": [
+        {"angle":45.0,"entity_id":0,"on":false,"position":{"x":64,"y":64},"type":"lamp"}
+    ],
+    "hooks": {
+        "airlocks": [],
+        "points": [],
+        "regions": []
+    },
+    "pathToExterior": "",
+    "tiles": []
+}
