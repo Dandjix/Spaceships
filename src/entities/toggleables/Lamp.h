@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "entities/entityId/IdentityId.h"
+#include "entities/entityId/EntityId.h"
 #include "entities/toggleables/scripts/Toggleable.h"
 
 class Lamp : public Toggleable{

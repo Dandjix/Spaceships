@@ -3,14 +3,8 @@
 #include "../math/AdjacencyListGraph.h"
 #include "Room.h"
 #include "SpaceShipBlueprint.h"
-#include <initializer_list>
-#include <iosfwd>
-#include <queue>
-#include <unordered_map>
 #include <unordered_set>
 
-#include "entities/entityId/IdentifiedEntity.h"
-#include "entities/entityId/IdentityId.h"
 #include "exterior/SpaceShipExterior.h"
 #include "hashProximityList/HashProximityMap.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
@@ -194,7 +188,8 @@ public:
     void setPlayer(Entity *entity);
 
 
-    static SpaceShip *fromJson(nlohmann::json::const_reference json, GameState::transientGameState & identifiedEntities);
+    static SpaceShip *fromJson(nlohmann::json::const_reference json, GameState::transientGameState & identifiedEntities, EntityId::Manager &
+                               entity_id_manager);
 
     nlohmann::json toJson();
 };

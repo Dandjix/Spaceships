@@ -43,16 +43,24 @@ std::string SpaceShipBlueprint::dumps() const {
 }
 
 SpaceShipBlueprint *SpaceShipBlueprint::loads(const std::string &from, std::filesystem::path path,
-                                              GameState::transientGameState &transient_game_state, bool
-                                              create_blueprint_entities = false) {
-    nlohmann::json dict = nlohmann::json::parse(from);
-    std::string pathToExterior = dict["pathToExterior"];
-    std::vector<std::vector<Tile> > tiles = dict["tiles"];
-    SpaceshipHooks hooks = SpaceshipHooks::fromJson(dict["hooks"]);
+                                              GameState::transientGameState &transient_game_state,
+                                              EntityId::Manager & entity_id_manager,
+                                              bool create_blueprint_entities = false) {
+    nlohmann::json json = nlohmann::json::parse(from);
+
+    if (create_blueprint_entities) {
+        entity_id_manager.incrementEntityIds(json);
+    }
+
+
+    std::string pathToExterior = json["pathToExterior"];
+    std::vector<std::vector<Tile> > tiles = json["tiles"];
+    SpaceshipHooks hooks = SpaceshipHooks::fromJson(json["hooks"]);
 
     std::vector<Entity *> entities;
-    if (create_blueprint_entities)
-        entities = entitiesFromJson(dict["entities"], transient_game_state);
+    if (create_blueprint_entities) {
+        entities = entitiesFromJson(json["entities"], transient_game_state);
+    }
     else
         entities = {};
 
@@ -61,11 +69,12 @@ SpaceShipBlueprint *SpaceShipBlueprint::loads(const std::string &from, std::file
 
 SpaceShipBlueprint *SpaceShipBlueprint::load(const std::filesystem::path &path,
                                              GameState::transientGameState &transient_game_state,
+                                             EntityId::Manager & entity_id_manager,
                                              bool create_blueprint_entities) {
     std::ifstream file(path);
     std::stringstream buffer;
     buffer << file.rdbuf();
-    return loads(buffer.str(), path, transient_game_state, create_blueprint_entities);
+    return loads(buffer.str(), path, transient_game_state, entity_id_manager, create_blueprint_entities);
 }
 
 void SpaceShipBlueprint::resize(Vector2Int newDimensions) {

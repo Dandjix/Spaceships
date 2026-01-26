@@ -6,31 +6,28 @@
 #include <cstdint>
 #include <iostream>
 
+#include "json.hpp"
+
+
 class IdentifiedEntity;
 class Toggleable;
 class Vehicle;
 class Humanoid;
 class Entity;
 
+namespace GameState {
+    struct transientGameState;
+}
+
 namespace EntityId {
     //instead of doing anything complex, since a uint64 is BIG, I'll just increment it each time one is assigned, and the max is going to
     //be stored in the save file. Decreasing this to a uint32 would be absolutely possible.
+
+    //entities can only reference entities on the same ship for now
+
     using entityId = std::uint64_t;
 
-    constexpr entityId FIRST_USABLE_VALUE = 1000;
-    /**
-     * This entityId is reserved for editor placed entities
-     */
-    constexpr entityId UNDEFINED_ENTITY_ID = 0;
-
-    /**
-     * entity ids below 1000 are reserved for special purposes, namely UNDEFINED_ENTITY_ID
-     * @param id the id to check
-     * @return
-     */
-    inline bool isValidEntityId(EntityId::entityId id) {
-        return id >= FIRST_USABLE_VALUE;
-    }
+    constexpr entityId FIRST_USABLE_VALUE = 0;
 
     class Manager {
     private:
@@ -42,10 +39,18 @@ namespace EntityId {
         Manager(const Manager&) = delete;
         Manager& operator=(const Manager&) = delete;
 
+        /**
+         * increments the counter and returns the new (hopefully unique) generated id
+         * @return
+         */
         entityId createEntityId() {
             return next_entity_id++;
         }
 
+        /**
+         * for use in loading a save and loading a ship
+         * @param id
+         */
         void setNextEntityId(entityId id) {
             next_entity_id = id;
         }
@@ -53,10 +58,27 @@ namespace EntityId {
         void printNextEntityId() const {
             std::cout << "next entity id is : " << next_entity_id << std::endl;
         }
+        void reset();
+
+        void reset(const GameState::transientGameState & transient_game_state);
+
+        /**
+         * doesnt increment the counter
+         * @return
+         */
+        [[nodiscard]] entityId getNextEntityId() {
+            return next_entity_id;
+        }
+
+        [[nodiscard]] static std::vector<std::string>getEntityIdKeys();
+
+        void incrementEntityIds(nlohmann::json &json);
 
         static Manager& getInstance() {
             static Manager instance;
             return instance;
         }
     };
+
+
 }

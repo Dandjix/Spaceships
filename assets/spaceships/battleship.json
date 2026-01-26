@@ -116,7 +116,7 @@
         },
         {
             "angle": 50.0,
-            "linked_entity_id": "null",
+            "linked_entity_id": 0,
             "position": {
                 "x": 85592,
                 "y": 41017
@@ -138,17 +138,17 @@
         "airlocks": [],
         "points": [
             {
-                "name": "pilot_seat",
-                "position": {
-                    "x": 81920,
-                    "y": 40960
-                }
-            },
-            {
                 "name": "hangar_center",
                 "position": {
                     "x": 24576,
                     "y": 24576
+                }
+            },
+            {
+                "name": "pilot_seat",
+                "position": {
+                    "x": 81920,
+                    "y": 40960
                 }
             }
         ],

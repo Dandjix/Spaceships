@@ -41,11 +41,4 @@ public:
         json["entity_id"] = entity_id;
         return json;
     }
-
-    void makeReal() override {
-        if (entity_id == EntityId::UNDEFINED_ENTITY_ID) {
-            entity_id = EntityId::Manager::getInstance().createEntityId();
-            std::cout << "entity at position : " << position << " has entity id : " << entity_id << std::endl;
-        }
-    }
 };

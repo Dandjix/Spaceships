@@ -142,12 +142,11 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 if (content.empty()) {
                     return;
                 }
+                EntityId::Manager::getInstance().reset();
                 GameState::transientGameState transient_game_state = {};
-                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,true);
+                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(), true);
 
                 blueprint_name = path;
-
-
                 *blueprint = *loaded;
                 Vector2Int dimensions = Vector2Int(blueprint->tiles.size(), blueprint->tiles[0].size());
                 grid.setDimensions(dimensions);

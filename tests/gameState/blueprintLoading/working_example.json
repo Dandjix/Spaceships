@@ -1,0 +1,29 @@
+{
+    "entities": [
+        {
+            "angle": 50.0,
+            "linked_entity_id": 0,
+            "position": {
+                "x": 85592,
+                "y": 41017
+            },
+            "type": "button"
+        },
+        {
+            "angle": 270.0,
+            "entity_id": 0,
+            "on": true,
+            "position": {
+                "x": 85980,
+                "y": 57049
+            },
+            "type": "lamp"
+        }
+    ],
+    "hooks": {
+        "airlocks": [],
+        "points": []
+    },
+    "pathToExterior": "",
+    "tiles": []
+}

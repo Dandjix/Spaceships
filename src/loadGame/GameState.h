@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "json.hpp"
-#include "entities/entityId/IdentityId.h"
+#include "entities/entityId/EntityId.h"
 
 
 class BehavioredEntity;
@@ -22,12 +22,20 @@ namespace GameState {
         std::unordered_map<EntityId::entityId,IdentifiedEntity *> identified_entities;
 
         transientGameState() = default;
+
+        [[nodiscard]] EntityId::entityId maxEntityId();
     };
 
 
     struct GameState {
-        explicit GameState(const std::vector<SpaceShip *> & space_ships) : space_ships(space_ships) {  }
+        explicit GameState(const std::vector<SpaceShip *> & space_ships, EntityId::entityId next_entity_id)
+        :
+        space_ships(space_ships),
+        next_entity_id(next_entity_id) {
+        }
+
         std::vector<SpaceShip * >space_ships;
+        EntityId::entityId next_entity_id;
         Camera * getCamera();
 
         BehavioredEntity *getPlayer();
@@ -37,6 +45,6 @@ namespace GameState {
     void dumpGameState(const GameState & game_state, const std::filesystem::path & path);
     std::string dumpsGameState(GameState game_state);
 
-    GameState loadGameState(const std::filesystem::path & path);
-    GameState loadsGameState(const std::string & content);
+    GameState loadGameState(const std::filesystem::path & path, EntityId::Manager &entity_id_manager);
+    GameState loadsGameState(const std::string & content, EntityId::Manager &entity_id_manager);
 }

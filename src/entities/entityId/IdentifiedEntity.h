@@ -5,7 +5,7 @@
 #pragma once
 #include <cstdint>
 
-#include "IdentityId.h"
+#include "EntityId.h"
 
 
 class Humanoid;
@@ -17,8 +17,6 @@ class IdentifiedEntity {
 
 public:
     virtual ~IdentifiedEntity() = default;
-
-    virtual void makeReal()=0;
 
     [[nodiscard]] virtual EntityId::entityId getEntityId() const = 0;
 

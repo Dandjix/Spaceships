@@ -12,8 +12,10 @@
 #include "vehicles/spaceship/PilotSeat.h"
 
 std::filesystem::path NewGame::ConstructNewGame() {
+    EntityId::Manager::getInstance().reset();
+
     GameState::transientGameState transient_game_state = {};
-    SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json",transient_game_state, true);
+    SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(ENV_PROJECT_ROOT"assets/spaceships/battleship.json",transient_game_state, EntityId::Manager::getInstance(), true);
 
     auto player = new Humanoid(Vector2Int{128,128}.scaleToWorldPosition(),45,new PlayerBehavior());
     auto camera =  new Camera(Vector2Int(0,0),0,1);
@@ -37,7 +39,8 @@ std::filesystem::path NewGame::ConstructNewGame() {
     auto * space_ship = new SpaceShip(blueprint,entities,{0,0},0);
 
     GameState::GameState game_state = GameState::GameState{
-        {space_ship}
+        {space_ship},
+        EntityId::Manager::getInstance().getNextEntityId()
     };
 
     std::filesystem::path path = ENV_PROJECT_ROOT"assets/newGame/newGame.save.json";

@@ -147,7 +147,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     SpaceShip *player_spaceship;
     std::vector<SpaceShip *> space_ships;
     {
-        GameState::GameState game_state = GameState::loadGameState(path_to_save);
+        GameState::GameState game_state = GameState::loadGameState(path_to_save, EntityId::Manager::getInstance());
         camera = game_state.getCamera();
         player = game_state.getPlayer();
         player_spaceship = game_state.getPlayerSpaceship();
@@ -176,7 +176,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                                          {
                                              "Quick Save", [space_ships,&snackbar]() {
                                                  std::string save_name;
-                                                 quickSave(GameState::GameState(space_ships), &save_name);
+                                                 quickSave(GameState::GameState(space_ships,EntityId::Manager::getInstance().getNextEntityId()), &save_name);
                                                  snackbar->addMessage(
                                                      std::format("Successfully saved game to : {}", save_name), 2000);
 
@@ -333,7 +333,8 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
     if (destination == SaveAndDesktop || destination == SaveAndMainMenu) {
         auto game_state = GameState::GameState(
-            space_ships
+            space_ships,
+            EntityId::Manager::getInstance().getNextEntityId()
         );
         GameState::dumpGameState(game_state, Saves::getNewAutosavePath());
         Saves::deleteOldAutosaves();

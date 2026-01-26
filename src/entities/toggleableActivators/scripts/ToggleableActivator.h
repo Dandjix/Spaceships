@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#include "entities/interactables/IInteractable.h"
 #include "physics/PhysicsEntity.h"
 
+class Toggleable;
 
 class ToggleableActivator{
 public:

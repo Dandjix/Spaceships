@@ -8,7 +8,7 @@
 
 #include "json.hpp"
 #include "behavior/BehavioredEntity.h"
-#include "entities/entityId/IdentityId.h"
+#include "entities/entityId/EntityId.h"
 #include "spaceships/SpaceShip.h"
 
 
@@ -24,7 +24,7 @@ nlohmann::json gameStateToJSON(const GameState::GameState &game_state) {
     return json;
 }
 
-GameState::GameState gameStateFromJSON(const nlohmann::json json) {
+GameState::GameState gameStateFromJSON(const nlohmann::json json, EntityId::Manager &entity_id_manager) {
     nlohmann::json json_ships = json["spaceships"];
 
     std::vector<SpaceShip *> ships = {};
@@ -32,7 +32,7 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json) {
     GameState::transientGameState transient_game_state = {};
 
     for (const auto &ship_entry: json_ships) {
-        auto ship = SpaceShip::fromJson(ship_entry, transient_game_state);
+        auto ship = SpaceShip::fromJson(ship_entry, transient_game_state, entity_id_manager);
         ships.push_back(ship);
     }
 
@@ -42,23 +42,25 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json) {
         }
     }
 
-    //this part determines the max entityId
-    auto max_entity_id = EntityId::FIRST_USABLE_VALUE;
-    for (const auto & [key,entity]: transient_game_state.identified_entities) {
-        auto id = entity->getEntityId();
-        if (EntityId::isValidEntityId(id) && id >= max_entity_id)
-            max_entity_id = id;
-    }
-    EntityId::Manager::getInstance().setNextEntityId(max_entity_id+1);
+    EntityId::Manager::getInstance().setNextEntityId(transient_game_state.maxEntityId());
 
-    //this part makes it so that entities placed in the editor with an id of 0 get a real entity id.
-    for (auto & [key,entity]: transient_game_state.identified_entities) {
-        entity->makeReal();
-    }
+    //this part determines the max entityId
+    EntityId::Manager::getInstance().reset(transient_game_state);
+
 
     return GameState::GameState(
-        ships
+        ships,
+        entity_id_manager.getNextEntityId()
     );
+}
+
+EntityId::entityId GameState::transientGameState::maxEntityId() {
+    EntityId::entityId max = 0;
+    for (const auto & [k,e] : identified_entities) {
+        if (k > max)
+            max = k;
+    }
+    return max;
 }
 
 Camera *GameState::GameState::getCamera() {
@@ -108,7 +110,7 @@ std::string GameState::dumpsGameState(GameState game_state) {
 }
 
 
-GameState::GameState GameState::loadGameState(const std::filesystem::path &path) {
+GameState::GameState GameState::loadGameState(const std::filesystem::path &path, EntityId::Manager &entity_id_manager) {
     std::ifstream in(path);
     if (!in) {
         throw std::runtime_error("Failed to open file for reading: " + path.string());
@@ -118,11 +120,11 @@ GameState::GameState GameState::loadGameState(const std::filesystem::path &path)
     buffer << in.rdbuf();
 
 
-    return loadsGameState(buffer.str());
+    return loadsGameState(buffer.str(), entity_id_manager);
 }
 
-GameState::GameState GameState::loadsGameState(const std::string &content) {
+GameState::GameState GameState::loadsGameState(const std::string &content, EntityId::Manager &entity_id_manager) {
     auto json = nlohmann::json::parse(content);
-    auto game_state = gameStateFromJSON(json);
+    auto game_state = gameStateFromJSON(json, entity_id_manager);
     return game_state;
 }

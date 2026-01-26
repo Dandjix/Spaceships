@@ -5,7 +5,7 @@
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
-#include "entities/entityId/IdentityId.h"
+#include "entities/entityId/EntityId.h"
 #include "entities/scripts/ActiveWhenPausedEntity.h"
 #include "EntityData/EntityLoading.h"
 #include "physics/PhysicsEntity.h"
@@ -171,14 +171,18 @@ Vector2Int SpaceShip::getCenter() const {
 
 SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint, const std::vector<Entity *> &entities, Vector2Int position,
                      float angle)
-    : spaceship_tiles(SpaceshipTiles(blueprint->tiles)), hooks(blueprint->hooks), blueprint_path(blueprint->path),
-      position(position), angle(angle),
+    :
+      exterior(new SpaceShipResources::TestExterior(Vector2Int(1024, 1024).scaleToWorldPosition())),
+      spaceship_tiles(SpaceshipTiles(blueprint->tiles)),
+      position(position),
       hash_proximity_map({}),
-      exterior(new SpaceShipResources::TestExterior(Vector2Int(1024, 1024).scaleToWorldPosition())) {
+      angle(angle),
+      blueprint_path(blueprint->path),
+      hooks(blueprint->hooks) {
     populateRooms();
 
     std::vector<Entity *> all_entities = blueprint->entities;
-    all_entities.insert(all_entities.end(),entities.begin(),entities.end());
+    all_entities.insert(all_entities.end(), entities.begin(), entities.end());
     registerEntities(all_entities);
 }
 
@@ -299,8 +303,9 @@ void SpaceShip::setPlayer(Entity *value) {
     focusEntity = value;
 }
 
-SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json, GameState::transientGameState & transient_game_state) {
-    SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"],transient_game_state,false);
+SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json,
+                               GameState::transientGameState &transient_game_state, EntityId::Manager &entity_id_manager) {
+    SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"], transient_game_state, entity_id_manager, false);
 
     std::vector<Entity *> loaded_entities = {};
     for (const auto &entity_entry: json["entities"]) {
