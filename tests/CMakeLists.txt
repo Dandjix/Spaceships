@@ -38,3 +38,7 @@ target_link_libraries(
 #include(CTest)
 #include(Catch)
 #catch_discover_tests(SpaceshipsTests)
+
+target_compile_definitions(SpaceshipsTests PRIVATE
+        ENV_PROJECT_ROOT="/home/timon/Projects/Spaceships"
+)
