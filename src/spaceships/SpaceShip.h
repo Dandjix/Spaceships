@@ -5,6 +5,7 @@
 #include "SpaceShipBlueprint.h"
 #include <unordered_set>
 
+#include "entities/scripts/Entity.h"
 #include "exterior/SpaceShipExterior.h"
 #include "hashProximityList/HashProximityMap.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
@@ -188,8 +189,13 @@ public:
     void setPlayer(Entity *entity);
 
 
-    static SpaceShip *fromJson(nlohmann::json::const_reference json, GameState::transientGameState & identifiedEntities, EntityId::Manager &
-                               entity_id_manager);
+    static SpaceShip *fromJson(
+        nlohmann::json::const_reference json,
+        GameState::transientGameState &identifiedEntities,
+        EntityId::Manager & entity_id_manager,
+        EntityRendering::Context * entity_rendering_context = nullptr);
+
+    SpaceShip *finalizeRendering(const EntityRendering::Context &entity_rendering_context);
 
     nlohmann::json toJson();
 };

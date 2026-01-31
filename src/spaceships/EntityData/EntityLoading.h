@@ -20,7 +20,7 @@ namespace GameState {
 }
 
 namespace EntityLoading {
-    inline Entity * fromJson(nlohmann::json entry, GameState::transientGameState & transient_game_state) {
+    inline Entity * fromJson(nlohmann::json entry, GameState::transientGameState & transient_game_state, EntityRendering::Context * entity_rendering_context) {
 
         Entity * entity = nullptr;
 
@@ -62,6 +62,10 @@ namespace EntityLoading {
 
             throw std::invalid_argument(message);
         }
+
+        if (entity_rendering_context != nullptr)
+            return entity->initializeRendering(*entity_rendering_context);
+
         return entity;
     }
 };

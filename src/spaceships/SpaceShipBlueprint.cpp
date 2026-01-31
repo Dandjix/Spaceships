@@ -23,11 +23,12 @@ nlohmann::json entitiesToJson(const std::vector<Entity *> &entities) {
 }
 
 std::vector<Entity *> entitiesFromJson(const nlohmann::json &json,
-                                       GameState::transientGameState &transient_game_state) {
+                                       GameState::transientGameState &transient_game_state,
+                                       EntityRendering::Context *entity_rendering_context) {
     std::vector<Entity *> entities = {};
 
     for (const auto &e: json) {
-        entities.push_back(EntityLoading::fromJson(e, transient_game_state));
+        entities.push_back(EntityLoading::fromJson(e, transient_game_state, entity_rendering_context));
     }
     return entities;
 }
@@ -44,7 +45,8 @@ std::string SpaceShipBlueprint::dumps() const {
 
 SpaceShipBlueprint *SpaceShipBlueprint::loads(const std::string &from, std::filesystem::path path,
                                               GameState::transientGameState &transient_game_state,
-                                              EntityId::Manager & entity_id_manager,
+                                              EntityId::Manager &entity_id_manager,
+                                              EntityRendering::Context *entity_rendering_context,
                                               bool create_blueprint_entities = false) {
     nlohmann::json json = nlohmann::json::parse(from);
 
@@ -59,9 +61,8 @@ SpaceShipBlueprint *SpaceShipBlueprint::loads(const std::string &from, std::file
 
     std::vector<Entity *> entities;
     if (create_blueprint_entities) {
-        entities = entitiesFromJson(json["entities"], transient_game_state);
-    }
-    else
+        entities = entitiesFromJson(json["entities"], transient_game_state, entity_rendering_context);
+    } else
         entities = {};
 
     return new SpaceShipBlueprint{std::move(path), pathToExterior, tiles, entities, hooks};
@@ -69,12 +70,13 @@ SpaceShipBlueprint *SpaceShipBlueprint::loads(const std::string &from, std::file
 
 SpaceShipBlueprint *SpaceShipBlueprint::load(const std::filesystem::path &path,
                                              GameState::transientGameState &transient_game_state,
-                                             EntityId::Manager & entity_id_manager,
+                                             EntityId::Manager &entity_id_manager,
+                                             EntityRendering::Context *entity_rendering_context,
                                              bool create_blueprint_entities) {
     std::ifstream file(path);
     std::stringstream buffer;
     buffer << file.rdbuf();
-    return loads(buffer.str(), path, transient_game_state, entity_id_manager, create_blueprint_entities);
+    return loads(buffer.str(), path, transient_game_state, entity_id_manager,entity_rendering_context, create_blueprint_entities);
 }
 
 void SpaceShipBlueprint::resize(Vector2Int newDimensions) {

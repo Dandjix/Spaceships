@@ -153,7 +153,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     SpaceShip *player_spaceship;
     std::vector<SpaceShip *> space_ships;
     {
-        GameState::GameState game_state = GameState::loadGameState(path_to_save, EntityId::Manager::getInstance());
+        GameState::GameState game_state = GameState::loadGameState(path_to_save, EntityId::Manager::getInstance(), &entity_loading_context);
         camera = game_state.getCamera();
         player = game_state.getPlayer();
         player_spaceship = game_state.getPlayerSpaceship();
@@ -354,7 +354,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
     delete pause_menu;
     for (auto space_ship: space_ships) {
-        delete space_ship;
+        delete space_ship->finalizeRendering(entity_loading_context);
     }
 
     return navigation;

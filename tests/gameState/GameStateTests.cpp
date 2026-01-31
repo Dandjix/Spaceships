@@ -32,7 +32,7 @@ TEST(GameStateTestSuite, EntityDuplication_EmptyBlueprint_Test) {
     nlohmann::json json = nlohmann::json::parse(dumped);
     GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),1);
 
-    auto loaded = GameState::loadsGameState(dumped, id_manager);
+    auto loaded = GameState::loadsGameState(dumped, id_manager, TODO);
 
     GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 1);
 }
@@ -55,7 +55,7 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLamp_Test) {
     nlohmann::json json = nlohmann::json::parse(dumped);
     GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),1);
 
-    auto loaded = GameState::loadsGameState(dumped, id_manager);
+    auto loaded = GameState::loadsGameState(dumped, id_manager, TODO);
 
     GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 1);
 }
@@ -83,7 +83,7 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLampPlusEntities_Test) {
     nlohmann::json json = nlohmann::json::parse(dumped);
     GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),2);
 
-    auto loaded = GameState::loadsGameState(dumped, id_manager);
+    auto loaded = GameState::loadsGameState(dumped, id_manager, TODO);
     GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 2);
 }
 
@@ -108,7 +108,7 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithHumanoid_Test) {
     GTEST_ASSERT_EQ(json["spaceships"].size(),1);
     GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),1);
 
-    auto loaded = GameState::loadsGameState(dumped, id_manager);
+    auto loaded = GameState::loadsGameState(dumped, id_manager, TODO);
     GTEST_ASSERT_EQ(loaded.space_ships.size(), 1);
     GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 1);
 }

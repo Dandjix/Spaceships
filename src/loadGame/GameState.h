@@ -8,6 +8,7 @@
 
 #include "json.hpp"
 #include "entities/entityId/EntityId.h"
+#include "entityRendering/RenderingInitialization.h"
 
 
 class BehavioredEntity;
@@ -45,6 +46,7 @@ namespace GameState {
     void dumpGameState(const GameState & game_state, const std::filesystem::path & path);
     std::string dumpsGameState(GameState game_state);
 
-    GameState loadGameState(const std::filesystem::path & path, EntityId::Manager &entity_id_manager);
-    GameState loadsGameState(const std::string & content, EntityId::Manager &entity_id_manager);
+    GameState loadGameState(const std::filesystem::path &path, EntityId::Manager &entity_id_manager, EntityRendering::Context *
+                            entity_rendering_context);
+    GameState loadsGameState(const std::string &content, EntityId::Manager &entity_id_manager, EntityRendering::Context *entity_rendering_context);
 }

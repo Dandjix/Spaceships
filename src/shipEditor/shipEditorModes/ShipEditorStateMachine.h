@@ -15,7 +15,6 @@ class GUIRect;
 class Entity;
 
 namespace ShipEditorModes {
-
     enum Mode {
         TilePainter,
         HookPainter,
@@ -27,44 +26,41 @@ namespace ShipEditorModes {
     class ShipEditorStateMachine {
     private:
         Mode current_mode_label;
-        ShipEditorMode * current_mode;
-        ModeTilePainter * tile_painter_mode;
-        ModeHookPainter * hook_painter_mode;
-        ModeAirlockPainter * airlock_painter_mode;
-        ModeEntityPainter * entity_painter_mode;
-        ModeToggleableLinker * toggleable_linker_mode;
+        ShipEditorMode *current_mode;
+        ModeTilePainter *tile_painter_mode;
+        ModeHookPainter *hook_painter_mode;
+        ModeAirlockPainter *airlock_painter_mode;
+        ModeEntityPainter *entity_painter_mode;
+        ModeToggleableLinker *toggleable_linker_mode;
 
     public:
-        SDL_Window * window;
+        SDL_Window *window;
 
         virtual ~ShipEditorStateMachine() = default;
 
-        CommonEditorObjects * common;
+        CommonEditorObjects *common;
 
-        ElementContainer<Entity * > * activeEntities;
-        ElementContainer<Entity*> * activeEntitiesDeletionQueue;
+        ElementContainer<Entity *> *activeEntities;
+        ElementContainer<Entity *> *activeEntitiesDeletionQueue;
 
-
-        ElementContainer<GUIRect * > * editorGUIElements;
-        ElementContainer<GUIRect*> * editorGUIElementsDeletionQueue;
+        ElementContainer<GUIRect *> *editorGUIElements;
+        ElementContainer<GUIRect *> *editorGUIElementsDeletionQueue;
 
         explicit ShipEditorStateMachine(
-            CommonEditorObjects * common,
-            ElementContainer<Entity * > * active,
-            ElementContainer<Entity * > * activeEntitiesDeletionQueue,
-            ElementContainer<GUIRect * > * GUIElements,
-            ElementContainer<GUIRect * > * editorGUIElementsDeletionQueue,
+            CommonEditorObjects *common,
+            ElementContainer<Entity *> *active,
+            ElementContainer<Entity *> *activeEntitiesDeletionQueue,
+            ElementContainer<GUIRect *> *GUIElements,
+            ElementContainer<GUIRect *> *editorGUIElementsDeletionQueue,
             Mode initial,
-            SDL_Window * window)
-        :
-        common(common),
-        current_mode_label(initial),
-        activeEntities(active),
-        activeEntitiesDeletionQueue(activeEntitiesDeletionQueue),
-        editorGUIElements(GUIElements),
-        editorGUIElementsDeletionQueue(editorGUIElementsDeletionQueue),
-        window(window)
-        {
+            SDL_Window *window)
+            : common(common),
+              current_mode_label(initial),
+              activeEntities(active),
+              activeEntitiesDeletionQueue(activeEntitiesDeletionQueue),
+              editorGUIElements(GUIElements),
+              editorGUIElementsDeletionQueue(editorGUIElementsDeletionQueue),
+              window(window) {
             tile_painter_mode = new ModeTilePainter(this);
             hook_painter_mode = new ModeHookPainter(this);
             airlock_painter_mode = new ModeAirlockPainter(this);
@@ -93,7 +89,7 @@ namespace ShipEditorModes {
 
         void setMode(Mode label) {
             if (label == current_mode_label)
-                return ;
+                return;
 
             current_mode->leave();
             //Assignments
@@ -117,7 +113,6 @@ namespace ShipEditorModes {
             }
 
             current_mode->enter();
-
         }
 
         Mode getMode() {

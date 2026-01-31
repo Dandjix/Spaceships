@@ -17,5 +17,6 @@ namespace ShipEditorModes {
         BlueprintEditorAppearance * appearance;
         std::vector<std::vector<Tile>> * tiles;
         std::vector<Entity *> * placed_entities;
+        EntityRendering::Context * entity_rendering_context;
     };
 }

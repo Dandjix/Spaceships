@@ -24,7 +24,7 @@ nlohmann::json gameStateToJSON(const GameState::GameState &game_state) {
     return json;
 }
 
-GameState::GameState gameStateFromJSON(const nlohmann::json json, EntityId::Manager &entity_id_manager) {
+GameState::GameState gameStateFromJSON(const nlohmann::json json, EntityId::Manager &entity_id_manager, EntityRendering::Context * entity_rendering_context) {
     nlohmann::json json_ships = json["spaceships"];
 
     std::vector<SpaceShip *> ships = {};
@@ -32,7 +32,7 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json, EntityId::Mana
     GameState::transientGameState transient_game_state = {};
 
     for (const auto &ship_entry: json_ships) {
-        auto ship = SpaceShip::fromJson(ship_entry, transient_game_state, entity_id_manager);
+        auto ship = SpaceShip::fromJson(ship_entry, transient_game_state, entity_id_manager, entity_rendering_context);
         ships.push_back(ship);
     }
 
@@ -110,7 +110,7 @@ std::string GameState::dumpsGameState(GameState game_state) {
 }
 
 
-GameState::GameState GameState::loadGameState(const std::filesystem::path &path, EntityId::Manager &entity_id_manager) {
+GameState::GameState GameState::loadGameState(const std::filesystem::path &path, EntityId::Manager &entity_id_manager, EntityRendering::Context * entity_rendering_context) {
     std::ifstream in(path);
     if (!in) {
         throw std::runtime_error("Failed to open file for reading: " + path.string());
@@ -120,11 +120,11 @@ GameState::GameState GameState::loadGameState(const std::filesystem::path &path,
     buffer << in.rdbuf();
 
 
-    return loadsGameState(buffer.str(), entity_id_manager);
+    return loadsGameState(buffer.str(), entity_id_manager, entity_rendering_context);
 }
 
-GameState::GameState GameState::loadsGameState(const std::string &content, EntityId::Manager &entity_id_manager) {
+GameState::GameState GameState::loadsGameState(const std::string &content, EntityId::Manager &entity_id_manager, EntityRendering::Context * entity_rendering_context) {
     auto json = nlohmann::json::parse(content);
-    auto game_state = gameStateFromJSON(json, entity_id_manager);
+    auto game_state = gameStateFromJSON(json, entity_id_manager,entity_rendering_context);
     return game_state;
 }

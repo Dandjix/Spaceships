@@ -20,6 +20,7 @@
 #include "shipEditorModes/CommonEditorEntities.h"
 #include "shipEditorModes/ShipEditorStateMachine.h"
 #include "../userInterface/elements/GUI/GUICheckbox.h"
+#include "entityRendering/RenderingInitialization.h"
 #include "game/ElementContainer.h"
 #include "loadGame/GameState.h"
 
@@ -61,6 +62,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     ElementContainer<GUIRect *> editorGUIElements = {};
     ElementContainer<GUIRect *> editorGUIElementsDeletionQueue = {};
 
+    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures",renderer);
+    EntityRendering::Context entity_loading_context = {texture_usage_map};
 
     auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1, 600);
     activeEntities.add(camera);
@@ -100,7 +103,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         &grid,
         &appearance,
         &blueprint->tiles,
-        &blueprint->entities
+        &blueprint->entities,
+        &entity_loading_context,
     };
 
     ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(
@@ -130,7 +134,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             "Edit entities",
             "Link toggleables"
         },
-        [&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string &option) {
+        [&entity_loading_context,&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string &option) {
             if (option == "Resize") {
                 grid.startResizing();
             } else if (option == "Save") {
@@ -144,7 +148,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 }
                 EntityId::Manager::getInstance().reset();
                 GameState::transientGameState transient_game_state = {};
-                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(), true);
+
+                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(),&entity_loading_context, true);
 
                 blueprint_name = path;
                 *blueprint = *loaded;

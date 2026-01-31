@@ -9,6 +9,7 @@
 #include "../math/Vectors.h"
 #include "Tile.h"
 #include "entities/entityId/EntityId.h"
+#include "entities/scripts/Entity.h"
 #include "Hooks/SpaceshipHooks.h"
 
 
@@ -45,11 +46,18 @@ public :
 
     void paint(int x, int y, Tile tileToPaint);
 
-    static SpaceShipBlueprint *load(const std::filesystem::path &path,
-                                    GameState::transientGameState &transient_game_state, EntityId::Manager &entity_id_manager, bool
-                                    create_blueprint_entities = false);
+    static SpaceShipBlueprint *load(
+        const std::filesystem::path &path,
+        GameState::transientGameState &transient_game_state,
+        EntityId::Manager &entity_id_manager,
+        EntityRendering::Context *entity_rendering_context, bool
+        create_blueprint_entities = false);
 
-    static SpaceShipBlueprint *loads(const std::string &from, std::filesystem::path path,
-                                     GameState::transientGameState &transient_game_state, EntityId::Manager &entity_id_manager, bool
-                                     create_blueprint_entities);
+    static SpaceShipBlueprint *loads(
+        const std::string &from,
+        std::filesystem::path path,
+        GameState::transientGameState &transient_game_state,
+        EntityId::Manager &entity_id_manager,
+        EntityRendering::Context *entity_rendering_context,
+        bool create_blueprint_entities);
 };

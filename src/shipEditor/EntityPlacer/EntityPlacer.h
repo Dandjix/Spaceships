@@ -21,10 +21,10 @@ namespace EntityPlacement {
 
     class EntityPlacer : public ShortLivedEntity {
     private:
-        const Registry * registry;
+        const Registry *registry;
 
-        std::vector<Entity*> * placed_entities;
-
+        std::vector<Entity *> *placed_entities;
+        EntityRendering::Context *entity_rendering_context;
         std::string to_place;
 
         float angle_to_place_at = 0;
@@ -35,12 +35,17 @@ namespace EntityPlacement {
 
     public:
         explicit EntityPlacer(
-            const Registry * registry,
-            std::vector<Entity*> * placed_entities,
+            const Registry *registry,
+            std::vector<Entity *> *placed_entities,
+            EntityRendering::Context *entity_rendering_context,
             Precision precision,
             bool enabled
         ) : ShortLivedEntity({0, 0}, 0),
-            registry(registry),placed_entities(placed_entities), enabled(enabled),precision(precision) {
+            registry(registry),
+            placed_entities(placed_entities),
+            entity_rendering_context(entity_rendering_context),
+            precision(precision),
+            enabled(enabled) {
             to_place = registry->spawners.begin()->first;
         }
 
@@ -68,8 +73,8 @@ namespace EntityPlacement {
 
         QueueOrder::Value getQueueOrder() override { return QueueOrder::MIDDLE; }
 
-        Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+        Entity *initializeRendering(const EntityRendering::Context &context) override { return this; }
 
-        Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
+        Entity *finalizeRendering(const EntityRendering::Context &context) override { return this; }
     };
 }

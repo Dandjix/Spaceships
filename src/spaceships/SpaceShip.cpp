@@ -305,18 +305,27 @@ void SpaceShip::setPlayer(Entity *value) {
 }
 
 SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json,
-                               GameState::transientGameState &transient_game_state, EntityId::Manager &entity_id_manager) {
-    SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"], transient_game_state, entity_id_manager, false);
+                               GameState::transientGameState &transient_game_state,
+                               EntityId::Manager &entity_id_manager,
+                               EntityRendering::Context * entity_rendering_context) {
+    SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"], transient_game_state, entity_id_manager, entity_rendering_context,false);
 
     std::vector<Entity *> loaded_entities = {};
     for (const auto &entity_entry: json["entities"]) {
-        loaded_entities.push_back(EntityLoading::fromJson(entity_entry, transient_game_state));
+        loaded_entities.push_back(EntityLoading::fromJson(entity_entry, transient_game_state, entity_rendering_context));
     }
     auto *space_ship = new SpaceShip(blueprint, loaded_entities, Vector2Int::fromJson(json["position"]), json["angle"]);
 
     delete blueprint;
 
     return space_ship;
+}
+
+SpaceShip *SpaceShip::finalizeRendering(const EntityRendering::Context &entity_rendering_context) {
+    for (auto entity: entities) {
+        entity->finalizeRendering(entity_rendering_context);
+    }
+    return this;
 }
 
 nlohmann::json SpaceShip::toJson() {
