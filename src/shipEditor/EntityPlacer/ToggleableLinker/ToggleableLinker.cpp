@@ -6,6 +6,9 @@
 
 #include "entities/toggleableActivators/scripts/ToggleableActivator.h"
 #include "entities/toggleables/scripts/Toggleable.h"
+#include "game/Rendering.h"
+#include "game/Update.h"
+#include "gameEvent/MousePositionType.h"
 
 constexpr float SHORTEST_DISTANCE_PX = 256;
 

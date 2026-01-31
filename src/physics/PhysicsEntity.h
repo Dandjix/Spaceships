@@ -1,10 +1,11 @@
 #pragma once
-#include "shapes/PhysicsShape.h"
-#include "../entities/scripts/Entity.h"
-#include "../physics/Physics.h"
+#include "entities/scripts/Entity.h"
+#include "math/Vectors.h"
 
+class SpaceShip;
 class IInteractable;
 class PhysicsShape;
+
 
 class PhysicsEntity : public Entity
 {
@@ -17,10 +18,7 @@ public :
 	{
 	}
 
-	~PhysicsEntity() override
-	{
-		delete shape;
-	}
+	~PhysicsEntity() override;
 
 	virtual float get_weight() { return 1.0f; }
 

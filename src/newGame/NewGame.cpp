@@ -7,6 +7,7 @@
 #include "entities/Sphere.h"
 #include "../entities/toggleableActivators/Button.h"
 // #include "entities/toggleables/Lamp.h"
+#include "player/Camera.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "vehicles/combatOutfit/CombatOutfit.h"
 #include "vehicles/spaceship/PilotSeat.h"

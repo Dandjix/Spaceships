@@ -52,7 +52,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    Textures::UsageMap::initialize(ENV_PROJECT_ROOT"assets/textures",renderer);
 
     MenuNavigation::Navigation navigation = MenuNavigation::MainMenu;
     std::filesystem::path save_to_load = "";

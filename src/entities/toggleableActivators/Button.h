@@ -24,8 +24,6 @@ public:
         float angle,
         Toggleable * linked_device);
 
-    ~Button() override;
-
     nlohmann::json toJson() override;
 
     static Button * fromJson(const nlohmann::json & json,GameState::transientGameState & transient_game_state);
@@ -49,4 +47,8 @@ public:
     void setLinkedEntity(Toggleable *entity_to_link) override;
 
     [[nodiscard]] Toggleable * getLinkedEntity() override;
+
+    Button *initializeRendering(const EntityRendering::Context &context) override;
+
+    Entity *finalizeRendering(const EntityRendering::Context &context) override;
 };

@@ -48,5 +48,9 @@ namespace HookDeleter{
         void disable();
 
         QueueOrder::Value getQueueOrder() override {return QueueOrder::LAST;}
+
+        Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+        Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
     };
 }

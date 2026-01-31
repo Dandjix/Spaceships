@@ -6,6 +6,7 @@
 #include "InteractableInteract.h"
 
 #include "PlayerVehicleTracker.h"
+#include "physics/Physics.h"
 
 
 void Player::InteractableInteract::enable() {

@@ -56,4 +56,8 @@ public:
     void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 
     QueueOrder::Value getQueueOrder() override;
+
+    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };

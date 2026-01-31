@@ -3,6 +3,7 @@
 
 #include "ElementContainer.h"
 #include "PauseManager.h"
+#include "entityRendering/RenderingInitialization.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
 #include "loadGame/AutoSave.h"
@@ -137,6 +138,11 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     Uint64 last = 0;
     float deltaTime = 0.0f;
     GameNavigation destination = Game;
+
+    // Entity rendering setup ------------------------------------------------------------------------------------------
+    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures",renderer);
+    EntityRendering::Context entity_loading_context = {texture_usage_map};
+
     // Texture Setup ---------------------------------------------------------------------------------------------------
     Tiles::loadAll(renderer);
     SpaceShipResources::TestExterior::loadAssets(renderer);
@@ -167,7 +173,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     gui_elements.add(snackbar);
 
     // Short lived entities --------------------------------------------------------------------------------------------
-    auto *vehicle_tracker = new Player::PlayerVehicleTracker(player);
+    Player::PlayerVehicleTracker * vehicle_tracker = (new Player::PlayerVehicleTracker(player))->initializeRendering(entity_loading_context);
     auto *vehicle_enter = new Player::InteractableInteract(tooltip, vehicle_tracker);
     auto *vehicle_leave = new Player::VehicleLeave(vehicle_tracker);
     auto *pause_manager = new PauseManager(&paused);

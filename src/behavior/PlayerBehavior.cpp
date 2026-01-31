@@ -1,5 +1,6 @@
 #include "PlayerBehavior.h"
 #include "../entities/Humanoid.h"
+#include "spaceships/SpaceShip.h"
 
 void PlayerBehavior::update(const UpdateContext &context, PhysicsEntity * owner) {
     const bool * state = SDL_GetKeyboardState(nullptr);

@@ -1,7 +1,6 @@
 #pragma once
 #include "Behavior.h"
 #include "json.hpp"
-#include "../player/Camera.h"
 
 class PlayerBehavior : public Behavior {
 private:

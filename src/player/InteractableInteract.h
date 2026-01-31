@@ -18,24 +18,26 @@ namespace Player {
 namespace Player {
     class InteractableInteract : public ShortLivedEntity {
     private:
-        GUITooltip * tooltip;
+        GUITooltip *tooltip;
 
-        PlayerVehicleTracker * player_vehicle_tracker;
+        PlayerVehicleTracker *player_vehicle_tracker;
 
         Events::Id on_player_in_vehicle_changed_id;
+
     protected:
-        IInteractable * iinteractable_under_mouse = nullptr;
+        IInteractable *iinteractable_under_mouse = nullptr;
 
         bool enabled;
 
     public:
         InteractableInteract(GUITooltip *tooltip,
-            PlayerVehicleTracker *player_vehicle_tracker)
-            : ShortLivedEntity({0,0}, 0),
+                             PlayerVehicleTracker *player_vehicle_tracker)
+            : ShortLivedEntity({0, 0}, 0),
               tooltip(tooltip),
               player_vehicle_tracker(player_vehicle_tracker),
               enabled(!player_vehicle_tracker->player_is_in_vehicle) {
-            on_player_in_vehicle_changed_id = player_vehicle_tracker->on_player_in_vehicle_changed.subscribe([this](bool in_vehicle){onEnterOrLeaveVehicle(in_vehicle);});
+            on_player_in_vehicle_changed_id = player_vehicle_tracker->on_player_in_vehicle_changed.subscribe(
+                [this](bool in_vehicle) { onEnterOrLeaveVehicle(in_vehicle); });
         }
 
         ~InteractableInteract() override {
@@ -47,9 +49,7 @@ namespace Player {
 
         void disable();
 
-
     public:
-
         void onEnterOrLeaveVehicle(bool in_vehicle);
 
 
@@ -60,6 +60,9 @@ namespace Player {
         void update(const UpdateContext &context) override;
 
         void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
-    };
 
+        InteractableInteract *initializeRendering(const EntityRendering::Context &context) override { return this; }
+
+        InteractableInteract *finalizeRendering(const EntityRendering::Context &context) override { return this; }
+    };
 }

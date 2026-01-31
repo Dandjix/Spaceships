@@ -7,6 +7,10 @@
 #include "math/Vectors.h"
 
 
+namespace EntityRendering {
+    struct Context;
+}
+
 namespace GameState {
     struct transientGameState;
 }
@@ -41,7 +45,6 @@ protected:
     void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture, Vector2Float destSize) const;
 
 public:
-
     Event<> on_die;
 
     Event<Entity*> on_ownership_change;
@@ -67,7 +70,12 @@ public:
 
     virtual void update(const UpdateContext& context);
     virtual void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context);
-    virtual void render(SDL_Renderer *renderer, const RenderingContext &context) = 0;
+
+    virtual Entity *initializeRendering(const EntityRendering::Context &context) = 0;
+
+    virtual Entity *finalizeRendering(const EntityRendering::Context &context) = 0;
+
+    virtual void render(SDL_Renderer *renderer, const RenderingContext &context) {}
     virtual void debugRender(SDL_Renderer *renderer, const RenderingContext &context) {}
 
     virtual void onRegistered(SpaceShip * newSpaceship) {}

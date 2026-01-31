@@ -1,7 +1,6 @@
 #pragma once
 #include "math/Color.h"
 #include "physics/PhysicsEntity.h"
-#include "textures/TextureSet.h"
 
 class CargoContainer : public PhysicsEntity {
 public:
@@ -27,22 +26,21 @@ public:
         Vector2Float scale = Vector2Float(61, 24).scaleToWorldPosition(),
         Color color = getRandomColor());
 
-    ~CargoContainer() override;
 
-    // Override update method (may not be necessary for CargoContainer)
     void update(const UpdateContext &context) override;
 
-    // Override render method
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
+
+    CargoContainer *initializeRendering(const EntityRendering::Context &context) override;
+
+    Entity *finalizeRendering(const EntityRendering::Context &context) override;
 
     static Entity *fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state);
 
     nlohmann::json toJson() override;
 
-private:
-    // Helper method to generate random color
-    static Color getRandomColor();
-
-public:
     constexpr std::string getJsonType() override;
+
+private:
+    static Color getRandomColor();
 };

@@ -21,5 +21,9 @@ public:
     constexpr std::string getJsonType() override;
 
     [[nodiscard]] std::string getVehicleName() const override {return "Combat Outfit";}
+
+    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };
 

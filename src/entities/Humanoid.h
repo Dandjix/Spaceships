@@ -45,6 +45,7 @@ public:
         return json;
     }
 
+
     static Humanoid * fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
         std::optional<float> angle = std::nullopt;
         if (json.contains("angle")) {
@@ -73,4 +74,8 @@ public:
     void setBehavior(Behavior *value) override {behavior = value;}
 
     Behavior * getBehavior() const override {return behavior;}
+
+    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    Entity *finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };

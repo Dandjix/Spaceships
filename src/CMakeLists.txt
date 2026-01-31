@@ -69,3 +69,7 @@ endif()
 target_compile_definitions(Spaceships PRIVATE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
 )
+
+target_compile_definitions(SpaceshipsLib INTERFACE
+        ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
+)

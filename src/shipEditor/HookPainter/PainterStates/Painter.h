@@ -74,6 +74,10 @@ namespace HookPainter {
         void confirmPlacement(const std::string& name);
 
         void setPrecision(Precision value);
+
+        Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+        Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
     };
 
 } // namespace HookPainter

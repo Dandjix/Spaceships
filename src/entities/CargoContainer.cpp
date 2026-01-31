@@ -1,36 +1,18 @@
 #include "CargoContainer.h"
 
-#include <iostream>
-#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-
+#include "entityRendering/RenderingInitialization.h"
 #include "physics/shapes/RectPhysicsShape.h"
 #include "textures/TextureSet.h"
 #include "textures/UsageMap.h"
 
 CargoContainer::CargoContainer(Vector2Int position, float angle, Variation variation, Vector2Float scale,
-                               Color color) : PhysicsEntity(position, angle, new RectPhysicsShape(this, scale)),
-                                              variation(variation), scale(scale), color(color) {
-    auto texture_set = Textures::UsageMap::getInstance().subscribe("objects/cargoContainer");
-    switch (variation) {
-        case Variation::blank:
-            texture = texture_set->at("blank");
-            break;
-        case Variation::EMA:
-            texture = texture_set->at("EMA");
-            break;
-        case Variation::SL:
-            texture = texture_set->at("SL");
-            break;
-        case Variation::SN:
-            texture = texture_set->at("SN");
-            break;
-    }
+                               Color color)
+    : PhysicsEntity(position,
+                    angle,
+                    new RectPhysicsShape(this, scale)),
+      variation(variation), scale(scale), texture(nullptr), color(color) {
 }
 
-CargoContainer::~CargoContainer() {
-    Textures::UsageMap::getInstance().unsubscribe("objects/cargoContainer");
-}
 
 nlohmann::json CargoContainer::toJson() {
     auto json = Entity::toJson();
@@ -59,11 +41,11 @@ void CargoContainer::render(SDL_Renderer *renderer, const RenderingContext &cont
 Entity *CargoContainer::fromJson(nlohmann::json::const_reference json,
                                  GameState::transientGameState &transient_game_state) {
     return new CargoContainer(Vector2Int::fromJson(
-    json["position"]),
-    json["angle"],
-    json["variation"],
-    Vector2Float::fromJson(json["scale"]),
-    Color::fromJson(json["color"]));
+                                  json["position"]),
+                              json["angle"],
+                              json["variation"],
+                              Vector2Float::fromJson(json["scale"]),
+                              Color::fromJson(json["color"]));
 }
 
 Color CargoContainer::getRandomColor() {
@@ -72,4 +54,30 @@ Color CargoContainer::getRandomColor() {
     unsigned char b = 128 + rand() % 127;
 
     return {r, g, b, 255};
+}
+
+CargoContainer *CargoContainer::initializeRendering(const EntityRendering::Context &context) {
+    auto texture_set = context.usage_map.subscribe("objects/cargoContainer");
+
+    switch (variation) {
+        case Variation::blank:
+            texture = texture_set->at("blank");
+            break;
+        case Variation::EMA:
+            texture = texture_set->at("EMA");
+            break;
+        case Variation::SL:
+            texture = texture_set->at("SL");
+            break;
+        case Variation::SN:
+            texture = texture_set->at("SN");
+            break;
+    }
+
+    return this;
+}
+
+Entity *CargoContainer::finalizeRendering(const EntityRendering::Context &context) {
+    context.usage_map.unsubscribe("objects/cargoContainer");
+    return this;
 }

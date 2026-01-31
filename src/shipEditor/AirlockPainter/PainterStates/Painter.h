@@ -82,6 +82,10 @@ namespace AirlockPainter {
             on_orientation_changed.emit(orientation);
         }
         Airlock::Orientation getOrientation() const {return orientation;}
+
+        Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+        Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
     };
 
 } // namespace Air

@@ -25,4 +25,8 @@ public:
     nlohmann::json toJson() override;
 
     static Lamp * fromJson(nlohmann::json json, GameState::transientGameState & transient_game_state);
+
+    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    Entity *finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };

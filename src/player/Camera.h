@@ -129,4 +129,8 @@ public:
     }
 
     constexpr std::string getJsonType() override {return "camera";}
+
+    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };

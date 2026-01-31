@@ -8,24 +8,25 @@ namespace Textures {
 
 class Sphere : public PhysicsEntity {
 private:
-    Textures::TextureSet * texture_set;  // Textures for the sphere
+    SDL_Texture *texture; // Texture for the sphere
     float radius;
+
 public:
     // Constructor
     Sphere(Vector2Int position, float radius);
 
-    ~Sphere() override;
+    float get_weight() override { return 5; }
 
-    float get_weight() override { return  5;}
+    Sphere *initializeRendering(const EntityRendering::Context &context) override;
 
-    // Override render function to render the sphere
-    void render(SDL_Renderer* renderer, const RenderingContext& context) override;
+    Entity *finalizeRendering(const EntityRendering::Context &context) override;
 
-    // Override update function (currently does nothing)
-    void update(const UpdateContext & context) override;
+    void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-    static Entity * fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
-        return new Sphere(Vector2Int::fromJson(json["position"]),json["radius"]);
+    void update(const UpdateContext &context) override;
+
+    static Entity *fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
+        return new Sphere(Vector2Int::fromJson(json["position"]), json["radius"]);
     }
 
     nlohmann::json toJson() override {
@@ -34,5 +35,5 @@ public:
         return json;
     }
 
-    constexpr std::string getJsonType() override {return "sphere";}
+    constexpr std::string getJsonType() override { return "sphere"; }
 };

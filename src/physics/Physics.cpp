@@ -4,6 +4,7 @@
 #include "../spaceships/SpaceShip.h"
 #include "../math/Vectors.h"
 #include "../spaceships/spaceshipTiles/SpaceshipTiles.h"
+#include "shapes/PhysicsShape.h"
 
 const float step = 1.0f;
 

@@ -3,3 +3,5 @@
 //
 
 #include "TextureSet.h"
+
+#include "UsageMap.h"

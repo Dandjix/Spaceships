@@ -4,6 +4,7 @@
 
 #pragma once
 #include <filesystem>
+#include <iostream>
 #include <ranges>
 #include <string>
 #include <unordered_map>
@@ -11,8 +12,12 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
+#include "UsageMap.h"
+
 
 namespace Textures {
+    class UsageMap;
+
     struct TextureSet {
     private:
         static bool hasEnding(std::string const &fullString, std::string const &ending) {
@@ -25,6 +30,9 @@ namespace Textures {
 
     protected:
         static std::unordered_map<std::string, SDL_Texture *> load(SDL_Renderer *renderer, const std::filesystem::path &path) {
+
+            std::cout << "in texture set, path is : " << path << std::endl;
+
             std::unordered_map<std::string, SDL_Texture *> textures = {};
 
             std::pmr::vector<std::string> accepted_texture_endings = {
@@ -43,22 +51,21 @@ namespace Textures {
             }
             return textures;
         }
-
-
     public:
         unsigned int user_count;
         std::unordered_map<std::string, SDL_Texture *> textures;
 
-        SDL_Texture * at(const std::string & key) {
-            return textures.at(key);
+        virtual SDL_Texture * at(const std::string & texture_key) {
+            return textures.at(texture_key);
         }
 
         TextureSet(SDL_Renderer * renderer, const std::filesystem::path &path,unsigned int user_count = 1)
             : user_count(user_count),
-              textures(std::move(load(renderer, path))) {
+              textures(std::move(load(renderer, path)))
+        {
         }
 
-        ~TextureSet() {
+        virtual ~TextureSet() {
             for (const auto texture: textures | std::views::values) {
                 SDL_DestroyTexture(texture);
             }

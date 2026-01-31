@@ -4,6 +4,8 @@
 
 #include "RectPhysicsShape.h"
 
+#include "game/Rendering.h"
+
 void RectPhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
 {
     PhysicsShape::debugRender(renderer, context);

@@ -9,6 +9,7 @@
 
 #include "game/Rendering.h"
 #include "physics/PhysicsEntity.h"
+#include "physics/shapes/PhysicsShape.h"
 #include "userInterface/fonts.h"
 
 /**

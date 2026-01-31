@@ -19,4 +19,8 @@ private:
     }
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
+
+    HookAppearance * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    HookAppearance * finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };

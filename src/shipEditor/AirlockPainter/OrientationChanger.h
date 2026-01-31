@@ -20,5 +20,9 @@ namespace AirlockPainter {
         }
 
         void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
+
+        OrientationChanger * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+        OrientationChanger * finalizeRendering(const EntityRendering::Context &context) override {return this;}
     };
 }

@@ -48,6 +48,10 @@ namespace HookDeleter{
         void disable();
 
         QueueOrder::Value getQueueOrder() override {return 100;}
+
+        PointDeleter * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+        PointDeleter * finalizeRendering(const EntityRendering::Context &context) override {return this;}
     };
 
 }

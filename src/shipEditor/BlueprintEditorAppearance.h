@@ -23,4 +23,8 @@ public:
 	QueueOrder::Value getQueueOrder() override {
 		return QueueOrder::LAST;
 	}
+
+	BlueprintEditorAppearance * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+	BlueprintEditorAppearance * finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };

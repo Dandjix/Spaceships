@@ -4,6 +4,7 @@
 
 #pragma once
 #include "physics/PhysicsEntity.h"
+#include "behavior/Behavior.h"
 
 class BehavioredEntity : public PhysicsEntity {
 

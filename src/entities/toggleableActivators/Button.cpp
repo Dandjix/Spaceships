@@ -17,13 +17,9 @@ Button::Button(Vector2Int position, float angle, Toggleable *linked_device)
           new RoundStaticPhysicsShape(
               this,
               Scaling::scaleToWorld(button_size_px))),
-      linked_entity(linked_device) {
-    texture = Textures::UsageMap::getInstance().subscribe("objects/button")->at("idle");
+      linked_entity(linked_device), texture(nullptr) {
 }
 
-Button::~Button() {
-    Textures::UsageMap::getInstance().unsubscribe("objects/button");
-}
 
 nlohmann::json Button::toJson() {
     auto json = PhysicsEntity::toJson();
@@ -72,6 +68,15 @@ void Button::setLinkedEntity(Toggleable *entity_to_link) {
     linked_entity = entity_to_link;
 }
 
-Toggleable * Button::getLinkedEntity() {
+Toggleable *Button::getLinkedEntity() {
     return linked_entity;
+}
+
+//TODO : create assets and more for humanoids
+Button *Button::initializeRendering(const EntityRendering::Context &context) {
+    return this;
+}
+
+Entity *Button::finalizeRendering(const EntityRendering::Context &context) {
+    return this;
 }

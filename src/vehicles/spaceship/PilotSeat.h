@@ -34,4 +34,8 @@ public:
     void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 
     constexpr Behavior::Control getControlType() override {return Behavior::PilotingSpaceship;}
+
+    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    Entity *finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };

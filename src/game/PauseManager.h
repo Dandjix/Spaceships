@@ -24,4 +24,8 @@ public:
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
     void setPaused(bool cond);
+
+    PauseManager * initializeRendering(const EntityRendering::Context &context) override{return this;}
+
+    PauseManager * finalizeRendering(const EntityRendering::Context &context) override{return this;}
 };

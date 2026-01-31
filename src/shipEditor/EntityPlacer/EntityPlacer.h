@@ -67,5 +67,9 @@ namespace EntityPlacement {
         void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
         QueueOrder::Value getQueueOrder() override { return QueueOrder::MIDDLE; }
+
+        Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+        Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
     };
 }

@@ -13,6 +13,7 @@
 #include "spaceshipTiles/SpaceshipTiles.h"
 #include "entities/scripts/LateUpdateEntity.h"
 #include "exterior/exteriors/TestExterior.h"
+#include "physics/Physics.h"
 
 namespace GameState {
     struct transientGameState;

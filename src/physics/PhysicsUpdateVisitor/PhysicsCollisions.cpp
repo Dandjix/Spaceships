@@ -8,6 +8,8 @@
 #include "math/Vectors.h"
 #include "../shapes/RoundPhysicsShape.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
+#include "spaceships/SpaceShip.h"
+#include "spaceships/Tile.h"
 /**
  * This is applied to two entities that are at the same position to unstuck them
  */

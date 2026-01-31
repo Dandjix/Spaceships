@@ -39,5 +39,13 @@ namespace Player {
         void unsubscribeEvents() const;
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override {}
+
+        PlayerVehicleTracker * initializeRendering(const EntityRendering::Context &context) override {
+            return this;
+        }
+
+        PlayerVehicleTracker *finalizeRendering(const EntityRendering::Context &context) override {
+            return this;
+        }
     };
 }

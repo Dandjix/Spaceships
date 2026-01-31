@@ -5,6 +5,7 @@
 #include "PhysicsShape.h"
 
 #include "../PhysicsEntity.h"
+#include "game/Rendering.h"
 
 
 void PhysicsShape::physicsUpdate(const PhysicsUpdateContext& context)

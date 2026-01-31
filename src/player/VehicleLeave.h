@@ -31,5 +31,9 @@ namespace Player {
         }
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override {}
+
+        VehicleLeave * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+        VehicleLeave * finalizeRendering(const EntityRendering::Context &context) override {return this;}
     };
 }
