@@ -17,6 +17,7 @@ TEST(BlueprintLoadingTestSuite, BlueprintLoadingTest) {
         "/home/timon/Projects/Spaceships/tests/gameState/blueprintLoading/working_example.json",
         transient_game_state,
         manager,
+        nullptr,
         true
         );
 

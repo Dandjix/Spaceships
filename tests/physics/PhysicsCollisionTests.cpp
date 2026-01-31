@@ -29,6 +29,10 @@ public:
     constexpr std::string getJsonType() override {
         return "mock_sphere";
     }
+
+    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+
+    Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
 };
 
 bool are_vectors_close(Vector2Int a, Vector2Int b, int tolerance = 10)
