@@ -2,9 +2,12 @@
 // Created by timon on 1/18/26.
 
 #pragma once
-#include "entities/Humanoid.h"
+#include <string>
 
 
+class PhysicsEntity;
+class Humanoid;
+class Entity;
 /**
  * Interactable objects, such as buttons, vehicles, terminals ...
  */

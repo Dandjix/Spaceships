@@ -5,6 +5,7 @@
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
+#include "behavior/BehavioredEntity.h"
 #include "entities/entityId/EntityId.h"
 #include "entities/scripts/ActiveWhenPausedEntity.h"
 #include "EntityData/EntityLoading.h"
@@ -14,6 +15,7 @@
 #include "entities/scripts/LateUpdateEntity.h"
 #include "exterior/exteriors/TestExterior.h"
 #include "physics/Physics.h"
+#include "physics/shapes/PhysicsShape.h"
 
 namespace GameState {
     struct transientGameState;

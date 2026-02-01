@@ -4,6 +4,10 @@
 
 #include "IInteractable.h"
 
+#include "entities/Humanoid.h"
+#include "entities/scripts/Entity.h"
+#include "math/Vectors.h"
+
 #define MAX_INTERACTABLE_DISTANCE_PIXELS 128
 
 std::string IInteractable::getInteractionText() const {

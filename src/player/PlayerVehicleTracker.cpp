@@ -5,6 +5,7 @@
 #include "PlayerVehicleTracker.h"
 
 #include "entities/Humanoid.h"
+#include "vehicles/Vehicle.h"
 
 
 inline void Player::PlayerVehicleTracker::determinePlayerAndVehicle(Entity *new_player) {

@@ -3,9 +3,10 @@
 //
 
 #pragma once
-#include "entities/Humanoid.h"
-#include "../entities/scripts/ShortLivedEntity.h"
-#include "vehicles/Vehicle.h"
+#include "entities/scripts/ShortLivedEntity.h"
+
+class Vehicle;
+class Humanoid;
 
 namespace Player {
     class PlayerVehicleTracker : public ShortLivedEntity {

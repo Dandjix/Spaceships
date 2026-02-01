@@ -3,14 +3,13 @@
 //
 
 #pragma once
+#include "entities/Humanoid.h"
 #include "vehicles/Vehicle.h"
-#include "physics/shapes/RoundStaticPhysicsShape.h"
+
 
 class PilotSeat : public Vehicle {
 public:
-    PilotSeat(const Vector2Int &position, float angle, Humanoid *pilot = nullptr)
-        : Vehicle(position, angle, new RoundStaticPhysicsShape(this, Scaling::scaleToWorld(48.0f)), pilot) {
-    }
+    PilotSeat(const Vector2Int &position, float angle, Humanoid *pilot = nullptr);
 
     ~PilotSeat() override = default;
 

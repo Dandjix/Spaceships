@@ -3,10 +3,11 @@
 //
 
 #pragma once
-#include "PlayerVehicleTracker.h"
-#include "../entities/scripts/ShortLivedEntity.h"
+#include "entities/scripts/ShortLivedEntity.h"
 
 namespace Player {
+    class PlayerVehicleTracker;
+
     class VehicleLeave : public ShortLivedEntity {
     private:
         PlayerVehicleTracker *player_vehicle_tracker;
@@ -16,20 +17,7 @@ namespace Player {
             : ShortLivedEntity({0, 0}, 0), player_vehicle_tracker(player_vehicle_tracker) {
         }
 
-        void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override {
-            if (!player_vehicle_tracker->player_is_in_vehicle)
-                return;
-
-
-            if (event.type == SDL_EVENT_KEY_DOWN) {
-                if (event.key.key == SDLK_R) {
-                    if (player_vehicle_tracker->vehicle->canStopPiloting()) {
-                        player_vehicle_tracker->vehicle->stopPiloting();
-                    }
-                }
-            }
-        }
-
+        void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override ;
         void render(SDL_Renderer *renderer, const RenderingContext &context) override {}
 
         VehicleLeave * initializeRendering(const EntityRendering::Context &context) override {return this;}

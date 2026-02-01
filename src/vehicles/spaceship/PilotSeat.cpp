@@ -4,6 +4,11 @@
 
 #include "PilotSeat.h"
 
+#include "physics/shapes/RoundStaticPhysicsShape.h"
+
+PilotSeat::PilotSeat(const Vector2Int &position, float angle, Humanoid *pilot): Vehicle(position, angle, new RoundStaticPhysicsShape(this, Scaling::scaleToWorld(48.0f)), pilot) {
+}
+
 void PilotSeat::render(SDL_Renderer *renderer, const RenderingContext &context) {
 }
 

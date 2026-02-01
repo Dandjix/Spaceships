@@ -5,12 +5,41 @@
 #include "Humanoid.h"
 
 #include "physics/Physics.h"
+#include "physics/shapes/RoundPhysicsShape.h"
+
+Humanoid::Humanoid(Vector2Int position, std::optional<float> angle, Behavior *behavior): BehavioredEntity(position, angle,
+                                                                                                          new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f))), behavior(behavior) {
+    radius = 20;
+    texture = nullptr;
+}
 
 void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
+    renderTexture(renderer, context, texture, Vector2Float(
+                      radius,
+                      radius
+                  )
+    );
+}
 
-    renderTexture(renderer,context,texture,Vector2Float(
-        radius,
-        radius
-        )
+FROM_JSON_IMPLEMENTATION(Humanoid, "humanoid") {
+    std::optional<float> angle = std::nullopt;
+    if (json.contains("angle")) {
+        angle = json["angle"];
+    }
+
+    Behavior *behavior = nullptr;
+
+
+    if (json.contains("behavior")) {
+        behavior = Behavior::fromJson(json["behavior"]);
+    }
+
+    return new Humanoid(
+        Vector2Int{
+            json["position"]["x"],
+            json["position"]["y"]
+        },
+        angle,
+        behavior
     );
 }

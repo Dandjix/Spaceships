@@ -6,11 +6,8 @@ class CombatOutfit : public Vehicle
     protected:
 
 public:
-    CombatOutfit(const Vector2Int &position, float angle,Humanoid *pilot = nullptr)
-        : Vehicle(position, angle,new RoundPhysicsShape(this,Scaling::scaleToWorld(64.0f)), pilot)
-    {
+    CombatOutfit(const Vector2Int &position, float angle,Humanoid *pilot = nullptr);
 
-    }
 public:
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
