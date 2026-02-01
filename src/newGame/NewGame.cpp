@@ -22,6 +22,7 @@ std::filesystem::path NewGame::ConstructNewGame() {
                 transient_game_state,
                 EntityId::Manager::getInstance(),
                 nullptr,
+                true,
                 true);
 
     auto player = new Humanoid(Vector2Int{128, 128}.scaleToWorldPosition(), 45, new PlayerBehavior());

@@ -149,7 +149,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 EntityId::Manager::getInstance().reset();
                 GameState::transientGameState transient_game_state = {};
 
-                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(),&entity_loading_context, true);
+                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(),&entity_loading_context, true, true);
 
                 blueprint_name = path;
                 *blueprint = *loaded;

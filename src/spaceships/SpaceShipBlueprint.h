@@ -50,8 +50,9 @@ public :
         const std::filesystem::path &path,
         GameState::transientGameState &transient_game_state,
         EntityId::Manager &entity_id_manager,
-        EntityRendering::Context *entity_rendering_context, bool
-        create_blueprint_entities = false);
+        EntityRendering::Context *entity_rendering_context,
+        bool create_blueprint_entities = false,
+        bool finalize_json_deserialization = false);
 
     static SpaceShipBlueprint *loads(
         const std::string &from,
@@ -59,5 +60,6 @@ public :
         GameState::transientGameState &transient_game_state,
         EntityId::Manager &entity_id_manager,
         EntityRendering::Context *entity_rendering_context,
-        bool create_blueprint_entities);
+        bool create_blueprint_entities = false,
+        bool finalize_json_deserialization = false);
 };
