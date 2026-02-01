@@ -36,7 +36,7 @@ void CargoContainer::render(SDL_Renderer *renderer, const RenderingContext &cont
     renderTexture(renderer, context, texture, halfSize);
 }
 
-FROM_JSON_IMPLEMENTATION(CargoContainer) {
+FROM_JSON_DEFINITION(CargoContainer) {
     return new CargoContainer(Vector2Int::fromJson(
                                   json["position"]),
                               json["angle"],

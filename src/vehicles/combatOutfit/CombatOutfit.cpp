@@ -11,7 +11,7 @@ nlohmann::json CombatOutfit::toJson() {
     return Vehicle::toJson();
 }
 
-FROM_JSON_IMPLEMENTATION(CombatOutfit) {
+FROM_JSON_DEFINITION(CombatOutfit) {
     if (json.contains("pilot")) {
         return new CombatOutfit(Vector2Int::fromJson(json["position"]),json["angle"],Humanoid::fromJson(json["pilot"], transient_game_state));
     }

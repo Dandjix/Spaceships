@@ -13,7 +13,7 @@ PilotSeat::PilotSeat(const Vector2Int &position, float angle, Humanoid *pilot) :
 void PilotSeat::render(SDL_Renderer *renderer, const RenderingContext &context) {
 }
 
-FROM_JSON_IMPLEMENTATION(PilotSeat) {
+FROM_JSON_DEFINITION(PilotSeat) {
     if (json.contains("pilot")) {
         return new PilotSeat(Vector2Int::fromJson(json["position"]), json["angle"],
                              Humanoid::fromJson(json["pilot"], transient_game_state));

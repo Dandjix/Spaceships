@@ -42,6 +42,6 @@ inline static const EntityLoading::RegisterEntity<ClassName> registration_##Clas
 public: \
 static ClassName * fromJson(const nlohmann::json& json, GameState::transientGameState& transient_game_state)
 
-#define FROM_JSON_IMPLEMENTATION(ClassName)\
+#define FROM_JSON_DEFINITION(ClassName)\
 ClassName * ClassName::fromJson(const nlohmann::json &json, GameState::transientGameState &transient_game_state)
 

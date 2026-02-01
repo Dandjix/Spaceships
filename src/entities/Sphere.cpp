@@ -12,7 +12,7 @@ Sphere::Sphere(Vector2Int position, float radius) : PhysicsEntity(position, std:
                                                     texture(nullptr), radius(radius) {
 }
 
-FROM_JSON_IMPLEMENTATION(Sphere) {
+FROM_JSON_DEFINITION(Sphere) {
     return new Sphere(Vector2Int::fromJson(json["position"]), json["radius"]);
 }
 
