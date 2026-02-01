@@ -15,10 +15,9 @@
 #include "vehicles/combatOutfit/CombatOutfit.h"
 #include "vehicles/spaceship/PilotSeat.h"
 
-Entity * EntityLoading::fromJson(nlohmann::json entry, GameState::transientGameState &transient_game_state,
-                                 EntityRendering::Context *entity_rendering_context) {
-
-    Entity * entity = nullptr;
+Entity *EntityLoading::fromJson(nlohmann::json entry, GameState::transientGameState &transient_game_state,
+                                EntityRendering::Context *entity_rendering_context) {
+    Entity *entity = nullptr;
 
     auto t = entry["type"];
 
@@ -27,36 +26,12 @@ Entity * EntityLoading::fromJson(nlohmann::json entry, GameState::transientGameS
         throw std::invalid_argument("type entry not filled");
     }
 
-    if (t == "humanoid") {
-        entity = Humanoid::fromJson(entry, transient_game_state);
-    }
-    else if (t == "sphere") {
-        entity = Sphere::fromJson(entry, transient_game_state);
-    }
-    else if (t == "cargo_container") {
-        entity = CargoContainer::fromJson(entry, transient_game_state);
-    }
-    else if (t =="camera") {
-        entity = Camera::fromJson(entry, transient_game_state);
-    }
-    else if (t=="combat_outfit") {
-        entity = CombatOutfit::fromJson(entry, transient_game_state);
-    }
-    else if (t=="pilot_seat") {
-        entity = PilotSeat::fromJson(entry, transient_game_state);
-    }
-    else if (t=="button") {
-        entity = Button::fromJson(entry,transient_game_state);
-    }
-    else if (t=="lamp") {
-        entity = Lamp::fromJson(entry,transient_game_state);
-    }
-    else {
-        std::string message = "t : ";
-        message.append(t);
-        message.append(" not handled");
-
-        throw std::invalid_argument(message);
+    if (EntityFactory::getInstance().contains(t)) {
+        auto factory = EntityFactory::getInstance().at(t);
+        entity = factory(entry,transient_game_state);
+    } else {
+        std::string type = t;
+        throw std::runtime_error(std::format("fromJson not implemented properly for {}",type));
     }
 
     if (entity_rendering_context != nullptr)

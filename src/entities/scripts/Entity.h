@@ -66,6 +66,12 @@ public:
     virtual nlohmann::json toJson()=0;
     virtual void finalizeJsonDeserialization(const GameState::transientGameState &transient_game_state) {};
     virtual bool isJsonSerializable(){return true;}
+
+    /**
+     * DO NOT DECLARE / DEFINE THIS DIRECTLY : this is done by using the
+     * FROM_JSON_DECLARATION macro
+     * @return
+     */
     virtual constexpr std::string getJsonType()=0;
 
     virtual void update(const UpdateContext& context);

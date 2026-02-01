@@ -16,25 +16,19 @@ public:
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-    [[nodiscard]] std::string getVehicleName() const override {return "Pilot Seat";}
+    [[nodiscard]] std::string getVehicleName() const override { return "Pilot Seat"; }
 
 public:
-    constexpr std::string getJsonType() override { return "pilot_seat";}
-    nlohmann::json toJson() override {return Vehicle::toJson();}
-    static PilotSeat * fromJson(nlohmann::json json, GameState::transientGameState &transient_game_state) {
-        if (json.contains("pilot")) {
-            return new PilotSeat(Vector2Int::fromJson(json["position"]),json["angle"],Humanoid::fromJson(json["pilot"], transient_game_state));
-        }
-        return new PilotSeat(Vector2Int::fromJson(json["position"]),json["angle"]);
-    }
+    nlohmann::json toJson() override { return Vehicle::toJson(); }
+    FROM_JSON_DECLARATION(PilotSeat, "pilot_seat");
 
     void update(const UpdateContext &context) override;
 
     void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 
-    constexpr Behavior::Control getControlType() override {return Behavior::PilotingSpaceship;}
+    constexpr Behavior::Control getControlType() override { return Behavior::PilotingSpaceship; }
 
-    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+    Entity *initializeRendering(const EntityRendering::Context &context) override { return this; }
 
-    Entity *finalizeRendering(const EntityRendering::Context &context) override {return this;}
+    Entity *finalizeRendering(const EntityRendering::Context &context) override { return this; }
 };

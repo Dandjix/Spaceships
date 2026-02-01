@@ -12,6 +12,9 @@ Sphere::Sphere(Vector2Int position, float radius) : PhysicsEntity(position, std:
                                                     texture(nullptr), radius(radius) {
 }
 
+FROM_JSON_IMPLEMENTATION(Sphere) {
+    return new Sphere(Vector2Int::fromJson(json["position"]), json["radius"]);
+}
 
 Sphere *Sphere::initializeRendering(const EntityRendering::Context &context) {
     texture = context.usage_map.subscribe("objects/sphere")->at("1");

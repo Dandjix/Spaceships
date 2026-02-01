@@ -4,6 +4,7 @@
 #include "../game/Rendering.h"
 #include "entities/scripts/LateUpdateEntity.h"
 #include "spaceships/SpaceShip.h"
+#include "spaceships/EntityData/EntityLoading.h"
 
 class Camera : public LateUpdateEntity {  // Inherit from Entity
 protected:
@@ -110,9 +111,7 @@ public:
         return json;
     }
 
-    static Camera *fromJson(nlohmann::json json, GameState::transientGameState &transient_game_state) {
-        return new Camera(Vector2Int::fromJson(json["position"]),json["angle"],json["scale"]);
-    }
+    FROM_JSON_DECLARATION(Camera,"camera");
 
     void registerInSpaceship(SpaceShip *space_ship) override {
         LateUpdateEntity::registerInSpaceship(space_ship);
@@ -127,8 +126,6 @@ public:
     void onRegistered(SpaceShip *newSpaceship) override {
         working_spaceship = newSpaceship;
     }
-
-    constexpr std::string getJsonType() override {return "camera";}
 
     Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
 

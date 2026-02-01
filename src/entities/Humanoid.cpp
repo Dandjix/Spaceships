@@ -21,7 +21,7 @@ void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
     );
 }
 
-FROM_JSON_IMPLEMENTATION(Humanoid, "humanoid") {
+FROM_JSON_IMPLEMENTATION(Humanoid) {
     std::optional<float> angle = std::nullopt;
     if (json.contains("angle")) {
         angle = json["angle"];

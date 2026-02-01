@@ -7,6 +7,7 @@
 #include "../toggleables/scripts/Toggleable.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 #include "scripts/ToggleableActivator.h"
+#include "spaceships/EntityData/EntityLoading.h"
 
 
 namespace GameState {
@@ -26,10 +27,9 @@ public:
 
     nlohmann::json toJson() override;
 
-    static Button * fromJson(const nlohmann::json & json,GameState::transientGameState & transient_game_state);
-    void finalizeJsonDeserialization(const GameState::transientGameState &transient_game_state) override;
+    FROM_JSON_DECLARATION(Button,"button");
 
-    std::string getJsonType() override { return "button"; }
+    void finalizeJsonDeserialization(const GameState::transientGameState &transient_game_state) override;
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 

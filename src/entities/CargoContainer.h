@@ -1,6 +1,7 @@
 #pragma once
 #include "math/Color.h"
 #include "physics/PhysicsEntity.h"
+#include "spaceships/EntityData/EntityLoading.h"
 
 class CargoContainer : public PhysicsEntity {
 public:
@@ -35,11 +36,10 @@ public:
 
     Entity *finalizeRendering(const EntityRendering::Context &context) override;
 
-    static Entity *fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state);
+    FROM_JSON_DECLARATION(CargoContainer,"cargo_container");
 
     nlohmann::json toJson() override;
 
-    constexpr std::string getJsonType() override;
 
 private:
     static Color getRandomColor();

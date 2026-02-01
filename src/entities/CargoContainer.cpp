@@ -22,8 +22,6 @@ nlohmann::json CargoContainer::toJson() {
     return json;
 }
 
-constexpr std::string CargoContainer::getJsonType() { return "cargo_container"; }
-
 void CargoContainer::update(const UpdateContext &context) {
     // CargoContainer might not need to move, so leave it empty.
 }
@@ -38,8 +36,7 @@ void CargoContainer::render(SDL_Renderer *renderer, const RenderingContext &cont
     renderTexture(renderer, context, texture, halfSize);
 }
 
-Entity *CargoContainer::fromJson(nlohmann::json::const_reference json,
-                                 GameState::transientGameState &transient_game_state) {
+FROM_JSON_IMPLEMENTATION(CargoContainer) {
     return new CargoContainer(Vector2Int::fromJson(
                                   json["position"]),
                               json["angle"],

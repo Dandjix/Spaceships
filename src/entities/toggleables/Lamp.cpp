@@ -36,7 +36,7 @@ nlohmann::json Lamp::toJson() {
     return json;
 }
 
-Lamp * Lamp::fromJson(nlohmann::json json, GameState::transientGameState & transient_game_state) {
+FROM_JSON_IMPLEMENTATION(Lamp) {
     auto lamp = new Lamp(Vector2Int::fromJson(json["position"]),json["angle"],json["entity_id"],json["on"]);
     transient_game_state.identified_entities[json["entity_id"]] = lamp;
     return lamp;

@@ -32,7 +32,7 @@ nlohmann::json Button::toJson() {
     return json;
 }
 
-Button *Button::fromJson(const nlohmann::json &json, GameState::transientGameState &transient_game_state) {
+FROM_JSON_IMPLEMENTATION(Button) {
     auto button = new Button(Vector2Int::fromJson(json["position"]), json["angle"], nullptr);
     transient_game_state.transient_data_per_entity[button]["linked_entity_id"] = json["linked_entity_id"];
     return button;

@@ -5,6 +5,7 @@
 #pragma once
 #include "entities/entityId/EntityId.h"
 #include "entities/toggleables/scripts/Toggleable.h"
+#include "spaceships/EntityData/EntityLoading.h"
 
 class Lamp : public Toggleable{
 protected:
@@ -14,8 +15,6 @@ public:
         : Toggleable(position, angle, entity_id), on(on) {
     }
 
-    std::string getJsonType() override {return "lamp";}
-
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
     bool getStatus() override {return on;}
@@ -24,7 +23,7 @@ public:
 
     nlohmann::json toJson() override;
 
-    static Lamp * fromJson(nlohmann::json json, GameState::transientGameState & transient_game_state);
+    FROM_JSON_DECLARATION(Lamp,"lamp");
 
     Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
 

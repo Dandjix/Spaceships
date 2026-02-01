@@ -1,5 +1,6 @@
 #pragma once
 #include "physics/PhysicsEntity.h"
+#include "spaceships/EntityData/EntityLoading.h"
 
 
 namespace Textures {
@@ -25,15 +26,11 @@ public:
 
     void update(const UpdateContext &context) override;
 
-    static Entity *fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state) {
-        return new Sphere(Vector2Int::fromJson(json["position"]), json["radius"]);
-    }
+    FROM_JSON_DECLARATION(Sphere,"sphere");
 
     nlohmann::json toJson() override {
         auto json = Entity::toJson();
         json["radius"] = radius;
         return json;
     }
-
-    constexpr std::string getJsonType() override { return "sphere"; }
 };

@@ -13,9 +13,7 @@ public:
 
     nlohmann::json toJson() override;
 
-    static Entity * fromJson(nlohmann::json::const_reference json, GameState::transientGameState &transient_game_state);
-
-    constexpr std::string getJsonType() override;
+    FROM_JSON_DECLARATION(CombatOutfit,"combat_outfit");
 
     [[nodiscard]] std::string getVehicleName() const override {return "Combat Outfit";}
 
