@@ -6,6 +6,7 @@
 #include <unordered_set>
 
 #include "entities/scripts/Entity.h"
+#include "entityContainer/EntityContainer.h"
 #include "exterior/SpaceShipExterior.h"
 #include "hashProximityList/HashProximityMap.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
@@ -97,10 +98,10 @@ public:
 
 public:
     std::filesystem::path blueprint_path;
-    std::unordered_set<Entity *> entities;
-    std::unordered_set<PhysicsEntity *> physics_entities;
-    std::unordered_set<LateUpdateEntity *> late_update_entities;
-    std::unordered_set<ActiveWhenPausedEntity *> active_when_paused_entities;
+    EntityContainer<Entity *> entities;
+    EntityContainer<PhysicsEntity *> physics_entities;
+    EntityContainer<LateUpdateEntity *> late_update_entities;
+    EntityContainer<ActiveWhenPausedEntity *> active_when_paused_entities;
     std::vector<Camera *> cameras;
 
     SpaceshipHooks hooks;
