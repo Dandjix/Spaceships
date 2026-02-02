@@ -55,6 +55,10 @@ namespace Textures {
         unsigned int user_count;
         std::unordered_map<std::string, SDL_Texture *> textures;
 
+        /**
+         * @param texture_key the name of the .png file without the .png extension (ie "door" for "door.png"
+         * @return a pointer to the texture
+         */
         virtual SDL_Texture * at(const std::string & texture_key) {
             return textures.at(texture_key);
         }
