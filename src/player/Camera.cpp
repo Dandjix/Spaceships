@@ -6,7 +6,7 @@
 
 #include "spaceships/EntityData/EntityLoading.h"
 
-FROM_JSON_IMPLEMENTATION(Camera)
+FROM_JSON_DEFINITION(Camera)
 {
     return new Camera(Vector2Int::fromJson(json["position"]),json["angle"],json["scale"]);
 }
