@@ -85,6 +85,8 @@ int main(int argc, char *argv[]) {
             case MenuNavigation::Settings:
                 throw std::logic_error("Function not yet implemented");
                 break;
+            case MenuNavigation::Quit:
+                break;
         }
     }
     SDL_DestroyRenderer(renderer);
