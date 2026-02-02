@@ -7,7 +7,7 @@
 
 class PhysicsEntity;
 class RoundPhysicsShape;
-class RectPhysicsShape;
+class ConvexPhysicsShape;
 class SpaceShip;
 class RoundStaticPhysicsShape;
 
@@ -17,7 +17,7 @@ public:
     explicit PhysicsUpdateVisitor()= default;
     virtual ~PhysicsUpdateVisitor() = default;
 
-    virtual void visitRect(RectPhysicsShape * e2, SpaceShip* space_ship)=0;
+    virtual void visitConvex(ConvexPhysicsShape * e2, SpaceShip* space_ship)=0;
     virtual void visitRound(RoundPhysicsShape * e2, SpaceShip* space_ship)=0;
     virtual void visitStaticRound(RoundStaticPhysicsShape * e2, SpaceShip* space_ship)=0;
     virtual void visitWall(SpaceShip* space_ship)=0;

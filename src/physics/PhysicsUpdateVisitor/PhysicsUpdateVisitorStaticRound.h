@@ -16,8 +16,8 @@ public:
 
     ~PhysicsUpdateVisitorStaticRound() override = default;
 
-    void visitRect(RectPhysicsShape *e2, SpaceShip *space_ship) override {
-        return PhysicsCollisions::visitStaticRoundRect(e1,e2,space_ship);
+    void visitConvex(ConvexPhysicsShape *e2, SpaceShip *space_ship) override {
+        return PhysicsCollisions::visitStaticRoundConvex(e1,e2,space_ship);
     }
 
     void visitRound(RoundPhysicsShape *e2, SpaceShip *space_ship) override {

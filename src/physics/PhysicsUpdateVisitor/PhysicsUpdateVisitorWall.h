@@ -11,7 +11,7 @@
 
 class PhysicsEntity;
 class RoundPhysicsShape;
-class RectPhysicsShape;
+class ConvexPhysicsShape;
 class SpaceShip;
 
 class PhysicsUpdateVisitorWall : public PhysicsUpdateVisitor {
@@ -19,8 +19,8 @@ public:
     PhysicsUpdateVisitorWall() : PhysicsUpdateVisitor() {
     }
 
-    void visitRect(RectPhysicsShape *e2, SpaceShip *space_ship) override {
-        PhysicsCollisions::visitRectWall(e2, space_ship);
+    void visitConvex(ConvexPhysicsShape *e2, SpaceShip *space_ship) override {
+        PhysicsCollisions::visitConvexWall(e2, space_ship);
     }
 
     void visitRound(RoundPhysicsShape *e2, SpaceShip *space_ship) override {

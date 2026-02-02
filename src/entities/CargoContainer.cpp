@@ -5,7 +5,7 @@
 #include "textures/TextureSet.h"
 #include "textures/UsageMap.h"
 
-CargoContainer::CargoContainer(Vector2Int position, float angle, Variation variation, Vector2Float scale,
+CargoContainer::CargoContainer(Vector2Int position, float angle, Variation variation, Vector2Int scale,
                                Color color)
     : PhysicsEntity(position,
                     angle,
@@ -30,7 +30,7 @@ void CargoContainer::render(SDL_Renderer *renderer, const RenderingContext &cont
     SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 
     // Calculate the half-size of the container
-    Vector2Float halfSize = scale.scaleToScreenPosition() * 0.5f;
+    Vector2Float halfSize = Vectors::toVector2Float(scale.scaleToScreenPosition()) * 0.5f;
 
     // Render the texture
     renderTexture(renderer, context, texture, halfSize);
@@ -41,7 +41,7 @@ FROM_JSON_DEFINITION(CargoContainer) {
                                   json["position"]),
                               json["angle"],
                               json["variation"],
-                              Vector2Float::fromJson(json["scale"]),
+                              Vector2Int::fromJson(json["scale"]),
                               Color::fromJson(json["color"]));
 }
 

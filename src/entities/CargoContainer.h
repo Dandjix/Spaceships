@@ -15,7 +15,7 @@ public:
 private:
     Variation variation;
     Color color;
-    Vector2Float scale;
+    Vector2Int scale;
     SDL_Texture *texture;
 
 public:
@@ -24,7 +24,7 @@ public:
         Vector2Int position,
         float angle = 0.0f,
         Variation variation = Variation::blank,
-        Vector2Float scale = Vector2Float(61, 24).scaleToWorldPosition(),
+        Vector2Int scale = Vector2Int(61, 24).scaleToWorldPosition(),
         Color color = getRandomColor());
 
 

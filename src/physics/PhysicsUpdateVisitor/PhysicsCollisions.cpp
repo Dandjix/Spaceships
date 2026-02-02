@@ -17,17 +17,17 @@ const float jolt = 3;
 
 namespace PhysicsCollisions
 {
-    void visitRects(RectPhysicsShape* shape1, RectPhysicsShape* shape2, SpaceShip* space_ship)
+    void visitConvexes(ConvexPhysicsShape* shape1, ConvexPhysicsShape* shape2, SpaceShip* space_ship)
     {
         // std::cout << "rect on rect collision" << std::endl;
     }
 
-    void visitRectRound(RectPhysicsShape* shape1, RoundPhysicsShape* shape2, SpaceShip* space_ship)
+    void visitConvexRound(ConvexPhysicsShape* shape1, RoundPhysicsShape* shape2, SpaceShip* space_ship)
     {
         // std::cout << "rect on round collision" << std::endl;
     }
 
-    void visitStaticRoundRect(RoundStaticPhysicsShape *shape1, RectPhysicsShape *shape2, SpaceShip *space_ship) {
+    void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
 
     }
 
@@ -166,7 +166,7 @@ namespace PhysicsCollisions
 }
 
 
-    void visitRectWall(RectPhysicsShape* shape1, SpaceShip* space_ship)
+    void visitConvexWall(ConvexPhysicsShape* shape1, SpaceShip* space_ship)
     {
         // std::cout << "rect on wall collision" << std::endl;
     }

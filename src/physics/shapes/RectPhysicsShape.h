@@ -3,37 +3,27 @@
 //
 
 #pragma once
+#include "ConvexPhysicsShape.h"
 #include "../PhysicsEntity.h"
 #include "PhysicsShape.h"
-#include "../PhysicsUpdateVisitor/PhysicsUpdateVisitorRect.h"
+#include "../PhysicsUpdateVisitor/PhysicsUpdateVisitorConvex.h"
 
 
-class RectPhysicsShape : public PhysicsShape
-{
+class RectPhysicsShape : public ConvexPhysicsShape {
 public:
     /**
      * The dimensions of the shape in world units
      */
-    Vector2Int dimensions;
-
-    void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override;
-
-    PhysicsUpdateVisitor * createVisitor() override
-    {
-        return new PhysicsUpdateVisitorRect(this);
+public:
+    RectPhysicsShape(PhysicsEntity *owner_entity, Vector2Int dimensions)
+        : ConvexPhysicsShape(
+            owner_entity,
+            {
+                {-dimensions.x / 2, -dimensions.y / 2},
+                {dimensions.x / 2, -dimensions.y / 2},
+                {dimensions.x / 2, dimensions.y / 2},
+                {-dimensions.x / 2, dimensions.y / 2}
+            }
+        ) {
     }
-
-    void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship) override
-    {
-        visitor->visitRect(this,space_ship);
-    }
-    BoundingBox<int> getBoundingBox() override;
-
-    RectPhysicsShape(PhysicsEntity * owner_entity, Vector2Float dimensions) : PhysicsShape(owner_entity), dimensions(dimensions) {  }
-
-    bool is_inside(Vector2Int world_position) override;
-
-private:
 };
-
-
