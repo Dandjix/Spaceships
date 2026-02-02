@@ -11,7 +11,10 @@
 class RectPhysicsShape : public PhysicsShape
 {
 public:
-    Vector2Float dimensions;
+    /**
+     * The dimensions of the shape in world units
+     */
+    Vector2Int dimensions;
 
     void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override;
 
