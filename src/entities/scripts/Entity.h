@@ -81,7 +81,7 @@ public:
 
     virtual Entity *finalizeRendering(const EntityRendering::Context &context) = 0;
 
-    virtual void render(SDL_Renderer *renderer, const RenderingContext &context) {}
+    virtual void render(SDL_Renderer *renderer, const RenderingContext &context) = 0;
     virtual void debugRender(SDL_Renderer *renderer, const RenderingContext &context) {}
 
     virtual void onRegistered(SpaceShip * newSpaceship) {}
