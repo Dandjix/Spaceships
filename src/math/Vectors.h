@@ -57,10 +57,6 @@ struct Vector2 {
         return Vector2<T>(x % modulus, y % modulus);
     }
 
-    T operator*(const Vector2<T> &other) const {
-        return x * other.x + y * other.y;
-    }
-
     Vector2<T> operator+(const Vector2<T> &other) const {
         return Vector2<T>(x + other.x, y + other.y);
     }
@@ -94,7 +90,7 @@ struct Vector2 {
             auto sinF = static_cast<int64_t>(sinf(radians) * SCALE);
             T x2 = (cosF * x - sinF * y) >> 16;
             T y2 = (sinF * x + cosF * y) >> 16;
-            return Vector2<T>( x2, y2 );
+            return Vector2<T>(x2, y2);
         } else {
             throw std::logic_error("rotate() is only defined for floats and ints");
         }
@@ -102,6 +98,10 @@ struct Vector2 {
 
     [[nodiscard]] float dot(Vector2<T> other) const {
         return (this->x * other.x) + (this->y * other.y);
+    }
+
+    [[nodiscard]] float cross(Vector2<T> other) const {
+        return this->x * other.y - this->y * other.x;
     }
 
     /**
@@ -184,10 +184,9 @@ struct Vector2 {
         return entry;
     }
 
-    [[nodiscard]]static Vector2<T> lerp(Vector2<T> a, Vector2<T> b, float c) {
-
-        T x = static_cast<T>(static_cast<float>(a.x)*(1-c)+static_cast<float>(b.x)*(c));
-        T y = static_cast<T>(static_cast<float>(a.y)*(1-c)+static_cast<float>(b.y)*(c));
+    [[nodiscard]] static Vector2<T> lerp(Vector2<T> a, Vector2<T> b, float c) {
+        T x = static_cast<T>(static_cast<float>(a.x) * (1 - c) + static_cast<float>(b.x) * (c));
+        T y = static_cast<T>(static_cast<float>(a.y) * (1 - c) + static_cast<float>(b.y) * (c));
 
         return Vector2<T>(
             x,
