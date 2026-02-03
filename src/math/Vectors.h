@@ -21,7 +21,7 @@ template<typename T>
 struct Vector2 {
     T x, y;
 
-    Vector2(T x = 0, T y = 0) : x(x), y(y) {
+    Vector2(T x = 0, T y = 0) : x(x), y(y) { // NOLINT(*-explicit-constructor)
     }
 
     [[nodiscard]] float length() const {
@@ -80,7 +80,7 @@ struct Vector2 {
      */
     [[nodiscard]] Vector2<T> rotate(float degrees) const {
         if constexpr (std::is_same_v<T, float>) {
-            float radians = degrees * (3.14159265358979323846f / 180.0f);
+            float radians = degrees * (static_cast<float>(M_PI) / 180.0f);
             float cosB = cosf(radians);
             float sinB = sinf(radians);
             T x2 = cosB * x - sinB * y;
@@ -89,15 +89,30 @@ struct Vector2 {
         } else if constexpr (std::is_same_v<T, int>) {
             constexpr int64_t SCALE = 1 << 16;
 
-            float radians = degrees * (3.14159265358979323846f / 180.0f);
+            float radians = degrees * (static_cast<float>(M_PI) / 180.0f);
             auto cosF = static_cast<int64_t>(cosf(radians) * SCALE);
             auto sinF = static_cast<int64_t>(sinf(radians) * SCALE);
             T x2 = (cosF * x - sinF * y) >> 16;
             T y2 = (sinF * x + cosF * y) >> 16;
             return Vector2<T>( x2, y2 );
         } else {
-            static_assert(std::is_same_v<T, float>, "rotate() is only defined for floats and ints");
+            throw std::logic_error("rotate() is only defined for floats and ints");
         }
+    }
+
+    [[nodiscard]] float dot(Vector2<T> other) const {
+        return (this->x * other.x) + (this->y * other.y);
+    }
+
+    /**
+     * positive angle between this vector and another
+     * @param other another vector
+     * @return the angle, unsigned
+     */
+    [[nodiscard]] float angle_to(Vector2<T> other) const {
+        float dot_product = this->dot(other);
+        float angle_radians = std::acos(dot_product / (this->length() * other.length()));
+        return angle_radians * 180.0f / static_cast<float>(M_PI); // Convert to degrees
     }
 
     /// <summary>
