@@ -25,7 +25,7 @@ namespace Physics
 
 	RaycastHitInfo RayCast(Vector2Int origin, Vector2Float direction, SpaceShip * spaceship, float maxDistance = FLT_MAX);
 
-	std::vector<PhysicsEntity*> EntityPointCast(Vector2Int world_position, SpaceShip * space_ship);
+	[[nodiscard]] std::vector<PhysicsEntity*> EntityPointCast(Vector2Int world_position, SpaceShip * space_ship);
 }
 
 struct PhysicsUpdateContext

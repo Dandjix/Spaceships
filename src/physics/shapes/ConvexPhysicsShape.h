@@ -11,19 +11,20 @@ protected:
     std::vector<Vector2Int> vertices;
 
 public:
-    explicit ConvexPhysicsShape(PhysicsEntity *owner_entity, const std::vector<Vector2Int> &vertices)
-        : PhysicsShape(owner_entity), vertices(vertices) {
-    }
+    explicit ConvexPhysicsShape(PhysicsEntity *owner_entity, const std::vector<Vector2Int> &vertices);
 
     /**
      * @return the raw stored vertices values, not transformed in any way. To get the world position of the vertices,
-     * see getVertices
+     * see getVertices.
+     * winding is always clockwise
      */
     [[nodiscard]] std::vector<Vector2Int> getRawVertices() const { return vertices; }
     /**
-     * @return the world position of the vertices, rotated and translated based on the entity's actual position
+     * @return the world position of the vertices, rotated and translated based on the entity's actual position.
+     * winding is always clockwise
      */
     [[nodiscard]] std::vector<Vector2Int> getVertices() const;
+
 
     PhysicsUpdateVisitor *createVisitor() override {
         return new PhysicsUpdateVisitorConvex(this);
