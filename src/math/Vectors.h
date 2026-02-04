@@ -96,11 +96,13 @@ struct Vector2 {
         }
     }
 
-    [[nodiscard]] float dot(Vector2<T> other) const {
+    template<typename T2>
+    [[nodiscard]] float dot(Vector2<T2> other) const {
         return (this->x * other.x) + (this->y * other.y);
     }
 
-    [[nodiscard]] float cross(Vector2<T> other) const {
+    template<typename T2>
+    [[nodiscard]] float cross(Vector2<T2> other) const {
         return this->x * other.y - this->y * other.x;
     }
 
