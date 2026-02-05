@@ -32,7 +32,7 @@ class RoundPhysicsShape : public PhysicsShape
 
 	void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override;
 
-	BoundingBox<int> getBoundingBox() override;
+	BoundingBox<int> getBoundingBox() const override;
 
-	bool is_inside(Vector2Int world_position) override;
+	bool is_inside(Vector2Int world_position) const override;
 };

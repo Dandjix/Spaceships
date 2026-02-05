@@ -23,6 +23,8 @@ public:
     explicit PhysicsShape(PhysicsEntity * owner_entity) : owner_entity(owner_entity){}
     virtual ~PhysicsShape() = default;
 
+    [[nodiscard]] Vector2Int getCenter() const;
+
     virtual void physicsUpdate(const PhysicsUpdateContext & context);
     void drawBoundingBox(SDL_Renderer* renderer, const RenderingContext& context);
 
@@ -43,7 +45,7 @@ public:
      */
     virtual void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship)=0;
 
-    virtual BoundingBox<int> getBoundingBox()=0;
+    [[nodiscard]] virtual BoundingBox<int> getBoundingBox() const =0;
 
-    virtual bool is_inside(Vector2Int world_position)=0;
+    [[nodiscard]] virtual bool is_inside(Vector2Int world_position) const =0;
 };

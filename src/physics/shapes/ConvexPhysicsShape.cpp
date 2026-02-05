@@ -49,7 +49,7 @@ ConvexPhysicsShape::ConvexPhysicsShape(
         std::reverse(this->vertices.begin(), this->vertices.end());
 }
 
-BoundingBox<int> ConvexPhysicsShape::getBoundingBox() {
+BoundingBox<int> ConvexPhysicsShape::getBoundingBox() const {
     // Define corners in local space
     std::vector<Vector2Int> world_vertices = getVertices();
 
@@ -106,7 +106,7 @@ unsigned long getSector(const std::vector<float> & cross_products) {
     return 0;
 }
 
-bool ConvexPhysicsShape::is_inside(Vector2Int Q) {
+bool ConvexPhysicsShape::is_inside(Vector2Int Q) const {
 
     //std::cout << "computing for point Q : "<< Q<<std::endl;
 

@@ -8,6 +8,10 @@
 #include "game/Rendering.h"
 
 
+Vector2Int PhysicsShape::getCenter() const {
+    return owner_entity->getPosition();
+}
+
 void PhysicsShape::physicsUpdate(const PhysicsUpdateContext& context)
 {
 

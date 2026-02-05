@@ -13,7 +13,7 @@ void RoundPhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingConte
     DebugRendering::drawCircle(renderer,context,owner_entity->getPosition(),radius);
 }
 
-BoundingBox<int> RoundPhysicsShape::getBoundingBox()
+BoundingBox<int> RoundPhysicsShape::getBoundingBox() const
 {
     Vector2Int TL;
 
@@ -24,6 +24,6 @@ BoundingBox<int> RoundPhysicsShape::getBoundingBox()
     return {TL,dimensions};
 }
 
-bool RoundPhysicsShape::is_inside(Vector2Int world_position) {
+bool RoundPhysicsShape::is_inside(Vector2Int world_position) const {
     return (owner_entity->getPosition() - world_position).sqrLength() <= radius*radius;
 }

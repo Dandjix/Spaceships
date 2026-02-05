@@ -34,7 +34,7 @@ public:
         visitor->visitConvex(this, space_ship);
     }
 
-    BoundingBox<int> getBoundingBox() override;
+    BoundingBox<int> getBoundingBox() const override;
 
-    bool is_inside(Vector2Int world_position) override;
+    bool is_inside(Vector2Int world_position) const override;
 };
