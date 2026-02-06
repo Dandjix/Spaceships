@@ -18,6 +18,31 @@
  */
 const float jolt = 3;
 
+std::vector<std::pair<Vector2Int, Vector2Int> > getDiagonals(Vector2Int center, std::vector<Vector2Int> polygon) {
+    std::vector<std::pair<Vector2Int, Vector2Int> > diagonals;
+    diagonals.reserve(polygon.size());
+
+    for (int i = 0; i < polygon.size(); ++i) {
+        diagonals.push_back({center, polygon[i]});
+    }
+    return diagonals;
+}
+
+std::vector<std::pair<Vector2Int, Vector2Int> > getSides(std::vector<Vector2Int> polygon) {
+    std::vector<std::pair<Vector2Int, Vector2Int> > sides;
+    sides.reserve(polygon.size());
+
+    for (int i = 0; i < polygon.size(); ++i) {
+        int next_i = (i + 1) % polygon.size();
+        sides.push_back({polygon[i], polygon[next_i]});
+    }
+    return sides;
+}
+
+// Vector2Float direction(Vector2Int start, Vector2Int end) {
+//     return Vectors::toVector2Float(end - start).normalized();
+// }
+
 namespace PhysicsCollisions {
     void applyJolt(PhysicsShape *shape1, PhysicsShape *shape2, SpaceShip *space_ship) {
         float random_angle = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * 360;
@@ -28,62 +53,49 @@ namespace PhysicsCollisions {
         shape2->owner_entity->movePosition(-jolt_vector, space_ship);
     }
 
-    void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
-        float overlap = INFINITY;
 
-        for (int shape = 0; shape < 2; shape++)
-        {
-            if (shape == 1)
-            {
+    void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
+        Vector2Float global_force;
+
+        for (int shape = 0; shape < 2; shape++) {
+            if (shape == 1) {
                 auto temp = poly1;
                 poly1 = poly2;
                 poly2 = temp;
             }
 
-            auto poly_1_p = poly1->getVertices();
-            auto poly_2_p = poly2->getVertices();
+            Vector2Float local_force = {0.0f, 0.0f};
 
-            for (int a = 0; a < poly_1_p.size(); a++)
-            {
-                int b = (a + 1) % poly_1_p.size();
-                Vector2Int axisProj = { -(poly_1_p[b].y - poly_1_p[a].y), poly_1_p[b].x - poly_1_p[a].x };
+            auto diagonals_1 = getDiagonals(poly1->getCenter(), poly1->getVertices());
+            // auto diagonals_2 = getDiagonals(poly2->getCenter(), poly2->getVertices());
+            // auto sides_1 = getSides(poly1->getVertices());
+            auto sides_2 = getSides(poly2->getVertices());
 
-                // Optional normalisation of projection axis enhances stability slightly
-                //float d = sqrtf(axisProj.x * axisProj.x + axisProj.y * axisProj.y);
-                //axisProj = { axisProj.x / d, axisProj.y / d };
+            // Debug::CollisionInfo::instance->addLines(diagonals_1);
+            // Debug::CollisionInfo::instance->addLines(sides_2);
 
-                // Work out min and max 1D points for r1
-                float min_r1 = INFINITY, max_r1 = -INFINITY;
-                for (int p = 0; p < poly_1_p.size(); p++)
-                {
-                    float q = (poly_1_p[p].x * axisProj.x + poly_1_p[p].y * axisProj.y);
-                    min_r1 = std::min(min_r1, q);
-                    max_r1 = std::max(max_r1, q);
+            for (auto diag: diagonals_1) {
+                for (auto side: sides_2) {
+                    auto res = Physics::segmentIntersectionFloats(diag.first, diag.second, side.first, side.second);
+                    if (!res.success)
+                        continue;
+                    local_force += Vectors::toVector2Float(diag.second - diag.first) * res.t1;
                 }
-
-                // Work out min and max 1D points for r2
-                float min_r2 = INFINITY, max_r2 = -INFINITY;
-                for (int p = 0; p < poly_2_p.size(); p++)
-                {
-                    float q = (poly_2_p[p].x * axisProj.x + poly_2_p[p].y * axisProj.y);
-                    min_r2 = std::min(min_r2, q);
-                    max_r2 = std::max(max_r2, q);
-                }
-
-                // Calculate actual overlap along projected axis, and store the minimum
-                overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
-
-                if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
-                    return;
             }
+            if (shape == 0)
+                global_force += local_force;
+            else
+                global_force -= local_force;
         }
 
-        // If we got here, the objects have collided, we will displace r1
-        // by overlap along the vector between the two object centers
-        Vector2Int d = { poly2->getCenter().x - poly1->getCenter().x, poly2->getCenter().y - poly1->getCenter().y };
-        float s = sqrtf(d.x*d.x + d.y*d.y);
-        Vector2Int new_poly1_center = {poly1->getCenter().x - static_cast<int>(overlap * d.x / s),poly1->getCenter().y - static_cast<int>(overlap * d.y / s)};
-        poly1->owner_entity->setPosition(new_poly1_center);
+        if (global_force == Vector2Float{0, 0})
+            return;
+
+        global_force*=0.5f;
+        global_force/= 10; //no clue why i need this here plz kill me
+
+        poly1->owner_entity->movePosition(global_force, space_ship);
+        poly2->owner_entity->movePosition(-global_force, space_ship);
     }
 
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
@@ -94,9 +106,9 @@ namespace PhysicsCollisions {
         auto direction = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized();
         Vector2Int end = round->getCenter() + Vectors::toVector2Int(direction * round->radius);
 
-        Debug::CollisionInfo::instance->addLine(start,end);
+        Debug::CollisionInfo::instance->addLine(start, end);
 
-        auto intersection = Physics::localSegmentCast(start,end,convex->getVertices());
+        auto intersection = Physics::localSegmentCast(start, end, convex->getVertices());
         if (!intersection.has_value()) return;
 
         //this is equivalent as if the convex was a circle with a certain radius
@@ -120,16 +132,21 @@ namespace PhysicsCollisions {
         float force_e1 = force_value * (e2_weight / (e2_weight + e1_weight));
         float force_e2 = force_value * (e1_weight / (e2_weight + e1_weight));
 
-        auto delta_e1 = (Vectors::toVector2Float(
-                             convex->getCenter() - round->getCenter()).normalized() *
-                         force_e1);
-        auto delta_e2 = (Vectors::toVector2Float(
-                             round->getCenter() - convex->getCenter()).normalized() *
-                         force_e2);
+        auto delta_e1 = Vectors::toVector2Float(
+                            convex->getCenter()
+                            -
+                            round->getCenter()
+                        ).normalized() * force_e1;
+
+        auto delta_e2 = Vectors::toVector2Float(
+                            round->getCenter()
+                            -
+                            convex->getCenter()
+                        ).normalized() * force_e2;
+
 
         convex->owner_entity->movePosition(delta_e1, space_ship);
         round->owner_entity->movePosition(delta_e2, space_ship);
-
     }
 
     void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
