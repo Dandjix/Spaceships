@@ -61,3 +61,33 @@ std::optional<Vector2Int> Physics::segmentIntersection(Vector2Int start_1, Vecto
     return std::nullopt;
 }
 
+Physics::segmentIntersectionFloatsResult Physics::segmentIntersectionFloats(Vector2Int start_1, Vector2Int end_1,
+    Vector2Int start_2, Vector2Int end_2) {
+
+    Vector2Int r = end_1 - start_1;  // Direction of first segment
+    Vector2Int s = end_2 - start_2;  // Direction of second segment
+
+    float r_cross_s = r.cross(s);
+    Vector2Int p3_minus_p1 = start_2 - start_1;
+    float p3_minus_p1_cross_r = p3_minus_p1.cross(r);
+
+    // Parallel or collinear - no single intersection point
+    if (std::abs(r_cross_s) < 1e-6f)
+        return {0,0,false};
+
+
+    float t1 = p3_minus_p1.cross(s) / r_cross_s;
+    float t2 = p3_minus_p1_cross_r / r_cross_s;
+
+    // Check if intersection is within both segments
+    if (t1 >= 0.0f && t1 <= 1.0f && t2 >= 0.0f && t2 <= 1.0f) {
+        // Calculate intersection point
+        // Using integer arithmetic might cause precision issues
+        // Consider using float intermediate values
+        int x = start_1.x + static_cast<int>(t1 * r.x);
+        int y = start_1.y + static_cast<int>(t1 * r.y);
+        return {t1,t2,true};
+    }
+
+    return {0,0,false};
+}

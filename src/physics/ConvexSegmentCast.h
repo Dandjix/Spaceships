@@ -18,4 +18,25 @@ namespace Physics {
         Vector2Int start_1, Vector2Int end_1,
         Vector2Int start_2, Vector2Int end_2
     );
+
+
+    struct segmentIntersectionFloatsResult {
+        float t1;
+        float t2;
+        bool success;
+    };
+
+    /**
+     * This returns the progress of the intersection
+     * @param start_1
+     * @param end_1
+     * @param start_2
+     * @param end_2
+     * @return
+     */
+    segmentIntersectionFloatsResult segmentIntersectionFloats(
+        Vector2Int start_1, Vector2Int end_1,
+        Vector2Int start_2, Vector2Int end_2
+    );
+
 };
