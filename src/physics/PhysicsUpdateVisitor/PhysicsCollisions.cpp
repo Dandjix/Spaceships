@@ -7,6 +7,9 @@
 
 #include "math/Vectors.h"
 #include "../shapes/RoundPhysicsShape.h"
+#include "debug/CollisionInfo.h"
+#include "physics/ConvexSegmentCast.h"
+#include "physics/shapes/ConvexPhysicsShape.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 #include "spaceships/SpaceShip.h"
 #include "spaceships/Tile.h"
@@ -16,18 +19,7 @@
 const float jolt = 3;
 
 namespace PhysicsCollisions {
-    void visitConvexes(ConvexPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
-        // std::cout << "rect on rect collision" << std::endl;
-    }
-
-    void visitConvexRound(ConvexPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
-        // std::cout << "rect on round collision" << std::endl;
-    }
-
-    void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
-    }
-
-    void applyJolt(RoundPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
+    void applyJolt(PhysicsShape *shape1, PhysicsShape *shape2, SpaceShip *space_ship) {
         float random_angle = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * 360;
 
         Vector2Float jolt_vector = Vector2Float(jolt, 0.0f).rotate(random_angle);
@@ -36,13 +28,70 @@ namespace PhysicsCollisions {
         shape2->owner_entity->movePosition(-jolt_vector, space_ship);
     }
 
+    void visitConvexes(ConvexPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
+        // std::cout << "rect on rect collision" << std::endl;
+    }
+
+    void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
+        if (convex->getCenter() == round->getCenter()) //Jolt if stuck together
+            applyJolt(convex, round, space_ship);
+
+        //if (shape1->is_inside(shape2->getCenter()) || shape1->is_inside(shape2->getCenter()))
+        // TODO : implement in case a shape is inside another
+
+        Vector2Int start = round->getCenter();
+        auto direction = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized();
+        Vector2Int end = round->getCenter() + Vectors::toVector2Int(direction * round->radius);
+
+        Debug::CollisionInfo::instance->addLine(start,end);
+
+        auto intersection = Physics::localSegmentCast(start,end,convex->getVertices());
+        if (!intersection.has_value()) return;
+
+        //this is equivalent as if the convex was a circle with a certain radius
+        auto convex_radius = (convex->getCenter() - intersection.value()).length();
+
+        //what follows is the same as round on round collision
+        Vector2Int diff = convex->getCenter() - round->getCenter();
+
+        float combined_radius = convex_radius + round->radius;
+
+        float force_value = convex_radius + round->radius - diff.length();
+
+
+        if (force_value <= 0) {
+            return;
+        }
+
+        float e1_weight = convex->owner_entity->get_weight();
+        float e2_weight = round->owner_entity->get_weight();
+
+        float force_e1 = force_value * (e2_weight / (e2_weight + e1_weight));
+        float force_e2 = force_value * (e1_weight / (e2_weight + e1_weight));
+
+        auto delta_e1 = (Vectors::toVector2Float(
+                             convex->getCenter() - round->getCenter()).normalized() *
+                         force_e1);
+        auto delta_e2 = (Vectors::toVector2Float(
+                             round->getCenter() - convex->getCenter()).normalized() *
+                         force_e2);
+
+        convex->owner_entity->movePosition(delta_e1, space_ship);
+        round->owner_entity->movePosition(delta_e2, space_ship);
+
+    }
+
+    void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
+    }
+
+
     void visitRounds(RoundPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
         // std::cout << "round on round collision" << std::endl;
-        if (shape1->owner_entity->getPosition() == shape2->owner_entity->getPosition()) {
+        if (shape1->getCenter() == shape2->getCenter()) {
             applyJolt(shape1, shape2, space_ship);
         }
 
-        Vector2Int diff = shape1->owner_entity->getPosition() - shape2->owner_entity->getPosition();
+        Vector2Int diff = shape1->getCenter() - shape2->getCenter();
 
         float combined_radius = shape1->radius + shape2->radius;
 
@@ -60,10 +109,10 @@ namespace PhysicsCollisions {
         float force_e2 = force_value * (e1_weight / (e2_weight + e1_weight));
 
         auto delta_e1 = (Vectors::toVector2Float(
-                             shape1->owner_entity->getPosition() - shape2->owner_entity->getPosition()).normalized() *
+                             shape1->getCenter() - shape2->getCenter()).normalized() *
                          force_e1);
         auto delta_e2 = (Vectors::toVector2Float(
-                             shape2->owner_entity->getPosition() - shape1->owner_entity->getPosition()).normalized() *
+                             shape2->getCenter() - shape1->getCenter()).normalized() *
                          force_e2);
 
         shape1->owner_entity->movePosition(delta_e1, space_ship);
@@ -72,7 +121,7 @@ namespace PhysicsCollisions {
 
     void visitStaticRoundRound(RoundStaticPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
         // std::cout << "round on round collision" << std::endl;
-        if (shape1->owner_entity->getPosition() == shape2->owner_entity->getPosition()) {
+        if (shape1->getCenter() == shape2->getCenter()) {
             float random_angle = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * 360;
 
             Vector2Float jolt_vector = Vector2Float(jolt, 0.0f).rotate(random_angle);
@@ -80,7 +129,7 @@ namespace PhysicsCollisions {
             shape2->owner_entity->movePosition(jolt_vector, space_ship);
         }
 
-        Vector2Int diff = shape1->owner_entity->getPosition() - shape2->owner_entity->getPosition();
+        Vector2Int diff = shape1->getCenter() - shape2->getCenter();
 
         float force_value = shape1->radius + shape2->radius - diff.length();
 
@@ -91,7 +140,7 @@ namespace PhysicsCollisions {
         float force_e2 = force_value;
 
         auto delta_e2 = (Vectors::toVector2Float(
-                             shape2->owner_entity->getPosition() - shape1->owner_entity->getPosition()).normalized() *
+                             shape2->getCenter() - shape1->getCenter()).normalized() *
                          force_e2);
 
         shape2->owner_entity->movePosition(delta_e2, space_ship);
@@ -111,7 +160,7 @@ namespace PhysicsCollisions {
         tilesStart = AABB.topLeft() / tileWorldSize; // - Vector2Int(1, 1);
         tilesEnd = AABB.bottomRight() / tileWorldSize; // + Vector2Int(1, 1);
 
-        Vector2Float center = Vectors::toVector2Float(shape1->owner_entity->getPosition());
+        Vector2Float center = Vectors::toVector2Float(shape1->getCenter());
         float radius = shape1->radius;
 
         for (int tx = tilesStart.x; tx <= tilesEnd.x; ++tx) {

@@ -5,10 +5,15 @@
 #include "Humanoid.h"
 
 #include "physics/Physics.h"
+#include "physics/shapes/RectPhysicsShape.h"
 #include "physics/shapes/RoundPhysicsShape.h"
 
-Humanoid::Humanoid(Vector2Int position, std::optional<float> angle, Behavior *behavior): BehavioredEntity(position, angle,
-                                                                                                          new RoundPhysicsShape(this, Scaling::scaleToWorld(20.0f))), behavior(behavior) {
+Humanoid::Humanoid(Vector2Int position, std::optional<float> angle, Behavior *behavior)
+    : BehavioredEntity(
+          position,
+          angle,
+          new RectPhysicsShape(this, Vector2Int{20,20}.scaleToWorldPosition())),
+      behavior(behavior) {
     radius = 20;
     texture = nullptr;
 }

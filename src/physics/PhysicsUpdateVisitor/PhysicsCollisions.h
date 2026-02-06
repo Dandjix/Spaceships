@@ -13,7 +13,7 @@ class SpaceShip;
 namespace PhysicsCollisions
 {
     void visitConvexes(ConvexPhysicsShape * shape1, ConvexPhysicsShape * shape2, SpaceShip * space_ship);
-    void visitConvexRound(ConvexPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
+    void visitConvexRound(ConvexPhysicsShape * convex, RoundPhysicsShape * round, SpaceShip * space_ship);
     void visitStaticRoundConvex(RoundStaticPhysicsShape * shape1, ConvexPhysicsShape * shape2, SpaceShip * space_ship);
     void visitRounds(RoundPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
     void visitStaticRoundRound(RoundStaticPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
