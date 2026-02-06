@@ -12,6 +12,15 @@ namespace Physics {
         Vector2Int segment_start, Vector2Int segment_end,
         Vector2Int circle_center, int circle_radius
     );
+
+    /**
+     * @param segment_start
+     * @param segment_end
+     * @param circle_center
+     * @param circle_radius
+     * @return a float in the range [0,1] representing the progress along the segment at which the intersection occurs,
+     * std::nullopt if no intersection
+     */
     std::optional<float> segmentCircleIntersectionFloat(
         Vector2Int segment_start, Vector2Int segment_end,
         Vector2Int circle_center, int circle_radius

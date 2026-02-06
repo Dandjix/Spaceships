@@ -46,20 +46,7 @@ std::optional<Vector2Int> Physics::segmentCircleIntersection(
         return std::nullopt; // No intersection
     }
 
-    // Compute sqrt(discriminant) using integer square root
-    float sqrt_disc = 0;
-    if (discriminant > 0) {
-        float left = 0, right = discriminant;
-        while (left <= right) {
-            float mid = left + (right - left) / 2;
-            if (mid * mid <= discriminant) {
-                sqrt_disc = mid;
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
-    }
+    float sqrt_disc = std::sqrt(discriminant);
 
     // Two potential t values (scaled by 2a to avoid division)
     // t = (-b ± sqrt_disc) / (2a)
@@ -89,4 +76,52 @@ std::optional<Vector2Int> Physics::segmentCircleIntersection(
     int y = segment_start.y + roundToInt((t_scaled * dy) / (2 * a));
 
     return Vector2Int{x, y};
+}
+
+std::optional<float> Physics::segmentCircleIntersectionFloat(Vector2Int segment_start, Vector2Int segment_end,
+    Vector2Int circle_center, int circle_radius) {
+        // Direction vector: d = end - start
+    int dx = segment_end.x - segment_start.x;
+    int dy = segment_end.y - segment_start.y;
+
+    // Start relative to center: f = start - center
+    int fx = segment_start.x - circle_center.x;
+    int fy = segment_start.y - circle_center.y;
+
+
+
+    // Quadratic coefficients: at² + bt + c = 0
+    float a = toFloatSquared(dx) + toFloatSquared(dy);
+    float b = 2 * toFloatMultiplied(fx,dx) + toFloatMultiplied(fy,dy);
+    float c = toFloatSquared( fx) + toFloatSquared( fy) - toFloatSquared( circle_radius);
+
+    // Check discriminant
+    float discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) {
+        return std::nullopt; // No intersection
+    }
+
+    float sqrt_disc = std::sqrt(discriminant);
+
+    // Two potential t values
+    // t = (-b ± sqrt_disc) / (2a)
+
+    float t1 = (-b - sqrt_disc) / (2*a);
+    float t2 = (-b + sqrt_disc) / (2*a);
+
+    // Choose the smallest valid t (closest to segment_start)
+    float t = -1.0f;
+
+    if (t1 >= 0 && t1 <= 1.0f) {
+        t = t1;
+    } else if (t2 >= 0 && t2 <= 1.0f) {
+        t = t2;
+    }
+
+    if (t < 0) {
+        return std::nullopt; // No intersection on segment
+    }
+
+    return t;
 }
