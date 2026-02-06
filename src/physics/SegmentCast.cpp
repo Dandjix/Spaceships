@@ -2,10 +2,10 @@
 // Created by timon on 2/6/26.
 //
 
-#include "ConvexSegmentCast.h"
+#include "SegmentCast.h"
 
 std::optional<Vector2Int> Physics::localSegmentCast(Vector2Int start, Vector2Int end,
-    const std::vector<Vector2Int> &world_vertices) {
+                                                    const std::vector<Vector2Int> &world_vertices) {
     if (world_vertices.size() < 3)
         return std::nullopt;
 

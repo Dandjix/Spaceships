@@ -3,7 +3,7 @@
 //
 #include "gtest/gtest.h"
 #include "math/Vectors.h"
-#include "physics/ConvexSegmentCast.h"
+#include "physics/SegmentCast.h"
 #include "physics/Physics.h"
 
 

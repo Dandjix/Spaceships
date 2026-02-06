@@ -8,7 +8,7 @@
 #include "math/Vectors.h"
 #include "../shapes/RoundPhysicsShape.h"
 #include "debug/CollisionInfo.h"
-#include "physics/ConvexSegmentCast.h"
+#include "physics/SegmentCast.h"
 #include "physics/shapes/ConvexPhysicsShape.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 #include "spaceships/SpaceShip.h"
