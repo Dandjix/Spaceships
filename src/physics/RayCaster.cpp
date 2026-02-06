@@ -46,11 +46,11 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 	Vector2Float playerScreenPos = context.camera_info.worldToScreenPoint(playerPos);
 
 	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(mousePos)));
+	DebugRendering::drawCross(renderer, (context.camera_info.worldToScreenPoint(mousePos)));
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(playerPos + Vector2Int(1200,1200))));
-	DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(playerPos - Vector2Int(1200,1200))));
+	DebugRendering::drawCross(renderer, (context.camera_info.worldToScreenPoint(playerPos + Vector2Int(1200,1200))));
+	DebugRendering::drawCross(renderer, (context.camera_info.worldToScreenPoint(playerPos - Vector2Int(1200,1200))));
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
 	SDL_RenderLine(renderer, mouseScreenPos.x, mouseScreenPos.y, playerScreenPos.x, playerScreenPos.y);
@@ -67,13 +67,13 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 	{
 		Vector2Float originHit = context.camera_info.worldToScreenPoint(originPosition.value());
 		SDL_SetRenderDrawColorFloat(renderer,0,0,1,1.0f);
-		DebugRendering::drawCross(renderer, Vectors::toVector2Int(originHit),15);
+		DebugRendering::drawCross(renderer, (originHit),15);
 	}
 
 	for (auto pos : checked_positions)
 	{
 		SDL_SetRenderDrawColorFloat(renderer,0,1,1,1.0f);
-		DebugRendering::drawCross(renderer, Vectors::toVector2Int(context.camera_info.worldToScreenPoint(pos)),12.5f);
+		DebugRendering::drawCross(renderer, (context.camera_info.worldToScreenPoint(pos)),12.5f);
 	}
 
 	if (hitPosition.has_value())
@@ -84,7 +84,7 @@ void RayCaster::render(SDL_Renderer* renderer, const RenderingContext& context)
 		float b = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		float size = 15.0f + static_cast <float> (rand()) / static_cast <float> (RAND_MAX)*10.0f;
 		SDL_SetRenderDrawColorFloat(renderer,r,g,b,1.0f);
-		DebugRendering::drawCross(renderer, Vectors::toVector2Int(screenHit),size);
+		DebugRendering::drawCross(renderer, (screenHit),size);
 	}
 
 }
