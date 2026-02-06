@@ -28,16 +28,67 @@ namespace PhysicsCollisions {
         shape2->owner_entity->movePosition(-jolt_vector, space_ship);
     }
 
-    void visitConvexes(ConvexPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
-        // std::cout << "rect on rect collision" << std::endl;
+    void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
+        float overlap = INFINITY;
+
+        for (int shape = 0; shape < 2; shape++)
+        {
+            if (shape == 1)
+            {
+                auto temp = poly1;
+                poly1 = poly2;
+                poly2 = temp;
+            }
+
+            auto poly_1_p = poly1->getVertices();
+            auto poly_2_p = poly2->getVertices();
+
+            for (int a = 0; a < poly_1_p.size(); a++)
+            {
+                int b = (a + 1) % poly_1_p.size();
+                Vector2Int axisProj = { -(poly_1_p[b].y - poly_1_p[a].y), poly_1_p[b].x - poly_1_p[a].x };
+
+                // Optional normalisation of projection axis enhances stability slightly
+                //float d = sqrtf(axisProj.x * axisProj.x + axisProj.y * axisProj.y);
+                //axisProj = { axisProj.x / d, axisProj.y / d };
+
+                // Work out min and max 1D points for r1
+                float min_r1 = INFINITY, max_r1 = -INFINITY;
+                for (int p = 0; p < poly_1_p.size(); p++)
+                {
+                    float q = (poly_1_p[p].x * axisProj.x + poly_1_p[p].y * axisProj.y);
+                    min_r1 = std::min(min_r1, q);
+                    max_r1 = std::max(max_r1, q);
+                }
+
+                // Work out min and max 1D points for r2
+                float min_r2 = INFINITY, max_r2 = -INFINITY;
+                for (int p = 0; p < poly_2_p.size(); p++)
+                {
+                    float q = (poly_2_p[p].x * axisProj.x + poly_2_p[p].y * axisProj.y);
+                    min_r2 = std::min(min_r2, q);
+                    max_r2 = std::max(max_r2, q);
+                }
+
+                // Calculate actual overlap along projected axis, and store the minimum
+                overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
+
+                if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
+                    return;
+            }
+        }
+
+        // If we got here, the objects have collided, we will displace r1
+        // by overlap along the vector between the two object centers
+        Vector2Int d = { poly2->getCenter().x - poly1->getCenter().x, poly2->getCenter().y - poly1->getCenter().y };
+        float s = sqrtf(d.x*d.x + d.y*d.y);
+        Vector2Int new_poly1_center = {poly1->getCenter().x - static_cast<int>(overlap * d.x / s),poly1->getCenter().y - static_cast<int>(overlap * d.y / s)};
+        poly1->owner_entity->setPosition(new_poly1_center);
     }
 
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
         if (convex->getCenter() == round->getCenter()) //Jolt if stuck together
             applyJolt(convex, round, space_ship);
-
-        //if (shape1->is_inside(shape2->getCenter()) || shape1->is_inside(shape2->getCenter()))
-        // TODO : implement in case a shape is inside another
 
         Vector2Int start = round->getCenter();
         auto direction = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized();
