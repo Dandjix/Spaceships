@@ -36,7 +36,7 @@ std::optional<Vector2Int> Physics::segmentCircleIntersection(
 
     // Quadratic coefficients: at² + bt + c = 0
     float a = toFloatSquared(dx) + toFloatSquared(dy);
-    float b = 2 * toFloatMultiplied(fx,dx) + toFloatMultiplied(fy,dy);
+    float b = 2 * (toFloatMultiplied(fx,dx) + toFloatMultiplied(fy,dy));
     float c = toFloatSquared( fx) + toFloatSquared( fy) - toFloatSquared( circle_radius);
 
     // Check discriminant
@@ -92,7 +92,7 @@ std::optional<float> Physics::segmentCircleIntersectionFloat(Vector2Int segment_
 
     // Quadratic coefficients: at² + bt + c = 0
     float a = toFloatSquared(dx) + toFloatSquared(dy);
-    float b = 2 * toFloatMultiplied(fx,dx) + toFloatMultiplied(fy,dy);
+    float b = 2 * (toFloatMultiplied(fx,dx) + toFloatMultiplied(fy,dy));
     float c = toFloatSquared( fx) + toFloatSquared( fy) - toFloatSquared( circle_radius);
 
     // Check discriminant
