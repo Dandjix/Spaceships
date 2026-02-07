@@ -177,7 +177,6 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     // Short lived entities --------------------------------------------------------------------------------------------
     Player::PlayerVehicleTracker * vehicle_tracker = (new Player::PlayerVehicleTracker(player))->initializeRendering(entity_loading_context);
     //Debug stuff
-    Debug::PointCastChecker * point_cast_checker = (new Debug::PointCastChecker())->initializeRendering(entity_loading_context);
     Debug::CollisionInfo * collision_info = (new Debug::CollisionInfo())->initializeRendering(entity_loading_context);
 
     auto *vehicle_enter = new Player::InteractableInteract(tooltip, vehicle_tracker);
@@ -221,7 +220,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         // std::cout << "paused set to : " << paused << std::endl;
     });
 
-    player_spaceship->registerEntities({vehicle_tracker, vehicle_enter, vehicle_leave, pause_manager, point_cast_checker, collision_info});
+    player_spaceship->registerEntities({vehicle_tracker, vehicle_enter, vehicle_leave, pause_manager, collision_info});
 
 
     // Parallax --------------------------------------------------------------------------------------------------------
