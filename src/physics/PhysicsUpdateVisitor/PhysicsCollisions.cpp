@@ -114,11 +114,18 @@ bool circleConvexAreColliding(ConvexPhysicsShape *convex, RoundPhysicsShape *rou
     return false;
 }
 
+struct PolygonInfo{
+    // Vector2Int center;
+    std::vector<Vector2Int> vertices;
+
+    PolygonInfo(Vector2Int center, const std::vector<Vector2Int> &vertices) : vertices(vertices) {  }
+};
+
 struct SATReturn {
     float overlap;
     bool are_colliding;
 };
-SATReturn SeparatedAxisTheorem(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2) {
+SATReturn SeparatedAxisTheorem(PolygonInfo * poly1, PolygonInfo * poly2) {
     float overlap = INFINITY;
 
     for (int shape = 0; shape < 2; shape++) {
@@ -128,20 +135,20 @@ SATReturn SeparatedAxisTheorem(ConvexPhysicsShape *poly1, ConvexPhysicsShape *po
             poly2 = temp;
         }
 
-        auto p1 = poly1->getVertices();
+        auto p1 = poly1->vertices;
 
-        for (auto [edge_start,edge_end]: getSides(poly1->getVertices())) {
+        for (auto [edge_start,edge_end]: getSides(poly1->vertices)) {
             Vector2Float normal = Vector2Float(-edge_end.y + edge_start.y, edge_end.x - edge_start.x).normalized();
 
             float min_r1 = INFINITY, max_r1 = -INFINITY;
-            for (auto vertex: poly1->getVertices()) {
+            for (auto vertex: poly1->vertices) {
                 float q = vertex.x * normal.x + vertex.y * normal.y; // dot product
                 min_r1 = std::min(min_r1, q);
                 max_r1 = std::max(max_r1, q);
             }
 
             float min_r2 = INFINITY, max_r2 = -INFINITY;
-            for (auto vertex: poly2->getVertices()) {
+            for (auto vertex: poly2->vertices) {
                 float q = vertex.x * normal.x + vertex.y * normal.y;
                 min_r2 = std::min(min_r2, q);
                 max_r2 = std::max(max_r2, q);
@@ -174,8 +181,12 @@ namespace PhysicsCollisions {
 
 
     void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
-
-        auto res = SeparatedAxisTheorem(poly1,poly2);
+        SATReturn res;
+        {
+            PolygonInfo poly1_info = {poly1->getCenter(),poly1->getVertices()};
+            PolygonInfo poly2_info = {poly2->getCenter(),poly2->getVertices()};
+            res = SeparatedAxisTheorem(&poly1_info,&poly2_info);
+        }
 
         if (!res.are_colliding)
             return;
@@ -192,10 +203,28 @@ namespace PhysicsCollisions {
         poly2->owner_entity->movePosition(-delta * force_e2,space_ship);
     }
 
+    // here's a little lesson in trickery, this is going down in history
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
-        if (circleConvexAreColliding(convex,round)) {
-            Debug::CollisionInfo::instance->addPoints({convex->getCenter(),round->getCenter()});
+        SATReturn res;
+        {
+            PolygonInfo convex_info = {convex->getCenter(),convex->getVertices()};
+            PolygonInfo round_info = {round->getCenter(),round->generateVertices()};
+            res = SeparatedAxisTheorem(&convex_info,&round_info);
         }
+
+        if (!res.are_colliding)
+            return;
+
+        Vector2Float delta = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized() * res.overlap;
+
+        float e1_weight = convex->owner_entity->get_weight();
+        float e2_weight = round->owner_entity->get_weight();
+
+        float force_e1 = (e2_weight / (e2_weight + e1_weight));
+        float force_e2 = (e1_weight / (e2_weight + e1_weight));
+
+        convex->owner_entity->movePosition(delta * force_e1,space_ship);
+        round->owner_entity->movePosition(-delta * force_e2,space_ship);
     }
 
     void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
