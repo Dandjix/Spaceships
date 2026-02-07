@@ -6,7 +6,6 @@
 
 #include "loadGame/GameState.h"
 #include "textures/TextureSet.h"
-#include "textures/UsageMap.h"
 
 constexpr float button_size_px = 22.0f;
 
