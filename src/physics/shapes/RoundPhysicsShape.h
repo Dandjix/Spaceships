@@ -9,7 +9,7 @@ class RoundPhysicsShape : public PhysicsShape
 	/**
 	 * radius of the shape, in world units
 	 */
-	float radius;
+	int radius;
 
 	PhysicsUpdateVisitor * createVisitor() override
 	{
@@ -25,16 +25,16 @@ class RoundPhysicsShape : public PhysicsShape
 	 * @param owner the owner entity
 	 * @param radius the radius in world units
 	 */
-	RoundPhysicsShape(PhysicsEntity * owner, float radius) : PhysicsShape(owner), radius(radius)
+	RoundPhysicsShape(PhysicsEntity * owner, int radius) : PhysicsShape(owner), radius(radius)
 	{
 
 	}
 
 	void debugRender(SDL_Renderer* renderer, const RenderingContext& context) override;
 
-	BoundingBox<int> getBoundingBox() const override;
+	[[nodiscard]] BoundingBox<int> getBoundingBox() const override;
 
-	bool is_inside(Vector2Int world_position) const override;
+	[[nodiscard]] bool is_inside(Vector2Int world_position) const override;
 
 	[[nodiscard]] std::vector<Vector2Int> generateVertices(int nb_sides = 12) const;
 };

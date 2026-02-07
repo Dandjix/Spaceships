@@ -3,11 +3,9 @@
 
 #include "PhysicsCollisions.h"
 
-#include <iostream>
 
 #include "math/Vectors.h"
 #include "../shapes/RoundPhysicsShape.h"
-#include "debug/CollisionInfo.h"
 #include "physics/Physics.h"
 #include "physics/SegmentCast.h"
 #include "physics/SegmentCircleCast.h"
@@ -21,12 +19,12 @@
  */
 constexpr float jolt = 3;
 
-std::vector<std::pair<Vector2Int, Vector2Int> > getDiagonals(Vector2Int center, std::vector<Vector2Int> polygon) {
+std::vector<std::pair<Vector2Int, Vector2Int> > getDiagonals(Vector2Int center, const std::vector<Vector2Int>& polygon) {
     std::vector<std::pair<Vector2Int, Vector2Int> > diagonals;
     diagonals.reserve(polygon.size());
 
-    for (int i = 0; i < polygon.size(); ++i) {
-        diagonals.push_back({center, polygon[i]});
+    for (auto & i : polygon) {
+        diagonals.emplace_back(center, i);
     }
     return diagonals;
 }
@@ -36,8 +34,8 @@ std::vector<std::pair<Vector2Int, Vector2Int> > getSides(std::vector<Vector2Int>
     sides.reserve(polygon.size());
 
     for (int i = 0; i < polygon.size(); ++i) {
-        int next_i = (i + 1) % polygon.size();
-        sides.push_back({polygon[i], polygon[next_i]});
+        std::size_t next_i = (i + 1) % polygon.size();
+        sides.emplace_back(polygon[i], polygon[next_i]);
     }
     return sides;
 }
@@ -54,18 +52,18 @@ bool areCollidingSAT(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2) {
         auto p1 = poly1->getVertices();
 
         for (auto [edge_start,edge_end]: getSides(poly1->getVertices())) {
-            Vector2Float normal = Vector2Float(-edge_end.y + edge_start.y, edge_end.x - edge_start.x);
+            Vector2Float normal = Vector2Float(static_cast<float>(-edge_end.y + edge_start.y), static_cast<float>(edge_end.x - edge_start.x));
 
             float min_r1 = INFINITY, max_r1 = -INFINITY;
             for (auto vertex: poly1->getVertices()) {
-                float q = vertex.x * normal.x + vertex.y * normal.y; // dot product
+                float q = static_cast<float>(vertex.x) * normal.x + static_cast<float>(vertex.y) * normal.y; // dot product
                 min_r1 = std::min(min_r1, q);
                 max_r1 = std::max(max_r1, q);
             }
 
             float min_r2 = INFINITY, max_r2 = -INFINITY;
             for (auto vertex: poly2->getVertices()) {
-                float q = vertex.x * normal.x + vertex.y * normal.y;
+                float q = static_cast<float>(vertex.x) * normal.x + static_cast<float>(vertex.y) * normal.y;
                 min_r2 = std::min(min_r2, q);
                 max_r2 = std::max(max_r2, q);
             }
@@ -91,8 +89,8 @@ bool areCollidingDiagonals(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2)
         // auto sides_1 = getSides(poly1->getVertices());
         auto sides_2 = getSides(poly2->getVertices());
         for (auto diag: diagonals_1) {
-            for (auto side: sides_2) {
-                auto res = Physics::segmentIntersectionFloats(diag.first, diag.second, side.first, side.second);
+            for (auto [start, end]: sides_2) {
+                auto res = Physics::segmentIntersectionFloats(diag.first, diag.second, start, end);
                 if (res.success)
                     return true;
             }
@@ -103,17 +101,15 @@ bool areCollidingDiagonals(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2)
 
 bool circleConvexAreColliding(ConvexPhysicsShape *convex, RoundPhysicsShape *round) {
     //if the convex's center is inside the circle, they are of course colliding.
-    if ((convex->getCenter() - round->getCenter()).sqrLength() <= (round->radius * round->radius))
+    if ((convex->getCenter() - round->getCenter()).sqrLength() <= static_cast<float>(round->radius * round->radius))
         return true;
 
     auto sides = getSides(convex->getVertices());
 
-    for (auto [start,end]: sides) {
-        if (Physics::segmentCircleIntersectionFloat(start, end, round->getCenter(), round->radius).has_value())
-            return true;
-    }
-
-    return false;
+    return std::ranges::any_of(sides, [&](const auto& side) {
+        auto [start, end] = side;
+        return Physics::segmentCircleIntersectionFloat(start, end, round->getCenter(), round->radius).has_value();
+    });
 }
 
 struct PolygonInfo {
@@ -252,7 +248,6 @@ namespace PhysicsCollisions {
 
 
     void visitRounds(RoundPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
-        // std::cout << "round on round collision" << std::endl;
         if (shape1->getCenter() == shape2->getCenter()) {
             applyJolt(shape1, shape2, space_ship);
         }
@@ -319,7 +314,6 @@ namespace PhysicsCollisions {
     }
 
     void visitStaticRoundRound(RoundStaticPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
-        // std::cout << "round on round collision" << std::endl;
         if (shape1->getCenter() == shape2->getCenter()) {
             float random_angle = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * 360;
 
