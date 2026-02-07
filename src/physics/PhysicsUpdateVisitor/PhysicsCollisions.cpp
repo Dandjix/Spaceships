@@ -171,8 +171,14 @@ namespace PhysicsCollisions {
 
         Vector2Float delta = Vectors::toVector2Float(poly1->getCenter() - poly2->getCenter()).normalized() * res.overlap;
 
-        poly1->owner_entity->movePosition(delta,space_ship);
-        poly2->owner_entity->movePosition(-delta,space_ship);
+        float e1_weight = poly1->owner_entity->get_weight();
+        float e2_weight = poly2->owner_entity->get_weight();
+
+        float force_e1 = (e2_weight / (e2_weight + e1_weight));
+        float force_e2 = (e1_weight / (e2_weight + e1_weight));
+
+        poly1->owner_entity->movePosition(delta * force_e1,space_ship);
+        poly2->owner_entity->movePosition(-delta * force_e2,space_ship);
     }
 
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
