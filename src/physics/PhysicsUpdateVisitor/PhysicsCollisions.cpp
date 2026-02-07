@@ -8,6 +8,7 @@
 #include "math/Vectors.h"
 #include "../shapes/RoundPhysicsShape.h"
 #include "debug/CollisionInfo.h"
+#include "physics/Physics.h"
 #include "physics/SegmentCast.h"
 #include "physics/SegmentCircleCast.h"
 #include "physics/shapes/ConvexPhysicsShape.h"
@@ -114,18 +115,20 @@ bool circleConvexAreColliding(ConvexPhysicsShape *convex, RoundPhysicsShape *rou
     return false;
 }
 
-struct PolygonInfo{
+struct PolygonInfo {
     // Vector2Int center;
     std::vector<Vector2Int> vertices;
 
-    PolygonInfo(Vector2Int center, const std::vector<Vector2Int> &vertices) : vertices(vertices) {  }
+    PolygonInfo(Vector2Int center, const std::vector<Vector2Int> &vertices) : vertices(vertices) {
+    }
 };
 
 struct SATReturn {
     float overlap;
     bool are_colliding;
 };
-SATReturn SeparatedAxisTheorem(PolygonInfo * poly1, PolygonInfo * poly2) {
+
+SATReturn SeparatedAxisTheorem(PolygonInfo *poly1, PolygonInfo *poly2) {
     float overlap = INFINITY;
 
     for (int shape = 0; shape < 2; shape++) {
@@ -157,11 +160,11 @@ SATReturn SeparatedAxisTheorem(PolygonInfo * poly1, PolygonInfo * poly2) {
             overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
 
             if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
-                return {0,false};
+                return {0, false};
         }
     }
 
-    return {overlap,true};
+    return {overlap, true};
 }
 
 
@@ -183,15 +186,16 @@ namespace PhysicsCollisions {
     void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
         SATReturn res;
         {
-            PolygonInfo poly1_info = {poly1->getCenter(),poly1->getVertices()};
-            PolygonInfo poly2_info = {poly2->getCenter(),poly2->getVertices()};
-            res = SeparatedAxisTheorem(&poly1_info,&poly2_info);
+            PolygonInfo poly1_info = {poly1->getCenter(), poly1->getVertices()};
+            PolygonInfo poly2_info = {poly2->getCenter(), poly2->getVertices()};
+            res = SeparatedAxisTheorem(&poly1_info, &poly2_info);
         }
 
         if (!res.are_colliding)
             return;
 
-        Vector2Float delta = Vectors::toVector2Float(poly1->getCenter() - poly2->getCenter()).normalized() * res.overlap;
+        Vector2Float delta = Vectors::toVector2Float(poly1->getCenter() - poly2->getCenter()).normalized() * res.
+                             overlap;
 
         float e1_weight = poly1->owner_entity->get_weight();
         float e2_weight = poly2->owner_entity->get_weight();
@@ -199,23 +203,24 @@ namespace PhysicsCollisions {
         float force_e1 = (e2_weight / (e2_weight + e1_weight));
         float force_e2 = (e1_weight / (e2_weight + e1_weight));
 
-        poly1->owner_entity->movePosition(delta * force_e1,space_ship);
-        poly2->owner_entity->movePosition(-delta * force_e2,space_ship);
+        poly1->owner_entity->movePosition(delta * force_e1, space_ship);
+        poly2->owner_entity->movePosition(-delta * force_e2, space_ship);
     }
 
     // here's a little lesson in trickery, this is going down in history
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
         SATReturn res;
         {
-            PolygonInfo convex_info = {convex->getCenter(),convex->getVertices()};
-            PolygonInfo round_info = {round->getCenter(),round->generateVertices()};
-            res = SeparatedAxisTheorem(&convex_info,&round_info);
+            PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
+            PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
+            res = SeparatedAxisTheorem(&convex_info, &round_info);
         }
 
         if (!res.are_colliding)
             return;
 
-        Vector2Float delta = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized() * res.overlap;
+        Vector2Float delta = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized() * res.
+                             overlap;
 
         float e1_weight = convex->owner_entity->get_weight();
         float e2_weight = round->owner_entity->get_weight();
@@ -223,8 +228,8 @@ namespace PhysicsCollisions {
         float force_e1 = (e2_weight / (e2_weight + e1_weight));
         float force_e2 = (e1_weight / (e2_weight + e1_weight));
 
-        convex->owner_entity->movePosition(delta * force_e1,space_ship);
-        round->owner_entity->movePosition(-delta * force_e2,space_ship);
+        convex->owner_entity->movePosition(delta * force_e1, space_ship);
+        round->owner_entity->movePosition(-delta * force_e2, space_ship);
     }
 
     void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
@@ -354,8 +359,47 @@ namespace PhysicsCollisions {
         }
     }
 
+    struct HitInfo {
+        Vector2Int hit;
+        float original_distance;
+    };
 
-    void visitConvexWall(ConvexPhysicsShape *shape1, SpaceShip *space_ship) {
-        // std::cout << "rect on wall collision" << std::endl;
+    //TODO : this does not handle when a corner pokes the shape
+    void visitConvexWall(ConvexPhysicsShape *convex, SpaceShip *space_ship) {
+
+        std::vector<HitInfo> hits;
+
+        for (auto[start,end] : getDiagonals(convex->getCenter(),convex->getVertices())) {
+            auto diff = end - start;
+            float original_distance = diff.length();
+            auto res = Physics::RayCast(start, Vectors::toVector2Float(diff), space_ship, original_distance);
+            if (!res.hit)
+                continue;
+            hits.push_back({res.hit_world_position,original_distance});
+        }
+
+        Vector2Float displacement = {0, 0};
+        int hit_count = 0;
+        for (auto hit: hits) {
+            auto diff = hit.hit - convex->getCenter();
+            float hit_distance_to_center = diff.length();
+
+            Vector2Float direction = Vectors::toVector2Float(diff);
+
+            // Calculate penetration: how far the vertex is past the wall
+            float hit_distance = hit.original_distance;
+            float penetration = hit_distance - hit_distance_to_center;
+
+            if (penetration > 0) {
+                // Push away from the wall along the ray direction
+                displacement += -direction.normalized() * penetration;
+                hit_count++;
+            }
+        }
+
+        // Average the displacement if multiple vertices hit.
+        if (hit_count > 0) {
+            convex->owner_entity->movePosition(displacement / hit_count, space_ship);
+        }
     }
 }

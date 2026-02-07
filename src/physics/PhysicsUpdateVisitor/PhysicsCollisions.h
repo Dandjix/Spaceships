@@ -18,5 +18,5 @@ namespace PhysicsCollisions
     void visitRounds(RoundPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
     void visitStaticRoundRound(RoundStaticPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
     void visitRoundWall(RoundPhysicsShape * shape1, SpaceShip * space_ship);
-    void visitConvexWall(ConvexPhysicsShape * shape1, SpaceShip * space_ship);
+    void visitConvexWall(ConvexPhysicsShape * convex, SpaceShip * space_ship);
 };
