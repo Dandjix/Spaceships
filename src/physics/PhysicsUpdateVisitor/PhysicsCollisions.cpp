@@ -451,7 +451,7 @@ namespace PhysicsCollisions {
         Vector2Float displacement = {0,0};
 
         iterateCornerNormals(AABB,space_ship,[&convex,&displacement](Vector2Int corner_position,Vector2Float normal) {
-            if (!convex->is_inside(corner_position) || normal == Vector2Float(0,0))
+            if (!convex->is_inside(corner_position))
                 return;
 
             Vector2Int diff = corner_position - convex->getCenter();
