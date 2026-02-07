@@ -37,4 +37,6 @@ public:
     BoundingBox<int> getBoundingBox() const override;
 
     bool is_inside(Vector2Int world_position) const override;
+
+    void debugRender(SDL_Renderer *renderer, const RenderingContext &context) override;
 };

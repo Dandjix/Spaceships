@@ -41,5 +41,5 @@ void PhysicsShape::drawBoundingBox(SDL_Renderer* renderer, const RenderingContex
 
 void PhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
 {
-    drawBoundingBox(renderer, context);
+    // drawBoundingBox(renderer, context);
 }

@@ -6,6 +6,7 @@
 
 #include <format>
 
+#include "game/Rendering.h"
 #include "physics/PhysicsEntity.h"
 
 std::vector<Vector2Int> ConvexPhysicsShape::getVertices() const {
@@ -161,4 +162,22 @@ bool ConvexPhysicsShape::is_inside(Vector2Int Q) const {
     // Check if Q is on the correct side of edge p_1 -> p_2
     float cross = (p_2 - p_1).cross(Q - p_1);
     return cross <= 0;
+}
+
+void ConvexPhysicsShape::debugRender(SDL_Renderer *renderer, const RenderingContext &context) {
+    PhysicsShape::debugRender(renderer, context);
+
+    SDL_SetRenderDrawColor(renderer,255,0,0,255);
+
+    auto points = getVertices();
+    for (int i = 0; i < points.size(); ++i) {
+        int next_i = (i+1)%points.size();
+        Vector2Int first = points[i];
+        Vector2Int second = points[next_i];
+
+        auto first_screen = context.camera_info.worldToScreenPoint(first);
+        auto second_screen = context.camera_info.worldToScreenPoint(second);
+
+        SDL_RenderLine(renderer,first_screen.x,first_screen.y,second_screen.x,second_screen.y);
+    }
 }
