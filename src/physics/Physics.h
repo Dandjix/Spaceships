@@ -18,12 +18,14 @@ namespace Physics
 			checked_positions(checked_positions)
 		{}
 
+		RaycastHitInfo() = default;
+
 		bool hit;
 		Vector2Int hit_world_position;
 		std::vector<Vector2Int> checked_positions;
 	};
 
-	RaycastHitInfo RayCast(Vector2Int origin, Vector2Float direction, SpaceShip * spaceship, float maxDistance = FLT_MAX);
+	[[nodiscard]] RaycastHitInfo RayCast(Vector2Int origin, Vector2Float direction, SpaceShip * spaceship, float maxDistance = FLT_MAX);
 
 	[[nodiscard]] std::vector<PhysicsEntity*> EntityPointCast(Vector2Int world_position, SpaceShip * space_ship);
 }
