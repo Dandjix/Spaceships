@@ -8,13 +8,13 @@
 
 
 namespace Physics {
-    std::optional<Vector2Int> localSegmentCast(
+    [[nodiscard]] std::optional<Vector2Int> localSegmentCast(
         Vector2Int start,
         Vector2Int end,
         const std::vector<Vector2Int> &world_vertices
     );
 
-    std::optional<Vector2Int> segmentIntersection(
+    [[nodiscard]] std::optional<Vector2Int> segmentIntersection(
         Vector2Int start_1, Vector2Int end_1,
         Vector2Int start_2, Vector2Int end_2
     );
@@ -34,7 +34,7 @@ namespace Physics {
      * @param end_2
      * @return
      */
-    segmentIntersectionFloatsResult segmentIntersectionFloats(
+    [[nodiscard]] segmentIntersectionFloatsResult segmentIntersectionFloats(
         Vector2Int start_1, Vector2Int end_1,
         Vector2Int start_2, Vector2Int end_2
     );
