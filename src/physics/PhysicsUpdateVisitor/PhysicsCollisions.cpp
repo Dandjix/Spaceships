@@ -232,7 +232,21 @@ namespace PhysicsCollisions {
         round->owner_entity->movePosition(-delta * force_e2, space_ship);
     }
 
-    void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
+    void visitStaticRoundConvex(RoundStaticPhysicsShape *static_round, ConvexPhysicsShape *convex, SpaceShip *space_ship) {
+        SATReturn res;
+        {
+            PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
+            PolygonInfo round_info = {static_round->getCenter(), static_round->generateVertices()};
+            res = SeparatedAxisTheorem(&convex_info, &round_info);
+        }
+
+        if (!res.are_colliding)
+            return;
+
+        Vector2Float delta = Vectors::toVector2Float(convex->getCenter() - static_round->getCenter()).normalized() * res.
+                             overlap;
+
+        convex->owner_entity->movePosition(delta, space_ship);
     }
 
 
