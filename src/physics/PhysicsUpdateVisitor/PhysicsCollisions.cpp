@@ -16,7 +16,7 @@
 /**
  * This is applied to two entities that are at the same position to unstuck them
  */
-const float jolt = 3;
+constexpr float jolt = 3;
 
 std::vector<std::pair<Vector2Int, Vector2Int> > getDiagonals(Vector2Int center, std::vector<Vector2Int> polygon) {
     std::vector<std::pair<Vector2Int, Vector2Int> > diagonals;
@@ -39,6 +39,71 @@ std::vector<std::pair<Vector2Int, Vector2Int> > getSides(std::vector<Vector2Int>
     return sides;
 }
 
+//https://www.youtube.com/watch?v=7Ik2vowGcU0&t=1320s
+bool areCollidingSAT(ConvexPhysicsShape * poly1, ConvexPhysicsShape * poly2)
+{
+    for (int shape = 0; shape < 2; shape++)
+    {
+        if (shape == 1) {
+            auto temp = poly1;
+            poly1 = poly2;
+            poly2 = temp;
+        }
+
+        auto p1= poly1->getVertices();
+
+        for (auto [edge_start,edge_end]: getSides(poly1->getVertices())) {
+            Vector2Float normal = Vector2Float(-edge_end.y + edge_start.y,edge_end.x - edge_start.x);
+
+            float min_r1 = INFINITY, max_r1 = -INFINITY;
+            for (auto vertex: poly1->getVertices()) {
+                float q = vertex.x * normal.x + vertex.y * normal.y; // dot product
+                min_r1 = std::min(min_r1,q);
+                max_r1 = std::max(max_r1,q);
+            }
+
+            float min_r2 = INFINITY, max_r2 = -INFINITY;
+            for (auto vertex: poly2->getVertices()) {
+                float q = vertex.x * normal.x + vertex.y * normal.y;
+                min_r2 = std::min(min_r2,q);
+                max_r2 = std::max(max_r2,q);
+            }
+
+            if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
+                return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool areCollidingDiagonals(ConvexPhysicsShape * poly1, ConvexPhysicsShape * poly2) {
+
+    for (int shape = 0; shape < 2; shape++) {
+        if (shape == 1) {
+            auto temp = poly1;
+            poly1 = poly2;
+            poly2 = temp;
+        }
+        auto diagonals_1 = getDiagonals(poly1->getCenter(), poly1->getVertices());
+        // auto diagonals_2 = getDiagonals(poly2->getCenter(), poly2->getVertices());
+        // auto sides_1 = getSides(poly1->getVertices());
+        auto sides_2 = getSides(poly2->getVertices());
+        // Debug::CollisionInfo::instance->addLines(diagonals_1);
+        // Debug::CollisionInfo::instance->addLines(sides_2);
+        for (auto diag: diagonals_1) {
+            for (auto side: sides_2) {
+                auto res = Physics::segmentIntersectionFloats(diag.first, diag.second, side.first, side.second);
+                if (res.success)
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
+
 // Vector2Float direction(Vector2Int start, Vector2Int end) {
 //     return Vectors::toVector2Float(end - start).normalized();
 // }
@@ -55,47 +120,16 @@ namespace PhysicsCollisions {
 
 
     void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
-        Vector2Float global_force;
 
-        for (int shape = 0; shape < 2; shape++) {
-            if (shape == 1) {
-                auto temp = poly1;
-                poly1 = poly2;
-                poly2 = temp;
-            }
-
-            Vector2Float local_force = {0.0f, 0.0f};
-
-            auto diagonals_1 = getDiagonals(poly1->getCenter(), poly1->getVertices());
-            // auto diagonals_2 = getDiagonals(poly2->getCenter(), poly2->getVertices());
-            // auto sides_1 = getSides(poly1->getVertices());
-            auto sides_2 = getSides(poly2->getVertices());
-
-            // Debug::CollisionInfo::instance->addLines(diagonals_1);
-            // Debug::CollisionInfo::instance->addLines(sides_2);
-
-            for (auto diag: diagonals_1) {
-                for (auto side: sides_2) {
-                    auto res = Physics::segmentIntersectionFloats(diag.first, diag.second, side.first, side.second);
-                    if (!res.success)
-                        continue;
-                    local_force += Vectors::toVector2Float(diag.second - diag.first) * res.t1;
-                }
-            }
-            if (shape == 0)
-                global_force += local_force;
-            else
-                global_force -= local_force;
+        if (areCollidingSAT(poly1,poly2)) {
+            Debug::CollisionInfo::instance->addPoints({poly1->getCenter(),poly2->getCenter()});
         }
 
-        if (global_force == Vector2Float{0, 0})
-            return;
+        // global_force*=0.5f;
+        // global_force/= 10; //no clue why i need this here plz kill me
 
-        global_force*=0.5f;
-        global_force/= 10; //no clue why i need this here plz kill me
-
-        poly1->owner_entity->movePosition(global_force, space_ship);
-        poly2->owner_entity->movePosition(-global_force, space_ship);
+        // poly1->owner_entity->movePosition(global_force, space_ship);
+        // poly2->owner_entity->movePosition(-global_force, space_ship);
     }
 
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
