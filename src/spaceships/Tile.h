@@ -26,7 +26,7 @@ private:
 
 
 public:
-	static const int tileSizePx = 64;
+	static constexpr int tileSizePx = 64;
 
 	static void loadAll(SDL_Renderer* renderer);
 
