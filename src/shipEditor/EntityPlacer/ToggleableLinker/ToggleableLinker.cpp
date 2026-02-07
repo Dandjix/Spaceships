@@ -13,7 +13,7 @@
 constexpr float SHORTEST_DISTANCE_PX = 256;
 
 Toggleable *ToggleableLinker::getClosestToggleable(Vector2Int world_mouse_position) const {
-    float smallest_distance = std::numeric_limits<float>().max();
+    float smallest_distance = std::numeric_limits<float>::max();
 
     Toggleable *closest = nullptr;
 
@@ -22,7 +22,7 @@ Toggleable *ToggleableLinker::getClosestToggleable(Vector2Int world_mouse_positi
 
         if (t == nullptr) continue;
 
-        auto distance = (world_mouse_position - t->getPosition()).length();
+        auto distance = (world_mouse_position - t->asEntity()->getPosition()).length();
 
         if (distance <= smallest_distance) {
             smallest_distance = distance;
@@ -36,7 +36,7 @@ Toggleable *ToggleableLinker::getClosestToggleable(Vector2Int world_mouse_positi
 }
 
 ToggleableActivator *ToggleableLinker::getClosestToggleableActivator(Vector2Int world_mouse_position) const {
-    float smallest_distance = std::numeric_limits<float>().max();
+    float smallest_distance = std::numeric_limits<float>::max();
 
     ToggleableActivator *closest = nullptr;
 
@@ -63,7 +63,7 @@ void ToggleableLinker::drawLineToExisting(SDL_Renderer * renderer,const Renderin
         return;
 
     auto screen_pos_1 = context.camera_info.worldToScreenPoint(toggleable_activator->asEntity()->getPosition());
-    auto screen_pos_2 = context.camera_info.worldToScreenPoint(toggleable_activator->getLinkedEntity()->getPosition());
+    auto screen_pos_2 = context.camera_info.worldToScreenPoint(toggleable_activator->getLinkedEntity()->asEntity()->getPosition());
 
     SDL_RenderLine(renderer,screen_pos_1.x,screen_pos_1.y,screen_pos_2.x,screen_pos_2.y);
 }
@@ -99,7 +99,7 @@ void drawOctagon(SDL_Renderer *renderer, const RenderingContext &context, Vector
 
     for (int i = 0; i < 8; ++i) {
         Vector2Int world_pos = {0, Scaling::scaleToWorld(OCTAGON_RADIUS_PX)};
-        world_pos = world_position + world_pos.rotate(12.5 + i * (360 / sides));
+        world_pos = world_position + world_pos.rotate(12.5f + static_cast<float>(i) * (360.0f / sides));
         points.push_back(context.camera_info.worldToScreenPoint(world_pos));
     }
 
@@ -125,8 +125,8 @@ void ToggleableLinker::render(SDL_Renderer *renderer, const RenderingContext &co
             if (closest_toggleable == nullptr)
                 break;
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-            drawOctagon(renderer, context, closest_toggleable->getPosition());
-            drawLine(renderer, context, activator_to_link_to->asEntity(), closest_toggleable);
+            drawOctagon(renderer, context, closest_toggleable->asEntity()->getPosition());
+            drawLine(renderer, context, activator_to_link_to->asEntity(), closest_toggleable->asEntity());
             break;
     }
 }

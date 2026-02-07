@@ -29,10 +29,9 @@ void Lamp::render(SDL_Renderer *renderer, const RenderingContext &context) {
 }
 
 nlohmann::json Lamp::toJson() {
-    auto json = Toggleable::toJson();
-
+    auto json = Entity::toJson();
+    json["entity_id"] = entity_id;
     json["on"] = on;
-
     return json;
 }
 

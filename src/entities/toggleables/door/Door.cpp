@@ -6,19 +6,25 @@
 
 #include "physics/shapes/RectStaticPhysicsShape.h"
 
-Door::Door(Vector2Int position, float angle, float state, float moment, Vector2Int dimensions)
-    : PhysicsEntity(position, angle, new RectStaticPhysicsShape(this, dimensions)), dimensions(dimensions),
+Door::Door(Vector2Int position, float angle, float state, float moment,EntityId::entityId entity_id ,Vector2Int dimensions)
+    : PhysicsEntity(position, angle, new RectStaticPhysicsShape(this, dimensions)), entity_id(entity_id),
+      dimensions(dimensions),
       state(state), moment(moment) {
 }
 
 FROM_JSON_DEFINITION(Door) {
-    return new Door(
+    auto door = new Door(
         Vector2Int::fromJson(json["position"]),
         json["angle"],
         json["state"],
         json["moment"],
+        json["entity_id"],
         Vector2Int::fromJson(json["dimensions"])
     );
+
+    transient_game_state.identified_entities[json["entity_id"]] = door;
+
+    return door;
 }
 
 nlohmann::json Door::toJson() {
@@ -26,6 +32,7 @@ nlohmann::json Door::toJson() {
     json["state"] = state;
     json["moment"] = moment;
     json["dimensions"] = dimensions.toJson();
+    json["entity_id"] = entity_id;
     return json;
 }
 
