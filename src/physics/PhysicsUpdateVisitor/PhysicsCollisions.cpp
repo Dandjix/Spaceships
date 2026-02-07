@@ -87,8 +87,6 @@ bool areCollidingDiagonals(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2)
         // auto diagonals_2 = getDiagonals(poly2->getCenter(), poly2->getVertices());
         // auto sides_1 = getSides(poly1->getVertices());
         auto sides_2 = getSides(poly2->getVertices());
-        // Debug::CollisionInfo::instance->addLines(diagonals_1);
-        // Debug::CollisionInfo::instance->addLines(sides_2);
         for (auto diag: diagonals_1) {
             for (auto side: sides_2) {
                 auto res = Physics::segmentIntersectionFloats(diag.first, diag.second, side.first, side.second);
@@ -160,9 +158,6 @@ namespace PhysicsCollisions {
 
 
     void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
-        if (areCollidingSAT(poly1, poly2)) {
-            Debug::CollisionInfo::instance->addPoints({poly1->getCenter(), poly2->getCenter()});
-        }
 
         auto res = SeparatedAxisTheorem(poly1,poly2);
 
