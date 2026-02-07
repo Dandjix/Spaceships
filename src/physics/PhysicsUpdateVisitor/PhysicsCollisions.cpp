@@ -9,6 +9,7 @@
 #include "../shapes/RoundPhysicsShape.h"
 #include "debug/CollisionInfo.h"
 #include "physics/SegmentCast.h"
+#include "physics/SegmentCircleCast.h"
 #include "physics/shapes/ConvexPhysicsShape.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 #include "spaceships/SpaceShip.h"
@@ -98,6 +99,25 @@ bool areCollidingDiagonals(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2)
     return false;
 }
 
+bool circleConvexAreColliding(ConvexPhysicsShape *convex, RoundPhysicsShape *round) {
+    //if the convex's center is inside the circle, they are of course colliding.
+    if ((convex->getCenter() - round->getCenter()).sqrLength() <= (round->radius * round->radius))
+        return true;
+
+    auto diagonals = getDiagonals(convex->getCenter(), convex->getVertices());
+    auto sides = getSides(convex->getVertices());
+
+    for (auto [start,end]: sides) {
+        if (Physics::segmentCircleIntersectionFloat(start, end, round->getCenter(), round->radius).has_value())
+            return true;
+    }
+    // for (auto [start,end]: diagonals) {
+    //     if (Physics::segmentCircleIntersectionFloat(start,end,round->getCenter(),round->radius).has_value())
+    //         return true;
+    // }
+    return false;
+}
+
 struct SATReturn {
     float overlap;
     bool are_colliding;
@@ -177,54 +197,9 @@ namespace PhysicsCollisions {
     }
 
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
-        if (convex->getCenter() == round->getCenter()) //Jolt if stuck together
-            applyJolt(convex, round, space_ship);
-
-        Vector2Int start = round->getCenter();
-        auto direction = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized();
-        Vector2Int end = round->getCenter() + Vectors::toVector2Int(direction * round->radius);
-
-        Debug::CollisionInfo::instance->addLine(start, end);
-
-        auto intersection = Physics::localSegmentCast(start, end, convex->getVertices());
-        if (!intersection.has_value()) return;
-
-        //this is equivalent as if the convex was a circle with a certain radius
-        auto convex_radius = (convex->getCenter() - intersection.value()).length();
-
-        //what follows is the same as round on round collision
-        Vector2Int diff = convex->getCenter() - round->getCenter();
-
-        float combined_radius = convex_radius + round->radius;
-
-        float force_value = convex_radius + round->radius - diff.length();
-
-
-        if (force_value <= 0) {
-            return;
+        if (circleConvexAreColliding(convex,round)) {
+            Debug::CollisionInfo::instance->addPoints({convex->getCenter(),round->getCenter()});
         }
-
-        float e1_weight = convex->owner_entity->get_weight();
-        float e2_weight = round->owner_entity->get_weight();
-
-        float force_e1 = force_value * (e2_weight / (e2_weight + e1_weight));
-        float force_e2 = force_value * (e1_weight / (e2_weight + e1_weight));
-
-        auto delta_e1 = Vectors::toVector2Float(
-                            convex->getCenter()
-                            -
-                            round->getCenter()
-                        ).normalized() * force_e1;
-
-        auto delta_e2 = Vectors::toVector2Float(
-                            round->getCenter()
-                            -
-                            convex->getCenter()
-                        ).normalized() * force_e2;
-
-
-        convex->owner_entity->movePosition(delta_e1, space_ship);
-        round->owner_entity->movePosition(delta_e2, space_ship);
     }
 
     void visitStaticRoundConvex(RoundStaticPhysicsShape *shape1, ConvexPhysicsShape *shape2, SpaceShip *space_ship) {
