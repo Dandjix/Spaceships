@@ -27,7 +27,7 @@ void PlayerBehavior::update(const UpdateContext &context, PhysicsEntity * owner)
 
     delta = delta.scaleToWorldPosition();
 
-    owner->movePosition(delta,context.spaceShip);
+    owner->movePosition(delta);
 }
 
 void PlayerBehavior::spaceshipControlUpdate(const UpdateContext &context, PhysicsEntity *owner, SpaceShip *space_ship) {

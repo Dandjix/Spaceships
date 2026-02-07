@@ -12,6 +12,10 @@ Vector2Int PhysicsShape::getCenter() const {
     return owner_entity->getPosition();
 }
 
+float PhysicsShape::getWeight() const {
+    return owner_entity->get_weight();
+}
+
 void PhysicsShape::physicsUpdate(const PhysicsUpdateContext& context)
 {
 
@@ -42,4 +46,7 @@ void PhysicsShape::drawBoundingBox(SDL_Renderer* renderer, const RenderingContex
 void PhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
 {
     // drawBoundingBox(renderer, context);
+}
+void PhysicsShape::moveCenter(Vector2Float delta) const {
+    owner_entity->movePosition(delta);
 }

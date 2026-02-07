@@ -175,8 +175,8 @@ namespace PhysicsCollisions {
 
         Vector2Float jolt_vector = Vector2Float(jolt, 0.0f).rotate(random_angle);
 
-        shape1->owner_entity->movePosition(jolt_vector, space_ship);
-        shape2->owner_entity->movePosition(-jolt_vector, space_ship);
+        shape1->moveCenter(jolt_vector);
+        shape2->moveCenter(-jolt_vector);
     }
 
 
@@ -194,14 +194,14 @@ namespace PhysicsCollisions {
         Vector2Float delta = Vectors::toVector2Float(poly1->getCenter() - poly2->getCenter()).normalized() * res.
                              overlap;
 
-        float e1_weight = poly1->owner_entity->get_weight();
-        float e2_weight = poly2->owner_entity->get_weight();
+        float e1_weight = poly1->getWeight();
+        float e2_weight = poly2->getWeight();
 
         float force_e1 = (e2_weight / (e2_weight + e1_weight));
         float force_e2 = (e1_weight / (e2_weight + e1_weight));
 
-        poly1->owner_entity->movePosition(delta * force_e1, space_ship);
-        poly2->owner_entity->movePosition(-delta * force_e2, space_ship);
+        poly1->moveCenter(delta * force_e1);
+        poly2->moveCenter(-delta * force_e2);
     }
 
     // here's a little lesson in trickery, this is going down in history
@@ -219,14 +219,14 @@ namespace PhysicsCollisions {
         Vector2Float delta = Vectors::toVector2Float(convex->getCenter() - round->getCenter()).normalized() * res.
                              overlap;
 
-        float e1_weight = convex->owner_entity->get_weight();
-        float e2_weight = round->owner_entity->get_weight();
+        float e1_weight = convex->getWeight();
+        float e2_weight = round->getWeight();
 
         float force_e1 = (e2_weight / (e2_weight + e1_weight));
         float force_e2 = (e1_weight / (e2_weight + e1_weight));
 
-        convex->owner_entity->movePosition(delta * force_e1, space_ship);
-        round->owner_entity->movePosition(-delta * force_e2, space_ship);
+        convex->moveCenter(delta * force_e1);
+        round->moveCenter(-delta * force_e2);
     }
 
     void visitStaticRoundConvex(RoundStaticPhysicsShape *static_round, ConvexPhysicsShape *convex, SpaceShip *space_ship) {
@@ -243,7 +243,7 @@ namespace PhysicsCollisions {
         Vector2Float delta = Vectors::toVector2Float(convex->getCenter() - static_round->getCenter()).normalized() * res.
                              overlap;
 
-        convex->owner_entity->movePosition(delta, space_ship);
+        convex->moveCenter(delta);
     }
 
 
@@ -260,8 +260,8 @@ namespace PhysicsCollisions {
             return;
         }
 
-        float e1_weight = shape1->owner_entity->get_weight();
-        float e2_weight = shape2->owner_entity->get_weight();
+        float e1_weight = shape1->getWeight();
+        float e2_weight = shape2->getWeight();
 
         float force_e1 = force_value * (e2_weight / (e2_weight + e1_weight));
         float force_e2 = force_value * (e1_weight / (e2_weight + e1_weight));
@@ -273,8 +273,8 @@ namespace PhysicsCollisions {
                              shape2->getCenter() - shape1->getCenter()).normalized() *
                          force_e2);
 
-        shape1->owner_entity->movePosition(delta_e1, space_ship);
-        shape2->owner_entity->movePosition(delta_e2, space_ship);
+        shape1->moveCenter(delta_e1);
+        shape2->moveCenter(delta_e2);
     }
 
     void visitStaticConvexConvex(ConvexStaticPhysicsShape *static_convex, ConvexPhysicsShape *convex,
@@ -292,7 +292,7 @@ namespace PhysicsCollisions {
         Vector2Float delta = Vectors::toVector2Float(static_convex->getCenter() - convex->getCenter()).normalized() * res.
                              overlap;
 
-        convex->owner_entity->movePosition(-delta, space_ship);
+        convex->moveCenter(-delta);
     }
 
     void visitStaticConvexRound(ConvexStaticPhysicsShape *static_convex, RoundPhysicsShape *round,
@@ -310,7 +310,7 @@ namespace PhysicsCollisions {
         Vector2Float delta = Vectors::toVector2Float(static_convex->getCenter() - round->getCenter()).normalized() * res.
                              overlap;
 
-        round->owner_entity->movePosition(-delta, space_ship);
+        round->moveCenter(-delta);
     }
 
     void visitStaticRoundRound(RoundStaticPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
@@ -319,7 +319,7 @@ namespace PhysicsCollisions {
 
             Vector2Float jolt_vector = Vector2Float(jolt, 0.0f).rotate(random_angle);
 
-            shape2->owner_entity->movePosition(jolt_vector, space_ship);
+            shape2->moveCenter(jolt_vector);
         }
 
         Vector2Int diff = shape1->getCenter() - shape2->getCenter();
@@ -336,7 +336,7 @@ namespace PhysicsCollisions {
                              shape2->getCenter() - shape1->getCenter()).normalized() *
                          force_e2);
 
-        shape2->owner_entity->movePosition(delta_e2, space_ship);
+        shape2->moveCenter(delta_e2);
     }
 
 
@@ -387,7 +387,7 @@ namespace PhysicsCollisions {
                     Vector2Float delta = normal * penetration;
 
                     // Apply collision correction
-                    shape1->owner_entity->movePosition(delta, space_ship);
+                    shape1->moveCenter(delta);
 
                     // Update center because we moved
                     center = center + delta;
@@ -433,7 +433,7 @@ namespace PhysicsCollisions {
 
         // Average the displacement if multiple vertices hit.
         if (hit_count > 0) {
-            convex->owner_entity->movePosition(displacement / hit_count, space_ship);
+            convex->moveCenter(displacement / hit_count);
         }
     }
 
@@ -505,7 +505,7 @@ namespace PhysicsCollisions {
                 displacement += -direction.normalized() * penetration;
             }
         });
-        convex->owner_entity->movePosition(displacement, space_ship);
+        convex->moveCenter(displacement);
     }
 
     void visitConvexWall(ConvexPhysicsShape *convex, SpaceShip *space_ship) {

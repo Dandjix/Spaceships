@@ -24,6 +24,8 @@ public:
     virtual ~PhysicsShape() = default;
 
     [[nodiscard]] Vector2Int getCenter() const;
+    [[nodiscard]] float getWeight() const;
+    void moveCenter(Vector2Float delta) const;
 
     virtual void physicsUpdate(const PhysicsUpdateContext & context);
     void drawBoundingBox(SDL_Renderer* renderer, const RenderingContext& context);

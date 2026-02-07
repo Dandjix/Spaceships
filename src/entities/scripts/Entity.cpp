@@ -57,7 +57,7 @@ void Entity::unregisterInSpacehip(SpaceShip* space_ship)
     onUnRegistered(space_ship);
 }
 
-void Entity::movePosition(Vector2Float delta, SpaceShip * space_ship) {
+void Entity::movePosition(Vector2Float delta) {
     if (delta.sqrLength() <= 0)
         return;
 
