@@ -11,6 +11,10 @@
 //
 
 namespace EntityLoading {
+    /**
+     * This is used to register any leaf entity's fromJson method so that it may be
+     * deserialized
+     */
     class EntityFactory {
     private:
         std::unordered_map<
