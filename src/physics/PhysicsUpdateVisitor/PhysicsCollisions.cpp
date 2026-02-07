@@ -40,33 +40,31 @@ std::vector<std::pair<Vector2Int, Vector2Int> > getSides(std::vector<Vector2Int>
 }
 
 //https://www.youtube.com/watch?v=7Ik2vowGcU0&t=1320s
-bool areCollidingSAT(ConvexPhysicsShape * poly1, ConvexPhysicsShape * poly2)
-{
-    for (int shape = 0; shape < 2; shape++)
-    {
+bool areCollidingSAT(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2) {
+    for (int shape = 0; shape < 2; shape++) {
         if (shape == 1) {
             auto temp = poly1;
             poly1 = poly2;
             poly2 = temp;
         }
 
-        auto p1= poly1->getVertices();
+        auto p1 = poly1->getVertices();
 
         for (auto [edge_start,edge_end]: getSides(poly1->getVertices())) {
-            Vector2Float normal = Vector2Float(-edge_end.y + edge_start.y,edge_end.x - edge_start.x);
+            Vector2Float normal = Vector2Float(-edge_end.y + edge_start.y, edge_end.x - edge_start.x);
 
             float min_r1 = INFINITY, max_r1 = -INFINITY;
             for (auto vertex: poly1->getVertices()) {
                 float q = vertex.x * normal.x + vertex.y * normal.y; // dot product
-                min_r1 = std::min(min_r1,q);
-                max_r1 = std::max(max_r1,q);
+                min_r1 = std::min(min_r1, q);
+                max_r1 = std::max(max_r1, q);
             }
 
             float min_r2 = INFINITY, max_r2 = -INFINITY;
             for (auto vertex: poly2->getVertices()) {
                 float q = vertex.x * normal.x + vertex.y * normal.y;
-                min_r2 = std::min(min_r2,q);
-                max_r2 = std::max(max_r2,q);
+                min_r2 = std::min(min_r2, q);
+                max_r2 = std::max(max_r2, q);
             }
 
             if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
@@ -78,8 +76,7 @@ bool areCollidingSAT(ConvexPhysicsShape * poly1, ConvexPhysicsShape * poly2)
 }
 
 
-bool areCollidingDiagonals(ConvexPhysicsShape * poly1, ConvexPhysicsShape * poly2) {
-
+bool areCollidingDiagonals(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2) {
     for (int shape = 0; shape < 2; shape++) {
         if (shape == 1) {
             auto temp = poly1;
@@ -120,9 +117,8 @@ namespace PhysicsCollisions {
 
 
     void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
-
-        if (areCollidingSAT(poly1,poly2)) {
-            Debug::CollisionInfo::instance->addPoints({poly1->getCenter(),poly2->getCenter()});
+        if (areCollidingSAT(poly1, poly2)) {
+            Debug::CollisionInfo::instance->addPoints({poly1->getCenter(), poly2->getCenter()});
         }
 
         // global_force*=0.5f;
