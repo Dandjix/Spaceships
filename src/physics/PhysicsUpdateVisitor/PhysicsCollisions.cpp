@@ -104,17 +104,13 @@ bool circleConvexAreColliding(ConvexPhysicsShape *convex, RoundPhysicsShape *rou
     if ((convex->getCenter() - round->getCenter()).sqrLength() <= (round->radius * round->radius))
         return true;
 
-    auto diagonals = getDiagonals(convex->getCenter(), convex->getVertices());
     auto sides = getSides(convex->getVertices());
 
     for (auto [start,end]: sides) {
         if (Physics::segmentCircleIntersectionFloat(start, end, round->getCenter(), round->radius).has_value())
             return true;
     }
-    // for (auto [start,end]: diagonals) {
-    //     if (Physics::segmentCircleIntersectionFloat(start,end,round->getCenter(),round->radius).has_value())
-    //         return true;
-    // }
+
     return false;
 }
 
