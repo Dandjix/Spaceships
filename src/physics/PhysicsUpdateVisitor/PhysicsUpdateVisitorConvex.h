@@ -39,4 +39,8 @@ public:
     void visitStaticRound(RoundStaticPhysicsShape *e2, SpaceShip *space_ship) override {
         return PhysicsCollisions::visitStaticRoundConvex(e2,e1,space_ship);
     }
+
+    void visitStaticConvex(ConvexStaticPhysicsShape *static_convex, SpaceShip *space_ship) override {
+        return PhysicsCollisions::visitStaticConvexConvex(static_convex,e1,space_ship);
+    }
 };

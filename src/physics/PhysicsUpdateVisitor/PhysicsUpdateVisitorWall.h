@@ -35,4 +35,7 @@ public:
     void visitStaticRound(RoundStaticPhysicsShape *e2, SpaceShip *space_ship) override {
         //This is left empty for there is no collision between walls and static
     }
+
+    void visitStaticConvex(ConvexStaticPhysicsShape *static_convex, SpaceShip *space_ship) override {
+    }
 };

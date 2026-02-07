@@ -12,6 +12,7 @@
 #include "physics/SegmentCast.h"
 #include "physics/SegmentCircleCast.h"
 #include "physics/shapes/ConvexPhysicsShape.h"
+#include "physics/shapes/ConvexStaticPhysicsShape.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 #include "spaceships/SpaceShip.h"
 #include "spaceships/Tile.h"
@@ -279,6 +280,42 @@ namespace PhysicsCollisions {
 
         shape1->owner_entity->movePosition(delta_e1, space_ship);
         shape2->owner_entity->movePosition(delta_e2, space_ship);
+    }
+
+    void visitStaticConvexConvex(ConvexStaticPhysicsShape *static_convex, ConvexPhysicsShape *convex,
+        SpaceShip *space_ship) {
+        SATReturn res;
+        {
+            PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
+            PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
+            res = SeparatedAxisTheorem(&static_convex_info, &convex_info);
+        }
+
+        if (!res.are_colliding)
+            return;
+
+        Vector2Float delta = Vectors::toVector2Float(static_convex->getCenter() - convex->getCenter()).normalized() * res.
+                             overlap;
+
+        convex->owner_entity->movePosition(-delta, space_ship);
+    }
+
+    void visitStaticConvexRound(ConvexStaticPhysicsShape *static_convex, RoundPhysicsShape *round,
+        SpaceShip *space_ship) {
+        SATReturn res;
+        {
+            PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
+            PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
+            res = SeparatedAxisTheorem(&static_convex_info, &round_info);
+        }
+
+        if (!res.are_colliding)
+            return;
+
+        Vector2Float delta = Vectors::toVector2Float(static_convex->getCenter() - round->getCenter()).normalized() * res.
+                             overlap;
+
+        round->owner_entity->movePosition(-delta, space_ship);
     }
 
     void visitStaticRoundRound(RoundStaticPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {

@@ -3,8 +3,11 @@
 //
 
 #pragma once
+#include "spaceships/SpaceShip.h"
 
 
+class ConvexStaticPhysicsShape;
+class PhysicsUpdateVisitorStaticConvex;
 class RoundPhysicsShape;
 class RoundStaticPhysicsShape;
 class ConvexPhysicsShape;
@@ -16,7 +19,11 @@ namespace PhysicsCollisions
     void visitConvexRound(ConvexPhysicsShape * convex, RoundPhysicsShape * round, SpaceShip * space_ship);
     void visitStaticRoundConvex(RoundStaticPhysicsShape * shape1, ConvexPhysicsShape * shape2, SpaceShip * space_ship);
     void visitRounds(RoundPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
+
+    void visitStaticConvexConvex(ConvexStaticPhysicsShape * static_convex, ConvexPhysicsShape * convex, SpaceShip * space_ship);
+    void visitStaticConvexRound(ConvexStaticPhysicsShape * static_convex, RoundPhysicsShape * round, SpaceShip * space_ship);
     void visitStaticRoundRound(RoundStaticPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
+
     void visitRoundWall(RoundPhysicsShape * shape1, SpaceShip * space_ship);
     void visitConvexWall(ConvexPhysicsShape * convex, SpaceShip * space_ship);
 };

@@ -19,8 +19,10 @@ public:
 
     virtual void visitConvex(ConvexPhysicsShape * e2, SpaceShip* space_ship)=0;
     virtual void visitRound(RoundPhysicsShape * e2, SpaceShip* space_ship)=0;
+    virtual void visitStaticConvex(ConvexStaticPhysicsShape * static_convex, SpaceShip *space_ship)=0;
     virtual void visitStaticRound(RoundStaticPhysicsShape * e2, SpaceShip* space_ship)=0;
     virtual void visitWall(SpaceShip* space_ship)=0;
+
 };
 
 
