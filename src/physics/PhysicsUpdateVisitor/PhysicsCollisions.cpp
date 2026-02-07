@@ -100,6 +100,49 @@ bool areCollidingDiagonals(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2)
     return false;
 }
 
+struct SATReturn {
+    float overlap;
+    bool are_colliding;
+};
+SATReturn SeparatedAxisTheorem(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2) {
+    float overlap = INFINITY;
+
+    for (int shape = 0; shape < 2; shape++) {
+        if (shape == 1) {
+            auto temp = poly1;
+            poly1 = poly2;
+            poly2 = temp;
+        }
+
+        auto p1 = poly1->getVertices();
+
+        for (auto [edge_start,edge_end]: getSides(poly1->getVertices())) {
+            Vector2Float normal = Vector2Float(-edge_end.y + edge_start.y, edge_end.x - edge_start.x).normalized();
+
+            float min_r1 = INFINITY, max_r1 = -INFINITY;
+            for (auto vertex: poly1->getVertices()) {
+                float q = vertex.x * normal.x + vertex.y * normal.y; // dot product
+                min_r1 = std::min(min_r1, q);
+                max_r1 = std::max(max_r1, q);
+            }
+
+            float min_r2 = INFINITY, max_r2 = -INFINITY;
+            for (auto vertex: poly2->getVertices()) {
+                float q = vertex.x * normal.x + vertex.y * normal.y;
+                min_r2 = std::min(min_r2, q);
+                max_r2 = std::max(max_r2, q);
+            }
+
+            overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
+
+            if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
+                return {0,false};
+        }
+    }
+
+    return {overlap,true};
+}
+
 
 // Vector2Float direction(Vector2Int start, Vector2Int end) {
 //     return Vectors::toVector2Float(end - start).normalized();
@@ -121,11 +164,15 @@ namespace PhysicsCollisions {
             Debug::CollisionInfo::instance->addPoints({poly1->getCenter(), poly2->getCenter()});
         }
 
-        // global_force*=0.5f;
-        // global_force/= 10; //no clue why i need this here plz kill me
+        auto res = SeparatedAxisTheorem(poly1,poly2);
 
-        // poly1->owner_entity->movePosition(global_force, space_ship);
-        // poly2->owner_entity->movePosition(-global_force, space_ship);
+        if (!res.are_colliding)
+            return;
+
+        Vector2Float delta = Vectors::toVector2Float(poly1->getCenter() - poly2->getCenter()).normalized() * res.overlap;
+
+        poly1->owner_entity->movePosition(delta,space_ship);
+        poly2->owner_entity->movePosition(-delta,space_ship);
     }
 
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
