@@ -81,7 +81,5 @@ public:
 
     void registerInSpaceship(SpaceShip *space_ship) override;
 
-    void unregisterInSpacehip(SpaceShip *space_ship) override;
-
-    void kill(SpaceShip *space_ship) override;
+    void unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) override;
 };

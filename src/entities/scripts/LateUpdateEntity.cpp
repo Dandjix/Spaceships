@@ -14,7 +14,7 @@ void LateUpdateEntity::registerInSpaceship(SpaceShip *space_ship) {
     space_ship->late_update_entities.insert(this);
 }
 
-void LateUpdateEntity::unregisterInSpacehip(SpaceShip *space_ship) {
-    Entity::unregisterInSpacehip(space_ship);
-    space_ship->late_update_entities.erase(this);
+void LateUpdateEntity::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
+    space_ship->late_update_entities.add_to_erasing_queue(this,false);
+    Entity::unregisterInSpaceship(space_ship, delete_when_done);
 }

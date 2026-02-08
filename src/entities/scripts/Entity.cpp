@@ -52,9 +52,9 @@ void Entity::registerInSpaceship(SpaceShip* space_ship)
     onRegistered(space_ship);
 }
 
-void Entity::unregisterInSpacehip(SpaceShip* space_ship)
+void Entity::unregisterInSpaceship(SpaceShip* space_ship, bool delete_when_done)
 {
-    space_ship->entities.erase(this);
+    space_ship->entities.add_to_erasing_queue(this,delete_when_done);
     onUnRegistered(space_ship);
 }
 
@@ -71,7 +71,6 @@ void Entity::movePosition(Vector2Float delta) {
 
 void Entity::kill(SpaceShip *space_ship) {
     on_killed.emit(space_ship);
-    unregisterInSpacehip(space_ship);
-    delete this;
+    unregisterInSpaceship(space_ship,true);
 }
 

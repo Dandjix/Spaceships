@@ -21,8 +21,8 @@ inline void PhysicsEntity::registerInSpaceship(SpaceShip* space_ship)
     //     std::cout << "inserted a non serializable ! " << std::endl;
 }
 
-inline void PhysicsEntity::unregisterInSpacehip(SpaceShip* space_ship)
+inline void PhysicsEntity::unregisterInSpaceship(SpaceShip* space_ship, bool delete_when_done)
 {
-    Entity::unregisterInSpacehip(space_ship);
-    space_ship->physics_entities.erase(this);
+    Entity::unregisterInSpaceship(space_ship, delete_when_done);
+    space_ship->physics_entities.add_to_erasing_queue(this);
 }

@@ -132,8 +132,9 @@ public:
      *  The use of this is to be overriden by physics entities, as they also add themselves to the physics entities list
      *
      * @param space_ship the spaceship in which the entity will be unregistered
+     * @param delete_when_done
      */
-    virtual void unregisterInSpacehip(SpaceShip *space_ship);;
+    virtual void unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done);;
 
     int getX() const { return position.x; }
     int getY() const { return position.y; }

@@ -276,9 +276,9 @@ void SpaceShip::handleQueueDeletion() {
     }
 }
 
-void SpaceShip::unregisterEntities(const std::vector<Entity *> &to_unregister) {
+void SpaceShip::unregisterEntities(const std::vector<Entity *> &to_unregister, bool delete_when_done) {
     for (Entity *e: to_unregister) {
-        e->unregisterInSpacehip(this);
+        e->unregisterInSpaceship(this, delete_when_done);
     }
 }
 
@@ -421,6 +421,13 @@ void SpaceShip::eventHandling(const SDL_Event &event, const GameEvent::GameEvent
     }
 }
 
+void SpaceShip::ProcessDeletionQueues() {
+    entities.process_deletion_queue();
+    physics_entities.process_deletion_queue();
+    late_update_entities.process_deletion_queue();
+    active_when_paused_entities.process_deletion_queue();
+}
+
 void SpaceShip::updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime,
                                GameEvent::MousePositionType mouse_position_type, bool paused) {
     UpdateContext updateContext = {
@@ -436,6 +443,9 @@ void SpaceShip::updateHandling(const CameraTransformations::CameraInfo &camera_i
             entity->update(updateContext);
         }
         hooks.update(updateContext);
+
+        ProcessDeletionQueues();
+
     } else {
         for (auto entity: active_when_paused_entities) {
             entity->update(updateContext);

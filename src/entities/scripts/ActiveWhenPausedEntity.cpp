@@ -11,7 +11,7 @@ inline void ActiveWhenPausedEntity::registerInSpaceship(SpaceShip *space_ship) {
     space_ship->active_when_paused_entities.insert(this);
 }
 
-inline void ActiveWhenPausedEntity::unregisterInSpacehip(SpaceShip *space_ship) {
-    ShortLivedEntity::unregisterInSpacehip(space_ship);
-    space_ship->active_when_paused_entities.erase(this);
+inline void ActiveWhenPausedEntity::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
+    space_ship->active_when_paused_entities.add_to_erasing_queue(this,false);
+    ShortLivedEntity::unregisterInSpaceship(space_ship, delete_when_done);
 }

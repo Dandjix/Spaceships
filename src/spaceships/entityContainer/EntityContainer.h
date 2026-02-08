@@ -10,13 +10,14 @@ template<class T>
 class EntityContainer {
 private:
     std::vector<T> container;
+    std::vector<std::pair<T,bool>> deletion_queue;
 
 public:
     // Type aliases for iterator support
-    using iterator = typename std::vector<T>::iterator;
-    using const_iterator = typename std::vector<T>::const_iterator;
+    using iterator = std::vector<T>::iterator;
+    using const_iterator = std::vector<T>::const_iterator;
     using value_type = T;
-    using size_type = typename std::vector<T>::size_type;
+    using size_type = std::vector<T>::size_type;
 
     // Iterators
     iterator begin() { return container.begin(); }
@@ -32,7 +33,22 @@ public:
         container.push_back(value);
     }
 
-    void erase(T key) {
+    void add_to_erasing_queue(T key, bool delete_when_done = false) {
+        deletion_queue.push_back({key,delete_when_done});
+    }
+
+    void process_deletion_queue() {
+        for (auto [value,delete_when_done]: deletion_queue) {
+            erase_now(value);
+        }
+        for (auto [value,delete_when_done]: deletion_queue) {
+            if (delete_when_done)
+                delete value;
+        }
+        deletion_queue.clear();
+    }
+
+    void erase_now(T key) {
         auto it = std::find(container.begin(), container.end(), key);
 
         if (it == container.end()) {

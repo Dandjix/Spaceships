@@ -97,14 +97,8 @@ void Door::registerInSpaceship(SpaceShip *space_ship) {
     door_right->registerInSpaceship(space_ship);
 }
 
-void Door::unregisterInSpacehip(SpaceShip *space_ship) {
-    Entity::unregisterInSpacehip(space_ship);
-    door_left->unregisterInSpacehip(space_ship);
-    door_right->unregisterInSpacehip(space_ship);
-}
-
-void Door::kill(SpaceShip *space_ship) {
-    door_left->kill(space_ship);
-    door_right->kill(space_ship);
-    Entity::kill(space_ship);
+void Door::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
+    door_left->unregisterInSpaceship(space_ship,delete_when_done);
+    door_right->unregisterInSpaceship(space_ship,delete_when_done);
+    Entity::unregisterInSpaceship(space_ship, delete_when_done);
 }

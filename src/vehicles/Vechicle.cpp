@@ -24,7 +24,7 @@ void Vehicle::interact(Humanoid *activator, const GameEvent::GameEventContext &c
     stopPiloting();
 
     pilot = activator;
-    spaceship->unregisterEntities({pilot});
+    spaceship->unregisterEntities({pilot}, false);
 
     if (is_player()) {
         spaceship->setPlayer(this);

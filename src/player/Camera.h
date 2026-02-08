@@ -118,9 +118,9 @@ public:
         space_ship->cameras.push_back(this);
     }
 
-    void unregisterInSpacehip(SpaceShip *space_ship) override {
-        LateUpdateEntity::unregisterInSpacehip(space_ship);
+    void unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) override {
         space_ship->cameras.erase(std::find(space_ship->cameras.begin(),space_ship->cameras.end(),this));
+        LateUpdateEntity::unregisterInSpaceship(space_ship, delete_when_done);
     }
 
     void onRegistered(SpaceShip *newSpaceship) override {

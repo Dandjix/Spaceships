@@ -167,6 +167,8 @@ public:
 
     void eventHandling(const SDL_Event &event, const GameEvent::GameEventContext &event_context, bool paused);
 
+    void ProcessDeletionQueues();
+
     void updateHandling(const CameraTransformations::CameraInfo &camera_info, float deltaTime,
                         GameEvent::MousePositionType mouse_position_type, bool
                         paused);
@@ -187,7 +189,7 @@ public:
     /// </summary>
     /// <param name="entities"> the entiti(es) to unregister</param>
     /// <returns></returns>
-    void unregisterEntities(const std::vector<Entity *> &entities);
+    void unregisterEntities(const std::vector<Entity *> &entities, bool delete_when_done);
 
     bool has_entity(Entity *entity) const;
 
