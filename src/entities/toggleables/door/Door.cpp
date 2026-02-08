@@ -37,7 +37,7 @@ float Door::getDoorAngle(bool right) const {
 }
 
 Vector2Int Door::getDoorDimensions(bool right) const {
-    return {static_cast<int>((dimensions.x / 2)), dimensions.y};
+    return {static_cast<int>((dimensions.x / 2)*state), dimensions.y};
 }
 
 SDL_Texture * Door::floor_texture = nullptr;
