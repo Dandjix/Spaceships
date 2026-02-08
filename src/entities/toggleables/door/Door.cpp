@@ -8,17 +8,18 @@
 #include "game/Update.h"
 #include "physics/shapes/RectStaticPhysicsShape.h"
 
-RectStaticPhysicsShape * Door::getDoorLeftShape() {
+RectStaticPhysicsShape *Door::getDoorLeftShape() {
     return dynamic_cast<RectStaticPhysicsShape *>(door_left->shape);
 }
 
-RectStaticPhysicsShape * Door::getDoorRightShape() {
+RectStaticPhysicsShape *Door::getDoorRightShape() {
     return dynamic_cast<RectStaticPhysicsShape *>(door_right->shape);
 }
 
+
 Vector2Int Door::getDoorPosition(bool right) const {
-    Vector2Int closed_position = {(dimensions.x / 2 )/ 2,};
-    Vector2Int open_position = {dimensions.x / 2, 0};
+    Vector2Int closed_position = {dimensions.x / 4,0};
+    Vector2Int open_position = {(dimensions.x / 4 + dimensions.x / 2), 0};
     Vector2Int local_position = Vector2Int::lerp(open_position, closed_position, state);
 
     if (!right)
@@ -36,11 +37,12 @@ float Door::getDoorAngle(bool right) const {
     return angle;
 }
 
-Vector2Int Door::getDoorDimensions(bool right) const {
-    return {static_cast<int>((dimensions.x / 2)*state), dimensions.y};
+Vector2Int computeDoorDimensions(bool right, Vector2Int dimensions) {
+    return {(dimensions.x / 2), dimensions.y};
 }
+Vector2Int Door::getDoorDimensions(bool right) const {return computeDoorDimensions(right, dimensions);}
 
-SDL_Texture * Door::floor_texture = nullptr;
+SDL_Texture *Door::floor_texture = nullptr;
 
 
 Door::Door(Vector2Int position, float angle, float state, float moment, EntityId::entityId entity_id,
@@ -48,10 +50,9 @@ Door::Door(Vector2Int position, float angle, float state, float moment, EntityId
     : Entity(position, angle), entity_id(entity_id),
       dimensions(dimensions),
       state(state), moment(moment),
-      door_left(new DoorPanel(getDoorPosition(false), getDoorAngle(false), dimensions)),
-      door_right(new DoorPanel(getDoorPosition(true), getDoorAngle(true), dimensions)) {
+      door_left(new DoorPanel(getDoorPosition(false), getDoorAngle(false), computeDoorDimensions(false, dimensions))),
+      door_right(new DoorPanel(getDoorPosition(true), getDoorAngle(true), computeDoorDimensions(true, dimensions))) {
     on_destroyed.subscribe([]() {
-
     });
 }
 
@@ -62,15 +63,15 @@ Door::~Door() {
 
 void Door::update(const UpdateContext &context) {
     state += moment * context.deltaTime;
-    state = std::clamp(state,0.0f,1.0f);
+    state = std::clamp(state, 0.0f, 1.0f);
 
     door_left->setPosition(getDoorPosition(false));
     door_left->setAngle(getDoorAngle(false));
-    getDoorLeftShape()->setDimensions(getDoorDimensions(false));
+    // getDoorLeftShape()->setDimensions(getDoorDimensions(false));
 
     door_right->setPosition(getDoorPosition(true));
     door_right->setAngle(getDoorAngle(true));
-    getDoorRightShape()->setDimensions(getDoorDimensions(true));
+    // getDoorRightShape()->setDimensions(getDoorDimensions(true));
 }
 
 FROM_JSON_DEFINITION(Door) {
@@ -120,7 +121,7 @@ void Door::registerInSpaceship(SpaceShip *space_ship) {
 }
 
 void Door::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
-    door_left->unregisterInSpaceship(space_ship,delete_when_done);
-    door_right->unregisterInSpaceship(space_ship,delete_when_done);
+    door_left->unregisterInSpaceship(space_ship, delete_when_done);
+    door_right->unregisterInSpaceship(space_ship, delete_when_done);
     Entity::unregisterInSpaceship(space_ship, delete_when_done);
 }
