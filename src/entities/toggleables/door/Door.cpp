@@ -5,22 +5,29 @@
 #include "Door.h"
 
 #include "DoorPanel.h"
+#include "game/Update.h"
+#include "physics/shapes/RectStaticPhysicsShape.h"
 
-SDL_Texture * Door::floor_texture = nullptr;
+RectStaticPhysicsShape * Door::getDoorLeftShape() {
+    return dynamic_cast<RectStaticPhysicsShape *>(door_left->shape);
+}
 
+RectStaticPhysicsShape * Door::getDoorRightShape() {
+    return dynamic_cast<RectStaticPhysicsShape *>(door_right->shape);
+}
 
 Vector2Int Door::getDoorPosition(bool right) const {
-    // Vector2Int closed_position = {dimensions.x / 2,};
-    // Vector2Int open_position = {static_cast<int>(dimensions.x * 1.5f), 0};
-    // Vector2Int local_position = Vector2Int::lerp(open_position, closed_position, state);
+    Vector2Int closed_position = {(dimensions.x / 2 )/ 2,};
+    Vector2Int open_position = {dimensions.x / 2, 0};
+    Vector2Int local_position = Vector2Int::lerp(open_position, closed_position, state);
 
-    //
-    // if (!right)
-    //     local_position *= -1;
-    //
-    // local_position = local_position.rotate(getAngle());
-    return getPosition(); // + local_position;
+    if (!right)
+        local_position *= -1;
+
+    local_position = local_position.rotate(getAngle());
+    return getPosition() + local_position;
 }
+
 
 float Door::getDoorAngle(bool right) const {
     float angle = getAngle();
@@ -30,8 +37,10 @@ float Door::getDoorAngle(bool right) const {
 }
 
 Vector2Int Door::getDoorDimensions(bool right) const {
-    return {dimensions.x / 2, dimensions.y};
+    return {static_cast<int>((dimensions.x / 2)), dimensions.y};
 }
+
+SDL_Texture * Door::floor_texture = nullptr;
 
 
 Door::Door(Vector2Int position, float angle, float state, float moment, EntityId::entityId entity_id,
@@ -49,6 +58,19 @@ Door::Door(Vector2Int position, float angle, float state, float moment, EntityId
 Door::~Door() {
     // delete door_left; //since those two are registered entities, they already get deleted when the spaceship is deleted
     // delete door_right;
+}
+
+void Door::update(const UpdateContext &context) {
+    state += moment * context.deltaTime;
+    state = std::clamp(state,0.0f,1.0f);
+
+    door_left->setPosition(getDoorPosition(false));
+    door_left->setAngle(getDoorAngle(false));
+    getDoorLeftShape()->setDimensions(getDoorDimensions(false));
+
+    door_right->setPosition(getDoorPosition(true));
+    door_right->setAngle(getDoorAngle(true));
+    getDoorRightShape()->setDimensions(getDoorDimensions(true));
 }
 
 FROM_JSON_DEFINITION(Door) {

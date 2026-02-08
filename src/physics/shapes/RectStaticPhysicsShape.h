@@ -18,4 +18,13 @@ public:
             }
         ) {
     }
+
+    void setDimensions(Vector2Int dimensions) {
+        setRawVertices( {
+            {-dimensions.x / 2, -dimensions.y / 2},
+            {dimensions.x / 2, -dimensions.y / 2},
+            {dimensions.x / 2, dimensions.y / 2},
+            {-dimensions.x / 2, dimensions.y / 2}
+        });
+    }
 };

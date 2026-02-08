@@ -13,6 +13,10 @@ protected:
 public:
     explicit ConvexPhysicsShape(PhysicsEntity *owner_entity, const std::vector<Vector2Int> &vertices);
 
+    void setRawVertices(const std::vector<Vector2Int> &vertices_param) {
+        vertices = vertices_param;
+    }
+
     /**
      * @return the raw stored vertices values, not transformed in any way. To get the world position of the vertices,
      * see getVertices.

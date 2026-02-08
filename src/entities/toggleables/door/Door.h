@@ -8,11 +8,16 @@
 //
 
 
+class RectStaticPhysicsShape;
+
 // -
 class Door : public Entity, public virtual Toggleable {
 protected:
     PhysicsEntity * door_left;
     PhysicsEntity * door_right;
+
+    RectStaticPhysicsShape * getDoorLeftShape();
+    RectStaticPhysicsShape * getDoorRightShape();
 
     [[nodiscard]] Vector2Int getDoorPosition(bool right) const;
     [[nodiscard]] float getDoorAngle(bool right) const;
@@ -43,6 +48,8 @@ public:
 
     ~Door() override;
 
+    void update(const UpdateContext &context) override;
+
     FROM_JSON_DECLARATION(Door, "door");
 
     nlohmann::json toJson() override;
@@ -59,6 +66,7 @@ public:
     [[nodiscard]] EntityId::entityId getEntityId() const override { return entity_id; }
 
     [[nodiscard]] Entity *asEntity() override { return this; }
+    [[nodiscard]] Toggleable * asToggleable() override {return this;}
 
     void toggle() override {
         if (moment > 0)
@@ -77,9 +85,9 @@ public:
             moment = -1;
     }
 
-    [[nodiscard]] Toggleable * asToggleable() override {return this;}
 
     void registerInSpaceship(SpaceShip *space_ship) override;
 
     void unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) override;
+
 };

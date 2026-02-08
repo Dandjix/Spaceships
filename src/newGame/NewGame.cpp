@@ -6,6 +6,7 @@
 
 #include "debug/DebugButton.h"
 #include "entities/Sphere.h"
+#include "entities/toggleableActivators/Button.h"
 #include "entities/toggleables/door/Door.h"
 #include "player/Camera.h"
 #include "spaceships/SpaceShipBlueprint.h"
@@ -31,16 +32,19 @@ std::filesystem::path NewGame::ConstructNewGame() {
     camera->setPlayer(player);
 
     // Debug stuff -----------------------------------------------------------------------------------------------------
-    auto door = new Door(Vector2Int{300,256}.scaleToWorldPosition(),0,0,0,EntityId::Manager::getInstance().createEntityId());
+    // auto debug_button = (new Debug::DebugButton(Vector2Int{300,300}.scaleToWorldPosition(),0));
+
     // auto lamp = new Lamp(Vector2Int{300,256}.scaleToWorldPosition(),0,EntityId::Manager::getInstance().createEntityId(),true);
-    auto debug_button = (new Debug::DebugButton(Vector2Int{300,300}.scaleToWorldPosition(),0));
+    auto door = new Door(Vector2Int{64*4,64*4 + 32}.scaleToWorldPosition(),0,0,0,EntityId::Manager::getInstance().createEntityId());
+    auto button = new Button(Vector2Int{64*4,64*6}.scaleToWorldPosition(),0,door);
 
     std::vector<Entity *> entities = {
         player,
         camera,
+        // debug_button,
         // lamp,
         door,
-        debug_button,
+        button,
         // new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
         new Sphere(Vector2Int{256, 128}.scaleToWorldPosition(), Scaling::scaleToWorld(45.0f)),
         new CargoContainer(Vector2Int{96, 96}.scaleToWorldPosition(), 22),
