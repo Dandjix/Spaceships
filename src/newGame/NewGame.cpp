@@ -35,19 +35,27 @@ std::filesystem::path NewGame::ConstructNewGame() {
     // auto debug_button = (new Debug::DebugButton(Vector2Int{300,300}.scaleToWorldPosition(),0));
 
     // auto lamp = new Lamp(Vector2Int{300,256}.scaleToWorldPosition(),0,EntityId::Manager::getInstance().createEntityId(),true);
-    auto door = new Door(Vector2Int{64*4,64*4 + 32}.scaleToWorldPosition(),0,0,0,EntityId::Manager::getInstance().createEntityId());
-    auto button = new Button(Vector2Int{64*4,64*6}.scaleToWorldPosition(),0,door);
+    auto door1 = new Door(Vector2Int{64*4,64*4 + 32}.scaleToWorldPosition(),0,0,0,EntityId::Manager::getInstance().createEntityId());
+    auto door2 = new Door(Vector2Int{64*6,64*4 + 32}.scaleToWorldPosition(),90,0,0,EntityId::Manager::getInstance().createEntityId());
+    auto door3 = new Door(Vector2Int{64*4,64*2 + 32}.scaleToWorldPosition(),45,0,0,EntityId::Manager::getInstance().createEntityId());
+
+    auto button1 = new Button(Vector2Int{64*4,64*6}.scaleToWorldPosition(),0,door1);
+    auto button2 = new Button(Vector2Int{64*5,64*6}.scaleToWorldPosition(),0,door2);
+    auto button3 = new Button(Vector2Int{64*6,64*6}.scaleToWorldPosition(),0,door3);
 
     std::vector<Entity *> entities = {
         player,
         camera,
         // debug_button,
         // lamp,
-        door,
-        button,
+        door1,
+        door2,
+        door3,
+        button1,
+        button2,
+        button3,
         // new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
         new Sphere(Vector2Int{256, 128}.scaleToWorldPosition(), Scaling::scaleToWorld(45.0f)),
-        new CargoContainer(Vector2Int{96, 96}.scaleToWorldPosition(), 22),
         new CombatOutfit(Vector2Int{196, 128}.scaleToWorldPosition(), 35),
         new CombatOutfit(Vector2Int{256, 128}.scaleToWorldPosition(), 35),
         new PilotSeat(blueprint->hooks.getPoint("pilot_seat")->position, 0),
