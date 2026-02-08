@@ -11,9 +11,12 @@
 #include "game/CameraTransformations.h"
 
 
+class SpaceShip;
+
 namespace GameEvent {
     struct GameEventContext {
         const CameraTransformations::CameraInfo camera_info;
+	    SpaceShip* spaceShip;
         MousePositionType mouse_position_type = Game;
         SDL_Window * window;
     };

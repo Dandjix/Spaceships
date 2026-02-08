@@ -5,6 +5,7 @@
 #include "Entity.h"
 
 #include "game/Rendering.h"
+#include "physics/scripts/PhysicsEntity.h"
 #include "spaceships/SpaceShip.h"
 
 void Entity::renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture,
@@ -66,5 +67,11 @@ void Entity::movePosition(Vector2Float delta) {
     this->setPosition(this->getPosition() + Vectors::toVector2Int(delta));
 
     // std::cout << "MOVEMENT DID OCCUR :" << getPosition()-old <<  std::endl;
+}
+
+void Entity::kill(SpaceShip *space_ship) {
+    on_killed.emit(space_ship);
+    unregisterInSpacehip(space_ship);
+    delete this;
 }
 

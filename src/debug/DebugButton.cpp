@@ -5,6 +5,12 @@
 #include "DebugButton.h"
 
 
+
+
+void Debug::DebugButton::DoStuff(const GameEvent::GameEventContext &context) {
+
+}
+
 nlohmann::json Debug::DebugButton::toJson() {
     auto json = PhysicsEntity::toJson();
     return json;

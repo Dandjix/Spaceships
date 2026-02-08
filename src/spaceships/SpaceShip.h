@@ -2,14 +2,20 @@
 #include "../game/Rendering.h"
 #include "../math/AdjacencyListGraph.h"
 #include "Room.h"
-#include "SpaceShipBlueprint.h"
 #include <unordered_set>
 
 #include "entities/scripts/Entity.h"
 #include "entityContainer/EntityContainer.h"
 #include "exterior/SpaceShipExterior.h"
 #include "hashProximityList/HashProximityMap.h"
+#include "Hooks/SpaceshipHooks.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
+
+namespace EntityId {
+    class Manager;
+}
+
+class SpaceShipBlueprint;
 
 namespace GameState {
     struct transientGameState;

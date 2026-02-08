@@ -4,7 +4,6 @@
 #include "ElementContainer.h"
 #include "PauseManager.h"
 #include "debug/CollisionInfo.h"
-#include "debug/PointCastChecker.h"
 #include "entityRendering/RenderingInitialization.h"
 #include "gameEvent/GameEvent.h"
 #include "gameEvent/GetMousePositionType.h"
@@ -14,7 +13,6 @@
 #include "player/PlayerVehicleTracker.h"
 #include "player/InteractableInteract.h"
 #include "player/VehicleLeave.h"
-#include "spaceships/exterior/SpaceShipExterior.h"
 #include "spaceships/exterior/exteriors/TestExterior.h"
 #include "textures/UsageMap.h"
 #include "userInterface/elements/GUI/GUILabel.h"
@@ -256,17 +254,16 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         float mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
 
-        GameEvent::GameEventContext event_context =
-        {
-            {
-                camera->getPosition(),
-                camera->getAngle(),
-                screenDimensions,
-                camera->getScale(),
-            },
-            GameEvent::getMousePositionType(gui_elements.get(), {mouse_x, mouse_y}),
-            window,
+
+        // context variables -------------------------------------------------------------------------------------------
+
+        auto camera_info = CameraTransformations::CameraInfo{
+            camera->getPosition(),
+            camera->getAngle(),
+            screenDimensions,
+            camera->getScale(),
         };
+        auto mouse_position_type = GameEvent::getMousePositionType(gui_elements.get(), {mouse_x, mouse_y});
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -274,9 +271,23 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 if (event.type == SDL_EVENT_QUIT) {
                     destination = NoSaveAndDesktop;
                 }
+                GameEvent::GameEventContext event_context =
+                {
+                    camera_info,
+                    space_ship,
+                    mouse_position_type,
+                    window
+                };
                 space_ship->eventHandling(event, event_context, paused);
             }
             for (auto gui_element: gui_elements.get()) {
+                GameEvent::GameEventContext event_context =
+                {
+                    camera_info,
+                    nullptr,
+                    mouse_position_type,
+                    window
+                };
                 gui_element->handleEvent(event, event_context);
             }
         }

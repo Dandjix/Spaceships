@@ -5,6 +5,7 @@
 #include "TileRendering.h"
 #include "../math/Hash.h"
 #include "ConnectRoomGraph.h"
+#include "SpaceShipBlueprint.h"
 #include "behavior/BehavioredEntity.h"
 #include "entities/entityId/EntityId.h"
 #include "entities/scripts/ActiveWhenPausedEntity.h"

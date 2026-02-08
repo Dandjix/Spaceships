@@ -159,9 +159,5 @@ public:
     /**
      * Destroys and unregisters the entity as well as any entities depending on it (Example : a door needs to kill its two panels)
      */
-    virtual void kill(SpaceShip *space_ship) {
-        on_killed.emit(space_ship);
-        unregisterInSpacehip(space_ship);
-        delete this;
-    }
+    virtual void kill(SpaceShip *space_ship);
 };

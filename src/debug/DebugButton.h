@@ -10,16 +10,14 @@
 namespace Debug {
     class DebugButton : public PhysicsEntity, public virtual IInteractable {
     protected:
-        void DoStuff() {
-            std::cout << "you done pressed the button I tell you hwat" << std::endl;
-        }
+        void DoStuff(const GameEvent::GameEventContext & context);
 
     public:
         DebugButton(const Vector2Int &position, float angle)
             : PhysicsEntity(position, angle, new RoundStaticPhysicsShape(this, Scaling::scaleToWorld(32))) {
         }
 
-        void interact(Humanoid *activator, const GameEvent::GameEventContext &context) override { DoStuff();}
+        void interact(Humanoid *activator, const GameEvent::GameEventContext &context) override { DoStuff(context);}
         bool is_interactable(Humanoid *activator) override { return true; }
 
         [[nodiscard]] PhysicsEntity *asEntity() override {return this;}

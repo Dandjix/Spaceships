@@ -8,6 +8,7 @@
 #include "entities/Sphere.h"
 #include "entities/toggleables/door/Door.h"
 #include "player/Camera.h"
+#include "spaceships/SpaceShipBlueprint.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "vehicles/combatOutfit/CombatOutfit.h"
 #include "vehicles/spaceship/PilotSeat.h"

@@ -79,6 +79,7 @@ MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *windo
                 0,
                 {win_x, win_y}
             },
+            nullptr,
             GameEvent::UI,
             window
         };

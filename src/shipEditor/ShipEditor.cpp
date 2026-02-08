@@ -198,6 +198,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 screenDimensions,
                 camera->getScale()
             },
+            nullptr,
             mouse_position_type,
             window
         };
