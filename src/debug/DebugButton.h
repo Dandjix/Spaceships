@@ -19,7 +19,7 @@ namespace Debug {
             : PhysicsEntity(position, angle, new RoundStaticPhysicsShape(this, Scaling::scaleToWorld(32))) {
         }
 
-        void interact(Humanoid *activator) override { DoStuff();}
+        void interact(Humanoid *activator, const GameEvent::GameEventContext &context) override { DoStuff();}
         bool is_interactable(Humanoid *activator) override { return true; }
 
         [[nodiscard]] PhysicsEntity *asEntity() override {return this;}

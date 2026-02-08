@@ -5,6 +5,10 @@
 #include <string>
 
 
+namespace GameEvent {
+    struct GameEventContext;
+}
+
 class PhysicsEntity;
 class Humanoid;
 class Entity;
@@ -23,8 +27,9 @@ public:
      * This should do what the object is supposed to do when interacted with. This should not check whether the object is
      * interactable, this is the responsibility of the AI / player control
      * @param activator the entity interacting with this object
+     * @param context
      */
-    virtual void interact(Humanoid * activator) = 0;
+    virtual void interact(Humanoid * activator, const GameEvent::GameEventContext &context) = 0;
 
     /**
      * This returns whether or not the object can be interacted with. It is most probable that this should call

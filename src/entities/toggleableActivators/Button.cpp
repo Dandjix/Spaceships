@@ -52,7 +52,7 @@ void Button::render(SDL_Renderer *renderer, const RenderingContext &context) {
     renderTexture(renderer, context, texture, Vector2Float{button_size_px, button_size_px});
 }
 
-void Button::interact(Humanoid *activator) {
+void Button::interact(Humanoid *activator, const GameEvent::GameEventContext &context) {
     if (linked_entity == nullptr)
         return;
 

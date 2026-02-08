@@ -33,7 +33,7 @@ public:
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-    void interact(Humanoid *activator) override;
+    void interact(Humanoid *activator, const GameEvent::GameEventContext &context) override;
 
     bool is_interactable(Humanoid *activator) override;
 

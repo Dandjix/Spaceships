@@ -20,7 +20,7 @@ void Vehicle::onRegistered(SpaceShip *newSpaceship) {
     spaceship = newSpaceship;
 }
 
-void Vehicle::interact(Humanoid *activator) {
+void Vehicle::interact(Humanoid *activator, const GameEvent::GameEventContext &context) {
     stopPiloting();
 
     pilot = activator;

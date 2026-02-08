@@ -79,7 +79,7 @@ void Player::InteractableInteract::handleEvent(const SDL_Event &event, const Gam
 
     if (event.type == SDL_EVENT_KEY_DOWN) {
         if (event.key.key == SDLK_E && iinteractable_under_mouse->is_interactable(player_vehicle_tracker->player)) {
-            iinteractable_under_mouse->interact(player_vehicle_tracker->player);
+            iinteractable_under_mouse->interact(player_vehicle_tracker->player, context);
         }
     }
 }
