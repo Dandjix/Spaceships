@@ -1,6 +1,7 @@
 #pragma once
 #include "math/Color.h"
 #include "../physics/scripts/PhysicsEntity.h"
+#include "math/Scaling.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
 class CargoContainer : public PhysicsEntity {
@@ -24,8 +25,9 @@ public:
         Vector2Int position,
         float angle = 0.0f,
         Variation variation = Variation::blank,
-        Vector2Int scale = Vector2Int(61, 24).scaleToWorldPosition(),
-        Color color = getRandomColor());
+        Color color = getRandomColor(),
+        Vector2Int scale = Scaling::metricToWorld(Vector2Float(6.06f, 2.44f))
+        );
 
 
     void update(const UpdateContext &context) override;
@@ -43,4 +45,11 @@ public:
 
 private:
     static Color getRandomColor();
+
+public:
+    /**
+     * a loaded cargo container is on average about 24 metric tons
+     * @return
+     */
+    float get_weight() override {return 24000;}
 };

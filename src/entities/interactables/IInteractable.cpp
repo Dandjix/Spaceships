@@ -6,6 +6,7 @@
 
 #include "entities/Humanoid.h"
 #include "entities/scripts/Entity.h"
+#include "math/Scaling.h"
 #include "math/Vectors.h"
 
 #define MAX_INTERACTABLE_DISTANCE_PIXELS 128

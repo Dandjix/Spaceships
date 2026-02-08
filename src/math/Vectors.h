@@ -255,16 +255,3 @@ namespace std {
         }
     };
 }
-
-
-namespace Scaling {
-    template<typename T>
-    T scaleToWorld(T number) {
-        return number * static_cast<T>(Vectors::getFactor());
-    }
-
-    template<typename T>
-    T scaleToScreen(T number) {
-        return number / static_cast<T>(Vectors::getFactor());
-    }
-}

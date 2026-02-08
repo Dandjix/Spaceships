@@ -20,6 +20,9 @@ public :
 
 	~PhysicsEntity() override;
 
+	/**
+	 * @return The weight in metric kilograms of the entity (ex : 24000 for a loaded cargo container)
+	 */
 	virtual float get_weight() { return 1.0f; }
 
 	[[nodiscard]] virtual IInteractable * asIInteractable(){return nullptr;}

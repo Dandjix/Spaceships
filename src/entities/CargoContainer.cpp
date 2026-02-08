@@ -5,8 +5,12 @@
 #include "textures/TextureSet.h"
 #include "textures/UsageMap.h"
 
-CargoContainer::CargoContainer(Vector2Int position, float angle, Variation variation, Vector2Int scale,
-                               Color color)
+CargoContainer::CargoContainer(Vector2Int position,
+                               float angle,
+                               Variation variation,
+                               Color color,
+                               Vector2Int scale
+)
     : PhysicsEntity(position,
                     angle,
                     new RectPhysicsShape(this, scale)),
@@ -17,7 +21,6 @@ CargoContainer::CargoContainer(Vector2Int position, float angle, Variation varia
 nlohmann::json CargoContainer::toJson() {
     auto json = Entity::toJson();
     json["variation"] = variation;
-    json["scale"] = scale.toJson();
     json["color"] = color.toJson();
     return json;
 }
@@ -41,7 +44,6 @@ FROM_JSON_DEFINITION(CargoContainer) {
                                   json["position"]),
                               json["angle"],
                               json["variation"],
-                              Vector2Int::fromJson(json["scale"]),
                               Color::fromJson(json["color"]));
 }
 

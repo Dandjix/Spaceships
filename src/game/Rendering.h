@@ -5,6 +5,7 @@
 #include "../math/Vectors.h"
 #include "../spaceships/Tile.h"
 #include "../game/CameraTransformations.h"
+#include "math/Scaling.h"
 
 struct RenderingContext {
     CameraTransformations::CameraInfo camera_info;

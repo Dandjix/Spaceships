@@ -3,6 +3,7 @@
 #include "physics/scripts/PhysicsEntity.h"
 #include "spaceships/Tile.h"
 #include "spaceships/EntityData/EntityLoading.h"
+#include "math/Scaling.h"
 //
 // Created by timon on 2/7/26.
 //
