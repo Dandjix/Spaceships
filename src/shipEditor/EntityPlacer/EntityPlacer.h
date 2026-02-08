@@ -7,7 +7,7 @@
 
 #include "../../entities/scripts/Entity.h"
 #include "../../entities/scripts/ShortLivedEntity.h"
-#include "EntityRegistry/EntityPlacement.h"
+#include "EntityPlacement/EntityPlacement.h"
 
 
 namespace EntityPlacement {
