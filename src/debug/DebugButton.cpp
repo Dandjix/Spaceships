@@ -8,11 +8,7 @@
 
 
 void Debug::DebugButton::DoStuff(const GameEvent::GameEventContext &context) {
-    for (auto entity: context.spaceShip->entities) {
-        if (dynamic_cast<Door*>(entity) != nullptr) {
-            entity->kill(context.spaceShip);
-        }
-    }
+    //what you want to debug here
 }
 
 nlohmann::json Debug::DebugButton::toJson() {
