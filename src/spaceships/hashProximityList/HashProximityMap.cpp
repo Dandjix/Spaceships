@@ -8,7 +8,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 
 #include "game/Rendering.h"
-#include "physics/PhysicsEntity.h"
+#include "../../physics/scripts/PhysicsEntity.h"
 #include "physics/shapes/PhysicsShape.h"
 #include "userInterface/fonts.h"
 

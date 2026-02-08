@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "physics/PhysicsEntity.h"
+#include "../../../physics/scripts/PhysicsEntity.h"
 
 class Toggleable;
 

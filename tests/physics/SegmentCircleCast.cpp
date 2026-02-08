@@ -6,7 +6,7 @@
 
 #include "gtest/gtest.h"
 #include "physics/Physics.h"
-#include "physics/PhysicsEntity.h"
+#include "../../src/physics/scripts/PhysicsEntity.h"
 #include "physics/shapes/RectPhysicsShape.h"
 
 TEST(SegmentCircleCastTestSuite, SegmentCircleCastTest) {

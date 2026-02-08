@@ -1,5 +1,5 @@
 #pragma once
-#include "physics/PhysicsEntity.h"
+#include "../physics/scripts/PhysicsEntity.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "math/Color.h"
-#include "physics/PhysicsEntity.h"
+#include "../physics/scripts/PhysicsEntity.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
 class CargoContainer : public PhysicsEntity {

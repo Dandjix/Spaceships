@@ -7,7 +7,7 @@
 #include <format>
 
 #include "game/Rendering.h"
-#include "physics/PhysicsEntity.h"
+#include "physics/scripts/PhysicsEntity.h"
 
 std::vector<Vector2Int> ConvexPhysicsShape::getVertices() const {
     std::vector<Vector2Int> world_vertices = {};

@@ -4,8 +4,8 @@
 
 #include "PhysicsShape.h"
 
-#include "../PhysicsEntity.h"
 #include "game/Rendering.h"
+#include "physics/scripts/PhysicsEntity.h"
 
 
 Vector2Int PhysicsShape::getCenter() const {

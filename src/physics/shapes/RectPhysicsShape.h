@@ -4,7 +4,7 @@
 
 #pragma once
 #include "ConvexPhysicsShape.h"
-#include "../PhysicsEntity.h"
+#include "../scripts/PhysicsEntity.h"
 #include "PhysicsShape.h"
 #include "../PhysicsUpdateVisitor/PhysicsUpdateVisitorConvex.h"
 

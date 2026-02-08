@@ -5,7 +5,7 @@
 #include "PhysicsEntity.h"
 
 #include "entities/scripts/Entity.h"
-#include "shapes/PhysicsShape.h"
+#include "../shapes/PhysicsShape.h"
 #include "spaceships/SpaceShip.h"
 
 PhysicsEntity::~PhysicsEntity() {

@@ -1,6 +1,6 @@
 #include "Physics.h"
 
-#include "PhysicsEntity.h"
+#include "scripts/PhysicsEntity.h"
 #include "../spaceships/SpaceShip.h"
 #include "../math/Vectors.h"
 #include "../spaceships/spaceshipTiles/SpaceshipTiles.h"

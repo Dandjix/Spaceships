@@ -6,7 +6,7 @@
 
 #include "entities/scripts/ShortLivedEntity.h"
 #include "gtest/gtest.h"
-#include "physics/PhysicsEntity.h"
+#include "../../src/physics/scripts/PhysicsEntity.h"
 #include "physics/shapes/ConvexPhysicsShape.h"
 TEST(ConvexShapeTestSuite, ConvexShapeTest) {
     class DummyEntity : public PhysicsEntity {

@@ -1,6 +1,6 @@
 #pragma once
 #include "entities/toggleables/scripts/Toggleable.h"
-#include "physics/PhysicsEntity.h"
+#include "physics/scripts/PhysicsEntity.h"
 #include "spaceships/Tile.h"
 #include "spaceships/EntityData/EntityLoading.h"
 //

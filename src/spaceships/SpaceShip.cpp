@@ -9,7 +9,7 @@
 #include "entities/entityId/EntityId.h"
 #include "entities/scripts/ActiveWhenPausedEntity.h"
 #include "EntityData/EntityLoading.h"
-#include "physics/PhysicsEntity.h"
+#include "../physics/scripts/PhysicsEntity.h"
 #include "physics/PhysicsUpdateVisitor/PhysicsUpdateVisitorWall.h"
 #include "spaceshipTiles/SpaceshipTiles.h"
 #include "entities/scripts/LateUpdateEntity.h"
