@@ -6,6 +6,7 @@
 
 #include "entities/scripts/Entity.h"
 #include "../shapes/PhysicsShape.h"
+#include "entities/toggleables/door/DoorPanel.h"
 #include "spaceships/SpaceShip.h"
 
 PhysicsEntity::~PhysicsEntity() {
@@ -16,6 +17,8 @@ inline void PhysicsEntity::registerInSpaceship(SpaceShip* space_ship)
 {
     Entity::registerInSpaceship(space_ship);
     space_ship->physics_entities.insert(this);
+    // if (!isJsonSerializable())
+    //     std::cout << "inserted a non serializable ! " << std::endl;
 }
 
 inline void PhysicsEntity::unregisterInSpacehip(SpaceShip* space_ship)

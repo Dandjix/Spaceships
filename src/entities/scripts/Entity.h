@@ -32,22 +32,29 @@ namespace QueueOrder {
     using Value = unsigned short;
 
     constexpr unsigned short FIRST = 0;
-    constexpr unsigned short MIDDLE = USHRT_MAX*0.5F;
+    constexpr unsigned short MIDDLE = USHRT_MAX * 0.5F;
     constexpr unsigned short LAST = USHRT_MAX;
 }
 
-class Entity
-{
+class Entity {
 protected:
-    Vector2Int position;        // Using Vector2 to represent position
+    Vector2Int position; // Using Vector2 to represent position
     std::optional<float> angle; // if an angle is null, the object will always face towards the camera
 
-    void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture, Vector2Float destSize) const;
+    void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture,
+                       Vector2Float destSize) const;
 
 public:
-    Event<> on_die;
+    /**
+     * called when the destructor is called
+     */
+    Event<> on_destroyed;
+    /**
+     * called when kill() is called
+     */
+    Event<SpaceShip *> on_killed;
 
-    Event<Entity*> on_ownership_change;
+    Event<Entity *> on_ownership_change;
 
 
     /// <summary>
@@ -58,46 +65,51 @@ public:
         : position(position), angle(angle) {
     } // Constructor using Vector2
 
-    virtual ~Entity()
-    {
-        on_die.emit();
+    virtual ~Entity() {
+        on_destroyed.emit();
     }
 
-    virtual nlohmann::json toJson()=0;
-    virtual void finalizeJsonDeserialization(const GameState::transientGameState &transient_game_state) {};
-    virtual bool isJsonSerializable(){return true;}
+    virtual nlohmann::json toJson() =0;
+
+    virtual void finalizeJsonDeserialization(const GameState::transientGameState &transient_game_state) {
+    };
+    virtual bool isJsonSerializable() { return true; }
 
     /**
      * DO NOT DECLARE / DEFINE THIS DIRECTLY : this is done by using the
      * FROM_JSON_DECLARATION macro
      * @return
      */
-    virtual constexpr std::string getJsonType()=0;
+    virtual constexpr std::string getJsonType() =0;
 
-    virtual void update(const UpdateContext& context);
-    virtual void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context);
+    virtual void update(const UpdateContext &context);
+
+    virtual void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context);
 
     virtual Entity *initializeRendering(const EntityRendering::Context &context) = 0;
 
     virtual Entity *finalizeRendering(const EntityRendering::Context &context) = 0;
 
     virtual void render(SDL_Renderer *renderer, const RenderingContext &context) = 0;
-    virtual void debugRender(SDL_Renderer *renderer, const RenderingContext &context) {}
 
-    virtual void onRegistered(SpaceShip * newSpaceship) {}
-    virtual void onUnRegistered(SpaceShip * oldSpaceship) {}
+    virtual void debugRender(SDL_Renderer *renderer, const RenderingContext &context) {
+    }
+
+    virtual void onRegistered(SpaceShip *newSpaceship) {
+    }
+
+    virtual void onUnRegistered(SpaceShip *oldSpaceship) {
+    }
 
     /// <summary>
     /// lowest values first ! put something early near the start, something late near the end. Base value is around 30000
     /// </summary>
     /// <returns></returns>
-    virtual QueueOrder::Value getQueueOrder()
-    {
+    virtual QueueOrder::Value getQueueOrder() {
         return QueueOrder::MIDDLE;
     }
 
-    [[nodiscard]] Vector2Int getPosition() const
-    {
+    [[nodiscard]] Vector2Int getPosition() const {
         return position;
     }
 
@@ -110,7 +122,8 @@ public:
      *
      * @param space_ship the spaceship in which the entity will be registered
      */
-    virtual void registerInSpaceship(SpaceShip* space_ship);
+    virtual void registerInSpaceship(SpaceShip *space_ship);
+
     /**
      *  Unregisters an entity in the spaceship so that it's behavior and appearance are handled in this spaceship. Does not call any event, this is done in the spaceship itself.
      *
@@ -120,18 +133,18 @@ public:
      *
      * @param space_ship the spaceship in which the entity will be unregistered
      */
-    virtual void unregisterInSpacehip(SpaceShip* space_ship);;
+    virtual void unregisterInSpacehip(SpaceShip *space_ship);;
 
     int getX() const { return position.x; }
     int getY() const { return position.y; }
     bool hasAngle() const { return angle.has_value(); }
     float getAngle() const { return angle.value_or(0); }
     void setPosition(Vector2Int newPosition) { position = newPosition; }
-    void setAngle(float a, bool force = false)
-    {
-        if (!angle.has_value())
-        {
-            throw std::invalid_argument("this entity was instantiated without an angle, it is not possible to assign it one now.");
+
+    void setAngle(float a, bool force = false) {
+        if (!angle.has_value()) {
+            throw std::invalid_argument(
+                "this entity was instantiated without an angle, it is not possible to assign it one now.");
         }
         auto new_angle = static_cast<float>(fmod(a + 360, 360));
         angle = new_angle;
@@ -142,4 +155,13 @@ public:
      * @param delta the vector to move, in world units
      */
     virtual void movePosition(Vector2Float delta);
+
+    /**
+     * Destroys and unregisters the entity as well as any entities depending on it (Example : a door needs to kill its two panels)
+     */
+    virtual void kill(SpaceShip *space_ship) {
+        on_killed.emit(space_ship);
+        unregisterInSpacehip(space_ship);
+        delete this;
+    }
 };

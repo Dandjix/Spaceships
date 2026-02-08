@@ -10,7 +10,7 @@
 class RoundStaticPhysicsShape : public RoundPhysicsShape{
 public:
 
-    explicit RoundStaticPhysicsShape(PhysicsEntity *owner_entity, float radius)
+    explicit RoundStaticPhysicsShape(PhysicsEntity *owner_entity, int radius)
         : RoundPhysicsShape(owner_entity,radius) {
     }
 

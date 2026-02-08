@@ -9,14 +9,28 @@
 
 
 // -
-class Door : public PhysicsEntity, public virtual Toggleable {
+class Door : public Entity, public virtual Toggleable {
+protected:
+    PhysicsEntity * door_left;
+    PhysicsEntity * door_right;
+
+    [[nodiscard]] Vector2Int getDoorPosition(bool right) const;
+    [[nodiscard]] float getDoorAngle(bool right) const;
+    [[nodiscard]] Vector2Int getDoorDimensions(bool right) const;
+
+    static SDL_Texture * floor_texture;
 public:
     EntityId::entityId entity_id;
     Vector2Int dimensions;
-    float state; //state 0 : open, 1 : closed
-    float moment; //(deltaTime * moment) added to state on update (if nothing is in the way of the door closing)
+    /**
+     * 0 : open, 1 : closed
+     */
+    float state;
+    /**
+     * (deltaTime * moment) added to state on update (if nothing is in the way of the door closing)
+     */
+    float moment;
 
-    // SDL_Texture * door_texture;
 
     Door(
         Vector2Int position,
@@ -26,6 +40,8 @@ public:
         EntityId::entityId entity_id,
         Vector2Int dimensions = {Scaling::scaleToWorld(Tiles::tileSizePx) * 2, Scaling::scaleToWorld(Tiles::tileSizePx)}
     );
+
+    ~Door() override;
 
     FROM_JSON_DECLARATION(Door, "door");
 
@@ -62,4 +78,10 @@ public:
     }
 
     [[nodiscard]] Toggleable * asToggleable() override {return this;}
+
+    void registerInSpaceship(SpaceShip *space_ship) override;
+
+    void unregisterInSpacehip(SpaceShip *space_ship) override;
+
+    void kill(SpaceShip *space_ship) override;
 };

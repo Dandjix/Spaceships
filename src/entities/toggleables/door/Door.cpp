@@ -4,12 +4,51 @@
 
 #include "Door.h"
 
-#include "physics/shapes/RectStaticPhysicsShape.h"
+#include "DoorPanel.h"
 
-Door::Door(Vector2Int position, float angle, float state, float moment,EntityId::entityId entity_id ,Vector2Int dimensions)
-    : PhysicsEntity(position, angle, new RectStaticPhysicsShape(this, dimensions)), entity_id(entity_id),
+SDL_Texture * Door::floor_texture = nullptr;
+
+
+Vector2Int Door::getDoorPosition(bool right) const {
+    // Vector2Int closed_position = {dimensions.x / 2,};
+    // Vector2Int open_position = {static_cast<int>(dimensions.x * 1.5f), 0};
+    // Vector2Int local_position = Vector2Int::lerp(open_position, closed_position, state);
+
+    //
+    // if (!right)
+    //     local_position *= -1;
+    //
+    // local_position = local_position.rotate(getAngle());
+    return getPosition(); // + local_position;
+}
+
+float Door::getDoorAngle(bool right) const {
+    float angle = getAngle();
+    if (!right)
+        angle = fmod(angle + 180, 360);
+    return angle;
+}
+
+Vector2Int Door::getDoorDimensions(bool right) const {
+    return {dimensions.x / 2, dimensions.y};
+}
+
+
+Door::Door(Vector2Int position, float angle, float state, float moment, EntityId::entityId entity_id,
+           Vector2Int dimensions)
+    : Entity(position, angle), entity_id(entity_id),
       dimensions(dimensions),
-      state(state), moment(moment) {
+      state(state), moment(moment),
+      door_left(new DoorPanel(getDoorPosition(false), getDoorAngle(false), dimensions)),
+      door_right(new DoorPanel(getDoorPosition(true), getDoorAngle(true), dimensions)) {
+    on_destroyed.subscribe([]() {
+
+    });
+}
+
+Door::~Door() {
+    // delete door_left; //since those two are registered entities, they already get deleted when the spaceship is deleted
+    // delete door_right;
 }
 
 FROM_JSON_DEFINITION(Door) {
@@ -28,7 +67,7 @@ FROM_JSON_DEFINITION(Door) {
 }
 
 nlohmann::json Door::toJson() {
-    auto json = PhysicsEntity::toJson();
+    auto json = Entity::toJson();
     json["state"] = state;
     json["moment"] = moment;
     json["dimensions"] = dimensions.toJson();
@@ -37,14 +76,35 @@ nlohmann::json Door::toJson() {
 }
 
 Entity *Door::initializeRendering(const EntityRendering::Context &context) {
-    // door_texture = context.usage_map.subscribe("objects/door")->at("door");
-    // floor_texture = context.usage_map.subscribe("objects/door")->at("floor");
+    auto set = context.usage_map.subscribe("objects/door");
+    floor_texture = set->at("floor");
+    door_left->initializeRendering(context);
+    door_right->initializeRendering(context);
     return this;
 }
 
 Entity *Door::finalizeRendering(const EntityRendering::Context &context) {
+    context.usage_map.unsubscribe("objects/door");
     return this;
 }
 
 void Door::render(SDL_Renderer *renderer, const RenderingContext &context) {
+}
+
+void Door::registerInSpaceship(SpaceShip *space_ship) {
+    Entity::registerInSpaceship(space_ship);
+    door_left->registerInSpaceship(space_ship);
+    door_right->registerInSpaceship(space_ship);
+}
+
+void Door::unregisterInSpacehip(SpaceShip *space_ship) {
+    Entity::unregisterInSpacehip(space_ship);
+    door_left->unregisterInSpacehip(space_ship);
+    door_right->unregisterInSpacehip(space_ship);
+}
+
+void Door::kill(SpaceShip *space_ship) {
+    door_left->kill(space_ship);
+    door_right->kill(space_ship);
+    Entity::kill(space_ship);
 }

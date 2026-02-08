@@ -8,7 +8,7 @@
 
 void HookRegion::registerEntity(Entity* entity)
 {
-    Events::Id id = entity->on_die.subscribe([this,entity]{
+    Events::Id id = entity->on_destroyed.subscribe([this,entity]{
         unRegisterEntity(entity);
     });
     entities_inside.insert({entity,id});
@@ -19,7 +19,7 @@ void HookRegion::unRegisterEntity(Entity* entity)
 {
     auto id = entities_inside[entity];
     entities_inside.erase(entity);
-    entity->on_die.unsubscribe(id);
+    entity->on_destroyed.unsubscribe(id);
     on_leave.emit(entity);
 }
 
