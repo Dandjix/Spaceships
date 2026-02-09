@@ -16,7 +16,6 @@ public:
     // Type aliases for iterator support
     using iterator = std::vector<T>::iterator;
     using const_iterator = std::vector<T>::const_iterator;
-    using value_type = T;
     using size_type = std::vector<T>::size_type;
 
     // Iterators
