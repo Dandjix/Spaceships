@@ -7,6 +7,8 @@
 #include <format>
 
 #include "game/Rendering.h"
+#include "physics/PhysicsUtil/BoundingBoxes.h"
+#include "physics/PhysicsUtil/PhysicsUtil.h"
 #include "physics/scripts/PhysicsEntity.h"
 
 std::vector<Vector2Int> ConvexPhysicsShape::getVertices() const {
@@ -51,24 +53,7 @@ ConvexPhysicsShape::ConvexPhysicsShape(
 }
 
 BoundingBox<int> ConvexPhysicsShape::getBoundingBox() const {
-    // Define corners in local space
-    std::vector<Vector2Int> world_vertices = getVertices();
-
-    int min_x = std::numeric_limits<int>::max(), max_x = std::numeric_limits<int>::min(), min_y = std::numeric_limits<
-        int>::max(), max_y = std::numeric_limits<int>::min();
-
-    for (auto c: world_vertices) {
-        if (c.x < min_x)
-            min_x = c.x;
-        if (c.x > max_x)
-            max_x = c.x;
-        if (c.y < min_y)
-            min_y = c.y;
-        if (c.y > max_y)
-            max_y = c.y;
-    }
-
-    return BoundingBox<int>({min_x, min_y}, {max_x - min_x, max_y - min_y});
+    return Physics::Util::createConvexBoundingBox(getVertices());
 }
 
 std::vector<float> P0CrossProducts(const std::vector<Vector2Int> & p, Vector2Int Q) {

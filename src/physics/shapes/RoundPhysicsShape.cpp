@@ -5,6 +5,8 @@
 #include "RoundPhysicsShape.h"
 
 #include "game/Rendering.h"
+#include "physics/PhysicsUtil/BoundingBoxes.h"
+#include "physics/PhysicsUtil/PhysicsUtil.h"
 
 void RoundPhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingContext& context)
 {
@@ -24,13 +26,7 @@ void RoundPhysicsShape::debugRender(SDL_Renderer* renderer, const RenderingConte
 
 BoundingBox<int> RoundPhysicsShape::getBoundingBox() const
 {
-    Vector2Int TL;
-
-    TL = owner_entity->getPosition() - Vector2Int( radius,radius);
-
-    Vector2Int dimensions = {static_cast<int>(std::ceil(radius*2)),static_cast<int>(std::ceil(radius*2))};
-
-    return {TL,dimensions};
+    return Physics::Util::createRoundBoundingBox(getCenter(),radius);
 }
 
 bool RoundPhysicsShape::is_inside(Vector2Int world_position) const {

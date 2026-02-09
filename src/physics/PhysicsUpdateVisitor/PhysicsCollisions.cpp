@@ -8,7 +8,7 @@
 #include "../shapes/RoundPhysicsShape.h"
 #include "physics/Physics.h"
 #include "physics/SegmentCast.h"
-#include "physics/SegmentCircleCast.h"
+#include "physics/PhysicsUtil/PhysicsUtil.h"
 #include "physics/shapes/ConvexPhysicsShape.h"
 #include "physics/shapes/ConvexStaticPhysicsShape.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
@@ -19,150 +19,8 @@
  */
 constexpr float jolt = 3;
 
-std::vector<std::pair<Vector2Int, Vector2Int> > getDiagonals(Vector2Int center, const std::vector<Vector2Int>& polygon) {
-    std::vector<std::pair<Vector2Int, Vector2Int> > diagonals;
-    diagonals.reserve(polygon.size());
-
-    for (auto & i : polygon) {
-        diagonals.emplace_back(center, i);
-    }
-    return diagonals;
-}
-
-std::vector<std::pair<Vector2Int, Vector2Int> > getSides(std::vector<Vector2Int> polygon) {
-    std::vector<std::pair<Vector2Int, Vector2Int> > sides;
-    sides.reserve(polygon.size());
-
-    for (int i = 0; i < polygon.size(); ++i) {
-        std::size_t next_i = (i + 1) % polygon.size();
-        sides.emplace_back(polygon[i], polygon[next_i]);
-    }
-    return sides;
-}
-
-//https://www.youtube.com/watch?v=7Ik2vowGcU0&t=1320s
-bool areCollidingSAT(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2) {
-    for (int shape = 0; shape < 2; shape++) {
-        if (shape == 1) {
-            auto temp = poly1;
-            poly1 = poly2;
-            poly2 = temp;
-        }
-
-        auto p1 = poly1->getVertices();
-
-        for (auto [edge_start,edge_end]: getSides(poly1->getVertices())) {
-            Vector2Float normal = Vector2Float(static_cast<float>(-edge_end.y + edge_start.y), static_cast<float>(edge_end.x - edge_start.x));
-
-            float min_r1 = INFINITY, max_r1 = -INFINITY;
-            for (auto vertex: poly1->getVertices()) {
-                float q = static_cast<float>(vertex.x) * normal.x + static_cast<float>(vertex.y) * normal.y; // dot product
-                min_r1 = std::min(min_r1, q);
-                max_r1 = std::max(max_r1, q);
-            }
-
-            float min_r2 = INFINITY, max_r2 = -INFINITY;
-            for (auto vertex: poly2->getVertices()) {
-                float q = static_cast<float>(vertex.x) * normal.x + static_cast<float>(vertex.y) * normal.y;
-                min_r2 = std::min(min_r2, q);
-                max_r2 = std::max(max_r2, q);
-            }
-
-            if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
-                return false;
-        }
-    }
-
-    return true;
-}
 
 
-bool areCollidingDiagonals(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2) {
-    for (int shape = 0; shape < 2; shape++) {
-        if (shape == 1) {
-            auto temp = poly1;
-            poly1 = poly2;
-            poly2 = temp;
-        }
-        auto diagonals_1 = getDiagonals(poly1->getCenter(), poly1->getVertices());
-        // auto diagonals_2 = getDiagonals(poly2->getCenter(), poly2->getVertices());
-        // auto sides_1 = getSides(poly1->getVertices());
-        auto sides_2 = getSides(poly2->getVertices());
-        for (auto diag: diagonals_1) {
-            for (auto [start, end]: sides_2) {
-                auto res = Physics::segmentIntersectionFloats(diag.first, diag.second, start, end);
-                if (res.success)
-                    return true;
-            }
-        }
-    }
-    return false;
-}
-
-bool circleConvexAreColliding(ConvexPhysicsShape *convex, RoundPhysicsShape *round) {
-    //if the convex's center is inside the circle, they are of course colliding.
-    if ((convex->getCenter() - round->getCenter()).sqrLength() <= static_cast<float>(round->radius * round->radius))
-        return true;
-
-    auto sides = getSides(convex->getVertices());
-
-    return std::ranges::any_of(sides, [&](const auto& side) {
-        auto [start, end] = side;
-        return Physics::segmentCircleIntersectionFloat(start, end, round->getCenter(), round->radius).has_value();
-    });
-}
-
-struct PolygonInfo {
-    // Vector2Int center;
-    std::vector<Vector2Int> vertices;
-
-    PolygonInfo(Vector2Int center, const std::vector<Vector2Int> &vertices) : vertices(vertices) {
-    }
-};
-
-struct SATReturn {
-    float overlap;
-    bool are_colliding;
-};
-
-SATReturn SeparatedAxisTheorem(PolygonInfo *poly1, PolygonInfo *poly2) {
-    float overlap = INFINITY;
-
-    for (int shape = 0; shape < 2; shape++) {
-        if (shape == 1) {
-            auto temp = poly1;
-            poly1 = poly2;
-            poly2 = temp;
-        }
-
-        auto p1 = poly1->vertices;
-
-        for (auto [edge_start,edge_end]: getSides(poly1->vertices)) {
-            Vector2Float normal = Vector2Float(-edge_end.y + edge_start.y, edge_end.x - edge_start.x).normalized();
-
-            float min_r1 = INFINITY, max_r1 = -INFINITY;
-            for (auto vertex: poly1->vertices) {
-                float q = vertex.x * normal.x + vertex.y * normal.y; // dot product
-                min_r1 = std::min(min_r1, q);
-                max_r1 = std::max(max_r1, q);
-            }
-
-            float min_r2 = INFINITY, max_r2 = -INFINITY;
-            for (auto vertex: poly2->vertices) {
-                float q = vertex.x * normal.x + vertex.y * normal.y;
-                min_r2 = std::min(min_r2, q);
-                max_r2 = std::max(max_r2, q);
-            }
-
-            overlap = std::min(std::min(max_r1, max_r2) - std::max(min_r1, min_r2), overlap);
-
-            if (!(max_r2 >= min_r1 && max_r1 >= min_r2))
-                return {0, false};
-        }
-    }
-
-    return {overlap, true};
-}
 
 
 // Vector2Float direction(Vector2Int start, Vector2Int end) {
@@ -181,10 +39,10 @@ namespace PhysicsCollisions {
 
 
     void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
-        SATReturn res;
+        Physics::Util::SATReturn res;
         {
-            PolygonInfo poly1_info = {poly1->getCenter(), poly1->getVertices()};
-            PolygonInfo poly2_info = {poly2->getCenter(), poly2->getVertices()};
+            Physics::Util::PolygonInfo poly1_info = {poly1->getCenter(), poly1->getVertices()};
+            Physics::Util::PolygonInfo poly2_info = {poly2->getCenter(), poly2->getVertices()};
             res = SeparatedAxisTheorem(&poly1_info, &poly2_info);
         }
 
@@ -206,10 +64,10 @@ namespace PhysicsCollisions {
 
     // here's a little lesson in trickery, this is going down in history
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
-        SATReturn res;
+        Physics::Util::SATReturn res;
         {
-            PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
-            PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
+            Physics::Util::PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
+            Physics::Util::PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
             res = SeparatedAxisTheorem(&convex_info, &round_info);
         }
 
@@ -230,10 +88,10 @@ namespace PhysicsCollisions {
     }
 
     void visitStaticRoundConvex(RoundStaticPhysicsShape *static_round, ConvexPhysicsShape *convex, SpaceShip *space_ship) {
-        SATReturn res;
+        Physics::Util::SATReturn res;
         {
-            PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
-            PolygonInfo round_info = {static_round->getCenter(), static_round->generateVertices()};
+            Physics::Util::PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
+            Physics::Util::PolygonInfo round_info = {static_round->getCenter(), static_round->generateVertices()};
             res = SeparatedAxisTheorem(&convex_info, &round_info);
         }
 
@@ -279,10 +137,10 @@ namespace PhysicsCollisions {
 
     void visitStaticConvexConvex(ConvexStaticPhysicsShape *static_convex, ConvexPhysicsShape *convex,
         SpaceShip *space_ship) {
-        SATReturn res;
+        Physics::Util::SATReturn res;
         {
-            PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
-            PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
+            Physics::Util::PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
+            Physics::Util::PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
             res = SeparatedAxisTheorem(&static_convex_info, &convex_info);
         }
 
@@ -297,10 +155,10 @@ namespace PhysicsCollisions {
 
     void visitStaticConvexRound(ConvexStaticPhysicsShape *static_convex, RoundPhysicsShape *round,
         SpaceShip *space_ship) {
-        SATReturn res;
+        Physics::Util::SATReturn res;
         {
-            PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
-            PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
+            Physics::Util::PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
+            Physics::Util::PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
             res = SeparatedAxisTheorem(&static_convex_info, &round_info);
         }
 
@@ -404,7 +262,7 @@ namespace PhysicsCollisions {
     void diagonalsDisplacement(ConvexPhysicsShape *convex, SpaceShip *space_ship) {
         std::vector<HitInfo> hits;
 
-        for (auto [start,end]: getDiagonals(convex->getCenter(), convex->getVertices())) {
+        for (auto [start,end]: Physics::Util::getDiagonals(convex->getCenter(), convex->getVertices())) {
             auto diff = end - start;
             float original_distance = diff.length();
             auto res = Physics::RayCast(start, Vectors::toVector2Float(diff), space_ship, original_distance);
