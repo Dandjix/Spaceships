@@ -49,6 +49,12 @@ public:
 
     ~Door() override;
 
+    [[nodiscard]] Vector2Int getCastPosition(bool left) const;
+
+    [[nodiscard]] Vector2Int getCastDimensions(bool left) const;
+
+    [[nodiscard]] bool hasOtherEntity(std::vector<PhysicsShape *> cast_res_1) const;
+
     void update(const UpdateContext &context) override;
 
     FROM_JSON_DECLARATION(Door, "door");

@@ -11,4 +11,5 @@ class PhysicsShape;
 
 namespace Physics {
     std::vector<PhysicsShape *> ConvexCast(std::vector<Vector2Int> points, SpaceShip *space_ship);
+    std::vector<PhysicsShape *> RectCast(Vector2Int rect_center,Vector2Int rect_dimensions,float angle, SpaceShip *space_ship);
 }

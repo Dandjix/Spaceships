@@ -6,6 +6,7 @@
 
 #include "DoorPanel.h"
 #include "game/Update.h"
+#include "physics/ConvexCast.h"
 #include "physics/shapes/RectStaticPhysicsShape.h"
 
 RectStaticPhysicsShape *Door::getDoorLeftShape() {
@@ -16,9 +17,12 @@ RectStaticPhysicsShape *Door::getDoorRightShape() {
     return dynamic_cast<RectStaticPhysicsShape *>(door_right->shape);
 }
 
+[[nodiscard]] int getDetectorWidth() {
+    return  Scaling::metricToWorld(0.15f);
+}
 
 Vector2Int Door::getDoorPosition(bool right) const {
-    Vector2Int closed_position = {dimensions.x / 4,0};
+    Vector2Int closed_position = {dimensions.x / 4, 0};
     Vector2Int open_position = {(dimensions.x / 4 + dimensions.x / 2), 0};
     Vector2Int local_position = Vector2Int::lerp(open_position, closed_position, state);
 
@@ -40,7 +44,8 @@ float Door::getDoorAngle(bool right) const {
 Vector2Int computeDoorDimensions(bool right, Vector2Int dimensions) {
     return {(dimensions.x / 2), dimensions.y};
 }
-Vector2Int Door::getDoorDimensions(bool right) const {return computeDoorDimensions(right, dimensions);}
+
+Vector2Int Door::getDoorDimensions(bool right) const { return computeDoorDimensions(right, dimensions); }
 
 SDL_Texture *Door::floor_texture = nullptr;
 
@@ -61,9 +66,47 @@ Door::~Door() {
     // delete door_right;
 }
 
+Vector2Int Door::getCastPosition(bool right) const {
+    Vector2Int closed_position = Vector2Int(0, 0) - Vector2Int(getDetectorWidth()/2, 0);
+    Vector2Int open_position = Vector2Int(dimensions.x / 2, 0) - Vector2Int(getDetectorWidth()/2, 0);
+    Vector2Int local_position = Vector2Int::lerp(open_position, closed_position, state);
+
+    if (!right)
+        local_position *= -1;
+
+    local_position = local_position.rotate(getAngle());
+    return getPosition() + local_position;
+}
+
+Vector2Int Door::getCastDimensions(bool right) const {
+    return {getDetectorWidth(), dimensions.y};
+}
+
+bool Door::hasOtherEntity(std::vector<PhysicsShape *> cast_res_1) const {
+    bool other = false;
+    for (auto shape: cast_res_1) {
+        if (shape->owner_entity != door_left && shape->owner_entity != door_right)
+            other = true;
+    }
+    return other;
+}
+
 void Door::update(const UpdateContext &context) {
+    if (moment > 0 && state < 1) {
+        std::vector<PhysicsShape*> cast_res_1 = Physics::RectCast(getCastPosition(false), getCastDimensions(false), getAngle(), context.spaceShip);
+        std::vector<PhysicsShape*> cast_res_2 = Physics::RectCast(getCastPosition(true), getCastDimensions(true), getAngle(), context.spaceShip);
+
+        if (hasOtherEntity(cast_res_1)||hasOtherEntity(cast_res_2)) {
+            moment = -1;
+        }
+    }
+
+
+
     state += moment * context.deltaTime;
     state = std::clamp(state, 0.0f, 1.0f);
+
+
 
     door_left->setPosition(getDoorPosition(false));
     door_left->setAngle(getDoorAngle(false));
