@@ -4,7 +4,6 @@
 
 #include "NewGame.h"
 
-#include "debug/DebugButton.h"
 #include "entities/Sphere.h"
 #include "entities/toggleableActivators/Button.h"
 #include "entities/toggleables/door/Door.h"
@@ -35,11 +34,14 @@ std::filesystem::path NewGame::ConstructNewGame() {
     // auto debug_button = (new Debug::DebugButton(Vector2Int{300,300}.scaleToWorldPosition(),0));
 
     // auto lamp = new Lamp(Vector2Int{300,256}.scaleToWorldPosition(),0,EntityId::Manager::getInstance().createEntityId(),true);
-
+    // auto door = new Door(Vector2Int(256,256+64).scaleToWorldPosition(),0,0,0,EntityId::Manager::getInstance().createEntityId());
+    // auto button = new Button(Vector2Int(256,256).scaleToWorldPosition(),0,door);
 
     std::vector<Entity *> entities = {
         player,
         camera,
+        // door,
+        // button,
         // debug_button,
         // lamp,
         // new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
