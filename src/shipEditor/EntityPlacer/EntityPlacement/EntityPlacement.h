@@ -3,25 +3,47 @@
 //
 
 #pragma once
-#include <filesystem>
-#include <functional>
-#include <variant>
+#include <future>
+#include <iostream>
 
-#include "../../../entities/scripts/Entity.h"
+#include "EntityFactory.h"
+#include "json.hpp"
+#include "math/Vectors.h"
 
 namespace EntityPlacement {
-    struct EntitySpawner {
-        std::function<Entity*(Vector2Int position, float angle)> construct;
-    };
-
-    class Registry {
-    public:
-        std::unordered_map<std::string, EntitySpawner> spawners;
-
-        static std::unordered_map<std::string, EntitySpawner> populateSpawners();
-
-        std::vector<std::string> getOptions();
-
-        explicit Registry() : spawners(populateSpawners()) {}
-    };
+    struct Context;
 }
+
+class Entity;
+
+namespace GameState {
+    struct transientGameState;
+}
+
+namespace EntityPlacement {
+    Entity *place(Vector2Int position, float angle);
+
+    template<typename T>
+    struct RegisterEntity {
+        explicit RegisterEntity(const std::string &class_name) {
+            EntityPlacement::
+                    EntityFactory::
+                    getInstance()
+                    .insert(
+                        class_name,
+                        [](EntityPlacementInterface & interface)-> std::future<Entity * >{
+                            return T::_editor_place(interface);
+                        });
+        }
+    };
+};
+
+
+#define EDITOR_PLACE_DECLARATION(ClassName,classId)\
+private:\
+inline static const EntityPlacement::RegisterEntity<ClassName> _editor_placement_registration_##ClassName = EntityPlacement::RegisterEntity<ClassName>{classId}; \
+public: \
+static std::future<Entity *> _editor_place(EntityPlacement::EntityPlacementInterface & interface)
+
+#define EDITOR_PLACE_DEFINITION(ClassName)\
+std::future<Entity *> ClassName::_editor_place(EntityPlacement::EntityPlacementInterface & interface)

@@ -48,3 +48,12 @@ FROM_JSON_DEFINITION(Humanoid) {
         behavior
     );
 }
+
+EDITOR_PLACE_DEFINITION(Humanoid) {
+    Vector2Int position = interface.getPosition();
+    float angle = interface.getAngle();
+
+    return std::async(std::launch::async, [position, angle]()->Entity* {
+        return new Humanoid(position, angle,nullptr);
+    });
+}

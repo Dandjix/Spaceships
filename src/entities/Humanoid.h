@@ -1,5 +1,6 @@
 #pragma once
 #include "behavior/BehavioredEntity.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
 
@@ -37,6 +38,8 @@ public:
     }
 
     FROM_JSON_DECLARATION(Humanoid,"humanoid");
+
+    EDITOR_PLACE_DECLARATION(Humanoid,"humanoid");
 
     void setBehavior(Behavior *value) override { behavior = value; }
 

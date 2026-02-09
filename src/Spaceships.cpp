@@ -18,6 +18,8 @@ void main_menu() {
 
 int main(int argc, char *argv[]) {
 
+    EntityPlacement::EntityFactory::getInstance().print();
+
     if (!std::filesystem::is_directory(ENV_PROJECT_ROOT"saves")) {
         std::filesystem::create_directory(ENV_PROJECT_ROOT"saves");
     }

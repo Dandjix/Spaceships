@@ -21,8 +21,6 @@ namespace EntityPlacement {
 
     class EntityPlacer : public ShortLivedEntity {
     private:
-        const Registry *registry;
-
         std::vector<Entity *> *placed_entities;
         EntityRendering::Context *entity_rendering_context;
         std::string to_place;
@@ -35,18 +33,16 @@ namespace EntityPlacement {
 
     public:
         explicit EntityPlacer(
-            const Registry *registry,
             std::vector<Entity *> *placed_entities,
             EntityRendering::Context *entity_rendering_context,
             Precision precision,
             bool enabled
         ) : ShortLivedEntity({0, 0}, 0),
-            registry(registry),
             placed_entities(placed_entities),
             entity_rendering_context(entity_rendering_context),
             precision(precision),
             enabled(enabled) {
-            to_place = registry->spawners.begin()->first;
+            to_place = EntityPlacement::EntityFactory::getInstance().begin()->first;
         }
 
         bool enabled;

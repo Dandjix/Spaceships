@@ -13,49 +13,47 @@ void ShipEditorModes::ModeEntityPainter::enter() {
     addedActiveEntities = {};
     addedEditorGUIElements = {};
 
-    EntityPlacement::Registry * registry = new EntityPlacement::Registry();
 
     auto entity_painter = new EntityPlacement::EntityPlacer(
-        registry,
         state_machine->common->placed_entities,
         state_machine->common->entity_rendering_context,
         EntityPlacement::Center,
         true
-        );
+    );
 
     auto registry_options = new GUIList(Anchor::TR,
                                         {0, 0},
                                         300,
-                                        GUI_Fill, registry->getOptions(),
+                                        GUI_Fill, EntityPlacement::EntityFactory::getInstance().getOptions(),
                                         [entity_painter](const std::string &option) {
                                             entity_painter->setEntityToPlace(option);
                                         });
 
     auto precision_list = new GUIList(Anchor::TL,
-                                 {100, 0},
-                                 100,
-                                 300,
-                                 {
-                                     "Center",
-                                     "Half",
-                                     "Quarter",
-                                     "Tenth",
-                                     "Free"
-                                 },
-                                 [entity_painter](const std::string &option) {
-                                     EntityPlacement::Precision p;
-                                     if (option == "Center")
-                                         p = EntityPlacement::Center;
-                                     else if (option == "Half")
-                                         p = EntityPlacement::Half;
-                                     else if (option == "Quarter")
-                                         p = EntityPlacement::Quarter;
-                                     else if (option == "Tenth")
-                                         p = EntityPlacement::Tenth;
-                                     else //if (option == "Free")
-                                         p = EntityPlacement::Free;
-                                     entity_painter->setPrecision(p);
-                                 });
+                                      {100, 0},
+                                      100,
+                                      300,
+                                      {
+                                          "Center",
+                                          "Half",
+                                          "Quarter",
+                                          "Tenth",
+                                          "Free"
+                                      },
+                                      [entity_painter](const std::string &option) {
+                                          EntityPlacement::Precision p;
+                                          if (option == "Center")
+                                              p = EntityPlacement::Center;
+                                          else if (option == "Half")
+                                              p = EntityPlacement::Half;
+                                          else if (option == "Quarter")
+                                              p = EntityPlacement::Quarter;
+                                          else if (option == "Tenth")
+                                              p = EntityPlacement::Tenth;
+                                          else //if (option == "Free")
+                                              p = EntityPlacement::Free;
+                                          entity_painter->setPrecision(p);
+                                      });
 
     addedActiveEntities.push_back(
         entity_painter
