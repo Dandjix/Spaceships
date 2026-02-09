@@ -166,7 +166,7 @@ Physics::RaycastHitInfo Physics::RayCast(
 }
 
 std::vector<PhysicsEntity *> Physics::EntityPointCast(Vector2Int world_position, SpaceShip *space_ship) {
-    std::vector<PhysicsShape * > shapes = space_ship->hash_proximity_map.at(world_position);
+    std::vector<PhysicsShape * > shapes = space_ship->hash_proximity_map.at_world(world_position);
     
     std::vector<PhysicsEntity * > hit = {};
     for (auto shape: shapes) {

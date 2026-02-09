@@ -176,6 +176,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     Player::PlayerVehicleTracker * vehicle_tracker = (new Player::PlayerVehicleTracker(player))->initializeRendering(entity_loading_context);
     //Debug stuff
     Debug::CollisionInfo * collision_info = (new Debug::CollisionInfo())->initializeRendering(entity_loading_context);
+    // Debug::ProximityMapVisualizer * proximity_map_visualizer = (new Debug::ProximityMapVisualizer(space_ships.at(0)))->initializeRendering(entity_loading_context);
 
     auto *vehicle_enter = new Player::InteractableInteract(tooltip, vehicle_tracker);
     auto *vehicle_leave = new Player::VehicleLeave(vehicle_tracker);

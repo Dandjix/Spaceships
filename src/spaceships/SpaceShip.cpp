@@ -364,21 +364,28 @@ void SpaceShip::physicsHandling(float target_delta_time, int subdivisions) {
 
         hash_proximity_map.populate(working_physics_entities);
 
-        for (int j = 0; j < working_physics_entities.size(); j++) {
-            for (int k = j + 1; k < working_physics_entities.size(); k++) {
-                const auto e1 = working_physics_entities.at(j);
-                auto e2 = working_physics_entities.at(k);
+        for (auto entity: working_physics_entities) {
+            if (entity->shape == nullptr)
+                continue;
 
-                if (!e1->shape->getBoundingBox().intersects(e2->shape->getBoundingBox())) {
-                    continue;
+            std::unordered_set<PhysicsShape*> shapes;
+            shapes.reserve(1);
+
+            for (Vector2Int cell: entity->shape->getBoundingBox().encompassedTiles()) {
+                for (PhysicsShape * physics_shape: hash_proximity_map.at_cell(cell)) {
+                    shapes.insert(physics_shape);
                 }
-
-                PhysicsUpdateVisitor *visitor = e1->shape->createVisitor();
-
-                e2->shape->consumeVisitor(visitor, this);
-
+            }
+            shapes.erase(entity->shape);
+            for (PhysicsShape *other_shape: shapes) {
+                // if (!entity->shape->getBoundingBox().intersects(other_shape->getBoundingBox())) //might be worth doing it, might not be. TODO : investigate
+                //     continue;
+                PhysicsUpdateVisitor *visitor = entity->shape->createVisitor();
+                other_shape->consumeVisitor(visitor, this);
                 delete visitor;
             }
+
+
         }
     }
 

@@ -16,14 +16,21 @@
  * @param world_position a world position  (a position inside the ship) to check for physics entities
  * @return a vector containing all physics entities at that position, (empty if nothing is there)
  */
-std::vector<PhysicsShape *> HashProximityMap::at(Vector2Int world_position) const {
+std::vector<PhysicsShape *> HashProximityMap::at_world(Vector2Int world_position) const {
 
-    Vector2Int coordinates = world_position / Scaling::scaleToWorld(Tiles::tileSizePx);
+    Vector2Int coordinates = world_position / static_cast<float>(Scaling::scaleToWorld( Tiles::tileSizePx));
 
     if (!proximityMap.contains(coordinates))
         return {};
 
     return proximityMap.at(coordinates);
+}
+
+std::vector<PhysicsShape *> HashProximityMap::at_cell(Vector2Int cell) const {
+    if (!proximityMap.contains(cell))
+        return {};
+
+    return proximityMap.at(cell);
 }
 
 /**
