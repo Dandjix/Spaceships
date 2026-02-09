@@ -27,7 +27,7 @@ public:
      * @return the world position of the vertices, rotated and translated based on the entity's actual position.
      * winding is always clockwise
      */
-    [[nodiscard]] std::vector<Vector2Int> getVertices() const;
+    [[nodiscard]] std::vector<Vector2Int> getVertices() const override;
 
 
     PhysicsUpdateVisitor *createVisitor() override {

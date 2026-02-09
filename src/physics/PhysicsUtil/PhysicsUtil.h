@@ -16,7 +16,6 @@ namespace Physics {
 
 
         struct PolygonInfo {
-            // Vector2Int center;
             std::vector<Vector2Int> vertices;
 
             [[nodiscard]] Vector2Int getCenter() const {
@@ -28,7 +27,7 @@ namespace Physics {
                 return {static_cast<int>(summ.x), static_cast<int>(summ.y)};
             }
 
-            PolygonInfo(Vector2Int center, const std::vector<Vector2Int> &vertices) : vertices(vertices) {
+            explicit PolygonInfo(const std::vector<Vector2Int> &vertices) : vertices(vertices) {
             }
         };
 

@@ -47,6 +47,8 @@ public:
      */
     virtual void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship)=0;
 
+    [[nodiscard]] virtual std::vector<Vector2Int> getVertices() const=0;
+
     [[nodiscard]] virtual BoundingBox<int> getBoundingBox() const =0;
 
     [[nodiscard]] virtual bool is_inside(Vector2Int world_position) const =0;

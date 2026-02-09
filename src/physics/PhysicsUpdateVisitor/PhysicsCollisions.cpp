@@ -19,14 +19,6 @@
  */
 constexpr float jolt = 3;
 
-
-
-
-
-// Vector2Float direction(Vector2Int start, Vector2Int end) {
-//     return Vectors::toVector2Float(end - start).normalized();
-// }
-
 namespace PhysicsCollisions {
     void applyJolt(PhysicsShape *shape1, PhysicsShape *shape2, SpaceShip *space_ship) {
         float random_angle = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * 360;
@@ -41,8 +33,8 @@ namespace PhysicsCollisions {
     void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
         Physics::Util::SATReturn res;
         {
-            Physics::Util::PolygonInfo poly1_info = {poly1->getCenter(), poly1->getVertices()};
-            Physics::Util::PolygonInfo poly2_info = {poly2->getCenter(), poly2->getVertices()};
+            auto poly1_info = Physics::Util::PolygonInfo(poly1->getVertices());
+            auto poly2_info = Physics::Util::PolygonInfo(poly2->getVertices());
             res = SeparatedAxisTheorem(&poly1_info, &poly2_info);
         }
 
@@ -66,8 +58,8 @@ namespace PhysicsCollisions {
     void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
         Physics::Util::SATReturn res;
         {
-            Physics::Util::PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
-            Physics::Util::PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
+            auto convex_info = Physics::Util::PolygonInfo(convex->getVertices());
+            auto round_info = Physics::Util::PolygonInfo(round->getVertices());
             res = SeparatedAxisTheorem(&convex_info, &round_info);
         }
 
@@ -90,8 +82,8 @@ namespace PhysicsCollisions {
     void visitStaticRoundConvex(RoundStaticPhysicsShape *static_round, ConvexPhysicsShape *convex, SpaceShip *space_ship) {
         Physics::Util::SATReturn res;
         {
-            Physics::Util::PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
-            Physics::Util::PolygonInfo round_info = {static_round->getCenter(), static_round->generateVertices()};
+            auto convex_info = Physics::Util::PolygonInfo(convex->getVertices());
+            auto round_info = Physics::Util::PolygonInfo(static_round->getVertices());
             res = SeparatedAxisTheorem(&convex_info, &round_info);
         }
 
@@ -139,8 +131,8 @@ namespace PhysicsCollisions {
         SpaceShip *space_ship) {
         Physics::Util::SATReturn res;
         {
-            Physics::Util::PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
-            Physics::Util::PolygonInfo convex_info = {convex->getCenter(), convex->getVertices()};
+            auto static_convex_info = Physics::Util::PolygonInfo(static_convex->getVertices());
+            auto convex_info = Physics::Util::PolygonInfo(convex->getVertices());
             res = SeparatedAxisTheorem(&static_convex_info, &convex_info);
         }
 
@@ -157,8 +149,8 @@ namespace PhysicsCollisions {
         SpaceShip *space_ship) {
         Physics::Util::SATReturn res;
         {
-            Physics::Util::PolygonInfo static_convex_info = {static_convex->getCenter(), static_convex->getVertices()};
-            Physics::Util::PolygonInfo round_info = {round->getCenter(), round->generateVertices()};
+            auto static_convex_info = Physics::Util::PolygonInfo(static_convex->getVertices());
+            auto round_info = Physics::Util::PolygonInfo(round->getVertices());
             res = SeparatedAxisTheorem(&static_convex_info, &round_info);
         }
 
@@ -370,4 +362,4 @@ namespace PhysicsCollisions {
         diagonalsDisplacement(convex, space_ship);
         cornerNormalsDisplacement(convex, space_ship);
     }
-}
+};

@@ -36,5 +36,5 @@ class RoundPhysicsShape : public PhysicsShape
 
 	[[nodiscard]] bool is_inside(Vector2Int world_position) const override;
 
-	[[nodiscard]] std::vector<Vector2Int> generateVertices(int nb_sides = 12) const;
+	[[nodiscard]] std::vector<Vector2Int> getVertices() const override;
 };
