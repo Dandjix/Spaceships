@@ -2,6 +2,7 @@
 #include "math/Color.h"
 #include "../physics/scripts/PhysicsEntity.h"
 #include "math/Scaling.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
 class CargoContainer : public PhysicsEntity {
@@ -39,6 +40,8 @@ public:
     Entity *finalizeRendering(const EntityRendering::Context &context) override;
 
     FROM_JSON_DECLARATION(CargoContainer,"cargo_container");
+
+    EDITOR_PLACE_DECLARATION(CargoContainer,"cargo_container");
 
     nlohmann::json toJson() override;
 

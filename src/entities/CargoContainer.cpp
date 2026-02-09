@@ -2,6 +2,7 @@
 
 #include "entityRendering/RenderingInitialization.h"
 #include "physics/shapes/RectPhysicsShape.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "textures/TextureSet.h"
 #include "textures/UsageMap.h"
 
@@ -45,6 +46,15 @@ FROM_JSON_DEFINITION(CargoContainer) {
                               json["angle"],
                               json["variation"],
                               Color::fromJson(json["color"]));
+}
+
+EDITOR_PLACE_DEFINITION(CargoContainer) {
+    Vector2Int position = interface.getPosition();
+    float angle = interface.getAngle();
+
+    return std::async(std::launch::async, [position, angle]()->Entity* {
+        return new CargoContainer(position, angle);
+    });
 }
 
 Color CargoContainer::getRandomColor() {
