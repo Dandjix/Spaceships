@@ -40,18 +40,8 @@ void HashProximityMap::populate(const std::vector<PhysicsEntity *> &entities){
         if (e->shape == nullptr)
             continue;
 
-        auto bb = e->shape->getBoundingBox();
-
-        int start_x = bb.topLeft().x / Scaling::scaleToWorld(Tiles::tileSizePx);
-        int start_y = bb.topLeft().y / Scaling::scaleToWorld(Tiles::tileSizePx);
-
-        int end_x = bb.bottomRight().x / Scaling::scaleToWorld(Tiles::tileSizePx);
-        int end_y = bb.bottomRight().y / Scaling::scaleToWorld(Tiles::tileSizePx);
-
-        for (int i = start_x; i <= end_x; ++i) {
-            for (int j = start_y; j <= end_y; ++j) {
-                proximityMap[{i,j}].push_back(e->shape);
-            }
+        for (Vector2Int tile: e->shape->getBoundingBox().encompassedTiles()) {
+            proximityMap[tile].push_back(e->shape);
         }
     }
 }

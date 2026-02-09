@@ -21,6 +21,9 @@ private:
 public:
     HashProximityMap() = default;
 
+    std::unordered_map<Vector2Int,std::vector<PhysicsShape *>>::const_iterator begin() const {return proximityMap.begin();}
+    std::unordered_map<Vector2Int,std::vector<PhysicsShape *>>::const_iterator end() const {return proximityMap.end();}
+
     std::vector<PhysicsShape *> at(Vector2Int world_position) const;
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) const;
