@@ -8,6 +8,7 @@
 #include "entities/toggleables/Lamp.h"
 #include "loadGame/GameState.h"
 #include "spaceships/SpaceShip.h"
+#include "spaceships/SpaceShipBlueprint.h"
 
 TEST(GameStateTestSuite, EntityDuplication_EmptyBlueprint_Test) {
     GameState::transientGameState transient_game_state = {};
