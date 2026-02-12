@@ -158,6 +158,30 @@ Entity *Door::finalizeRendering(const EntityRendering::Context &context) {
 void Door::render(SDL_Renderer *renderer, const RenderingContext &context) {
 }
 
+QueueOrder::Value Door::getQueueOrder() { return QueueOrder::LAST - 1000; }
+
+EntityId::entityId Door::getEntityId() const { return entity_id; }
+
+Entity * Door::asEntity() { return this; }
+
+Toggleable * Door::asToggleable() {return this;}
+
+void Door::toggle() {
+    if (moment > 0)
+        moment = -1;
+    else
+        moment = 1;
+}
+
+bool Door::getStatus() {return moment >0;}
+
+void Door::setStatus(bool value) {
+    if (value)
+        moment = 1;
+    else
+        moment = -1;
+}
+
 void Door::registerInSpaceship(SpaceShip *space_ship) {
     Entity::registerInSpaceship(space_ship);
     door_left->registerInSpaceship(space_ship);

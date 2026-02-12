@@ -69,29 +69,20 @@ public:
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
     //near the end for rendering reasons (on top of most entities)
-    QueueOrder::Value getQueueOrder() override { return QueueOrder::LAST - 1000; }
+    QueueOrder::Value getQueueOrder() override;
 
-    [[nodiscard]] EntityId::entityId getEntityId() const override { return entity_id; }
+    [[nodiscard]] EntityId::entityId getEntityId() const override;
 
-    [[nodiscard]] Entity *asEntity() override { return this; }
-    [[nodiscard]] Toggleable * asToggleable() override {return this;}
+    [[nodiscard]] Entity *asEntity() override;
 
-    void toggle() override {
-        if (moment > 0)
-            moment = -1;
-        else
-            moment = 1;
-    }
+    [[nodiscard]] Toggleable * asToggleable() override;
+
+    void toggle() override;
 
 
-    bool getStatus() override {return moment >0;}
+    bool getStatus() override;
 
-    void setStatus(bool value) override {
-        if (value)
-            moment = 1;
-        else
-            moment = -1;
-    }
+    void setStatus(bool value) override;
 
 
     void registerInSpaceship(SpaceShip *space_ship) override;
