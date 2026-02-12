@@ -7,22 +7,29 @@
 #include "physics/Physics.h"
 #include "physics/shapes/RectPhysicsShape.h"
 #include "physics/shapes/RoundPhysicsShape.h"
+#include "rendering/util/RenderTexture.h"
 
 Humanoid::Humanoid(Vector2Int position, std::optional<float> angle, Behavior *behavior)
     : BehavioredEntity(
           position,
           angle,
-          new RectPhysicsShape(this, Vector2Int{20,20}.scaleToWorldPosition())),
+          new RectPhysicsShape(this, Vector2Int{20, 20}.scaleToWorldPosition())),
       behavior(behavior) {
     radius = 20;
     texture = nullptr;
 }
 
 void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
-    renderTexture(renderer, context, texture, Vector2Float(
-                      radius,
-                      radius
-                  )
+    Rendering::Util::renderTexture(
+        renderer,
+        context,
+        getPosition(),
+        getAngle(),
+        texture,
+        Vector2Float(
+            radius,
+            radius
+        )
     );
 }
 
@@ -53,7 +60,7 @@ EDITOR_PLACE_DEFINITION(Humanoid) {
     Vector2Int position = context->interface->getPosition();
     float angle = context->interface->getAngle();
 
-    return std::async(std::launch::async, [position, angle]()->Entity* {
-        return new Humanoid(position, angle,nullptr);
+    return std::async(std::launch::async, [position, angle]()-> Entity * {
+        return new Humanoid(position, angle, nullptr);
     });
 }

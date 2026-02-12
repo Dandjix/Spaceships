@@ -15,9 +15,8 @@ struct ExteriorRenderingContext {
     CameraTransformations::ExteriorCameraInfo camera_info;
 };
 
-class Rendering {
-public :
-    static Vector2Int get_zero(const RenderingContext &context) {
+namespace Rendering {
+    inline Vector2Int get_zero(const RenderingContext &context) {
         Vector2Int zero = Vector2Int(0, 0) - (context.camera_info.cameraPosition).scaleToScreenPosition() / context.
                           camera_info.cameraScale; //scale zero
 
@@ -29,9 +28,8 @@ public :
     }
 };
 
-class DebugRendering {
-public:
-    static void drawCross(SDL_Renderer *renderer, Vector2Float screenPosition, float size = 14.0f) {
+namespace DebugRendering {
+    inline void drawCross(SDL_Renderer *renderer, Vector2Float screenPosition, float size = 14.0f) {
         float halfLength = size / 2;
 
         Vector2Float corners[4] = {
@@ -93,15 +91,15 @@ public:
         // Total rotation = object angle + camera angle
         float totalAngleDeg = angle + context.camera_info.cameraAngle;
         float angleRad = totalAngleDeg * (3.14159265f / 180.0f);
-        float cosA = cos(angleRad);
-        float sinA = sin(angleRad);
+        float cosA = std::cos(angleRad);
+        float sinA = std::sin(angleRad);
 
         // Rotate corners around center
-        for (int i = 0; i < 4; ++i) {
-            float x = corners[i].x;
-            float y = corners[i].y;
-            corners[i].x = x * cosA - y * sinA + center.x;
-            corners[i].y = x * sinA + y * cosA + center.y;
+        for (auto & corner : corners) {
+            float x = corner.x;
+            float y = corner.y;
+            corner.x = x * cosA - y * sinA + center.x;
+            corner.y = x * sinA + y * cosA + center.y;
         }
 
         // Draw rectangle from corners
@@ -131,10 +129,6 @@ public:
         Vector2Int TR = Vector2Int(bottomRight.x, topLeft.y);
         Vector2Int BR = bottomRight;
         Vector2Int BL = Vector2Int(topLeft.x, bottomRight.y);
-
-        // Center of the box (in world coords)
-        Vector2Int center = (TL + BR) / 2.0f;
-
 
         // Apply camera transform: offset, scale
         auto transform = [&](Vector2Int pt) -> Vector2Float {

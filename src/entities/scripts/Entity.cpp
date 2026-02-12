@@ -8,30 +8,6 @@
 #include "physics/scripts/PhysicsEntity.h"
 #include "spaceships/SpaceShip.h"
 
-void Entity::renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture,
-                           Vector2Float destSize) const {
-    destSize = destSize / context.camera_info.cameraScale;
-
-    Vector2Float center = context.camera_info.worldToScreenPoint(position);
-
-    SDL_FRect destRect = {
-        center.x - destSize.x,
-        center.y - destSize.y,
-        destSize.x * 2.0f,
-        destSize.y * 2.0f};
-    float entity_angle;
-    if (hasAngle())
-    {
-        entity_angle = getAngle() + context.camera_info.cameraAngle;
-    }
-    else
-    {
-        entity_angle = 0;
-    }
-
-    SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, entity_angle, nullptr, SDL_FLIP_NONE);
-}
-
 nlohmann::json Entity::toJson() {
     nlohmann::json entry = {};
     entry["position"] = getPosition().toJson();

@@ -41,9 +41,6 @@ protected:
     Vector2Int position; // Using Vector2 to represent position
     std::optional<float> angle; // if an angle is null, the object will always face towards the camera
 
-    void renderTexture(SDL_Renderer *renderer, const RenderingContext &context, SDL_Texture *texture,
-                       Vector2Float destSize) const;
-
 public:
     /**
      * called when the destructor is called

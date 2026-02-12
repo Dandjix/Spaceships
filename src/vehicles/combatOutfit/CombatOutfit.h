@@ -1,5 +1,5 @@
 #pragma once
-#include "../../vehicles/Vehicle.h"
+#include "vehicles/Vehicle.h"
 
 class CombatOutfit : public Vehicle
 {

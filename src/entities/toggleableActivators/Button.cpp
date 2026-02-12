@@ -5,6 +5,7 @@
 #include "Button.h"
 
 #include "loadGame/GameState.h"
+#include "rendering/util/RenderTexture.h"
 #include "textures/TextureSet.h"
 
 constexpr float button_size_px = 22.0f;
@@ -49,7 +50,13 @@ void Button::finalizeJsonDeserialization(const GameState::transientGameState &tr
 
 
 void Button::render(SDL_Renderer *renderer, const RenderingContext &context) {
-    renderTexture(renderer, context, texture, Vector2Float{button_size_px, button_size_px});
+    Rendering::Util::renderTexture(
+        renderer,
+        context,
+        getPosition(),
+        getAngle(),
+        texture,
+        Vector2Float{button_size_px, button_size_px});
 }
 
 void Button::interact(Humanoid *activator, const GameEvent::GameEventContext &context) {

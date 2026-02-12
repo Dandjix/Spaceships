@@ -3,6 +3,7 @@
 
 #include "entityRendering/RenderingInitialization.h"
 #include "physics/shapes/RoundPhysicsShape.h"
+#include "rendering/util/RenderTexture.h"
 #include "textures/TextureSet.h"
 #include "textures/UsageMap.h"
 
@@ -34,7 +35,7 @@ void Sphere::render(SDL_Renderer *renderer, const RenderingContext &context) {
     halfSize = halfSize.scaleToScreenPosition();
 
     // Render the texture with calculated size
-    renderTexture(renderer, context, texture, halfSize);
+    Rendering::Util::renderTexture(renderer, context,getPosition(),getAngle(), texture, halfSize);
 }
 
 // Override update function (currently empty, but could be used to handle animations or interactions)

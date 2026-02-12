@@ -14,10 +14,8 @@ namespace EntityPlacement {
     public:
         [[nodiscard]] Vector2Int getPosition() const { return position_to_place; }
 
-        [[nodiscard]] float getAngle(float snap = 0) const {
-            if (snap == 0) return angle_to_place;
-
-            return std::fmod(angle_to_place, snap);
+        [[nodiscard]] float getAngle() const {
+            return angle_to_place;
         }
 
         void setPositionToPlace(Vector2Int position_to_place_param) { position_to_place = position_to_place_param; }

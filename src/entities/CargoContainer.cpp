@@ -2,6 +2,7 @@
 
 #include "entityRendering/RenderingInitialization.h"
 #include "physics/shapes/RectPhysicsShape.h"
+#include "rendering/util/RenderTexture.h"
 #include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "textures/TextureSet.h"
 #include "textures/UsageMap.h"
@@ -37,7 +38,7 @@ void CargoContainer::render(SDL_Renderer *renderer, const RenderingContext &cont
     Vector2Float halfSize = Vectors::toVector2Float(scale.scaleToScreenPosition()) * 0.5f;
 
     // Render the texture
-    renderTexture(renderer, context, texture, halfSize);
+    Rendering::Util::renderTexture(renderer, context,getPosition(),getAngle(), texture, halfSize);
 }
 
 FROM_JSON_DEFINITION(CargoContainer) {
