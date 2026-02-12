@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <format>
 #include <iostream>
 #include <functional>
 
@@ -95,6 +96,34 @@ struct Vector2 {
             throw std::logic_error("rotate() is only defined for floats and ints");
         }
     }
+
+    [[nodiscard]] Vector2<T> rotateCardinal(int angle_param) const {
+        int angle = angle_param % 360;
+        if (angle < 0) angle += 360;
+
+        Vector2<T> result;
+
+        switch (angle) {
+            case 0:
+                result = {x,y};
+                break;
+            case 90:
+                result = {-y,x};
+                break;
+            case 180:
+                result = {-x,-y};
+                break;
+            case 270:
+                result = {y,-x};
+                break;
+            default:
+                throw std::logic_error(std::format(
+                    "cardinal rotation can only be done at cardinal angles, (0,90,180,270), not at {}", angle_param));
+        }
+
+        return result;
+    }
+
 
     template<typename T2>
     [[nodiscard]] float dot(Vector2<T2> other) const {
