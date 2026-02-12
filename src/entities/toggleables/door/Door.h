@@ -68,7 +68,7 @@ public:
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
-    //near the end for rendering reasons (on top of most entities)
+    //near the start for rendering reasons (floor is on the floor)
     QueueOrder::Value getQueueOrder() override;
 
     [[nodiscard]] EntityId::entityId getEntityId() const override;

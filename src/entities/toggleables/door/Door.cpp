@@ -8,6 +8,7 @@
 #include "game/Update.h"
 #include "physics/ConvexCast.h"
 #include "physics/shapes/RectStaticPhysicsShape.h"
+#include "rendering/util/RenderTexture.h"
 #include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 
 RectStaticPhysicsShape *Door::getDoorLeftShape() {
@@ -19,7 +20,7 @@ RectStaticPhysicsShape *Door::getDoorRightShape() {
 }
 
 [[nodiscard]] int getDetectorWidth() {
-    return  Scaling::metricToWorld(0.15f);
+    return Scaling::metricToWorld(0.15f);
 }
 
 Vector2Int Door::getDoorPosition(bool right) const {
@@ -68,8 +69,8 @@ Door::~Door() {
 }
 
 Vector2Int Door::getCastPosition(bool right) const {
-    Vector2Int closed_position = Vector2Int(0, 0) - Vector2Int(getDetectorWidth()/2, 0);
-    Vector2Int open_position = Vector2Int(dimensions.x / 2, 0) - Vector2Int(getDetectorWidth()/2, 0);
+    Vector2Int closed_position = Vector2Int(0, 0) - Vector2Int(getDetectorWidth() / 2, 0);
+    Vector2Int open_position = Vector2Int(dimensions.x / 2, 0) - Vector2Int(getDetectorWidth() / 2, 0);
     Vector2Int local_position = Vector2Int::lerp(open_position, closed_position, state);
 
     if (!right)
@@ -94,19 +95,19 @@ bool Door::hasOtherEntity(std::vector<PhysicsShape *> cast_res_1) const {
 
 void Door::update(const UpdateContext &context) {
     if (moment > 0 && state < 1) {
-        std::vector<PhysicsShape*> cast_res_1 = Physics::RectCast(getCastPosition(false), getCastDimensions(false), getAngle(), context.spaceShip);
-        std::vector<PhysicsShape*> cast_res_2 = Physics::RectCast(getCastPosition(true), getCastDimensions(true), getAngle(), context.spaceShip);
+        std::vector<PhysicsShape *> cast_res_1 = Physics::RectCast(getCastPosition(false), getCastDimensions(false),
+                                                                   getAngle(), context.spaceShip);
+        std::vector<PhysicsShape *> cast_res_2 = Physics::RectCast(getCastPosition(true), getCastDimensions(true),
+                                                                   getAngle(), context.spaceShip);
 
-        if (hasOtherEntity(cast_res_1)||hasOtherEntity(cast_res_2)) {
+        if (hasOtherEntity(cast_res_1) || hasOtherEntity(cast_res_2)) {
             moment = -1;
         }
     }
 
 
-
     state += moment * context.deltaTime;
     state = std::clamp(state, 0.0f, 1.0f);
-
 
 
     door_left->setPosition(getDoorPosition(false));
@@ -156,15 +157,33 @@ Entity *Door::finalizeRendering(const EntityRendering::Context &context) {
 }
 
 void Door::render(SDL_Renderer *renderer, const RenderingContext &context) {
+    std::vector<Vector2Int> floor_tiles = {
+        Vector2Int(Scaling::scaleToWorld(Tiles::tileSizePx / 2), 0).rotateCardinal(static_cast<int>(getAngle())),
+        Vector2Int(Scaling::scaleToWorld(-Tiles::tileSizePx / 2), 0).rotateCardinal(static_cast<int>(getAngle()))
+    };
+
+    for (int i = 0; i < floor_tiles.size(); ++i) {
+        floor_tiles[i] += getPosition();
+    }
+
+    for (auto floor_tile: floor_tiles) {
+        Rendering::Util::renderTexture(
+            renderer,
+            context,
+            floor_tile,
+            getAngle(),
+            floor_texture,
+            {Tiles::tileSizePx/2, Tiles::tileSizePx/2});
+    }
 }
 
-QueueOrder::Value Door::getQueueOrder() { return QueueOrder::LAST - 1000; }
+QueueOrder::Value Door::getQueueOrder() { return QueueOrder::FIRST + 1000; }
 
 EntityId::entityId Door::getEntityId() const { return entity_id; }
 
-Entity * Door::asEntity() { return this; }
+Entity *Door::asEntity() { return this; }
 
-Toggleable * Door::asToggleable() {return this;}
+Toggleable *Door::asToggleable() { return this; }
 
 void Door::toggle() {
     if (moment > 0)
@@ -173,7 +192,7 @@ void Door::toggle() {
         moment = 1;
 }
 
-bool Door::getStatus() {return moment >0;}
+bool Door::getStatus() { return moment > 0; }
 
 void Door::setStatus(bool value) {
     if (value)
@@ -195,44 +214,42 @@ void Door::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
 }
 
 int round(int x, int quotient) {
-    return static_cast<int>(std::round(static_cast<double>(x)/quotient)*quotient);
+    return static_cast<int>(std::round(static_cast<double>(x) / quotient) * quotient);
 }
-[[nodiscard]]Vector2Int round_position(Vector2Int position, float angle) {
+
+[[nodiscard]] Vector2Int round_position(Vector2Int position, float angle) {
     int cell_size = Scaling::scaleToWorld(Tiles::tileSizePx);
 
-
-
-    if (std::fmod(angle,180.0f) == 0.0f) { //horizontal
+    if (std::fmod(angle, 180.0f) == 0.0f) {
+        //horizontal
         //x rounded to center of cell,
         //y rounded to edge of cell
         position = {
-            round(position.x,cell_size) + cell_size/2,
-            round(position.y,cell_size)
+            round(position.x, cell_size) + cell_size / 2,
+            round(position.y, cell_size)
         };
-    }
-    else { //vertical
+    } else {
+        //vertical
         //x rounded to edge of cell,
         //y rounded to center of cell
         position = {
-            round(position.x,cell_size),
-            round(position.y,cell_size) + cell_size/2
+            round(position.x, cell_size),
+            round(position.y, cell_size) + cell_size / 2
         };
     }
     return position;
 }
 
-EDITOR_PLACE_DEFINITION(Door){
-    float angle = context->interface->getAngle(90.0f);
+EDITOR_PLACE_DEFINITION(Door) {
+    float angle = context->interface->getAngle();
     Vector2Int position = context->interface->getPosition();
 
-    std::cout << angle << "," <<position << std::endl;
+    float rounded_angle = round(angle,90);
+    Vector2Int rounded_position = round_position(position, rounded_angle);
 
-    position = round_position(position,angle);
+    std::cout << "rounded to : " << rounded_angle << "," << rounded_position << std::endl;
 
-    std::cout << "rounded to : " << angle << "," <<position << std::endl;
-
-
-    return std::async(std::launch::async, [position, angle]()->Entity* {
-        return new Door(position, angle,0,0,1234);
+    return std::async(std::launch::async, [rounded_position, rounded_angle]()-> Entity * {
+        return new Door(rounded_position, rounded_angle, 0, 0, 1234);
     });
 }
