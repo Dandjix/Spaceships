@@ -8,6 +8,7 @@
 #include "game/Update.h"
 #include "physics/ConvexCast.h"
 #include "physics/shapes/RectStaticPhysicsShape.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 
 RectStaticPhysicsShape *Door::getDoorLeftShape() {
     return dynamic_cast<RectStaticPhysicsShape *>(door_left->shape);
@@ -167,4 +168,47 @@ void Door::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
     door_left->unregisterInSpaceship(space_ship, delete_when_done);
     door_right->unregisterInSpaceship(space_ship, delete_when_done);
     Entity::unregisterInSpaceship(space_ship, delete_when_done);
+}
+
+int round(int x, int quotient) {
+    return static_cast<int>(std::round(static_cast<double>(x)/quotient)*quotient);
+}
+[[nodiscard]]Vector2Int round_position(Vector2Int position, float angle) {
+    int cell_size = Scaling::scaleToWorld(Tiles::tileSizePx);
+
+
+
+    if (std::fmod(angle,180.0f) == 0.0f) { //horizontal
+        //x rounded to center of cell,
+        //y rounded to edge of cell
+        position = {
+            round(position.x,cell_size) + cell_size/2,
+            round(position.y,cell_size)
+        };
+    }
+    else { //vertical
+        //x rounded to edge of cell,
+        //y rounded to center of cell
+        position = {
+            round(position.x,cell_size),
+            round(position.y,cell_size) + cell_size/2
+        };
+    }
+    return position;
+}
+
+EDITOR_PLACE_DEFINITION(Door){
+    float angle = context->interface->getAngle(90.0f);
+    Vector2Int position = context->interface->getPosition();
+
+    std::cout << angle << "," <<position << std::endl;
+
+    position = round_position(position,angle);
+
+    std::cout << "rounded to : " << angle << "," <<position << std::endl;
+
+
+    return std::async(std::launch::async, [position, angle]()->Entity* {
+        return new Door(position, angle,0,0,1234);
+    });
 }

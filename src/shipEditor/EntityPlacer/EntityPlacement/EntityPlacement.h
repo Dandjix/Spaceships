@@ -7,18 +7,12 @@
 #include <iostream>
 
 #include "EntityFactory.h"
+#include "EntityPlacementContext.h"
 #include "json.hpp"
 #include "math/Vectors.h"
 
-namespace EntityPlacement {
-    struct Context;
-}
-
 class Entity;
 
-namespace GameState {
-    struct transientGameState;
-}
 
 namespace EntityPlacement {
     Entity *place(Vector2Int position, float angle);
@@ -31,8 +25,8 @@ namespace EntityPlacement {
                     getInstance()
                     .insert(
                         class_name,
-                        [](EntityPlacementInterface & interface)-> std::future<Entity * >{
-                            return T::_editor_place(interface);
+                        [](EntityPlacement::Context * context)-> std::future<Entity * >{
+                            return T::_editor_place(context);
                         });
         }
     };
@@ -43,7 +37,7 @@ namespace EntityPlacement {
 private:\
 inline static const EntityPlacement::RegisterEntity<ClassName> _editor_placement_registration_##ClassName = EntityPlacement::RegisterEntity<ClassName>{classId}; \
 public: \
-static std::future<Entity *> _editor_place(EntityPlacement::EntityPlacementInterface & interface)
+static std::future<Entity *> _editor_place(EntityPlacement::Context * context)
 
 #define EDITOR_PLACE_DEFINITION(ClassName)\
-std::future<Entity *> ClassName::_editor_place(EntityPlacement::EntityPlacementInterface & interface)
+std::future<Entity *> ClassName::_editor_place(EntityPlacement::Context * context)

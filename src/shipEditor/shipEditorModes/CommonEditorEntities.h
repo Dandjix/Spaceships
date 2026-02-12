@@ -5,6 +5,8 @@
 #pragma once
 #include <vector>
 
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
+
 enum class Tile;
 class ShipBuildingGrid;
 class SpaceShipBlueprint;
@@ -18,5 +20,6 @@ namespace ShipEditorModes {
         std::vector<std::vector<Tile>> * tiles;
         std::vector<Entity *> * placed_entities;
         EntityRendering::Context * entity_rendering_context;
+        EntityPlacement::Interface * entity_placement_interface;
     };
 }

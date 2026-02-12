@@ -4,14 +4,15 @@
 #include <string>
 #include <unordered_map>
 
-#include "EntityPlacementInterface.h"
+#include "EntityPlacementContext.h"
+#include "Interface.h"
 #include "entities/scripts/Entity.h"
 //
 // Created by timon on 2/9/26.
 //
 
 namespace EntityPlacement {
-    class EntityPlacementInterface;
+    class Interface;
     /**
      * This is used to register an entity so that it can be spawned in the editor
      * deserialized
@@ -20,7 +21,7 @@ namespace EntityPlacement {
     private:
         std::unordered_map<
             std::string,
-            std::function<std::future<Entity *>(EntityPlacementInterface &interface)>
+            std::function<std::future<Entity *>(EntityPlacement::Context * entity_placement_context)>
         >
         factories;
 
@@ -31,7 +32,7 @@ namespace EntityPlacement {
         }
 
         void insert(const std::string &key,
-                    const std::function<std::future<Entity *>(EntityPlacementInterface &interface)> &value) {
+                    const std::function<std::future<Entity *>(EntityPlacement::Context * context)> &value) {
             auto [_,success] = factories.insert({key, value});
 
             if (!success)
@@ -55,11 +56,11 @@ namespace EntityPlacement {
         // Type aliases for iterator support
         using const_iterator = std::unordered_map<
             std::string,
-            std::function<std::future<Entity *>(EntityPlacementInterface &interface)>
+            std::function<std::future<Entity *>(EntityPlacement::Context * context)>
         >::const_iterator;
         using size_type = std::unordered_map<
             std::string,
-            std::function<std::future<Entity *>(EntityPlacementInterface &interface)>
+            std::function<std::future<Entity *>(EntityPlacement::Context * context)>
         >::size_type;
 
         // Iterators
@@ -69,7 +70,7 @@ namespace EntityPlacement {
 
         size_type size() { return factories.size(); }
 
-        [[nodiscard]] const std::function<std::future<Entity *>(EntityPlacementInterface &)> &at(
+        [[nodiscard]] const std::function<std::future<Entity *>(EntityPlacement::Context * context)> &at(
             const std::string &key) const {
             if (!contains(key)) {
                 print();

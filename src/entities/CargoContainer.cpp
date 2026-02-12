@@ -49,10 +49,10 @@ FROM_JSON_DEFINITION(CargoContainer) {
 }
 
 EDITOR_PLACE_DEFINITION(CargoContainer) {
-    Vector2Int position = interface.getPosition();
-    float angle = interface.getAngle();
+    Vector2Int position = context->interface->getPosition();
+    float angle = context->interface->getAngle();
 
-    return std::async(std::launch::async, [position, angle]()->Entity* {
+    return std::async(std::launch::async, [position, angle]()-> Entity * {
         return new CargoContainer(position, angle);
     });
 }

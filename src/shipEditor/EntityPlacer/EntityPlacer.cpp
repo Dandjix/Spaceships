@@ -7,10 +7,21 @@
 #include "game/Rendering.h"
 #include "gameEvent/GameEvent.h"
 
-void EntityPlacement::EntityPlacer::placeEntity(Vector2Int world_position, float angle, const std::string &to_place_key) {
+void EntityPlacement::EntityPlacer::placeEntity(
+    Vector2Int world_position,
+    float angle,
+    const std::string &to_place_key
+) {
     auto spawner = EntityPlacement::EntityFactory::getInstance().at(to_place_key);
-    auto entity_placement_interface = EntityPlacementInterface(world_position,angle);
-    auto future_entity = spawner(entity_placement_interface);
+
+    entity_placement_interface->setPositionToPlace(world_position);
+    entity_placement_interface->setAngleToPlace(angle);
+
+    auto entity_placement_context = EntityPlacement::Context(
+        entity_placement_interface
+    );
+
+    auto future_entity = spawner(&entity_placement_context);
     auto entity = future_entity.get();
     if (entity_rendering_context != nullptr)
         entity->initializeRendering(*entity_rendering_context);
@@ -22,9 +33,8 @@ void EntityPlacement::EntityPlacer::setPrecision(Precision value) {
 }
 
 inline void EntityPlacement::EntityPlacer::update(const UpdateContext &context) {
-
-    float mouse_x,mouse_y;
-    SDL_GetMouseState(&mouse_x,&mouse_y);
+    float mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
 }
 
 void EntityPlacement::EntityPlacer::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
@@ -33,21 +43,27 @@ void EntityPlacement::EntityPlacer::handleEvent(const SDL_Event &event, const Ga
     }
 
     if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && context.mouse_position_type == GameEvent::Game) {
-        float mouse_x,mouse_y;
-        SDL_GetMouseState(&mouse_x,&mouse_y);
-        placeEntity(context.camera_info.screenToWorldPoint({mouse_x,mouse_y}),angle_to_place_at,to_place);
+        float mouse_x, mouse_y;
+        SDL_GetMouseState(&mouse_x, &mouse_y);
+
+        placeEntity(
+            context.camera_info.screenToWorldPoint({mouse_x, mouse_y}),
+            angle_to_place_at,
+            to_place
+        );
     }
 }
 
 void EntityPlacement::EntityPlacer::render(SDL_Renderer *renderer, const RenderingContext &context) {
-    float mouse_x,mouse_y;
-    SDL_GetMouseState(&mouse_x,&mouse_y);
-    Vector2Int world_position = context.camera_info.screenToWorldPoint(Vector2Float{mouse_x,mouse_y});
-    Vector2Int offset_world_position = world_position + Vector2Int(Scaling::scaleToWorld(96),0).rotate(angle_to_place_at);
+    float mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+    Vector2Int world_position = context.camera_info.screenToWorldPoint(Vector2Float{mouse_x, mouse_y});
+    Vector2Int offset_world_position = world_position + Vector2Int(Scaling::scaleToWorld(96), 0).rotate(
+                                           angle_to_place_at);
 
     Vector2Float screen_position = context.camera_info.worldToScreenPoint(world_position);
     Vector2Float offset_screen_position = context.camera_info.worldToScreenPoint(offset_world_position);
 
-    SDL_SetRenderDrawColor(renderer,0,255,0,255);
-    SDL_RenderLine(renderer,screen_position.x,screen_position.y,offset_screen_position.x,offset_screen_position.y);
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_RenderLine(renderer, screen_position.x, screen_position.y, offset_screen_position.x, offset_screen_position.y);
 }

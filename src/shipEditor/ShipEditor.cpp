@@ -20,9 +20,11 @@
 #include "shipEditorModes/CommonEditorEntities.h"
 #include "shipEditorModes/ShipEditorStateMachine.h"
 #include "../userInterface/elements/GUI/GUICheckbox.h"
+#include "entities/CargoContainer.h"
 #include "entityRendering/RenderingInitialization.h"
 #include "game/ElementContainer.h"
 #include "loadGame/GameState.h"
+#include "EntityPlacer/EntityPlacement/EntityPlacement.h"
 
 void ResizeGrid(Vector2Int newSize) {
     std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
@@ -63,7 +65,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     ElementContainer<GUIRect *> editorGUIElementsDeletionQueue = {};
 
     auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures",renderer);
-    EntityRendering::Context entity_loading_context = {texture_usage_map};
+    EntityRendering::Context entity_rendering_context = {texture_usage_map};
 
     auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1, 600);
     activeEntities.add(camera);
@@ -98,13 +100,18 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     BlueprintEditorAppearance appearance(blueprint);
     activeEntities.add(&appearance);
 
+    auto * entity_placement_interface = new EntityPlacement::Interface();
+
+    EntityPlacement::Context entity_placement_context = {entity_placement_interface};
+
     ShipEditorModes::CommonEditorObjects common = {
         blueprint,
         &grid,
         &appearance,
         &blueprint->tiles,
         &blueprint->entities,
-        &entity_loading_context,
+        &entity_rendering_context,
+        entity_placement_interface
     };
 
     ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(
@@ -134,7 +141,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             "Edit entities",
             "Link toggleables"
         },
-        [&entity_loading_context,&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string &option) {
+        [&entity_rendering_context,&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string &option) {
             if (option == "Resize") {
                 grid.startResizing();
             } else if (option == "Save") {
@@ -149,7 +156,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 EntityId::Manager::getInstance().reset();
                 GameState::transientGameState transient_game_state = {};
 
-                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(),&entity_loading_context, true, true);
+                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(),&entity_rendering_context, true, true);
 
                 blueprint_name = path;
                 *blueprint = *loaded;
@@ -279,6 +286,11 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         });
 
         for (Entity *entity: all_entities) {
+
+            // if (dynamic_cast<CargoContainer * >(entity) != nullptr) {
+            //     std::cout << "rendering a container ! " << std::endl;
+            // }
+
             entity->render(renderer, renderingContext);
         }
         for (Entity *entity: all_entities) {

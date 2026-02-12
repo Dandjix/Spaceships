@@ -23,26 +23,35 @@ namespace EntityPlacement {
     private:
         std::vector<Entity *> *placed_entities;
         EntityRendering::Context *entity_rendering_context;
+        EntityPlacement::Interface *entity_placement_interface;
         std::string to_place;
 
         float angle_to_place_at = 0;
 
+
         Precision precision;
 
-        void placeEntity(Vector2Int world_position, float angle, const std::string &to_place_key);
+        void placeEntity(
+            Vector2Int world_position,
+            float angle,
+            const std::string &to_place_key
+        );
 
     public:
         explicit EntityPlacer(
             std::vector<Entity *> *placed_entities,
+            const EntityPlacement::EntityFactory &entity_factory,
+            EntityPlacement::Interface *entity_placement_interface,
             EntityRendering::Context *entity_rendering_context,
             Precision precision,
             bool enabled
         ) : ShortLivedEntity({0, 0}, 0),
             placed_entities(placed_entities),
             entity_rendering_context(entity_rendering_context),
+            entity_placement_interface(entity_placement_interface),
             precision(precision),
             enabled(enabled) {
-            to_place = EntityPlacement::EntityFactory::getInstance().begin()->first;
+            to_place = entity_factory.begin()->first;
         }
 
         bool enabled;

@@ -3,6 +3,7 @@
 #include "physics/scripts/PhysicsEntity.h"
 #include "spaceships/Tile.h"
 #include "spaceships/EntityData/EntityLoading.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "math/Scaling.h"
 //
 // Created by timon on 2/7/26.
@@ -97,4 +98,5 @@ public:
 
     void unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) override;
 
+    EDITOR_PLACE_DECLARATION(Door,"door");
 };
