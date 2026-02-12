@@ -18,10 +18,21 @@ TEST(BlueprintLoadingTestSuite, BlueprintLoadingTest) {
         transient_game_state,
         manager,
         nullptr,
+        true,
         true
         );
 
-    ASSERT_EQ(dynamic_cast<Button *>(blueprint->entities[0])->getLinkedEntity() , blueprint->entities[1]);
+    auto button =dynamic_cast<Button *>(blueprint->entities.at(0));
+
+    auto toggleable = button->getLinkedEntity();
+
+    ASSERT_TRUE(toggleable != nullptr);
+
+    auto linked = toggleable->asEntity();
+
+    auto lamp = blueprint->entities.at(1);
+
+    ASSERT_EQ(linked, lamp);
 
     std::cout << "deleting !" << std::endl;
     delete blueprint;
