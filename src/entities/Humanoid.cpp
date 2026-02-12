@@ -27,8 +27,8 @@ void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
         getAngle(),
         texture,
         Vector2Float(
-            radius,
-            radius
+            radius*2,
+            radius*2
         )
     );
 }

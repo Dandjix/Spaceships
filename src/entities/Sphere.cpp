@@ -29,13 +29,13 @@ Entity *Sphere::finalizeRendering(const EntityRendering::Context &context) {
 
 // Override render function
 void Sphere::render(SDL_Renderer *renderer, const RenderingContext &context) {
-    // Calculate the half-size of the sphere for rendering (scale it according to the camera)
-    Vector2Float halfSize(static_cast<float>(radius), static_cast<float>(radius));
+    // Calculate the size of the sphere for rendering (scale it according to the camera)
+    Vector2Float size(static_cast<float>(radius*2), static_cast<float>(radius*2));
 
-    halfSize = halfSize.scaleToScreenPosition();
+    size = size.scaleToScreenPosition();
 
     // Render the texture with calculated size
-    Rendering::Util::renderTexture(renderer, context,getPosition(),getAngle(), texture, halfSize);
+    Rendering::Util::renderTexture(renderer, context,getPosition(),getAngle(), texture, size);
 }
 
 // Override update function (currently empty, but could be used to handle animations or interactions)

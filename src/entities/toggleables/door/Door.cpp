@@ -173,7 +173,7 @@ void Door::render(SDL_Renderer *renderer, const RenderingContext &context) {
             floor_tile,
             getAngle(),
             floor_texture,
-            {Tiles::tileSizePx/2, Tiles::tileSizePx/2});
+            {Tiles::tileSizePx, Tiles::tileSizePx});
     }
 }
 

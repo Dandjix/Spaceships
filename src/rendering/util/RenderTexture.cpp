@@ -19,10 +19,10 @@ void Rendering::Util::renderTexture(
     Vector2Float screen_texture_center = context.camera_info.worldToScreenPoint(center);
 
     SDL_FRect destRect = {
-        screen_texture_center.x - destSize_pixels.x,
-        screen_texture_center.y - destSize_pixels.y,
-        destSize_pixels.x * 2.0f,
-        destSize_pixels.y * 2.0f
+        screen_texture_center.x - destSize_pixels.x/2,
+        screen_texture_center.y - destSize_pixels.y/2,
+        destSize_pixels.x,
+        destSize_pixels.y
     };
     SDL_RenderTextureRotated(renderer, texture, nullptr, &destRect, angle, nullptr, SDL_FLIP_NONE);
 }

@@ -8,7 +8,7 @@
 #include "rendering/util/RenderTexture.h"
 #include "textures/TextureSet.h"
 
-constexpr float button_size_px = 22.0f;
+constexpr float button_radius_px = 22.0f;
 
 Button::Button(Vector2Int position, float angle, Toggleable *linked_device)
     : PhysicsEntity(
@@ -16,7 +16,7 @@ Button::Button(Vector2Int position, float angle, Toggleable *linked_device)
           angle,
           new RoundStaticPhysicsShape(
               this,
-              Scaling::scaleToWorld(button_size_px))),
+              Scaling::scaleToWorld(button_radius_px))),
       linked_entity(linked_device), texture(nullptr) {
 }
 
@@ -56,7 +56,7 @@ void Button::render(SDL_Renderer *renderer, const RenderingContext &context) {
         getPosition(),
         getAngle(),
         texture,
-        Vector2Float{button_size_px, button_size_px});
+        Vector2Float{button_radius_px*2, button_radius_px*2});
 }
 
 void Button::interact(Humanoid *activator, const GameEvent::GameEventContext &context) {
