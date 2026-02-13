@@ -8,9 +8,10 @@
 class DoorPanel : public ShortLivedPhysicsEntity{
 protected:
     static SDL_Texture * door_texture;
+    Vector2Int dimensions;
 
 public:
-    DoorPanel(const Vector2Int &position, const std::optional<float> &angle, Vector2Int physics_dimensions);
+    DoorPanel(const Vector2Int &position, const std::optional<float> &angle, Vector2Int dimensions);
 
     void registerInSpaceship(SpaceShip *space_ship) override;
 
@@ -19,4 +20,6 @@ public:
     DoorPanel * finalizeRendering(const EntityRendering::Context &context) override;
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) override;
+
+    QueueOrder::Value getQueueOrder() override {return QueueOrder::LAST - 1000;}
 };
