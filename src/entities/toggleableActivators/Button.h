@@ -7,6 +7,7 @@
 #include "../toggleables/scripts/Toggleable.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 #include "scripts/ToggleableActivator.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
 
@@ -51,4 +52,6 @@ public:
     Button *initializeRendering(const EntityRendering::Context &context) override;
 
     Entity *finalizeRendering(const EntityRendering::Context &context) override;
+
+    EDITOR_PLACE_DECLARATION(Button,"button");
 };
