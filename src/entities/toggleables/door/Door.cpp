@@ -222,19 +222,15 @@ int round(int x, int quotient) {
 
     if (std::fmod(angle, 180.0f) == 0.0f) {
         //horizontal
-        //x rounded to center of cell,
-        //y rounded to edge of cell
         position = {
-            round(position.x, cell_size) + cell_size / 2,
-            round(position.y, cell_size)
+            round(position.x, cell_size),
+            round(position.y - cell_size/2, cell_size) + cell_size / 2
         };
     } else {
         //vertical
-        //x rounded to edge of cell,
-        //y rounded to center of cell
         position = {
-            round(position.x, cell_size),
-            round(position.y, cell_size) + cell_size / 2
+            round(position.x - cell_size/2, cell_size) + cell_size / 2,
+            round(position.y, cell_size)
         };
     }
     return position;
