@@ -77,7 +77,7 @@ public:
                        Vector2Int position,
                        float angle);
 
-    // explicit SpaceShip();
+    explicit SpaceShip();
 
     ~SpaceShip();
 

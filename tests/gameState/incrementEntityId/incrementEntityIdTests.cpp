@@ -23,8 +23,8 @@ TEST(IncrementEntityIdTestSuite, IncrementEntityIdSimpleTest) {
 
     manager.incrementEntityIds(json);
 
-    ASSERT_EQ(json["entities"][0]["entity_id"], 1000);
-    ASSERT_EQ(json["entities"][1]["linked_entity_id"], 1000);
+    ASSERT_EQ(json["instance"][0]["entity_id"], 1000);
+    ASSERT_EQ(json["instance"][1]["linked_entity_id"], 1000);
 
     ASSERT_EQ(manager.getNextEntityId(),1001);
 }
@@ -44,10 +44,10 @@ TEST(IncrementEntityIdTestSuite, IncrementEntityIdDoubleTest) {
 
     manager.incrementEntityIds(json);
 
-    ASSERT_EQ(json["entities"][0]["entity_id"], 1000);
-    ASSERT_EQ(json["entities"][1]["entity_id"], 1001);
-    ASSERT_EQ(json["entities"][2]["linked_entity_id"], 1000);
-    ASSERT_EQ(json["entities"][3]["linked_entity_id"], 1001);
+    ASSERT_EQ(json["instance"][0]["entity_id"], 1000);
+    ASSERT_EQ(json["instance"][1]["entity_id"], 1001);
+    ASSERT_EQ(json["instance"][2]["linked_entity_id"], 1000);
+    ASSERT_EQ(json["instance"][3]["linked_entity_id"], 1001);
 
     ASSERT_EQ(manager.getNextEntityId(),1002);
 }

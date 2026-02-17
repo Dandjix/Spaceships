@@ -45,9 +45,29 @@ SpaceShip::SpaceShip(const SpaceShipBlueprint *blueprint,
       blueprint_path(blueprint->path),
       spaceship_tiles(new SpaceshipTiles(blueprint->tiles)),
       spaceship_hooks(blueprint->hooks),
-      instance(new Instances::Instance(this, instance_entities)),
       position(position),
       angle(angle) {
+
+    std::vector<Entity *> entities_to_add;
+    entities_to_add.reserve(blueprint->entities.size() + instance_entities.size());
+    for (Entity * e: blueprint->entities)entities_to_add.push_back(e);
+    for (Entity * e: instance_entities)entities_to_add.push_back(e);
+
+
+    instance = new Instances::Instance(this, entities_to_add);
+
+    spaceship_rooms = new SpaceshipRooms(spaceship_tiles);
+    spaceship_rooms->populateRooms();
+}
+
+SpaceShip::SpaceShip()
+    : exterior(nullptr),
+      blueprint_path(""),
+      spaceship_tiles(new SpaceshipTiles({})),
+      spaceship_hooks(new SpaceshipHooks({}, {}, {})),
+      instance(new Instances::Instance(this, {})),
+      position({0, 0}),
+      angle(0) {
     spaceship_rooms = new SpaceshipRooms(spaceship_tiles);
     spaceship_rooms->populateRooms();
 }
@@ -73,7 +93,6 @@ SpaceShip *SpaceShip::fromJson(nlohmann::json::const_reference json,
                                GameState::transientGameState &transient_game_state,
                                EntityId::Manager &entity_id_manager,
                                EntityRendering::Context *entity_rendering_context) {
-
     SpaceShipBlueprint *blueprint = SpaceShipBlueprint::load(json["blueprint_path"], transient_game_state,
                                                              entity_id_manager, entity_rendering_context, false);
 
@@ -102,29 +121,6 @@ nlohmann::json SpaceShip::toJson() {
     json["angle"] = angle;
 
     json["instance"] = instance->entitiesToJson();
-
-    // std::cout << "instance : \n" << json["instance"].dump(3) << std::endl;
-
-    std::string ids;
-
-    for (Entity * entity: instance->entities) {
-        if (!entity->isJsonSerializable())
-            continue;
-        ids += entity->getJsonType() + "\n";
-    }
-
-    std::cout << "instance ids real: " << ids << std::endl;
-
-    ids = "";
-    for (const nlohmann::json & entity: json["instance"]) {
-        ids += std::string(entity["type"]) + "\n";
-    }
-
-
-    std::cout << "instance ids json: " << ids << std::endl;
-
-    std::cout << "instance length real: " << instance->entities.size() << std::endl;
-    std::cout << "instance length json: " << json["instance"].size() << std::endl;
 
     return json;
 }

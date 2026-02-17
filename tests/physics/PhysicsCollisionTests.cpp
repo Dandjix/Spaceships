@@ -52,7 +52,7 @@ TEST(PhysicsCollisionTestSuite, RoundRoundSimpleTest)
 
     auto visitor = e1->shape->createVisitor();
 
-    e2->shape->consumeVisitor(visitor,space_ship);
+    e2->shape->consumeVisitor(visitor,space_ship->instance);
 
     // diagonal distance of about 45 (radius 50)
 

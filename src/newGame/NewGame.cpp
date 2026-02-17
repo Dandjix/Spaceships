@@ -52,11 +52,6 @@ std::filesystem::path NewGame::ConstructNewGame() {
         // new Button(Vector2Int{256,256}.scaleToWorldPosition(),0,lamp)
     };
 
-    //append blueprint entities to the programatically created spaceship
-    std::vector<Entity *> blueprint_entities = blueprint->entities;
-    entities.reserve(blueprint_entities.size());
-    for (Entity * e: blueprint_entities) entities.push_back(e);
-
     auto *space_ship = new SpaceShip(blueprint, entities, {0, 0}, 0);
 
     GameState::GameState game_state = GameState::GameState{

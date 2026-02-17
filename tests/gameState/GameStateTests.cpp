@@ -16,8 +16,7 @@ TEST(GameStateTestSuite, EntityDuplication_EmptyBlueprint_Test) {
     auto id_manager = EntityId::Manager();
 
     auto blueprint = SpaceShipBlueprint::load("/home/timon/Projects/Spaceships/tests/gameState/empty_test_ship.json",
-                                              transient_game_state, id_manager, nullptr,true);
-
+                                              transient_game_state, id_manager, nullptr, true);
 
 
     GameState::GameState game_state = GameState::GameState{
@@ -31,11 +30,11 @@ TEST(GameStateTestSuite, EntityDuplication_EmptyBlueprint_Test) {
 
     auto dumped = GameState::dumpsGameState(game_state);
     nlohmann::json json = nlohmann::json::parse(dumped);
-    GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),1);
+    ASSERT_EQ(json["spaceships"][0]["instance"].size(), 1);
 
     auto loaded = GameState::loadsGameState(dumped, id_manager, nullptr);
 
-    GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 1);
+    ASSERT_EQ(loaded.space_ships.at(0)->instance->entities.size(), 1);
 }
 
 TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLamp_Test) {
@@ -43,7 +42,7 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLamp_Test) {
     auto id_manager = EntityId::Manager();
 
     auto blueprint = SpaceShipBlueprint::load("/home/timon/Projects/Spaceships/tests/gameState/test_ship_1_lamp.json",
-                                              transient_game_state, id_manager, nullptr,true);
+                                              transient_game_state, id_manager, nullptr, true);
 
     GameState::GameState game_state = GameState::GameState{
         {
@@ -54,11 +53,11 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLamp_Test) {
 
     auto dumped = GameState::dumpsGameState(game_state);
     nlohmann::json json = nlohmann::json::parse(dumped);
-    GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),1);
+    ASSERT_EQ(json["spaceships"][0]["instance"].size(), 1);
 
     auto loaded = GameState::loadsGameState(dumped, id_manager, nullptr);
 
-    GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 1);
+    ASSERT_EQ(loaded.space_ships.at(0)->instance->entities.size(), 1);
 }
 
 TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLampPlusEntities_Test) {
@@ -66,7 +65,7 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLampPlusEntities_Test) {
     auto id_manager = EntityId::Manager();
 
     auto blueprint = SpaceShipBlueprint::load("/home/timon/Projects/Spaceships/tests/gameState/test_ship_1_lamp.json",
-                                              transient_game_state, id_manager, nullptr,true);
+                                              transient_game_state, id_manager, nullptr, true);
 
 
     EntityId::entityId id = id_manager.createEntityId();
@@ -82,34 +81,37 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithLampPlusEntities_Test) {
 
     auto dumped = GameState::dumpsGameState(game_state);
     nlohmann::json json = nlohmann::json::parse(dumped);
-    GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),2);
+    ASSERT_EQ(json["spaceships"][0]["instance"].size(), 2);
 
     auto loaded = GameState::loadsGameState(dumped, id_manager, nullptr);
-    GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 2);
+    ASSERT_EQ(loaded.space_ships.at(0)->instance->entities.size(), 2);
 }
 
 TEST(GameStateTestSuite, EntityDuplication_BlueprintWithHumanoid_Test) {
     GameState::transientGameState transient_game_state = {};
     auto id_manager = EntityId::Manager();
 
-    auto blueprint = SpaceShipBlueprint::load("/home/timon/Projects/Spaceships/tests/gameState/test_ship_1_humanoid.json",
-                                              transient_game_state, id_manager, nullptr,true);
+    auto blueprint = SpaceShipBlueprint::load(
+        "/home/timon/Projects/Spaceships/tests/gameState/test_ship_1_humanoid.json",
+        transient_game_state, id_manager, nullptr, true);
 
+    ASSERT_EQ(blueprint->entities.size(), 1);
 
     GameState::GameState game_state = GameState::GameState{
-            {
-                new SpaceShip(blueprint, {}, {0, 0}, 0)
-            },
+        {
+            new SpaceShip(blueprint, {}, {0, 0}, 0)
+        },
         0
     };
 
     auto dumped = GameState::dumpsGameState(game_state);
 
     nlohmann::json json = nlohmann::json::parse(dumped);
-    GTEST_ASSERT_EQ(json["spaceships"].size(),1);
-    GTEST_ASSERT_EQ(json["spaceships"][0]["entities"].size(),1);
+    std::cout << json.dump(2) << std::endl;
+    ASSERT_EQ(json["spaceships"].size(), 1);
+    ASSERT_EQ(json["spaceships"][0]["instance"].size(), 1);
 
     auto loaded = GameState::loadsGameState(dumped, id_manager, nullptr);
-    GTEST_ASSERT_EQ(loaded.space_ships.size(), 1);
-    GTEST_ASSERT_EQ(loaded.space_ships.at(0)->entities.size(), 1);
+    ASSERT_EQ(loaded.space_ships.size(), 1);
+    ASSERT_EQ(loaded.space_ships.at(0)->instance->entities.size(), 1);
 }
