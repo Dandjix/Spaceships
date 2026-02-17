@@ -48,9 +48,14 @@ std::filesystem::path NewGame::ConstructNewGame() {
         new Sphere(Vector2Int{256, 128}.scaleToWorldPosition(), Scaling::scaleToWorld(45.0f)),
         new CombatOutfit(Vector2Int{196, 128}.scaleToWorldPosition(), 35),
         new CombatOutfit(Vector2Int{256, 128}.scaleToWorldPosition(), 35),
-        new PilotSeat(blueprint->hooks.getPoint("pilot_seat")->position, 0),
+        new PilotSeat(blueprint->hooks->getPoint("pilot_seat")->position, 0),
         // new Button(Vector2Int{256,256}.scaleToWorldPosition(),0,lamp)
     };
+
+    //append blueprint entities to the programatically created spaceship
+    std::vector<Entity *> blueprint_entities = blueprint->entities;
+    entities.reserve(blueprint_entities.size());
+    for (Entity * e: blueprint_entities) entities.push_back(e);
 
     auto *space_ship = new SpaceShip(blueprint, entities, {0, 0}, 0);
 

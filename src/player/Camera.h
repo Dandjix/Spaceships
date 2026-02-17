@@ -15,119 +15,57 @@ protected:
 private :
     float scale;
 public:
+
     /// <summary>
     /// Creates a Camera that follows the player.
     /// </summary>
     /// <param name="p">Pointer to the player entity</param>
-    Camera(Vector2Int position, float angle, float scale) : LateUpdateEntity(position, angle), player(nullptr), scale(scale) {
-    }
+    Camera(Vector2Int position, float angle, float scale);
 
-    SpaceShip * working_spaceship = nullptr;
+    ~Camera() override;
+
+    Instances::Instance * working_instance = nullptr;
 
     /// <summary>
     /// Set the player entity that the camera follows.
     /// </summary>
     /// <param name="p">Pointer to the new player entity</param>
-    void setPlayer(Entity* p)
-    {
-        player = p;
-        player_ownership_changed_id = player->on_ownership_change.subscribe(
-            [this](Entity * new_owner) {
-                player->on_ownership_change.unsubscribe(this->player_ownership_changed_id);
-                setPlayer(new_owner);
-            });
-        setPosition(p->getPosition());  // Set the camera's position to follow the player initially
-    }
+    void setPlayer(Entity* p);
 
-    void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context) override {
-        if (event.type == SDL_EVENT_MOUSE_WHEEL) {
-            float zoomFactor = 0.1f; // Adjust zoom speed
-            float scale_value= getScale() + event.wheel.y * zoomFactor;
+    void handleEvent(const SDL_Event& event, const GameEvent::GameEventContext &context) override;
 
-            // Clamp scale
-            scale_value = std::clamp(scale_value, 0.5f,5.0f);
+    QueueOrder::Value getQueueOrder() override;
 
-            setScale(scale_value);
-        }
-    }
+    void setScale(float s);
 
-    QueueOrder::Value getQueueOrder() override
-    {
-        return QueueOrder::LAST;
-    }
-    
-    void setScale(float s)
-    {
-        if (s != scale)
-        {
-            scale = s;
-        }
-    }
+    float getScale() const;
 
-    float getScale() const
-    {
-        return scale;
-    }
-
-    void setScreenDimensions(Vector2Int value)
-    {
-        this->screenDimensions = value;
-    }
+    void setScreenDimensions(Vector2Int value);
 
 
     /// <summary>
     /// A camera renders nothing.
     /// </summary>
-    void render(SDL_Renderer* renderer,const RenderingContext& context) override {}
+    void render(SDL_Renderer* renderer,const RenderingContext& context) override;
 
     /// <summary>
     /// Update the camera's position to follow the player.
     /// </summary>
-    void update(const UpdateContext & context) override {
-        setPosition(player->getPosition());  // Update camera's position based on the player's position
-        const bool* state = SDL_GetKeyboardState(nullptr);
-        float deltaAngle = 0;
-        if (state[SDL_SCANCODE_PAGEUP]) {
-            deltaAngle -= 180* context.deltaTime;
-        }
-        if (state[SDL_SCANCODE_PAGEDOWN]) {
-            deltaAngle += 180 * context.deltaTime;
-        }
-        float newAngle = getAngle() + deltaAngle;
-        setAngle(newAngle);
-        //if (getAngle() != newAngle)
-        //{
-        //    std::cout << "angle is " << newAngle <<"\n";
-        //}
-    }
+    void update(const UpdateContext & context) override;
 
-    void lateUpdate(const UpdateContext &context) override {
-        setPosition(player->getPosition());  // Again in late update so that the camera position is synced with the physics
-    }
+    void lateUpdate(const UpdateContext &context) override;
 
-    nlohmann::json toJson() override {
-        auto json = Entity::toJson();
-        json["scale"] = scale;
-        return json;
-    }
+    nlohmann::json toJson() override;
 
-    FROM_JSON_DECLARATION(Camera,"camera");
+    FROM_JSON_DECLARATION(Camera, "camera");
 
-    void registerInSpaceship(SpaceShip *space_ship) override {
-        LateUpdateEntity::registerInSpaceship(space_ship);
-        space_ship->cameras.push_back(this);
-    }
+    void registerInInstance(Instances::Instance *world_instance) override;
 
-    void unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) override {
-        space_ship->cameras.erase(std::find(space_ship->cameras.begin(),space_ship->cameras.end(),this));
-        LateUpdateEntity::unregisterInSpaceship(space_ship, delete_when_done);
-    }
+    void unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done) override;
 
-    void onRegistered(SpaceShip *newSpaceship) override {
-        working_spaceship = newSpaceship;
-    }
+    void onRegistered(Instances::Instance *newInstance) override;
 
-    Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+    Entity * initializeRendering(const EntityRendering::Context &context) override;
 
-    Entity * finalizeRendering(const EntityRendering::Context &context) override {return this;}
+    Entity * finalizeRendering(const EntityRendering::Context &context) override;
 };

@@ -76,37 +76,49 @@ std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer *renderer, Vect
     return objects;
 }
 
-void RenderingHandle(SDL_Renderer *renderer, Camera *camera, const Vector2Int &screenDimensions,
-                     std::vector<ParallaxObject> parallax_objects) {
+void RenderingHandle(SDL_Renderer *renderer, std::vector<SpaceShip *> space_ships, Camera *camera,
+                     const Vector2Int &screenDimensions, std::vector<ParallaxObject> parallax_objects) {
     renderSpaceBackground();
     renderPlanets();
 
-    auto ship = camera->working_spaceship;
+    Instances::Instance *player_instance = camera->working_instance;
+    SpaceShip *player_spaceship = player_instance->space_ship;
 
 
     RenderingContext interiorContext = {
         {
             camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()
-        }
+        },
+        player_spaceship->instance
     };
 
     ExteriorRenderingContext exteriorContext = {
         {
-            camera->getPosition(), ship->getPosition(), ship->getCenterOffset(), camera->getAngle(), ship->getAngle(), screenDimensions,
+            camera->getPosition(),
+            player_spaceship->getPosition(),
+            player_spaceship->getCenterOffset(),
+            camera->getAngle(),
+            player_spaceship->getAngle(),
+            screenDimensions,
             camera->getScale()
         }
     };
 
-    renderParallax(renderer, exteriorContext, ship, std::move(parallax_objects));
+    renderParallax(renderer, exteriorContext, player_spaceship, std::move(parallax_objects));
 
     //the one place that hasn't been corrupted by capitalism (it is space)
-    ship->renderExterior(renderer, exteriorContext);
+    player_spaceship->renderExterior(renderer, exteriorContext);
 
     //current ship interior rendering
-    ship->renderInterior(renderer, interiorContext);
+    player_instance->space_ship->spaceship_tiles->render
+    (
+        renderer,
+        interiorContext,
+        player_instance->space_ship->spaceship_rooms->getAll()
+    );
 
     //render
-    ship->renderEntities(renderer, interiorContext);
+    player_instance->renderHandling(renderer, interiorContext);
 }
 
 
@@ -140,7 +152,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     GameNavigation destination = Game;
 
     // Entity rendering setup ------------------------------------------------------------------------------------------
-    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures",renderer);
+    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures", renderer);
     EntityRendering::Context entity_loading_context = {texture_usage_map};
 
     // Texture Setup ---------------------------------------------------------------------------------------------------
@@ -153,14 +165,14 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     SpaceShip *player_spaceship;
     std::vector<SpaceShip *> space_ships;
     {
-        GameState::GameState game_state = GameState::loadGameState(path_to_save, EntityId::Manager::getInstance(), &entity_loading_context);
+        GameState::GameState game_state = GameState::loadGameState(path_to_save, EntityId::Manager::getInstance(),
+                                                                   &entity_loading_context);
         camera = game_state.getCamera();
         player = game_state.getPlayer();
         player_spaceship = game_state.getPlayerSpaceship();
         space_ships = game_state.space_ships;
     }
     camera->setPlayer(player);
-    player_spaceship->setPlayer(player);
 
     // GUI elements ----------------------------------------------------------------------------------------------------
     ElementContainer<GUIRect *> gui_elements;
@@ -173,9 +185,10 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     gui_elements.add(snackbar);
 
     // Short lived entities --------------------------------------------------------------------------------------------
-    Player::PlayerVehicleTracker * vehicle_tracker = (new Player::PlayerVehicleTracker(player))->initializeRendering(entity_loading_context);
+    Player::PlayerVehicleTracker *vehicle_tracker = (new Player::PlayerVehicleTracker(player))->initializeRendering(
+        entity_loading_context);
     //Debug stuff
-    Debug::CollisionInfo * collision_info = (new Debug::CollisionInfo())->initializeRendering(entity_loading_context);
+    Debug::CollisionInfo *collision_info = (new Debug::CollisionInfo())->initializeRendering(entity_loading_context);
     // Debug::ProximityMapVisualizer * proximity_map_visualizer = (new Debug::ProximityMapVisualizer(space_ships.at(0)))->initializeRendering(entity_loading_context);
 
     auto *vehicle_enter = new Player::InteractableInteract(tooltip, vehicle_tracker);
@@ -186,7 +199,9 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                                          {
                                              "Quick Save", [space_ships,&snackbar]() {
                                                  std::string save_name;
-                                                 quickSave(GameState::GameState(space_ships,EntityId::Manager::getInstance().getNextEntityId()), &save_name);
+                                                 quickSave(GameState::GameState(space_ships,
+                                                               EntityId::Manager::getInstance().getNextEntityId()),
+                                                           &save_name);
                                                  snackbar->addMessage(
                                                      std::format("Successfully saved game to : {}", save_name), 2000);
 
@@ -219,7 +234,9 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         // std::cout << "paused set to : " << paused << std::endl;
     });
 
-    player_spaceship->registerEntities({vehicle_tracker, vehicle_enter, vehicle_leave, pause_manager, collision_info});
+    player_spaceship->instance->registerEntities({
+        vehicle_tracker, vehicle_enter, vehicle_leave, pause_manager, collision_info
+    });
 
 
     // Parallax --------------------------------------------------------------------------------------------------------
@@ -279,7 +296,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                     mouse_position_type,
                     window
                 };
-                space_ship->eventHandling(event, event_context, paused);
+                space_ship->instance->eventHandling(event, event_context, paused);
             }
             for (auto gui_element: gui_elements.get()) {
                 GameEvent::GameEventContext event_context =
@@ -298,17 +315,15 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
 
 
         for (auto ship: space_ships) {
-            ship->updateHandling(
+            ship->instance->updateHandling(
                 {camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()},
                 deltaTime,
                 GameEvent::Game,
                 paused);
-            // QUEUE DELETION ------------------------------------------------------------------------------------------
-            ship->handleQueueDeletion();
             // PHYSICS -------------------------------------------------------------------------------------------------
-            ship->physicsHandling(target_delta_time);
-
-            ship->lateUpdateHandling(
+            ship->instance->physicsHandling(target_delta_time);
+            // LATE UPDATE ---------------------------------------------------------------------------------------------
+            ship->instance->lateUpdateHandling(
                 {camera->getPosition(), camera->getAngle(), screenDimensions, camera->getScale()},
                 deltaTime,
                 GameEvent::Game,
@@ -330,7 +345,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
 
-        RenderingHandle(renderer, camera, screenDimensions, parallax_objects);
+        RenderingHandle(renderer, space_ships, camera, screenDimensions, parallax_objects);
 
         // GUI RENDERING -----------------------------------------------------------------------------------------------
         GUI_RenderingContext gui_rendering_context = {

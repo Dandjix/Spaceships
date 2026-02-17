@@ -96,9 +96,9 @@ bool Door::hasOtherEntity(std::vector<PhysicsShape *> cast_res_1) const {
 void Door::update(const UpdateContext &context) {
     if (moment > 0 && state < 1) {
         std::vector<PhysicsShape *> cast_res_1 = Physics::RectCast(getCastPosition(false), getCastDimensions(false),
-                                                                   getAngle(), context.spaceShip);
+                                                                   getAngle(), context.world_instance);
         std::vector<PhysicsShape *> cast_res_2 = Physics::RectCast(getCastPosition(true), getCastDimensions(true),
-                                                                   getAngle(), context.spaceShip);
+                                                                   getAngle(), context.world_instance);
 
         if (hasOtherEntity(cast_res_1) || hasOtherEntity(cast_res_2)) {
             moment = -1;
@@ -201,16 +201,16 @@ void Door::setStatus(bool value) {
         moment = -1;
 }
 
-void Door::registerInSpaceship(SpaceShip *space_ship) {
-    Entity::registerInSpaceship(space_ship);
-    door_left->registerInSpaceship(space_ship);
-    door_right->registerInSpaceship(space_ship);
+void Door::registerInInstance(Instances::Instance *world_instance) {
+    Entity::registerInInstance(world_instance);
+    door_left->registerInInstance(world_instance);
+    door_right->registerInInstance(world_instance);
 }
 
-void Door::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
-    door_left->unregisterInSpaceship(space_ship, delete_when_done);
-    door_right->unregisterInSpaceship(space_ship, delete_when_done);
-    Entity::unregisterInSpaceship(space_ship, delete_when_done);
+void Door::unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done) {
+    door_left->unregisterInInstance(world_instance, delete_when_done);
+    door_right->unregisterInInstance(world_instance, delete_when_done);
+    Entity::unregisterInInstance(world_instance, delete_when_done);
 }
 
 int round(int x, int quotient) {

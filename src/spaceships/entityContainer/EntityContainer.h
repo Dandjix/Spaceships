@@ -10,9 +10,14 @@ template<class T>
 class EntityContainer {
 private:
     std::vector<T> container;
-    std::vector<std::pair<T,bool>> deletion_queue;
+    std::vector<std::pair<T, bool> > deletion_queue;
 
 public:
+    EntityContainer() = default;
+
+    explicit EntityContainer(std::vector<T> values) : container(values), deletion_queue({}) {
+    }
+
     // Type aliases for iterator support
     using iterator = std::vector<T>::iterator;
     using const_iterator = std::vector<T>::const_iterator;
@@ -33,7 +38,7 @@ public:
     }
 
     void add_to_erasing_queue(T key, bool delete_when_done = false) {
-        deletion_queue.push_back({key,delete_when_done});
+        deletion_queue.push_back({key, delete_when_done});
     }
 
     void process_deletion_queue() {
@@ -59,10 +64,10 @@ public:
     }
 
     void erase_index(size_type index) {
-        container.erase(container.begin()+index);
+        container.erase(container.begin() + index);
     }
 
-    bool contains(const T& key) const {
+    bool contains(const T &key) const {
         return std::find(container.begin(), container.end(), key) != container.end();
     }
 

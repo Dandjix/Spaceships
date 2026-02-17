@@ -36,7 +36,7 @@ IInteractable *Player::InteractableInteract::getIInteractableUnderMouse(const Up
     SDL_GetMouseState(&mouse_x,&mouse_y);
     Vector2Int world_position = context.camera_info.screenToWorldPoint({mouse_x,mouse_y});
 
-    auto hit = Physics::EntityPointCast(world_position,context.spaceShip);
+    auto hit = Physics::EntityPointCast(world_position,context.world_instance);
 
     for (auto entity: hit) {
         if (auto * under_mouse = entity->asIInteractable()) {

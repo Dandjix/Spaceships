@@ -22,16 +22,16 @@ void Entity::update(const UpdateContext &context) {}
 
 void Entity::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {}
 
-void Entity::registerInSpaceship(SpaceShip* space_ship)
+void Entity::registerInInstance(Instances::Instance *world_instance)
 {
-    space_ship->entities.insert(this);
-    onRegistered(space_ship);
+    world_instance->entities.insert(this);
+    onRegistered(world_instance);
 }
 
-void Entity::unregisterInSpaceship(SpaceShip* space_ship, bool delete_when_done)
+void Entity::unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done)
 {
-    space_ship->entities.add_to_erasing_queue(this,delete_when_done);
-    onUnRegistered(space_ship);
+    world_instance->entities.add_to_erasing_queue(this,delete_when_done);
+    onUnRegistered(world_instance);
 }
 
 void Entity::movePosition(Vector2Float delta) {
@@ -45,8 +45,8 @@ void Entity::movePosition(Vector2Float delta) {
     // std::cout << "MOVEMENT DID OCCUR :" << getPosition()-old <<  std::endl;
 }
 
-void Entity::kill(SpaceShip *space_ship) {
-    on_killed.emit(space_ship);
-    unregisterInSpaceship(space_ship,true);
+void Entity::kill(Instances::Instance *world_instance) {
+    on_killed.emit(world_instance);
+    unregisterInInstance(world_instance,true);
 }
 

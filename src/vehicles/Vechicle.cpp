@@ -16,19 +16,19 @@ void Vehicle::relinquishControl(Humanoid * old_pilot) {
         old_pilot->getBehavior()->ChangeControl(Behavior::OnFoot);
 }
 
-void Vehicle::onRegistered(SpaceShip *newSpaceship) {
-    spaceship = newSpaceship;
+void Vehicle::onRegistered(Instances::Instance *newInstance) {
+    spaceship = newInstance->space_ship;
 }
 
 void Vehicle::interact(Humanoid *activator, const GameEvent::GameEventContext &context) {
     stopPiloting();
 
     pilot = activator;
-    spaceship->unregisterEntities({pilot}, false);
+    spaceship->instance->unregisterEntities({pilot}, false);
 
-    if (is_player()) {
-        spaceship->setPlayer(this);
-    }
+    // if (is_player()) {
+    //     spaceship->instance->setPlayer(this);
+    // }
 
     assumeControl(pilot);
     pilot->on_start_piloting_vehicle.emit(this);
@@ -39,13 +39,13 @@ void Vehicle::stopPiloting() {
     if(pilot == nullptr) return;
 
 
-    spaceship->registerEntities({pilot});
+    spaceship->instance->registerEntities({pilot});
     pilot->setPosition(getPosition());
     pilot->setAngle(getAngle());
 
-    if (pilot->is_player()) {
-        spaceship->setPlayer(pilot);
-    }
+    // if (pilot->is_player()) {
+    //     spaceship->instance->setPlayer(pilot);
+    // }
     pilot->on_stop_piloting_vehicle.emit(this);
     auto old_pilot = pilot;
     pilot = nullptr;

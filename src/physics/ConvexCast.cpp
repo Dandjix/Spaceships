@@ -11,12 +11,12 @@
 #include "shapes/PhysicsShape.h"
 #include "spaceships/SpaceShip.h"
 
-std::vector<PhysicsShape *> Physics::ConvexCast(std::vector<Vector2Int> points, SpaceShip *space_ship) {
+std::vector<PhysicsShape *> Physics::ConvexCast(std::vector<Vector2Int> points, Instances::Instance *instance) {
     BoundingBox<int> cast_AABB = Physics::Util::createConvexBoundingBox(points);
 
     std::unordered_set<PhysicsShape *> shapes;
     for (Vector2Int cell: cast_AABB.encompassedTiles()) {
-        for (PhysicsShape *shape: space_ship->hash_proximity_map.at_cell(cell)) {
+        for (PhysicsShape *shape: instance->hash_proximity_map.at_cell(cell)) {
             shapes.insert(shape);
         }
     }
@@ -39,7 +39,7 @@ Physics::RectCast(
     Vector2Int rect_center,
     Vector2Int rect_dimensions,
     float angle,
-    SpaceShip *space_ship) {
+    Instances::Instance *instance) {
 
     std::vector<Vector2Int> vertices = {
         {-rect_dimensions.x/2,-rect_dimensions.y/2},{rect_dimensions.x/2,-rect_dimensions.y/2},
@@ -54,5 +54,5 @@ Physics::RectCast(
         Debug::CollisionInfo::instance->addLine(vertices[i],vertices[(i+1)%vertices.size()]);
     }
 
-    return ConvexCast(vertices,space_ship);
+    return ConvexCast(vertices,instance);
 }

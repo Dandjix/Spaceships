@@ -34,8 +34,8 @@ public:
         return new PhysicsUpdateVisitorConvex(this);
     }
 
-    void consumeVisitor(PhysicsUpdateVisitor *visitor, SpaceShip *space_ship) override {
-        visitor->visitConvex(this, space_ship);
+    void consumeVisitor(PhysicsUpdateVisitor *visitor, Instances::Instance *instance) override {
+        visitor->visitConvex(this, instance);
     }
 
     BoundingBox<int> getBoundingBox() const override;

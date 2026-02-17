@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 #include <list>
+#include <stdexcept>
 #include <unordered_map>
 #include <utility>
 #include <unordered_set>
@@ -40,13 +42,25 @@ protected:
     std::unordered_map<T, std::list<std::pair<T, int> > > adjacencyListMap;
 
 public:
+    AdjacencyListGraph() = default;
+
     ~AdjacencyListGraph() {
+
+        // std::unordered_set<T> unicity_check = {};
+        // for (auto [key,_]: adjacencyListMap) {
+        //     if (unicity_check.contains(key))
+        //         throw std::runtime_error("multiple same keys");
+        //     unicity_check.insert(key);
+        // }
+
         for (auto room: adjacencyListMap) {
             delete room.first;
         }
     }
 
     void addVertex(T vertex) {
+        // if (adjacencyListMap.contains(vertex))
+        //     throw std::runtime_error("Vertex is already in the map");
         adjacencyListMap[vertex] = std::list<std::pair<T, int> >();
     }
 

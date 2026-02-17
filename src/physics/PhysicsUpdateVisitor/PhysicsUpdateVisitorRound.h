@@ -22,23 +22,23 @@ public:
     explicit PhysicsUpdateVisitorRound(RoundPhysicsShape *e1) : PhysicsUpdateVisitor(), e1(e1) {
     }
 
-    void visitConvex(ConvexPhysicsShape *e2, SpaceShip *space_ship) override {
-        PhysicsCollisions::visitConvexRound(e2, e1, space_ship);
+    void visitConvex(ConvexPhysicsShape *e2, Instances::Instance *instance) override {
+        PhysicsCollisions::visitConvexRound(e2, e1, instance);
     }
 
-    void visitRound(RoundPhysicsShape *e2, SpaceShip *space_ship) override {
-        PhysicsCollisions::visitRounds(e1, e2, space_ship);
+    void visitRound(RoundPhysicsShape *e2, Instances::Instance *instance) override {
+        PhysicsCollisions::visitRounds(e1, e2, instance);
     }
 
-    void visitWall(SpaceShip *space_ship) override {
-        PhysicsCollisions::visitRoundWall(e1, space_ship);
+    void visitWall(SpaceshipTiles *spaceship_tiles) override {
+        PhysicsCollisions::visitRoundWall(e1, spaceship_tiles);
     }
 
-    void visitStaticRound(RoundStaticPhysicsShape *e2, SpaceShip *space_ship) override {
-        PhysicsCollisions::visitStaticRoundRound(e2, e1, space_ship);
+    void visitStaticRound(RoundStaticPhysicsShape *e2, Instances::Instance *instance) override {
+        PhysicsCollisions::visitStaticRoundRound(e2, e1, instance);
     }
 
-    void visitStaticConvex(ConvexStaticPhysicsShape *static_convex, SpaceShip *space_ship) override {
-        PhysicsCollisions::visitStaticConvexRound(static_convex,e1,space_ship);
+    void visitStaticConvex(ConvexStaticPhysicsShape *static_convex, Instances::Instance *instance) override {
+        PhysicsCollisions::visitStaticConvexRound(static_convex,e1,instance);
     }
 };

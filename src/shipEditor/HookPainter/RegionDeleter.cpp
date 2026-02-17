@@ -5,6 +5,7 @@
 #include "RegionDeleter.h"
 
 #include "game/Rendering.h"
+#include "game/Update.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "spaceships/Hooks/HookRegion.h"
 #include "spaceships/Hooks/SpaceshipHooks.h"

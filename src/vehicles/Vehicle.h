@@ -29,7 +29,7 @@ protected:
     void relinquishControl(Humanoid * old_pilot);
 
 public:
-    void onRegistered(SpaceShip *newSpaceship) override;
+    void onRegistered(Instances::Instance *newInstance) override;
 
     Humanoid *getPilot() {
         return pilot;

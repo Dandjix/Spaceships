@@ -10,7 +10,7 @@
 #include "userInterface/fonts.h"
 
 void Debug::ProximityMapVisualizer::render(SDL_Renderer *renderer, const RenderingContext &context) {
-    for (auto [position,shapes]: space_ship->hash_proximity_map) {
+    for (auto [position,shapes]: space_ship->instance->hash_proximity_map) {
         Vector2Int world_position = ((position * Tiles::tileSizePx) + Vector2Int(Tiles::tileSizePx/2,Tiles::tileSizePx/2)).scaleToWorldPosition();
         Vector2Float screen_position = context.camera_info.worldToScreenPoint(world_position);
         Vector2Float text_dimensions = {0,0};

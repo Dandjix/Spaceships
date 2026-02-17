@@ -26,7 +26,7 @@ public:
 
     constexpr std::string getJsonType() final {
         // throw std::invalid_argument("Tried to get the json type of a short lived object : this is illegal"); //can't throw in a constexpr sadly
-        return nullptr;
+        return "short_lived_entity";
     }
 
     void finalizeJsonDeserialization(const GameState::transientGameState &transient_game_state) final {

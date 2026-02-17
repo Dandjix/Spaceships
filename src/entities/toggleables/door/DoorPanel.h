@@ -13,7 +13,7 @@ protected:
 public:
     DoorPanel(const Vector2Int &position, const std::optional<float> &angle, Vector2Int dimensions);
 
-    void registerInSpaceship(SpaceShip *space_ship) override;
+    void registerInInstance(Instances::Instance *world_instance) override;
 
     DoorPanel * initializeRendering(const EntityRendering::Context &context) override;
 

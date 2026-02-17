@@ -17,22 +17,21 @@ public:
     }
 
 
-    void visitConvex(ConvexPhysicsShape *e2, SpaceShip *space_ship) override {
-        return PhysicsCollisions::visitStaticConvexConvex(shape, e2, space_ship);
+    void visitConvex(ConvexPhysicsShape *e2, Instances::Instance *instance) override {
+        return PhysicsCollisions::visitStaticConvexConvex(shape, e2, instance);
     }
 
-    void visitRound(RoundPhysicsShape *e2, SpaceShip *space_ship) override {
-        return PhysicsCollisions::visitStaticConvexRound(shape, e2, space_ship);
-    }
-
-
-    void visitStaticRound(RoundStaticPhysicsShape *e2, SpaceShip *space_ship) override {
-    }
-
-    void visitStaticConvex(ConvexStaticPhysicsShape *static_convex, SpaceShip *space_ship) override {
+    void visitRound(RoundPhysicsShape *e2, Instances::Instance *instance) override {
+        return PhysicsCollisions::visitStaticConvexRound(shape, e2, instance);
     }
 
 
-    void visitWall(SpaceShip *space_ship) override {
+    void visitStaticRound(RoundStaticPhysicsShape *e2, Instances::Instance *instance) override {
+    }
+
+    void visitStaticConvex(ConvexStaticPhysicsShape *static_convex, Instances::Instance *instance) override {
+    }
+
+    void visitWall(SpaceshipTiles *spaceship_tiles) override {
     }
 };

@@ -7,8 +7,13 @@
 #include "../game/CameraTransformations.h"
 #include "math/Scaling.h"
 
+namespace Instances {
+    class Instance;
+}
+
 struct RenderingContext {
     CameraTransformations::CameraInfo camera_info;
+    Instances::Instance * instance;
 };
 
 struct ExteriorRenderingContext {

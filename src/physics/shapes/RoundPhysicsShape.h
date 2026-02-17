@@ -15,9 +15,9 @@ class RoundPhysicsShape : public PhysicsShape
 	{
 		return  new PhysicsUpdateVisitorRound(this);
 	}
-	void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship) override
+	void consumeVisitor(PhysicsUpdateVisitor* visitor, Instances::Instance *instance) override
 	{
-		visitor->visitRound(this,space_ship);
+		visitor->visitRound(this,instance);
 	}
 
 	/**

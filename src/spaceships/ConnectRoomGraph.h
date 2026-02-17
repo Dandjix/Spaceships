@@ -1,6 +1,6 @@
 #pragma once
 #include "../math/AdjacencyListGraph.h"
-#include "Room.h"
+#include "../instance/Rooms/Room.h"
 
 class ConnectRoomGraph
 {

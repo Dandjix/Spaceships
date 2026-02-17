@@ -10,6 +10,6 @@ PhysicsUpdateVisitor * ConvexStaticPhysicsShape::createVisitor() {
     return new PhysicsUpdateVisitorStaticConvex(this);
 }
 
-void ConvexStaticPhysicsShape::consumeVisitor(PhysicsUpdateVisitor *visitor, SpaceShip *space_ship) {
-    visitor->visitStaticConvex(this, space_ship);
+void ConvexStaticPhysicsShape::consumeVisitor(PhysicsUpdateVisitor *visitor, Instances::Instance *instance) {
+    visitor->visitStaticConvex(this, instance);
 }

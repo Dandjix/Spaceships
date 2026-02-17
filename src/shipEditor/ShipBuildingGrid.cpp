@@ -1,6 +1,7 @@
 #include "ShipBuildingGrid.h"
 #include "../math/Vectors.h"
 #include "../spaceships/Tile.h"
+#include "gameEvent/GameEvent.h"
 
 void ShipBuildingGrid::drawLines(Vector2Int dimensions, SDL_Renderer* renderer, const RenderingContext& context) const
 {

@@ -25,13 +25,13 @@ namespace Physics
 		std::vector<Vector2Int> checked_positions;
 	};
 
-	[[nodiscard]] RaycastHitInfo RayCast(Vector2Int origin, Vector2Float direction, SpaceShip * spaceship, float maxDistance = FLT_MAX);
+	[[nodiscard]] RaycastHitInfo RayCast(Vector2Int origin, Vector2Float direction, SpaceshipTiles *spaceship_tiles, float maxDistance = FLT_MAX);
 
-	[[nodiscard]] std::vector<PhysicsEntity*> EntityPointCast(Vector2Int world_position, SpaceShip * space_ship);
+	[[nodiscard]] std::vector<PhysicsEntity*> EntityPointCast(Vector2Int world_position, Instances::Instance *world_instance);
 }
 
 struct PhysicsUpdateContext
 {
 	float deltaTime;
-	SpaceShip * space_ship;
+	Instances::Instance * world_instance;
 };

@@ -15,6 +15,10 @@ struct PhysicsUpdateContext;
 class PhysicsEntity;
 class PhysicsUpdateVisitor;
 
+namespace Instances {
+    class Instance;
+}
+
 class PhysicsShape
 {
 public:
@@ -43,9 +47,9 @@ public:
      * Calls the correct physics collision function using the visitor beore deleting it (To be clear : this function deletes the instance)
      * /!\ You must call PhysicsEntity::consumeVisitor(visitor) AFTER your call to the correct method in the override.
      * @param visitor the visitor
-     * @param space_ship the spaceship that both entities belong to
+     * @param instance the spaceship that both entities belong to
      */
-    virtual void consumeVisitor(PhysicsUpdateVisitor* visitor, SpaceShip* space_ship)=0;
+    virtual void consumeVisitor(PhysicsUpdateVisitor* visitor, Instances::Instance *instance)=0;
 
     [[nodiscard]] virtual std::vector<Vector2Int> getVertices() const=0;
 

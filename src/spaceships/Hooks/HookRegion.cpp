@@ -4,8 +4,8 @@
 
 #include "HookRegion.h"
 
+#include "game/Update.h"
 #include "spaceships/SpaceShip.h"
-
 void HookRegion::registerEntity(Entity* entity)
 {
     Events::Id id = entity->on_destroyed.subscribe([this,entity]{
@@ -37,7 +37,7 @@ bool HookRegion::hasEntity(Entity* entity) const
 }
 
 void HookRegion::update(const UpdateContext &context) {
-    auto entities = context.spaceShip->getEntities(RoomDistance::All);
+    auto entities = context.world_instance->getEntities();
 
     for (auto entity: entities) {
         if (pointIsInside(entity->getPosition())) {

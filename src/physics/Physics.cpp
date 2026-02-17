@@ -11,13 +11,12 @@ const float step = 1.0f;
 std::optional<Vector2Int> NaiveRaycast(
     Vector2Int origin,
     Vector2Float direction,
-    SpaceShip* spaceship,
+    SpaceshipTiles *spaceship_tiles,
     float maxDistance)
 {
-    const SpaceshipTiles & tiles = spaceship->getSpaceshipTiles();
     Vector2Int tiles_dimensions;
-    tiles_dimensions.x = tiles.size_x();
-    tiles_dimensions.y = tiles.size_y();
+    tiles_dimensions.x = spaceship_tiles->size_x();
+    tiles_dimensions.y = spaceship_tiles->size_y();
 
     direction.normalize();
     Vector2Float step_vector = direction * step;
@@ -41,7 +40,7 @@ std::optional<Vector2Int> NaiveRaycast(
             return std::nullopt;
         }
 
-        if (tiles.get_tile(tile_coordinates.x,tile_coordinates.y) == Tile::Wall)
+        if (spaceship_tiles->get_tile(tile_coordinates.x,tile_coordinates.y) == Tile::Wall)
         {
             return world_position;
         }
@@ -57,21 +56,19 @@ std::optional<Vector2Int> NaiveRaycast(
  * Casts a ray that interracts with the tilemap
  * @param origin the origin, in world units
  * @param direction the direction vector. This is normalized in the function.
- * @param spaceship the spaceship whose tilemap we are going to check
+ * @param spaceship_tiles the spaceship whose tilemap we are going to check
  * @param maxDistance the max distance after which to give up
  * @return a Physics::RaycastHitInfo object
  */
 Physics::RaycastHitInfo Physics::RayCast(
     Vector2Int origin,
     Vector2Float direction,
-    SpaceShip* spaceship,
+    SpaceshipTiles *spaceship_tiles,
     float maxDistance)
 {
-    const auto& tiles = spaceship->getSpaceshipTiles();
+    int mapW = spaceship_tiles->size_x();
 
-    int mapW = tiles.size_x();
-
-    int mapH = tiles.size_y();
+    int mapH = spaceship_tiles->size_y();
 
     direction.normalize();
 
@@ -142,7 +139,7 @@ Physics::RaycastHitInfo Physics::RayCast(
             || vMapCheck.x >= mapW || vMapCheck.y >= mapH)
             return RaycastHitInfo(false,{0,0},checked_positions);
 
-        if (tiles.get_tile(vMapCheck.x,vMapCheck.y) == Tile::Wall)
+        if (spaceship_tiles->get_tile(vMapCheck.x,vMapCheck.y) == Tile::Wall)
         {
             return RaycastHitInfo(true,world_position_to_check,checked_positions);
         }
@@ -165,8 +162,8 @@ Physics::RaycastHitInfo Physics::RayCast(
 
 }
 
-std::vector<PhysicsEntity *> Physics::EntityPointCast(Vector2Int world_position, SpaceShip *space_ship) {
-    std::vector<PhysicsShape * > shapes = space_ship->hash_proximity_map.at_world(world_position);
+std::vector<PhysicsEntity *> Physics::EntityPointCast(Vector2Int world_position, Instances::Instance *world_instance) {
+    std::vector<PhysicsShape * > shapes = world_instance->hash_proximity_map.at_world(world_position);
     
     std::vector<PhysicsEntity * > hit = {};
     for (auto shape: shapes) {

@@ -27,9 +27,9 @@ public :
 
 	[[nodiscard]] virtual IInteractable * asIInteractable(){return nullptr;}
 
-	void registerInSpaceship(SpaceShip* space_ship) override;
+	void registerInInstance(Instances::Instance *world_instance) override;
 
-	void unregisterInSpaceship(SpaceShip* space_ship, bool delete_when_done) override;
+	void unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done) override;
 };
 
 

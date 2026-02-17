@@ -47,12 +47,12 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
 
     airlock_painter->on_airlock_placed.subscribe(
         [this](const std::string &name, Vector2Int TL, Vector2Int dimensions, Airlock::Orientation orientation) {
-            state_machine->common->blueprint->hooks.addAirlock(name, new Airlock(TL, dimensions, orientation));
+            state_machine->common->blueprint->hooks->addAirlock(name, new Airlock(TL, dimensions, orientation));
         });
 
     addedActiveEntities.push_back(airlock_painter);
 
-    auto airlock_deleter = new AirlockDeleter::AirlockDeleter(&state_machine->common->blueprint->hooks, false);
+    auto airlock_deleter = new AirlockDeleter::AirlockDeleter(state_machine->common->blueprint->hooks, false);
     addedActiveEntities.push_back(airlock_deleter);
 
     auto action_list = new GUIList(Anchor::TL, {100, 0}, 160, GUI_Fill, std::vector<std::string>{
@@ -83,7 +83,7 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
 
     addedEditorGUIElements.push_back(action_list);
 
-    auto appearance = new HookAppearance(&state_machine->common->blueprint->hooks);
+    auto appearance = new HookAppearance(state_machine->common->blueprint->hooks);
     addedActiveEntities.push_back(appearance);
 
     auto orientationLabel = new GUILabel(Anchor::TR, {0, 0}, 100, 25, "", {0, 0, 255, 255}, fonts["sm"],

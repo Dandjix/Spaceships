@@ -15,15 +15,15 @@ class SpaceShip;
 
 namespace PhysicsCollisions
 {
-    void visitConvexes(ConvexPhysicsShape * shape1, ConvexPhysicsShape * shape2, SpaceShip * space_ship);
-    void visitConvexRound(ConvexPhysicsShape * convex, RoundPhysicsShape * round, SpaceShip * space_ship);
-    void visitStaticRoundConvex(RoundStaticPhysicsShape * shape1, ConvexPhysicsShape * shape2, SpaceShip * space_ship);
-    void visitRounds(RoundPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
+    void visitConvexes(ConvexPhysicsShape * shape1, ConvexPhysicsShape * shape2, Instances::Instance * instance);
+    void visitConvexRound(ConvexPhysicsShape * convex, RoundPhysicsShape * round, Instances::Instance * instance);
+    void visitStaticRoundConvex(RoundStaticPhysicsShape * shape1, ConvexPhysicsShape * shape2, Instances::Instance * instance);
+    void visitRounds(RoundPhysicsShape * shape1, RoundPhysicsShape * shape2, Instances::Instance * instance);
 
-    void visitStaticConvexConvex(ConvexStaticPhysicsShape * static_convex, ConvexPhysicsShape * convex, SpaceShip * space_ship);
-    void visitStaticConvexRound(ConvexStaticPhysicsShape * static_convex, RoundPhysicsShape * round, SpaceShip * space_ship);
-    void visitStaticRoundRound(RoundStaticPhysicsShape * shape1, RoundPhysicsShape * shape2, SpaceShip * space_ship);
+    void visitStaticConvexConvex(ConvexStaticPhysicsShape * static_convex, ConvexPhysicsShape * convex, Instances::Instance * instance);
+    void visitStaticConvexRound(ConvexStaticPhysicsShape * static_convex, RoundPhysicsShape * round, Instances::Instance * instance);
+    void visitStaticRoundRound(RoundStaticPhysicsShape * shape1, RoundPhysicsShape * shape2, Instances::Instance * instance);
 
-    void visitRoundWall(RoundPhysicsShape * shape1, SpaceShip * space_ship);
-    void visitConvexWall(ConvexPhysicsShape * convex, SpaceShip * space_ship);
+    void visitRoundWall(RoundPhysicsShape * shape1, SpaceshipTiles *tiles);
+    void visitConvexWall(ConvexPhysicsShape * convex, SpaceshipTiles *tiles);
 };

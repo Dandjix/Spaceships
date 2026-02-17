@@ -13,5 +13,5 @@ public:
 
     PhysicsUpdateVisitor * createVisitor() override;
 
-    void consumeVisitor(PhysicsUpdateVisitor *visitor, SpaceShip *space_ship) override;
+    void consumeVisitor(PhysicsUpdateVisitor *visitor, Instances::Instance *instance) override;
 };

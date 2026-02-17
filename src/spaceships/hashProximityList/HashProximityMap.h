@@ -16,15 +16,21 @@ class PhysicsShape;
 
 class HashProximityMap {
 private:
-    std::unordered_map<Vector2Int,std::vector<PhysicsShape *>> proximityMap;
+    std::unordered_map<Vector2Int, std::vector<PhysicsShape *> > proximityMap;
 
 public:
     HashProximityMap() = default;
 
-    std::unordered_map<Vector2Int,std::vector<PhysicsShape *>>::const_iterator begin() const {return proximityMap.begin();}
-    std::unordered_map<Vector2Int,std::vector<PhysicsShape *>>::const_iterator end() const {return proximityMap.end();}
+    std::unordered_map<Vector2Int, std::vector<PhysicsShape *> >::const_iterator begin() const {
+        return proximityMap.begin();
+    }
+
+    std::unordered_map<Vector2Int, std::vector<PhysicsShape *> >::const_iterator end() const {
+        return proximityMap.end();
+    }
 
     std::vector<PhysicsShape *> at_world(Vector2Int world_position) const;
+
     std::vector<PhysicsShape *> at_cell(Vector2Int cell) const;
 
     void render(SDL_Renderer *renderer, const RenderingContext &context) const;
@@ -33,5 +39,3 @@ public:
 
     void clear();
 };
-
-

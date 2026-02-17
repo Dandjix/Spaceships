@@ -6,12 +6,12 @@
 
 #include "spaceships/SpaceShip.h"
 
-inline void ActiveWhenPausedEntity::registerInSpaceship(SpaceShip *space_ship) {
-    ShortLivedEntity::registerInSpaceship(space_ship);
-    space_ship->active_when_paused_entities.insert(this);
+inline void ActiveWhenPausedEntity::registerInInstance(Instances::Instance *world_instance) {
+    ShortLivedEntity::registerInInstance(world_instance);
+    world_instance->active_when_paused_entities.insert(this);
 }
 
-inline void ActiveWhenPausedEntity::unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done) {
-    space_ship->active_when_paused_entities.add_to_erasing_queue(this,false);
-    ShortLivedEntity::unregisterInSpaceship(space_ship, delete_when_done);
+inline void ActiveWhenPausedEntity::unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done) {
+    world_instance->active_when_paused_entities.add_to_erasing_queue(this,false);
+    ShortLivedEntity::unregisterInInstance(world_instance, delete_when_done);
 }

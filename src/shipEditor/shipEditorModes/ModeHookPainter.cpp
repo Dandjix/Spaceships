@@ -46,18 +46,18 @@ void ShipEditorModes::ModeHookPainter::enter() {
     };
 
     hook_painter->on_region_placed.subscribe([this](const std::string &name, Vector2Int TL, Vector2Int dimensions){
-        state_machine->common->blueprint->hooks.addRegion(name,new HookRegion(TL,dimensions));
+        state_machine->common->blueprint->hooks->addRegion(name,new HookRegion(TL,dimensions));
     });
 
     hook_painter->on_point_placed.subscribe([this](const std::string &name, Vector2Int position){
-        state_machine->common->blueprint->hooks.addPoint(name,new HookPoint(position));
+        state_machine->common->blueprint->hooks->addPoint(name,new HookPoint(position));
     });
 
     addedActiveEntities.push_back(hook_painter);
 
-    auto region_deleter = new HookDeleter::RegionDeleter(&state_machine->common->blueprint->hooks,false);
+    auto region_deleter = new HookDeleter::RegionDeleter(state_machine->common->blueprint->hooks,false);
     addedActiveEntities.push_back(region_deleter);
-    auto point_deleter = new HookDeleter::PointDeleter(&state_machine->common->blueprint->hooks,false);
+    auto point_deleter = new HookDeleter::PointDeleter(state_machine->common->blueprint->hooks,false);
     addedActiveEntities.push_back(point_deleter);
 
     auto action_list = new GUIList(Anchor::TL,{100,0},160,GUI_Fill,std::vector<std::string>{
@@ -108,7 +108,7 @@ void ShipEditorModes::ModeHookPainter::enter() {
 
     addedEditorGUIElements.push_back(action_list);
 
-    auto appearance = new HookAppearance(&state_machine->common->blueprint->hooks);
+    auto appearance = new HookAppearance(state_machine->common->blueprint->hooks);
 
     addedActiveEntities.push_back(appearance);
 

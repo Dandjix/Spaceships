@@ -2,6 +2,8 @@
 #include "../player/Camera.h"
 #include "../physics/Physics.h"
 #include "../math/Vectors.h"
+#include "game/Update.h"
+
 void RayCaster::update(const UpdateContext& context)
 {
 	const bool* state = SDL_GetKeyboardState(nullptr);
@@ -20,7 +22,7 @@ void RayCaster::update(const UpdateContext& context)
 	{
 		float maxDistance = (player->getPosition() - mousePosition).length();
 
-		auto hit = Physics::RayCast(player->getPosition(), direction, context.spaceShip,maxDistance);
+		auto hit = Physics::RayCast(player->getPosition(), direction, context.world_instance->space_ship->spaceship_tiles,maxDistance);
 
 		originPosition = player->getPosition();
 		if (hit.hit)

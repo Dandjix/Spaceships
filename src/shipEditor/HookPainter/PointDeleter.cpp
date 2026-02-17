@@ -3,6 +3,8 @@
 //
 
 #include "PointDeleter.h"
+
+#include "game/Update.h"
 #include "spaceships/Hooks/HookPoint.h"
 
 void HookDeleter::PointDeleter::deletePoint(const std::string &point_name) {

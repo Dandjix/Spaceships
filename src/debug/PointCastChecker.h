@@ -1,5 +1,6 @@
 #pragma once
 #include "entities/scripts/ShortLivedEntity.h"
+#include "game/Update.h"
 #include "physics/Physics.h"
 #include "userInterface/fonts.h"
 //
@@ -58,6 +59,6 @@ inline void PointCastChecker::update(const UpdateContext &context) {
     SDL_GetMouseState(&mouse_x, &mouse_y);
     auto world_mouse_position = context.camera_info.screenToWorldPoint({mouse_x, mouse_y});
 
-    entities_under_mouse = Physics::EntityPointCast(world_mouse_position, context.spaceShip);
+    entities_under_mouse = Physics::EntityPointCast(world_mouse_position, context.world_instance);
 }
 }

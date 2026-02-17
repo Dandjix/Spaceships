@@ -13,16 +13,16 @@ PhysicsEntity::~PhysicsEntity() {
     delete shape;
 }
 
-inline void PhysicsEntity::registerInSpaceship(SpaceShip* space_ship)
+inline void PhysicsEntity::registerInInstance(Instances::Instance *world_instance)
 {
-    Entity::registerInSpaceship(space_ship);
-    space_ship->physics_entities.insert(this);
+    Entity::registerInInstance(world_instance);
+    world_instance->physics_entities.insert(this);
     // if (!isJsonSerializable())
     //     std::cout << "inserted a non serializable ! " << std::endl;
 }
 
-inline void PhysicsEntity::unregisterInSpaceship(SpaceShip* space_ship, bool delete_when_done)
+inline void PhysicsEntity::unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done)
 {
-    Entity::unregisterInSpaceship(space_ship, delete_when_done);
-    space_ship->physics_entities.add_to_erasing_queue(this);
+    Entity::unregisterInInstance(world_instance, delete_when_done);
+    world_instance->physics_entities.add_to_erasing_queue(this);
 }

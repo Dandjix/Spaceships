@@ -36,7 +36,7 @@ HookPoint *SpaceshipHooks::getPoint(const std::string &key) {
 }
 
 void SpaceshipHooks::update(const UpdateContext &context) {
-    for (auto entity: context.spaceShip->getEntities(RoomDistance::All)) {
+    for (auto entity: context.world_instance->getEntities()) {
         for (auto entry: regions) {
             HookRegion *region = entry.second;
             if (region->pointIsInside(entity->getPosition())) {
@@ -98,7 +98,7 @@ void SpaceshipHooks::update(const UpdateContext &context) {
     return entry;
 }
 
-SpaceshipHooks SpaceshipHooks::fromJson(const nlohmann::json &entry) {
+SpaceshipHooks * SpaceshipHooks::fromJson(const nlohmann::json &entry) {
 
     nlohmann::json regions;
     if (entry.contains("regions")) regions = entry["regions"];
@@ -145,7 +145,7 @@ SpaceshipHooks SpaceshipHooks::fromJson(const nlohmann::json &entry) {
         airlock_map.insert({name, airlock});
     }
 
-    SpaceshipHooks hooks = SpaceshipHooks(region_map, point_map, airlock_map);
+    SpaceshipHooks * hooks = new SpaceshipHooks(region_map, point_map, airlock_map);
 
     return hooks;
 }

@@ -28,6 +28,7 @@ std::vector<Entity *> entitiesFromJson(const nlohmann::json &json,
     std::vector<Entity *> entities = {};
 
     for (const auto &e: json) {
+        // std::cout << "e : " << e<< std::endl;
         entities.push_back(EntityLoading::fromJson(e, transient_game_state, entity_rendering_context));
     }
     return entities;
@@ -38,7 +39,7 @@ std::string SpaceShipBlueprint::dumps() const {
     nlohmann::json json;
     json["pathToExterior"] = pathToExterior;
     json["tiles"] = tiles;
-    json["hooks"] = hooks.toJson();
+    json["hooks"] = hooks->toJson();
     json["entities"] = entitiesToJson(entities);
     return json.dump(4);
 }
@@ -58,7 +59,7 @@ SpaceShipBlueprint *SpaceShipBlueprint::loads(const std::string &from, std::file
 
     std::string pathToExterior = json["pathToExterior"];
     std::vector<std::vector<Tile> > tiles = json["tiles"];
-    SpaceshipHooks hooks = SpaceshipHooks::fromJson(json["hooks"]);
+    SpaceshipHooks * hooks = SpaceshipHooks::fromJson(json["hooks"]);
 
     std::vector<Entity *> entities;
     if (create_blueprint_entities) {
@@ -82,6 +83,10 @@ SpaceShipBlueprint *SpaceShipBlueprint::load(const std::filesystem::path &path,
     std::ifstream file(path);
     std::stringstream buffer;
     buffer << file.rdbuf();
+
+    // std::cout << "path is : " << path << std::endl;
+    // std::cout << "here is the buffer : " << buffer.str() << std::endl;
+
     return loads(buffer.str(), path, transient_game_state, entity_id_manager, entity_rendering_context,
                  create_blueprint_entities, finalize_json_deserialization);
 }

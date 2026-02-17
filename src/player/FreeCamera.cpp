@@ -1,0 +1,52 @@
+//
+// Created by timon on 2/16/26.
+//
+#include "FreeCamera.h"
+
+#include "game/Update.h"
+
+FreeCamera::FreeCamera(Vector2Int position, float angle, float scale, float speed): Camera(position,angle,scale),speed(speed) {}
+
+void FreeCamera::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
+    if (event.type != SDL_EVENT_MOUSE_WHEEL) return;
+    if ((SDL_GetModState() & SDL_KMOD_ALT)) return;
+
+
+
+    float zoomFactor = 0.1f; // Adjust zoom speed
+    float scale_value= getScale() + event.wheel.y * zoomFactor;
+
+    // Clamp scale
+    scale_value = std::clamp(scale_value, 0.5f,5.0f);
+
+    setScale(scale_value);
+}
+
+void FreeCamera::update(const UpdateContext &context) {
+    const bool* state = SDL_GetKeyboardState(nullptr);
+    float deltaX = 0;
+    float deltaY = 0;
+    if (state[SDL_SCANCODE_W]) {
+        deltaY -= 1;
+    }
+    if (state[SDL_SCANCODE_S]) {
+        deltaY += 1;
+    }
+    if (state[SDL_SCANCODE_A]) {
+        deltaX -= 1;
+    }
+    if (state[SDL_SCANCODE_D]) {
+        deltaX += 1;
+    }
+
+    Vector2Float delta = Vector2Float(deltaX, deltaY);
+
+    delta.normalize();
+
+    delta = (delta * (speed * context.deltaTime * Vectors::getFactor())).rotate(-getAngle());
+
+    Vector2Float newPosFloat = Vectors::toVector2Float(position) + delta;
+    Vector2Int newPos = Vectors::toVector2Int(newPosFloat);
+
+    position = newPos;
+}

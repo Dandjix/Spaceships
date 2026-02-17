@@ -5,6 +5,7 @@
 #include "AirlockDeleter.h"
 
 #include "game/Rendering.h"
+#include "game/Update.h"
 #include "spaceships/Hooks/SpaceshipHooks.h"
 #include "spaceships/Hooks/airlock/Airlock.h"
 

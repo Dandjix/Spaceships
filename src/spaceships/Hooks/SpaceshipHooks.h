@@ -8,9 +8,6 @@
 #include <utility>
 
 #include "json.hpp"
-#include "json.hpp"
-#include "json.hpp"
-#include "behavior/Behavior.h"
 
 
 class Airlock;
@@ -68,7 +65,7 @@ public:
     }
 
 
-    static SpaceshipHooks fromJson(const nlohmann::json &entry);
+    static SpaceshipHooks * fromJson(const nlohmann::json &entry);
 };
 
 

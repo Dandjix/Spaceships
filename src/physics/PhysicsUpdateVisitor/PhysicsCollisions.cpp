@@ -20,7 +20,7 @@
 constexpr float jolt = 3;
 
 namespace PhysicsCollisions {
-    void applyJolt(PhysicsShape *shape1, PhysicsShape *shape2, SpaceShip *space_ship) {
+    void applyJolt(PhysicsShape *shape1, PhysicsShape *shape2, Instances::Instance * instance) {
         float random_angle = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * 360;
 
         Vector2Float jolt_vector = Vector2Float(jolt, 0.0f).rotate(random_angle);
@@ -30,7 +30,7 @@ namespace PhysicsCollisions {
     }
 
 
-    void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, SpaceShip *space_ship) {
+    void visitConvexes(ConvexPhysicsShape *poly1, ConvexPhysicsShape *poly2, Instances::Instance * instance) {
         Physics::Util::SATReturn res;
         {
             auto poly1_info = Physics::Util::PolygonInfo(poly1->getVertices());
@@ -55,7 +55,7 @@ namespace PhysicsCollisions {
     }
 
     // here's a little lesson in trickery, this is going down in history
-    void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, SpaceShip *space_ship) {
+    void visitConvexRound(ConvexPhysicsShape *convex, RoundPhysicsShape *round, Instances::Instance * instance) {
         Physics::Util::SATReturn res;
         {
             auto convex_info = Physics::Util::PolygonInfo(convex->getVertices());
@@ -79,7 +79,7 @@ namespace PhysicsCollisions {
         round->moveCenter(-delta * force_e2);
     }
 
-    void visitStaticRoundConvex(RoundStaticPhysicsShape *static_round, ConvexPhysicsShape *convex, SpaceShip *space_ship) {
+    void visitStaticRoundConvex(RoundStaticPhysicsShape *static_round, ConvexPhysicsShape *convex, Instances::Instance * instance) {
         Physics::Util::SATReturn res;
         {
             auto convex_info = Physics::Util::PolygonInfo(convex->getVertices());
@@ -97,9 +97,9 @@ namespace PhysicsCollisions {
     }
 
 
-    void visitRounds(RoundPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
+    void visitRounds(RoundPhysicsShape *shape1, RoundPhysicsShape *shape2, Instances::Instance * instance) {
         if (shape1->getCenter() == shape2->getCenter()) {
-            applyJolt(shape1, shape2, space_ship);
+            applyJolt(shape1, shape2, instance);
         }
 
         Vector2Int diff = shape1->getCenter() - shape2->getCenter();
@@ -128,7 +128,7 @@ namespace PhysicsCollisions {
     }
 
     void visitStaticConvexConvex(ConvexStaticPhysicsShape *static_convex, ConvexPhysicsShape *convex,
-        SpaceShip *space_ship) {
+        Instances::Instance * instance) {
         Physics::Util::SATReturn res;
         {
             auto static_convex_info = Physics::Util::PolygonInfo(static_convex->getVertices());
@@ -146,7 +146,7 @@ namespace PhysicsCollisions {
     }
 
     void visitStaticConvexRound(ConvexStaticPhysicsShape *static_convex, RoundPhysicsShape *round,
-        SpaceShip *space_ship) {
+        Instances::Instance * instance) {
         Physics::Util::SATReturn res;
         {
             auto static_convex_info = Physics::Util::PolygonInfo(static_convex->getVertices());
@@ -163,7 +163,7 @@ namespace PhysicsCollisions {
         round->moveCenter(-delta);
     }
 
-    void visitStaticRoundRound(RoundStaticPhysicsShape *shape1, RoundPhysicsShape *shape2, SpaceShip *space_ship) {
+    void visitStaticRoundRound(RoundStaticPhysicsShape *shape1, RoundPhysicsShape *shape2, Instances::Instance * instance) {
         if (shape1->getCenter() == shape2->getCenter()) {
             float random_angle = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) * 360;
 
@@ -190,7 +190,7 @@ namespace PhysicsCollisions {
     }
 
 
-    void visitRoundWall(RoundPhysicsShape *shape1, SpaceShip *space_ship) {
+    void visitRoundWall(RoundPhysicsShape *shape1, SpaceshipTiles *tiles) {
         auto AABB = shape1->getBoundingBox();
 
         int tileWorldSize = Scaling::scaleToWorld(Tiles::tileSizePx);
@@ -203,7 +203,7 @@ namespace PhysicsCollisions {
         Vector2Int tilesEnd = AABB.bottomRight() / tileWorldSize; // + Vector2Int(1, 1);
         for (int tx = tilesStart.x; tx <= tilesEnd.x; ++tx) {
             for (int ty = tilesStart.y; ty <= tilesEnd.y; ++ty) {
-                Tile tile = space_ship->getSpaceshipTiles().get_tile(tx, ty);
+                Tile tile = tiles->get_tile(tx, ty);
 
                 // Only collide with solid (or wall) tiles
                 if (tile != Tile::Wall)
@@ -251,13 +251,13 @@ namespace PhysicsCollisions {
         float original_distance;
     };
 
-    void diagonalsDisplacement(ConvexPhysicsShape *convex, SpaceShip *space_ship) {
+    void diagonalsDisplacement(ConvexPhysicsShape *convex, SpaceshipTiles *spaceship_tiles) {
         std::vector<HitInfo> hits;
 
         for (auto [start,end]: Physics::Util::getDiagonals(convex->getCenter(), convex->getVertices())) {
             auto diff = end - start;
             float original_distance = diff.length();
-            auto res = Physics::RayCast(start, Vectors::toVector2Float(diff), space_ship, original_distance);
+            auto res = Physics::RayCast(start, Vectors::toVector2Float(diff), spaceship_tiles, original_distance);
             if (!res.hit)
                 continue;
             hits.push_back({res.hit_world_position, original_distance});
@@ -287,7 +287,7 @@ namespace PhysicsCollisions {
         }
     }
 
-    void iterateCornerNormals(const BoundingBox<int> &AABB, SpaceShip *space_ship,
+    void iterateCornerNormals(const BoundingBox<int> &AABB, SpaceshipTiles *spaceship_tiles,
                               const std::function<void(Vector2Int world_position, Vector2Float normal)> &func) {
         int tileWorldSize = Scaling::scaleToWorld(Tiles::tileSizePx);
         Vector2Int cornersStart = AABB.topLeft() / tileWorldSize;
@@ -297,10 +297,10 @@ namespace PhysicsCollisions {
             for (int corner_y = cornersStart.y; corner_y <= cornersEnd.y; ++corner_y) {
                 // Check the 4 tiles that share this corner
                 // Top-left, top-right, bottom-left, bottom-right relative to corner
-                bool tl = space_ship->getSpaceshipTiles().get_tile(corner_x - 1, corner_y - 1) == Tile::Wall;
-                bool tr = space_ship->getSpaceshipTiles().get_tile(corner_x, corner_y - 1) == Tile::Wall;
-                bool bl = space_ship->getSpaceshipTiles().get_tile(corner_x - 1, corner_y) == Tile::Wall;
-                bool br = space_ship->getSpaceshipTiles().get_tile(corner_x, corner_y) == Tile::Wall;
+                bool tl = spaceship_tiles->get_tile(corner_x - 1, corner_y - 1) == Tile::Wall;
+                bool tr = spaceship_tiles->get_tile(corner_x, corner_y - 1) == Tile::Wall;
+                bool bl = spaceship_tiles->get_tile(corner_x - 1, corner_y) == Tile::Wall;
+                bool br = spaceship_tiles->get_tile(corner_x, corner_y) == Tile::Wall;
 
                 int wall_count = tl + tr + bl + br;
 
@@ -326,12 +326,12 @@ namespace PhysicsCollisions {
         }
     }
 
-    void cornerNormalsDisplacement(ConvexPhysicsShape *convex, SpaceShip *space_ship) {
+    void cornerNormalsDisplacement(ConvexPhysicsShape *convex, SpaceshipTiles *spaceship_tiles) {
         auto AABB = convex->getBoundingBox();
 
         Vector2Float displacement = {0,0};
 
-        iterateCornerNormals(AABB,space_ship,[&convex,&displacement](Vector2Int corner_position,Vector2Float normal) {
+        iterateCornerNormals(AABB,spaceship_tiles,[&convex,&displacement](Vector2Int corner_position,Vector2Float normal) {
             if (!convex->is_inside(corner_position))
                 return;
 
@@ -358,8 +358,8 @@ namespace PhysicsCollisions {
         convex->moveCenter(displacement);
     }
 
-    void visitConvexWall(ConvexPhysicsShape *convex, SpaceShip *space_ship) {
-        diagonalsDisplacement(convex, space_ship);
-        cornerNormalsDisplacement(convex, space_ship);
+    void visitConvexWall(ConvexPhysicsShape *convex, SpaceshipTiles *tiles) {
+        diagonalsDisplacement(convex, tiles);
+        cornerNormalsDisplacement(convex, tiles);
     }
 };

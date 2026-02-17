@@ -18,7 +18,7 @@ public:
 
     PhysicsUpdateVisitor * createVisitor() override;
 
-    void consumeVisitor(PhysicsUpdateVisitor *visitor, SpaceShip *space_ship) override {
-        visitor->visitStaticRound(this,space_ship);
+    void consumeVisitor(PhysicsUpdateVisitor *visitor, Instances::Instance *instance) override {
+        visitor->visitStaticRound(this,instance);
     }
 };

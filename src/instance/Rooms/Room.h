@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_set>
 #include <climits>
-#include "Tile.h"
+#include "../../spaceships/Tile.h"
 
 class Entity;
 

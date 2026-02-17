@@ -21,8 +21,8 @@ DoorPanel::DoorPanel(const Vector2Int &position, const std::optional<float> &ang
     std::cout << "door panel initialized " << getPosition().x << "," <<getPosition().y <<" , size : "<< dimensions.x << ", " << dimensions.y << std::endl;
 }
 
-void DoorPanel::registerInSpaceship(SpaceShip *space_ship) {
-    ShortLivedPhysicsEntity::registerInSpaceship(space_ship);
+void DoorPanel::registerInInstance(Instances::Instance *instance) {
+    ShortLivedPhysicsEntity::registerInInstance(instance);
 }
 
 DoorPanel *DoorPanel::initializeRendering(const EntityRendering::Context &context) {

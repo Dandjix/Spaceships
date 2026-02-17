@@ -7,6 +7,10 @@
 #include "math/Vectors.h"
 
 
+namespace Instances {
+    class Instance;
+}
+
 namespace EntityRendering {
     struct Context;
 }
@@ -49,7 +53,7 @@ public:
     /**
      * called when kill() is called
      */
-    Event<SpaceShip *> on_killed;
+    Event<Instances::Instance *> on_killed;
 
     Event<Entity *> on_ownership_change;
 
@@ -92,10 +96,10 @@ public:
     virtual void debugRender(SDL_Renderer *renderer, const RenderingContext &context) {
     }
 
-    virtual void onRegistered(SpaceShip *newSpaceship) {
+    virtual void onRegistered(Instances::Instance *newInstance) {
     }
 
-    virtual void onUnRegistered(SpaceShip *oldSpaceship) {
+    virtual void onUnRegistered(Instances::Instance *oldInstance) {
     }
 
     /// <summary>
@@ -117,9 +121,9 @@ public:
      *
      *  The use of this is to be overriden by physics entities, as they also add themselves to the physics entities list
      *
-     * @param space_ship the spaceship in which the entity will be registered
+     * @param world_instance the spaceship in which the entity will be registered
      */
-    virtual void registerInSpaceship(SpaceShip *space_ship);
+    virtual void registerInInstance(Instances::Instance *world_instance);
 
     /**
      *  Unregisters an entity in the spaceship so that it's behavior and appearance are handled in this spaceship. Does not call any event, this is done in the spaceship itself.
@@ -128,10 +132,10 @@ public:
      *
      *  The use of this is to be overriden by physics entities, as they also add themselves to the physics entities list
      *
-     * @param space_ship the spaceship in which the entity will be unregistered
+     * @param world_instance the spaceship in which the entity will be unregistered
      * @param delete_when_done
      */
-    virtual void unregisterInSpaceship(SpaceShip *space_ship, bool delete_when_done);;
+    virtual void unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done);;
 
     int getX() const { return position.x; }
     int getY() const { return position.y; }
@@ -157,5 +161,5 @@ public:
     /**
      * Destroys and unregisters the entity as well as any entities depending on it (Example : a door needs to kill its two panels)
      */
-    virtual void kill(SpaceShip *space_ship);
+    virtual void kill(Instances::Instance *world_instance);
 };

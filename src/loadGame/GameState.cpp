@@ -10,7 +10,7 @@
 #include "behavior/BehavioredEntity.h"
 #include "entities/entityId/EntityId.h"
 #include "spaceships/SpaceShip.h"
-
+#include "instance/Instance.h"
 
 nlohmann::json gameStateToJSON(const GameState::GameState &game_state) {
     nlohmann::json json = {};
@@ -37,7 +37,7 @@ GameState::GameState gameStateFromJSON(const nlohmann::json json, EntityId::Mana
     }
 
     for (auto ship: ships) {
-        for (auto entity: ship->entities) {
+        for (auto entity: ship->instance->entities) {
             entity->finalizeJsonDeserialization(transient_game_state);
         }
     }
@@ -65,15 +65,18 @@ EntityId::entityId GameState::transientGameState::maxEntityId() {
 
 Camera *GameState::GameState::getCamera() {
     for (auto s: space_ships) {
-        if (s->cameras.size() == 1)
-            return s->cameras.at(0);
+        if (s->instance->cameras.size() > 1)
+            throw std::runtime_error("There are multiple cameras in an instance");
+
+        if (s->instance->cameras.size() == 1)
+            return s->instance->cameras.at(0);
     }
-    return nullptr;
+    throw std::runtime_error("camera could not be found");
 }
 
 BehavioredEntity *GameState::GameState::getPlayer() {
     for (auto space_ship: space_ships) {
-        for (auto entity: space_ship->getBehavioredEntities(RoomDistance::All)) {
+        for (auto entity: space_ship->instance->getBehavioredEntities()) {
             if (entity->is_player()) {
                 return entity;
             }
@@ -86,7 +89,7 @@ SpaceShip * GameState::GameState::getPlayerSpaceship() {
     auto player = getPlayer();
 
     for (auto space_ship: space_ships) {
-        if (space_ship->has_entity(player))
+        if (space_ship->instance->has_entity(player))
             return space_ship;
     }
     return nullptr;

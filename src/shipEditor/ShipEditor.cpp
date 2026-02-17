@@ -64,7 +64,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     ElementContainer<GUIRect *> editorGUIElements = {};
     ElementContainer<GUIRect *> editorGUIElementsDeletionQueue = {};
 
-    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures",renderer);
+    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures", renderer);
     EntityRendering::Context entity_rendering_context = {texture_usage_map};
 
     auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1, 600);
@@ -82,9 +82,9 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     auto *blueprint = new SpaceShipBlueprint(
         "",
         "",
-        std::vector<std::vector<Tile> >(initialDimensions.x,std::vector<Tile>(initialDimensions.y, Tile::Void)),
+        std::vector<std::vector<Tile> >(initialDimensions.x, std::vector<Tile>(initialDimensions.y, Tile::Void)),
         {},
-        {{}, {}, {}}
+        new SpaceshipHooks({}, {}, {})
     );
 
     ShipBuildingGrid grid(
@@ -100,7 +100,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     BlueprintEditorAppearance appearance(blueprint);
     activeEntities.add(&appearance);
 
-    auto * entity_placement_interface = new EntityPlacement::Interface();
+    auto *entity_placement_interface = new EntityPlacement::Interface();
 
     EntityPlacement::Context entity_placement_context = {entity_placement_interface};
 
@@ -141,7 +141,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             "Edit entities",
             "Link toggleables"
         },
-        [&entity_rendering_context,&destination,&grid,&blueprint,&state_machine,&blueprint_name](const std::string &option) {
+        [&entity_rendering_context,&destination,&grid,&blueprint,&state_machine,&blueprint_name](
+    const std::string &option) {
             if (option == "Resize") {
                 grid.startResizing();
             } else if (option == "Save") {
@@ -156,7 +157,9 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 EntityId::Manager::getInstance().reset();
                 GameState::transientGameState transient_game_state = {};
 
-                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,EntityId::Manager::getInstance(),&entity_rendering_context, true, true);
+                auto loaded = SpaceShipBlueprint::loads(content, path, transient_game_state,
+                                                        EntityId::Manager::getInstance(), &entity_rendering_context,
+                                                        true, true);
 
                 blueprint_name = path;
                 *blueprint = *loaded;
@@ -286,7 +289,6 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         });
 
         for (Entity *entity: all_entities) {
-
             // if (dynamic_cast<CargoContainer * >(entity) != nullptr) {
             //     std::cout << "rendering a container ! " << std::endl;
             // }

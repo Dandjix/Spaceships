@@ -28,14 +28,14 @@ public :
     std::string pathToExterior;
     std::vector<std::vector<Tile> > tiles;
     std::vector<Entity *> entities;
-    SpaceshipHooks hooks;
+    SpaceshipHooks * hooks;
 
     SpaceShipBlueprint(
         std::filesystem::path path,
         std::string pathToExterior,
         std::vector<std::vector<Tile> > tiles,
         std::vector<Entity *> entities,
-        const SpaceshipHooks &hooks)
+        SpaceshipHooks * hooks)
         : path(std::move(path)), pathToExterior(std::move(pathToExterior)), tiles(std::move(tiles)),
           entities(std::move(entities)), hooks(hooks) {
     }
