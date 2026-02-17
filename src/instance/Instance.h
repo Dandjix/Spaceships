@@ -50,7 +50,6 @@ namespace Instances {
             for (Entity *entity: entities) {
                 delete entity;
             }
-            std::cout << "entities deleted ! "<<std::endl;
         }
 
         void physicsHandling(float target_delta_time, int subdivisions = 2);
@@ -129,8 +128,6 @@ namespace Instances {
         std::vector<BehavioredEntity *> getBehavioredEntities() const;
 
         nlohmann::json entitiesToJson() {
-
-            std::cout << "a call to toJson has been made." << std::endl;
 
             std::vector<nlohmann::json> entity_entries = nlohmann::json::array();
             for (auto e: entities) {

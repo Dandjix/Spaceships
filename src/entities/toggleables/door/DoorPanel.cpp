@@ -18,7 +18,6 @@ DoorPanel::DoorPanel(const Vector2Int &position, const std::optional<float> &ang
         angle,
         new RectStaticPhysicsShape(this, dimensions)
     ),dimensions(dimensions) {
-    std::cout << "door panel initialized " << getPosition().x << "," <<getPosition().y <<" , size : "<< dimensions.x << ", " << dimensions.y << std::endl;
 }
 
 void DoorPanel::registerInInstance(Instances::Instance *instance) {

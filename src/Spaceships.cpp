@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
             case MenuNavigation::NewGame: {
                 auto path = NewGame::ConstructNewGame();
 
-                std::cout << "new game constructed" << "\n\n" << std::endl;
+                // std::cout << "new game constructed" << "\n\n" << std::endl;
 
                 navigation = RunGame(renderer, window, path);
                 break;

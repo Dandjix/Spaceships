@@ -31,8 +31,6 @@ namespace Textures {
     protected:
         static std::unordered_map<std::string, SDL_Texture *> load(SDL_Renderer *renderer, const std::filesystem::path &path) {
 
-            std::cout << "in texture set, path is : " << path << std::endl;
-
             std::unordered_map<std::string, SDL_Texture *> textures = {};
 
             std::pmr::vector<std::string> accepted_texture_endings = {
