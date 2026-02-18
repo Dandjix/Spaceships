@@ -39,16 +39,21 @@ std::filesystem::path NewGame::ConstructNewGame() {
     // auto door = new Door(Vector2Int(256,256+64).scaleToWorldPosition(),0,0,0,EntityId::Manager::getInstance().createEntityId());
     // auto button = new Button(Vector2Int(256,256).scaleToWorldPosition(),0,door);
 
-    std::vector<Contraptions::FissionReactor::Reactor::ControlRodInfo> info = {};
 
-    info = {
-        {0,0.25},
-        {175,0.5},
-        {220,0.75},
-    };
+    std::vector<Contraptions::FissionReactor::Reactor::ControlRodInfo> info;
+
+    {
+        auto left = Contraptions::FissionReactor::Reactor::ControlRodInfo::symmetricRange(12, -60, 60, 0);
+        auto right = Contraptions::FissionReactor::Reactor::ControlRodInfo::symmetricRange(12, 120, 240, 0);
+
+        info.reserve(right.size() + left.size());
+        for (const auto &control_rod_info: left)     info.push_back(control_rod_info);
+        for (const auto &control_rod_info: right)  info.push_back(control_rod_info);
+    }
+
 
     Vector2Int reactor_pos = blueprint->hooks->getPoint("reactor")->position;
-    auto reactor = new Contraptions::FissionReactor::Reactor(reactor_pos,0,info,1000);
+    auto reactor = new Contraptions::FissionReactor::Reactor(reactor_pos, 0, info, 1000);
 
     std::vector<Entity *> entities = {
         player,

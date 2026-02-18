@@ -7,23 +7,52 @@
 #include "entities/contraptions/fissionReactor/controlRod/ControlRod.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 
+constexpr int REACTOR_RADIUS = UNITS_PER_METER * 5.0f * Vectors::getFactor();
+
+std::vector<Contraptions::FissionReactor::Reactor::ControlRodInfo> Contraptions::FissionReactor::Reactor::ControlRodInfo
+::range(int nb_rods, float start_angle, float end_angle, float progress) {
+    std::vector<ControlRodInfo> info;
+    info.reserve(nb_rods);
+    for (int i = 0; i < nb_rods; ++i) {
+        float diff = (end_angle - start_angle)/static_cast<float>(nb_rods);
+        float working_angle = start_angle + diff* static_cast<float>(i);
+        info.push_back({working_angle,progress});
+    }
+    return info;
+}
+
+std::vector<Contraptions::FissionReactor::Reactor::ControlRodInfo> Contraptions::FissionReactor::Reactor::ControlRodInfo
+::symmetricRange(int nb_rods, float start_angle, float end_angle, float progress) {
+    std::vector<ControlRodInfo> info;
+    info.reserve(nb_rods);
+    for (int i = 0; i < nb_rods; ++i) {
+        float diff = (end_angle - start_angle)/static_cast<float>(nb_rods - 1);
+        float working_angle = start_angle + diff* static_cast<float>(i);
+        info.push_back({working_angle,progress});
+    }
+    return info;
+}
+
 void Contraptions::FissionReactor::Reactor::constructControlRods(const std::vector<ControlRodInfo> &control_rod_info) {
     if (!control_rods.empty())
         throw std::runtime_error("tried constructing reactor rods more than once : rods vector not empty");
 
+    int LENGTH_OF_ROD_STICKING_WHEN_FULLY_INSERTED = Scaling::metricToWorld(0.15f);
+
     control_rods.reserve(control_rod_info.size());
 
-    Vector2Int rod_dimensions = Scaling::metricToWorld(Vector2Float(5,0.25f));
+    Vector2Int rod_dimensions = Scaling::metricToWorld(Vector2Float(3, 0.20f));
 
     for (auto [relative_angle,progress]: control_rod_info) {
         float to_rotate = getAngle() - relative_angle;
 
-        int center_distance = Scaling::metricToWorld(2.25f)
-                              + rod_dimensions.x / 2;
+        int center_distance = REACTOR_RADIUS
+                              - rod_dimensions.x / 2
+                              + LENGTH_OF_ROD_STICKING_WHEN_FULLY_INSERTED;
 
-        int end_distance = Scaling::metricToWorld(2.25f)
-                           + rod_dimensions.x
-                           + Scaling::metricToWorld(2);
+        int end_distance = REACTOR_RADIUS
+                           + rod_dimensions.x / 2
+                           + Scaling::metricToWorld(0.3f);
 
         Vector2Int rod_start = getPosition() + Vector2Int(end_distance, 0).rotate(to_rotate);
         Vector2Int rod_end = getPosition() + Vector2Int(center_distance, 0).rotate(to_rotate);
@@ -42,7 +71,7 @@ Contraptions::FissionReactor::Reactor::Reactor
     float output) : PhysicsEntity(
                         position,
                         angle,
-                        new RoundStaticPhysicsShape(this, Scaling::metricToWorld(5))),
+                        new RoundStaticPhysicsShape(this, REACTOR_RADIUS)),
                     output(output) {
     constructControlRods(control_rod_info);
 }
@@ -55,7 +84,7 @@ Contraptions::FissionReactor::Reactor::generate_rod_info() const {
     for (ControlRod *control_rod: control_rods) {
         float relative_angle = control_rod->computeAngle();
         float progress = control_rod->getProgress();
-        info.push_back({relative_angle,progress });
+        info.push_back({relative_angle, progress});
     }
 
     return info;
@@ -78,7 +107,7 @@ void Contraptions::FissionReactor::Reactor::unregisterInInstance(Instances::Inst
 
 bool Contraptions::FissionReactor::Reactor::interacts(PhysicsEntity *other) {
     //if any of them is a rod of this reactor, don't interact.
-    return ! std::any_of(control_rods.begin(), control_rods.end(),[other](ControlRod * control_rod) {
+    return !std::any_of(control_rods.begin(), control_rods.end(), [other](ControlRod *control_rod) {
         return other == control_rod;
     });
 }

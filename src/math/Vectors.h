@@ -256,7 +256,7 @@ public:
 
 class Vectors {
 public:
-    static int getFactor() {
+    constexpr static int getFactor() {
         return factor;
     }
 

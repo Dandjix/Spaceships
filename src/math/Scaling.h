@@ -39,7 +39,7 @@ namespace Scaling {
 #define UNITS_PER_METER 64.0f
 
     template<typename T>
-    int metricToWorld(T meters) {
+    constexpr int metricToWorld(T meters) {
         return static_cast<int>(std::round(meters * static_cast<float>(Vectors::getFactor()) * UNITS_PER_METER));
     }
 

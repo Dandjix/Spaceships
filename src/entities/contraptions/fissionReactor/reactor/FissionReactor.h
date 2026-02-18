@@ -37,6 +37,10 @@ namespace Contraptions::FissionReactor {
                 }
                 return info_vector;
             }
+
+            static std::vector<ControlRodInfo> range(int nb_rods, float start_angle=0, float end_angle = 360, float progress = 0.5f);
+
+            static std::vector<ControlRodInfo> symmetricRange(int nb_rods, float start_angle=0, float end_angle = 360, float progress = 0.5f);
         };
     protected:
         std::vector<ControlRod *> control_rods;
