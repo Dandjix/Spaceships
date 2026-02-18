@@ -65,5 +65,7 @@ namespace Contraptions::FissionReactor {
         void registerInInstance(Instances::Instance *world_instance) override;
 
         void unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done) override;
+
+        [[nodiscard]] bool interacts(PhysicsEntity *other) override;
     };
 }

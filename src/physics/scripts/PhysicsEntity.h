@@ -31,6 +31,8 @@ public :
 
     ~PhysicsEntity() override;
 
+    [[nodiscard]] virtual bool interacts(PhysicsEntity * other){return true;}
+
     void applyConstraints();
 
     /**

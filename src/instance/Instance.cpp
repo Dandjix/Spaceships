@@ -113,6 +113,10 @@ void Instances::Instance::physicsHandling(float target_delta_time, int subdivisi
             for (PhysicsShape *other_shape: shapes) {
                 // if (!entity->shape->getBoundingBox().intersects(other_shape->getBoundingBox())) //might be worth doing it, might not be. TODO : investigate
                 //     continue;
+
+                if (!entity->interacts(other_shape->owner_entity) || !other_shape->owner_entity->interacts(entity)) //if one of those doesnt want to interact, the collision is not processed.
+                    continue;
+
                 PhysicsUpdateVisitor *visitor = entity->shape->createVisitor();
                 other_shape->consumeVisitor(visitor, this);
                 delete visitor;

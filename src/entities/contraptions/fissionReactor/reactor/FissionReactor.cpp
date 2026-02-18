@@ -76,6 +76,13 @@ void Contraptions::FissionReactor::Reactor::unregisterInInstance(Instances::Inst
     }
 }
 
+bool Contraptions::FissionReactor::Reactor::interacts(PhysicsEntity *other) {
+    //if any of them is a rod of this reactor, don't interact.
+    return ! std::any_of(control_rods.begin(), control_rods.end(),[other](ControlRod * control_rod) {
+        return other == control_rod;
+    });
+}
+
 nlohmann::json Contraptions::FissionReactor::Reactor::toJson() {
     nlohmann::json json = PhysicsEntity::toJson();
 
