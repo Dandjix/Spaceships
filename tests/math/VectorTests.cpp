@@ -48,12 +48,12 @@ TEST(VectorTestSuite, AngleTest) {
         }
     };
     for (auto test: tests) {
-        ASSERT_EQ(test.v1.angle_to(test.v2), test.expected);
+        ASSERT_EQ(test.v1.unsigned_angle_to(test.v2), test.expected);
     }
-    ASSERT_TRUE(std::isnan(Vector2Int(0,0).angle_to(Vector2Int(0,0))));
+    ASSERT_TRUE(std::isnan(Vector2Int(0,0).unsigned_angle_to(Vector2Int(0,0))));
 
     //floats
-    ASSERT_EQ(Vector2Float(1,0).angle_to(Vector2Float(1,1)),45);
+    ASSERT_EQ(Vector2Float(1,0).unsigned_angle_to(Vector2Float(1,1)),45);
 }
 
 

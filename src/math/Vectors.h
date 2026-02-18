@@ -1,10 +1,8 @@
 #pragma once
 #include <cmath>
 #include <format>
-#include <iostream>
 #include <functional>
 
-#include "json.hpp"
 #include "json.hpp"
 
 inline const int factor = 64;
@@ -141,9 +139,16 @@ struct Vector2 {
      * @return the signed angle in degrees
      */
     [[nodiscard]] float angle_to(Vector2<T> other) const {
+        if ((this->x == 0 && this->y == 0)||(other.x == 0 && other.y == 0)) //TODO : make this better possibly
+            return std::nanf("");
+
         float cross = this->cross(other);
         float dot   = this->dot(other);
         return std::atan2(cross, dot) * 180.0f / static_cast<float>(M_PI);
+    }
+
+    [[nodiscard]] float unsigned_angle_to(Vector2<T> other) const {
+        return std::abs(angle_to(other));
     }
 
     /// <summary>
@@ -214,6 +219,8 @@ struct Vector2 {
         entry["y"] = y;
         return entry;
     }
+
+
 
     [[nodiscard]] static Vector2<T> lerp(Vector2<T> a, Vector2<T> b, float c) {
         T x = static_cast<T>(static_cast<float>(a.x) * (1 - c) + static_cast<float>(b.x) * (c));

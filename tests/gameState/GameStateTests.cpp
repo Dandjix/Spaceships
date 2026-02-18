@@ -107,7 +107,6 @@ TEST(GameStateTestSuite, EntityDuplication_BlueprintWithHumanoid_Test) {
     auto dumped = GameState::dumpsGameState(game_state);
 
     nlohmann::json json = nlohmann::json::parse(dumped);
-    std::cout << json.dump(2) << std::endl;
     ASSERT_EQ(json["spaceships"].size(), 1);
     ASSERT_EQ(json["spaceships"][0]["instance"].size(), 1);
 
