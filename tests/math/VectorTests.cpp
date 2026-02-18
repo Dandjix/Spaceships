@@ -53,17 +53,23 @@ TEST(VectorTestSuite, AngleTest) {
     ASSERT_TRUE(std::isnan(Vector2Int(0,0).unsigned_angle_to(Vector2Int(0,0))));
 
     //floats
-    ASSERT_EQ(Vector2Float(1,0).unsigned_angle_to(Vector2Float(1,1)),45);
+    ASSERT_EQ(Vector2Float(1,0).unsigned_angle_to(Vector2Float(1,1)), 45);
 }
 
 
 TEST(VectorTestSuite, RotateCardinalTests) {
+    Vector2Int test = {69, 420};
 
-    Vector2Int test = {69,420};
+    ASSERT_EQ(test.rotate(0), test.rotateCardinal(0));
+    ASSERT_EQ(test.rotate(90), test.rotateCardinal(90));
+    ASSERT_EQ(test.rotate(180), test.rotateCardinal(180));
+    ASSERT_EQ(test.rotate(270), test.rotateCardinal(270));
+}
 
-    ASSERT_EQ(test.rotate(0),test.rotateCardinal(0));
-    ASSERT_EQ(test.rotate(90),test.rotateCardinal(90));
-    ASSERT_EQ(test.rotate(180),test.rotateCardinal(180));
-    ASSERT_EQ(test.rotate(270),test.rotateCardinal(270));
-
+TEST(VectorTestSuite, AngleToTests) {
+    ASSERT_EQ(Vector2Int(1, 0).angle_to({1,0}), 0);
+    ASSERT_EQ(Vector2Int(1, 0).angle_to({0,1}), 90);
+    ASSERT_EQ(Vector2Int(0, 1).angle_to({1,0}), -90);
+    ASSERT_EQ(Vector2Int(0, 1).angle_to({10,0}), -90);
+    ASSERT_TRUE(std::isnan(Vector2Int(0, 0).angle_to({0, 0})));
 }
