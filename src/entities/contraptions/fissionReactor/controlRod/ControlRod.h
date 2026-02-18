@@ -2,6 +2,7 @@
 #include "physics/constraints/RailConstraint.h"
 #include "physics/constraints/scripts/PhysicsConstraint.h"
 #include "physics/scripts/PhysicsEntity.h"
+#include "physics/scripts/ShortLivedPhysicsEntity.h"
 #include "physics/shapes/PhysicsShape.h"
 #include "physics/shapes/RectPhysicsShape.h"
 //
@@ -9,7 +10,7 @@
 //
 
 namespace Contraptions::FissionReactor {
-    class ControlRod : public PhysicsEntity {
+    class ControlRod : public ShortLivedPhysicsEntity {
     protected:
         Physics::Constraints::Rail rail_constraint;
 
@@ -17,25 +18,38 @@ namespace Contraptions::FissionReactor {
             return {&rail_constraint};
         }
 
-        PhysicsShape *constructPhysicsShape() {
-            return new RectPhysicsShape(this, Scaling::metricToWorld(Vector2Float(0.45f, 5)));
+        PhysicsShape *constructPhysicsShape(Vector2Int dimensions) {
+            int tip_length = dimensions.y;
+
+            std::vector<Vector2Int> points = {
+                {dimensions.x / 2, -dimensions.y / 2},
+                {dimensions.x / 2, dimensions.y / 2},
+                {-dimensions.x / 2 + tip_length / 2, dimensions.y / 2},
+                {-dimensions.x / 2 - tip_length / 2, 0},
+                {-dimensions.x / 2 + tip_length / 2, -dimensions.y / 2},
+            };
+
+            return new ConvexPhysicsShape(this, points);
         }
 
     public:
-        ControlRod(Vector2Int rail_start, Vector2Int rail_end, float progress)
-            : PhysicsEntity(
+        ControlRod(Vector2Int rail_start, Vector2Int rail_end, float progress, Vector2Int dimensions)
+            : ShortLivedPhysicsEntity(
                   Physics::Constraints::Rail::computePosition(rail_start, rail_end, progress),
-                  Physics::Constraints::Rail::computeAngle(rail_start, rail_end),
-                  constructPhysicsShape()
+                  Physics::Constraints::Rail::computeRodEntityAngle(rail_start, rail_end),
+                    //inverted since because it is PLACED at
+                    //45 deg clockwise of the reactor, which means
+                    //the angle of the actual entity is reversed
+                  constructPhysicsShape(dimensions)
               ),
               rail_constraint(rail_start, rail_end) {
         }
 
-        ControlRod(Vector2Int position, float angle, Vector2Int rail_start, Vector2Int rail_end)
-            : PhysicsEntity(
+        ControlRod(Vector2Int position, float angle, Vector2Int rail_start, Vector2Int rail_end, Vector2Int dimensions)
+            : ShortLivedPhysicsEntity(
                   position,
                   angle,
-                  constructPhysicsShape()
+                  constructPhysicsShape(dimensions)
               ),
               rail_constraint(rail_start, rail_end) {
         }
@@ -51,8 +65,8 @@ namespace Contraptions::FissionReactor {
         void render(SDL_Renderer *renderer, const RenderingContext &context) override {
         }
 
-        FROM_JSON_DECLARATION(ControlRod, "fission_reactor_control_rod");
-
-        nlohmann::json toJson() override;
+        float computeAngle() {
+            return Physics::Constraints::Rail::computeAngleAroundReactor(rail_constraint.getStart(), rail_constraint.getEnd());
+        }
     };
 }

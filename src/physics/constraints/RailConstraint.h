@@ -29,10 +29,12 @@ namespace Physics::Constraints {
         [[nodiscard]] Vector2Int getEnd() const { return end; }
         [[nodiscard]] int getLength() const { return static_cast<int>(std::round((end - start).length())); }
 
+
         [[nodiscard]] static Vector2Int computePosition(Vector2Int rail_start, Vector2Int rail_end, float progress);
 
-        [[nodiscard]] static float computeAngle(Vector2Int rail_start, Vector2Int rail_end);
+        [[nodiscard]] static float computeAngleAroundReactor(Vector2Int rail_start, Vector2Int rail_end);
 
+        [[nodiscard]] static float computeRodEntityAngle(Vector2Int start, Vector2Int end) {return - computeAngleAroundReactor(start,end);}
         Rail(Vector2Int start, Vector2Int end);
 
         void apply(PhysicsEntity *owner_entity) override;

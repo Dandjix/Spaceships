@@ -23,8 +23,8 @@ namespace Physics::Constraints {
         return position;
     }
 
-    float Rail::computeAngle(Vector2Int rail_start, Vector2Int rail_end) {
-        return (rail_end - rail_start).angle_to({1, 0});
+    float Rail::computeAngleAroundReactor(Vector2Int rail_start, Vector2Int rail_end) {
+        return (rail_start - rail_end).angle_to({1, 0}) ; //yeah ik this looks weird
     }
 
     Rail::Rail(Vector2Int start, Vector2Int end) : start(start), end(end) {
