@@ -18,12 +18,12 @@ namespace Physics::Constraints {
 
     public:
         /**
-         * this has to be a world position kinda obvioulsy
+         * this has to be a world position kinda obviously
          * @return
          */
         [[nodiscard]] Vector2Int getStart() const { return start; }
         /**
-         * this has to be a world position kinda obvioulsy
+         * this has to be a world position kinda obviously
          * @return
          */
         [[nodiscard]] Vector2Int getEnd() const { return end; }
