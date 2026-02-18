@@ -5,6 +5,7 @@
 #include "NewGame.h"
 
 #include "entities/Sphere.h"
+#include "entities/contraptions/fissionReactor/controlRod/ControlRod.h"
 #include "entities/toggleableActivators/Button.h"
 #include "entities/toggleables/door/Door.h"
 #include "player/Camera.h"
@@ -36,6 +37,12 @@ std::filesystem::path NewGame::ConstructNewGame() {
     // auto lamp = new Lamp(Vector2Int{300,256}.scaleToWorldPosition(),0,EntityId::Manager::getInstance().createEntityId(),true);
     // auto door = new Door(Vector2Int(256,256+64).scaleToWorldPosition(),0,0,0,EntityId::Manager::getInstance().createEntityId());
     // auto button = new Button(Vector2Int(256,256).scaleToWorldPosition(),0,door);
+    auto rail =
+            new Contraptions::FissionReactor::ControlRod(
+                Scaling::metricToWorld(Vector2Float{2.5f,2.5f}),
+                Scaling::metricToWorld(Vector2Float{7.5f,7.5f}),
+                0.5f
+            );
 
     std::vector<Entity *> entities = {
         player,
@@ -44,6 +51,7 @@ std::filesystem::path NewGame::ConstructNewGame() {
         // button,
         // debug_button,
         // lamp,
+        rail,
         // new Humanoid(Vector2Int{96,128}.scaleToWorldPosition(),45,nullptr),
         new Sphere(Vector2Int{256, 128}.scaleToWorldPosition(), Scaling::scaleToWorld(45.0f)),
         new CombatOutfit(Vector2Int{196, 128}.scaleToWorldPosition(), 35),

@@ -118,6 +118,9 @@ void Instances::Instance::physicsHandling(float target_delta_time, int subdivisi
                 delete visitor;
             }
         }
+        for (auto entity: working_physics_entities) {
+            entity->applyConstraints();
+        }
     }
 
     for (PhysicsEntity *e: getPhysicsEntities()) {

@@ -11,9 +11,7 @@
 nlohmann::json Entity::toJson() {
     nlohmann::json entry = {};
     entry["position"] = getPosition().toJson();
-    if (hasAngle()) {
-        entry["angle"] = getAngle();
-    }
+    if (hasAngle())entry["angle"] = getAngle();
     entry["type"] = getJsonType();
     return entry;
 }

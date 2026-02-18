@@ -136,14 +136,14 @@ struct Vector2 {
     }
 
     /**
-     * positive angle between this vector and another
+     * signed angle from this vector to another (counter-clockwise positive)
      * @param other another vector
-     * @return the angle, unsigned
+     * @return the signed angle in degrees
      */
     [[nodiscard]] float angle_to(Vector2<T> other) const {
-        float dot_product = this->dot(other);
-        float angle_radians = std::acos(dot_product / (this->length() * other.length()));
-        return angle_radians * 180.0f / static_cast<float>(M_PI); // Convert to degrees
+        float cross = this->cross(other);
+        float dot   = this->dot(other);
+        return std::atan2(cross, dot) * 180.0f / static_cast<float>(M_PI);
     }
 
     /// <summary>
