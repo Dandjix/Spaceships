@@ -36,40 +36,66 @@ public:
     }
 };
 
-TEST(RailConstraintTestSuite, RailConstraintProgressSimpletTest) {
+TEST(RailConstraintTestSuite, RailConstraintGetProgressSimpleTest) {
     {
         //start
         DummyRailedClass railed = DummyRailedClass({0, 0}, 0, {0, 0}, {1000, 0}, nullptr);
         Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
         ASSERT_FALSE(rail == nullptr);
-        ASSERT_EQ(rail->progress(&railed),0.0f);
+        ASSERT_EQ(rail->getProgress(&railed), 0.0f);
     }
     {
         //end
         DummyRailedClass railed = DummyRailedClass({1000, 0}, 0, {0, 0}, {1000, 0}, nullptr);
         Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
         ASSERT_FALSE(rail == nullptr);
-        ASSERT_EQ(rail->progress(&railed),1.0f);
+        ASSERT_EQ(rail->getProgress(&railed), 1.0f);
     }
     {
         //middle
         DummyRailedClass railed = DummyRailedClass({500, 0}, 0, {0, 0}, {1000, 0}, nullptr);
         Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
         ASSERT_FALSE(rail == nullptr);
-        ASSERT_EQ(rail->progress(&railed),0.5f);
+        ASSERT_EQ(rail->getProgress(&railed), 0.5f);
     }
     {
         // 1/4
         DummyRailedClass railed = DummyRailedClass({250, 0}, 0, {0, 0}, {1000, 0}, nullptr);
         Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
         ASSERT_FALSE(rail == nullptr);
-        ASSERT_EQ(rail->progress(&railed),0.25f);
+        ASSERT_EQ(rail->getProgress(&railed), 0.25f);
     }
     {
         //middle translated + rotated
         DummyRailedClass railed = DummyRailedClass({1000, 1000}, 0, {-1000, -1000}, {3000, 3000}, nullptr);
         Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
         ASSERT_FALSE(rail == nullptr);
-        ASSERT_EQ(rail->progress(&railed),0.5f);
+        ASSERT_EQ(rail->getProgress(&railed), 0.5f);
+    }
+}
+
+TEST(RailConstraintTestSuite, RailConstraintSetProgressSimpleTest) {
+    Vector2Int position = {0,0};
+    float angle = 0;
+    {
+        DummyRailedClass railed = DummyRailedClass(position, angle, {0, 0}, {1000, 0}, nullptr);
+        Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
+        ASSERT_FALSE(rail == nullptr);
+        rail->setProgress(&railed, 0.5f);
+        ASSERT_EQ(railed.getPosition(), Vector2Int(500,0));
+    }
+    {
+        DummyRailedClass railed = DummyRailedClass(position, angle, {-500, 0}, {1000, 0}, nullptr);
+        Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
+        ASSERT_FALSE(rail == nullptr);
+        rail->setProgress(&railed, 0.66666f);
+        ASSERT_EQ(railed.getPosition(), Vector2Int(500,0));
+    }
+    {
+        DummyRailedClass railed = DummyRailedClass(position, angle, {-500, -500}, {1500, 3500}, nullptr);
+        Physics::Constraints::Rail *rail = dynamic_cast<Physics::Constraints::Rail *>(railed.getConstraints().at(0));
+        ASSERT_FALSE(rail == nullptr);
+        rail->setProgress(&railed, 0.75f);
+        ASSERT_EQ(railed.getPosition(), Vector2Int(1000,2500));
     }
 }

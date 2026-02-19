@@ -52,7 +52,7 @@ namespace Physics::Constraints {
         owner_entity->setPosition({dx, dy});
     }
 
-    [[nodiscard]] float Rail::progress(const PhysicsEntity *owner_entity) const {
+    [[nodiscard]] float Rail::getProgress(const PhysicsEntity *owner_entity) const {
         Vector2Int A = getStart();
         Vector2Int B = getEnd();
         Vector2Int C = owner_entity->getPosition();
@@ -65,6 +65,10 @@ namespace Physics::Constraints {
         float progress = static_cast<float>(abx * acx + aby * acy) / static_cast<float>(abx * abx + aby * aby);
 
         return progress;
+    }
+
+    void Rail::setProgress(PhysicsEntity *owner_entity, float progress) {
+        owner_entity->setPosition(Vector2Int::lerp(getStart(),getEnd(),progress));
     }
 
     void Rail::debugRender(PhysicsEntity *owner, SDL_Renderer *renderer, const RenderingContext &context) {

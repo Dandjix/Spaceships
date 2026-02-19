@@ -223,8 +223,8 @@ struct Vector2 {
 
 
     [[nodiscard]] static Vector2<T> lerp(Vector2<T> a, Vector2<T> b, float c) {
-        T x = static_cast<T>(static_cast<float>(a.x) * (1 - c) + static_cast<float>(b.x) * (c));
-        T y = static_cast<T>(static_cast<float>(a.y) * (1 - c) + static_cast<float>(b.y) * (c));
+        T x = static_cast<T>(std::round(static_cast<float>(a.x) * (1 - c) + static_cast<float>(b.x) * (c)));
+        T y = static_cast<T>(std::round(static_cast<float>(a.y) * (1 - c) + static_cast<float>(b.y) * (c)));
 
         return Vector2<T>(
             x,

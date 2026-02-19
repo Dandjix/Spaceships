@@ -37,9 +37,9 @@ namespace Contraptions::FissionReactor {
             : ShortLivedPhysicsEntity(
                   Physics::Constraints::Rail::computePosition(rail_start, rail_end, progress),
                   Physics::Constraints::Rail::computeRodEntityAngle(rail_start, rail_end),
-                    //inverted since because it is PLACED at
-                    //45 deg clockwise of the reactor, which means
-                    //the angle of the actual entity is reversed
+                  //inverted since because it is PLACED at
+                  //45 deg clockwise of the reactor, which means
+                  //the angle of the actual entity is reversed
                   constructPhysicsShape(dimensions)
               ),
               rail_constraint(rail_start, rail_end) {
@@ -54,8 +54,15 @@ namespace Contraptions::FissionReactor {
               rail_constraint(rail_start, rail_end) {
         }
 
-        float getProgress() {
-            return rail_constraint.progress(this);
+        /**
+         * @return how close to the end position the object is
+         */
+        [[nodiscard]] float getProgress() {
+            return rail_constraint.getProgress(this);
+        }
+
+        void setProgress(float progress) {
+            rail_constraint.setProgress(this,progress);
         }
 
         ControlRod *initializeRendering(const EntityRendering::Context &context) override { return this; }
@@ -66,7 +73,8 @@ namespace Contraptions::FissionReactor {
         }
 
         float computeAngle() {
-            return Physics::Constraints::Rail::computeAngleAroundReactor(rail_constraint.getStart(), rail_constraint.getEnd());
+            return Physics::Constraints::Rail::computeAngleAroundReactor(
+                rail_constraint.getStart(), rail_constraint.getEnd());
         }
     };
 }

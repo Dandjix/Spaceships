@@ -73,3 +73,10 @@ TEST(VectorTestSuite, AngleToTests) {
     ASSERT_EQ(Vector2Int(0, 1).angle_to({10,0}), -90);
     ASSERT_TRUE(std::isnan(Vector2Int(0, 0).angle_to({0, 0})));
 }
+
+TEST(VectorTestSuite, LerpTests) {
+    ASSERT_EQ(Vector2Int::lerp({0,0},{1000,0},0.5f),Vector2Int(500,0));
+    ASSERT_EQ(Vector2Int::lerp({-1000,0},{1000,0},0.5f),Vector2Int(0,0));
+    ASSERT_EQ(Vector2Int::lerp({-500,0},{1000,0},0.6666f),Vector2Int(500,0));
+    ASSERT_EQ(Vector2Int::lerp({100,100},{500,500},0.75f),Vector2Int(400,400));
+}

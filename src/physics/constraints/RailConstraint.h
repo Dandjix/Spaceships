@@ -34,17 +34,25 @@ namespace Physics::Constraints {
 
         [[nodiscard]] static float computeAngleAroundReactor(Vector2Int rail_start, Vector2Int rail_end);
 
-        [[nodiscard]] static float computeRodEntityAngle(Vector2Int start, Vector2Int end) {return - computeAngleAroundReactor(start,end);}
+        [[nodiscard]] static float computeRodEntityAngle(Vector2Int start, Vector2Int end) {
+            return -computeAngleAroundReactor(start, end);
+        }
+
         Rail(Vector2Int start, Vector2Int end);
 
         void apply(PhysicsEntity *owner_entity) override;
 
         /**
-         *
          * @param owner_entity the entity this belongs to
          * @return 0 if the rail is at the start position, 1 if at the other end, 0.5 in the middle etc.
          */
-        float progress(const PhysicsEntity *owner_entity) const;
+        [[nodiscard]] float getProgress(const PhysicsEntity *owner_entity) const;
+
+        /**
+         * @param progress the target proportional distance from start to end
+         * @param owner_entity the entity this belongs to
+         */
+        void setProgress(PhysicsEntity *owner_entity, float progress);
 
         void debugRender(PhysicsEntity *owner, SDL_Renderer *renderer, const RenderingContext &context) override;
     };
