@@ -71,7 +71,7 @@ namespace Physics::Constraints {
 
         float progress = static_cast<float>(abx * acx + aby * acy) / static_cast<float>(abx * abx + aby * aby);
 
-        return progress;
+        return std::clamp(progress,0.0f,1.0f);
     }
 
     void Rail::setProgress(PhysicsEntity *owner_entity, float progress) {
