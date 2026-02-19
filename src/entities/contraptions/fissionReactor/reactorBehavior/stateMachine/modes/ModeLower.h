@@ -5,6 +5,11 @@
 //
 namespace Contraptions::FissionReactor::Behavior {
     class ModeLower : public Mode {
-        void update(const UpdateContext &context, Reactor *reactor) override {}
+    protected:
+        float moment_percentage;
+    public:
+        explicit ModeLower(float moment_percentage) : moment_percentage(moment_percentage) {  }
+
+        void update(const UpdateContext &context, Reactor *reactor) override;
     };
 }

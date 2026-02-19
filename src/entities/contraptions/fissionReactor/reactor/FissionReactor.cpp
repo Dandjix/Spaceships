@@ -14,9 +14,9 @@ std::vector<Contraptions::FissionReactor::Reactor::ControlRodInfo> Contraptions:
     std::vector<ControlRodInfo> info;
     info.reserve(nb_rods);
     for (int i = 0; i < nb_rods; ++i) {
-        float diff = (end_angle - start_angle)/static_cast<float>(nb_rods);
-        float working_angle = start_angle + diff* static_cast<float>(i);
-        info.push_back({working_angle,progress});
+        float diff = (end_angle - start_angle) / static_cast<float>(nb_rods);
+        float working_angle = start_angle + diff * static_cast<float>(i);
+        info.push_back({working_angle, progress});
     }
     return info;
 }
@@ -26,9 +26,9 @@ std::vector<Contraptions::FissionReactor::Reactor::ControlRodInfo> Contraptions:
     std::vector<ControlRodInfo> info;
     info.reserve(nb_rods);
     for (int i = 0; i < nb_rods; ++i) {
-        float diff = (end_angle - start_angle)/static_cast<float>(nb_rods - 1);
-        float working_angle = start_angle + diff* static_cast<float>(i);
-        info.push_back({working_angle,progress});
+        float diff = (end_angle - start_angle) / static_cast<float>(nb_rods - 1);
+        float working_angle = start_angle + diff * static_cast<float>(i);
+        info.push_back({working_angle, progress});
     }
     return info;
 }
@@ -63,16 +63,31 @@ void Contraptions::FissionReactor::Reactor::constructControlRods(const std::vect
     }
 }
 
+float Contraptions::FissionReactor::Reactor::getOutput() const {
+
+    float total_rod_progress = 0.0f;
+
+    for (ControlRod *rod: control_rods) {
+        total_rod_progress += rod->getProgress();
+    }
+
+    float rod_progress_percentage = total_rod_progress  / static_cast<float>(control_rods.size());
+
+    float output = (nominal_output * 2) * (1 - rod_progress_percentage);
+
+    return output;
+}
+
 Contraptions::FissionReactor::Reactor::Reactor
 (
     Vector2Int position,
     float angle,
     const std::vector<ControlRodInfo> &control_rod_info,
-    float output) : PhysicsEntity(
+    float nominal_output) : PhysicsEntity(
                         position,
                         angle,
                         new RoundStaticPhysicsShape(this, REACTOR_RADIUS)), behavior(1000),
-                    output(output) {
+                    nominal_output(nominal_output) {
     constructControlRods(control_rod_info);
 }
 
@@ -116,7 +131,7 @@ nlohmann::json Contraptions::FissionReactor::Reactor::toJson() {
     nlohmann::json json = PhysicsEntity::toJson();
 
     json["rod_info"] = ControlRodInfo::vectorToJson(generate_rod_info());
-    json["output"] = output;
+    json["nominal_output"] = nominal_output;
 
     return json;
 }
@@ -127,6 +142,6 @@ FROM_JSON_DEFINITION(Contraptions::FissionReactor::Reactor) {
         json["angle"],
 
         ControlRodInfo::vectorFromJson(json["rod_info"]),
-        json["output"]
+        json["nominal_output"]
     );
 }

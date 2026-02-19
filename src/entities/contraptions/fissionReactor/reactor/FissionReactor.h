@@ -51,16 +51,16 @@ namespace Contraptions::FissionReactor {
     protected:
         FissionReactorBehavior behavior;
         std::vector<ControlRod *> control_rods;
-        float output;
+        float nominal_output;
 
         void constructControlRods(const std::vector<ControlRodInfo> &control_rod_info);
 
     public:
         std::vector<ControlRod *> getControlRods() { return control_rods; }
 
-        [[nodiscard]] float getOutput() const { return output; }
+        [[nodiscard]] float getOutput() const;
 
-        Reactor(Vector2Int position, float angle, const std::vector<ControlRodInfo> &control_rod_info, float output);
+        Reactor(Vector2Int position, float angle, const std::vector<ControlRodInfo> &control_rod_info, float nominal_output);
 
         Entity *initializeRendering(const EntityRendering::Context &context) override { return this; }
 

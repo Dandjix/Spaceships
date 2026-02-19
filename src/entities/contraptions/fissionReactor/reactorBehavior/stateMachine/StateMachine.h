@@ -26,9 +26,9 @@ namespace Contraptions::FissionReactor::Behavior {
         };
 
     protected:
-        ModeLower lower_mode;
-        ModeRaise raise_mode;
         ModeIdle idle_mode;
+        ModeRaise raise_mode;
+        ModeLower lower_mode;
         Mode *current_mode;
         ModeEnum current_mode_enum;
 
@@ -38,7 +38,10 @@ namespace Contraptions::FissionReactor::Behavior {
     public:
         explicit StateMachine(ModeEnum current_mode_enum)
             : current_mode_enum(current_mode_enum),
-              idle_mode(0, 0.35f) {
+              idle_mode(0, 0.35f),
+        raise_mode(0.05f),
+        lower_mode(0.1f)
+        {
             current_mode = determineMode(current_mode_enum);
         }
 

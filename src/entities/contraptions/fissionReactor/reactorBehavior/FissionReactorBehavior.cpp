@@ -6,19 +6,23 @@
 
 #include "entities/contraptions/fissionReactor/reactor/FissionReactor.h"
 
-using ReactorBehavior = Contraptions::FissionReactor::FissionReactorBehavior;
+using FissionReactorBehavior = Contraptions::FissionReactor::FissionReactorBehavior;
 
 constexpr float TOLERANCE = 10;
 
-// void ReactorBehavior::update(const UpdateContext &context,FissionReactor::Reactor *reactor) {
-//     if (reactor->getOutput() < target_throughput - TOLERANCE)
-//         state_machine.
-//     else if (reactor->getOutput() > target_throughput + TOLERANCE)
-//         lowerOutput(context,reactor);
-//
-//     else
-//         idle(context,reactor);
-//
-//     state_machine.update(context,reactor);
-//
-// }
+void FissionReactorBehavior::update(const UpdateContext &context, Reactor *reactor) {
+
+    float output = reactor->getOutput();
+
+    if (output > target_output + TOLERANCE) {
+        state_machine.setMode(Behavior::StateMachine::LOWER);
+    }
+    else if (output < target_output - TOLERANCE) {
+        state_machine.setMode(Behavior::StateMachine::RAISE);
+    }
+    else {
+        state_machine.setMode(Behavior::StateMachine::IDLE);
+    }
+
+    state_machine.update(context, reactor);
+}
