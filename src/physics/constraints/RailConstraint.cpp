@@ -46,8 +46,15 @@ namespace Physics::Constraints {
 
         progress = std::clamp(progress, 0.0f, 1.0f);
 
-        int dx = A.x + static_cast<int>(static_cast<float>(abx) * progress);
-        int dy = A.y + static_cast<int>(static_cast<float>(aby) * progress);
+        int dx = A.x + static_cast<int>(std::round(static_cast<float>(abx) * progress));
+        int dy = A.y + static_cast<int>(std::round(static_cast<float>(aby) * progress));
+
+        // {
+        //     auto [x,y] = owner_entity->getPosition();
+        //     if (x != dx || y != dy) {
+        //         std::cout << "the constraint has moved the rod" << std::endl;
+        //     }
+        // }
 
         owner_entity->setPosition({dx, dy});
     }
