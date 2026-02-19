@@ -4,6 +4,7 @@
 //
 #include <vector>
 
+#include "entities/contraptions/fissionReactor/reactorBehavior/FissionReactorBehavior.h"
 #include "physics/scripts/PhysicsEntity.h"
 
 namespace Contraptions::FissionReactor {
@@ -16,17 +17,19 @@ namespace Contraptions::FissionReactor {
         struct ControlRodInfo {
             float relative_angle;
             float rail_progress;
-            static nlohmann::json vectorToJson(const std::vector<ControlRodInfo> & info_vector) {
+
+            static nlohmann::json vectorToJson(const std::vector<ControlRodInfo> &info_vector) {
                 nlohmann::json json = nlohmann::json::array();
-                for (int i = 0; i < info_vector.size(); ++i) {
+                for (const ControlRodInfo &i: info_vector) {
                     nlohmann::json entry = {};
-                    entry["relative_angle"] = info_vector.at(i).relative_angle;
-                    entry["rail_progress"] =  info_vector.at(i).rail_progress;
+                    entry["relative_angle"] = i.relative_angle;
+                    entry["rail_progress"] = i.rail_progress;
                     json.push_back(entry);
                 }
                 return json;
             }
-            static std::vector<ControlRodInfo> vectorFromJson(const nlohmann::json & json) {
+
+            static std::vector<ControlRodInfo> vectorFromJson(const nlohmann::json &json) {
                 std::vector<ControlRodInfo> info_vector;
                 info_vector.reserve(json.size());
                 for (auto info_json: json) {
@@ -38,27 +41,33 @@ namespace Contraptions::FissionReactor {
                 return info_vector;
             }
 
-            static std::vector<ControlRodInfo> range(int nb_rods, float start_angle=0, float end_angle = 360, float progress = 0.5f);
+            static std::vector<ControlRodInfo> range(int nb_rods, float start_angle = 0, float end_angle = 360,
+                                                     float progress = 0.5f);
 
-            static std::vector<ControlRodInfo> symmetricRange(int nb_rods, float start_angle=0, float end_angle = 360, float progress = 0.5f);
+            static std::vector<ControlRodInfo> symmetricRange(int nb_rods, float start_angle = 0, float end_angle = 360,
+                                                              float progress = 0.5f);
         };
+
     protected:
+        FissionReactorBehavior behavior;
         std::vector<ControlRod *> control_rods;
         float output;
 
         void constructControlRods(const std::vector<ControlRodInfo> &control_rod_info);
+
     public:
-        std::vector<ControlRod *> getControlRods() {return control_rods;}
+        std::vector<ControlRod *> getControlRods() { return control_rods; }
 
         [[nodiscard]] float getOutput() const { return output; }
 
         Reactor(Vector2Int position, float angle, const std::vector<ControlRodInfo> &control_rod_info, float output);
 
-        Entity * initializeRendering(const EntityRendering::Context &context) override {return this;}
+        Entity *initializeRendering(const EntityRendering::Context &context) override { return this; }
 
-        Entity * finalizeRendering(const EntityRendering::Context &context) override{return this;}
+        Entity *finalizeRendering(const EntityRendering::Context &context) override { return this; }
 
-        void render(SDL_Renderer *renderer, const RenderingContext &context) override{}
+        void render(SDL_Renderer *renderer, const RenderingContext &context) override {
+        }
 
         std::vector<Contraptions::FissionReactor::Reactor::ControlRodInfo> generate_rod_info() const;
 
@@ -71,5 +80,9 @@ namespace Contraptions::FissionReactor {
         void unregisterInInstance(Instances::Instance *world_instance, bool delete_when_done) override;
 
         [[nodiscard]] bool interacts(PhysicsEntity *other) override;
+
+        void update(const UpdateContext &context) override {
+            behavior.update(context,this);
+        }
     };
 }

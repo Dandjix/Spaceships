@@ -24,7 +24,7 @@ namespace Physics::Constraints {
     }
 
     float Rail::computeAngleAroundReactor(Vector2Int rail_start, Vector2Int rail_end) {
-        return (rail_start - rail_end).angle_to({1, 0}) ; //yeah ik this looks weird
+        return (rail_start - rail_end).angle_to({1, 0}); //yeah ik this looks weird
     }
 
     Rail::Rail(Vector2Int start, Vector2Int end) : start(start), end(end) {
@@ -75,7 +75,7 @@ namespace Physics::Constraints {
     }
 
     void Rail::setProgress(PhysicsEntity *owner_entity, float progress) {
-        owner_entity->setPosition(Vector2Int::lerp(getStart(),getEnd(),progress));
+        owner_entity->setPosition(Vector2Int::lerp(getStart(), getEnd(), progress));
     }
 
     void Rail::debugRender(PhysicsEntity *owner, SDL_Renderer *renderer, const RenderingContext &context) {

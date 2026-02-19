@@ -71,7 +71,7 @@ Contraptions::FissionReactor::Reactor::Reactor
     float output) : PhysicsEntity(
                         position,
                         angle,
-                        new RoundStaticPhysicsShape(this, REACTOR_RADIUS)),
+                        new RoundStaticPhysicsShape(this, REACTOR_RADIUS)), behavior(1000),
                     output(output) {
     constructControlRods(control_rod_info);
 }
