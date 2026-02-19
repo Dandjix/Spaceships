@@ -4,7 +4,7 @@
 
 #pragma once
 #include "../interactables/IInteractable.h"
-#include "../toggleables/scripts/Toggleable.h"
+#include "../toggleables/scripts/IToggleable.h"
 #include "physics/shapes/RoundStaticPhysicsShape.h"
 #include "scripts/ToggleableActivator.h"
 #include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
@@ -17,14 +17,14 @@ namespace GameState {
 
 class Button : public PhysicsEntity, public IInteractable, public virtual ToggleableActivator{
 private:
-    Toggleable * linked_entity;
+    IToggleable * linked_entity;
 
     SDL_Texture * texture;
 public:
     Button(
         Vector2Int position,
         float angle,
-        Toggleable * linked_device);
+        IToggleable * linked_device);
 
     nlohmann::json toJson() override;
 
@@ -45,9 +45,9 @@ public:
         return "[E] Toggle light";
     }
 
-    void setLinkedEntity(Toggleable *entity_to_link) override;
+    void setLinkedEntity(IToggleable *entity_to_link) override;
 
-    [[nodiscard]] Toggleable * getLinkedEntity() override;
+    [[nodiscard]] IToggleable * getLinkedEntity() override;
 
     Button *initializeRendering(const EntityRendering::Context &context) override;
 

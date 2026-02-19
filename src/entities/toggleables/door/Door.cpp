@@ -183,7 +183,7 @@ EntityId::entityId Door::getEntityId() const { return entity_id; }
 
 Entity *Door::asEntity() { return this; }
 
-Toggleable *Door::asToggleable() { return this; }
+IToggleable *Door::asToggleable() { return this; }
 
 void Door::toggle() {
     if (moment > 0)

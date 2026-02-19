@@ -10,7 +10,7 @@
 
 constexpr float button_radius_px = 22.0f;
 
-Button::Button(Vector2Int position, float angle, Toggleable *linked_device)
+Button::Button(Vector2Int position, float angle, IToggleable *linked_device)
     : PhysicsEntity(
           position,
           angle,
@@ -70,11 +70,11 @@ bool Button::is_interactable(Humanoid *activator) {
     return IInteractable::distance_check(this, activator);
 }
 
-void Button::setLinkedEntity(Toggleable *entity_to_link) {
+void Button::setLinkedEntity(IToggleable *entity_to_link) {
     linked_entity = entity_to_link;
 }
 
-Toggleable *Button::getLinkedEntity() {
+IToggleable *Button::getLinkedEntity() {
     return linked_entity;
 }
 

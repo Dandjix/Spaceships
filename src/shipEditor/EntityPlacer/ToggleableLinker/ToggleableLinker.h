@@ -7,7 +7,7 @@
 
 
 class ToggleableActivator;
-class Toggleable;
+class IToggleable;
 
 class ToggleableLinker : public ShortLivedEntity {
 public:
@@ -22,13 +22,13 @@ protected:
 
     std::vector<Entity *> *entities;
 
-    Toggleable *closest_toggleable = nullptr;
+    IToggleable *closest_toggleable = nullptr;
     ToggleableActivator *closest_activator = nullptr;
 
-    Toggleable *toggleable_to_link_to = nullptr;
+    IToggleable *toggleable_to_link_to = nullptr;
     ToggleableActivator *activator_to_link_to = nullptr;
 
-    Toggleable *getClosestToggleable(Vector2Int world_mouse_position) const;
+    IToggleable *getClosestToggleable(Vector2Int world_mouse_position) const;
 
     ToggleableActivator *getClosestToggleableActivator(Vector2Int world_mouse_position) const;
 
@@ -51,7 +51,7 @@ public:
 
     void update(const UpdateContext &context) override;
 
-    void done(ToggleableActivator *toggleable_activator, Toggleable *toggleable);
+    void done(ToggleableActivator *toggleable_activator, IToggleable *toggleable);
 
     void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 

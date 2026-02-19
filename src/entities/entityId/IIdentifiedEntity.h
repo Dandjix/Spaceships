@@ -10,13 +10,13 @@
 
 class Humanoid;
 class Vehicle;
-class Toggleable;
+class IToggleable;
 class Entity;
 
-class IdentifiedEntity {
+class IIdentifiedEntity {
 
 public:
-    virtual ~IdentifiedEntity() = default;
+    virtual ~IIdentifiedEntity() = default;
 
     [[nodiscard]] virtual EntityId::entityId getEntityId() const = 0;
 
@@ -26,5 +26,5 @@ public:
 
     [[nodiscard]] virtual Humanoid * asHumanoid() {return nullptr;}
     [[nodiscard]] virtual Vehicle * asVehicle() {return nullptr;}
-    [[nodiscard]] virtual Toggleable * asToggleable() {return nullptr;}
+    [[nodiscard]] virtual IToggleable * asToggleable() {return nullptr;}
 };

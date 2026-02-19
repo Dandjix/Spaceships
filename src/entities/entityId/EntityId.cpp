@@ -3,7 +3,7 @@
 //
 #include "EntityId.h"
 #include "loadGame/GameState.h"
-#include "IdentifiedEntity.h"
+#include "IIdentifiedEntity.h"
 #include <iostream>
 #include <unordered_set>
 

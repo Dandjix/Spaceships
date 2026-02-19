@@ -1,5 +1,5 @@
 #pragma once
-#include "entities/toggleables/scripts/Toggleable.h"
+#include "entities/toggleables/scripts/IToggleable.h"
 #include "physics/scripts/PhysicsEntity.h"
 #include "spaceships/Tile.h"
 #include "spaceships/EntityData/EntityLoading.h"
@@ -13,7 +13,7 @@
 class RectStaticPhysicsShape;
 
 // -
-class Door : public Entity, public virtual Toggleable {
+class Door : public Entity, public virtual IToggleable {
 protected:
     PhysicsEntity * door_left;
     PhysicsEntity * door_right;
@@ -75,7 +75,7 @@ public:
 
     [[nodiscard]] Entity *asEntity() override;
 
-    [[nodiscard]] Toggleable * asToggleable() override;
+    [[nodiscard]] IToggleable * asToggleable() override;
 
     void toggle() override;
 

@@ -4,10 +4,10 @@
 
 #pragma once
 #include "entities/entityId/EntityId.h"
-#include "entities/toggleables/scripts/Toggleable.h"
+#include "entities/toggleables/scripts/IToggleable.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
-class Lamp : public Entity, public virtual Toggleable {
+class Lamp : public Entity, public virtual IToggleable {
 protected:
     EntityId::entityId entity_id;
     bool on;
@@ -37,5 +37,5 @@ public:
 
     void toggle() override { on = !on; }
 
-    [[nodiscard]] Toggleable * asToggleable() override {return this;}
+    [[nodiscard]] IToggleable * asToggleable() override {return this;}
 };

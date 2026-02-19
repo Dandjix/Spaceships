@@ -5,15 +5,15 @@
 #pragma once
 #include "../../../physics/scripts/PhysicsEntity.h"
 
-class Toggleable;
+class IToggleable;
 
 class ToggleableActivator{
 public:
     virtual ~ToggleableActivator() = default;
 
-    virtual void setLinkedEntity(Toggleable * entity_to_link) = 0;
+    virtual void setLinkedEntity(IToggleable * entity_to_link) = 0;
 
-    [[nodiscard]] virtual Toggleable * getLinkedEntity() = 0;
+    [[nodiscard]] virtual IToggleable * getLinkedEntity() = 0;
 
     [[nodiscard]] virtual Entity * asEntity()=0;
 };

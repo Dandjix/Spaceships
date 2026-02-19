@@ -20,7 +20,7 @@ namespace GameState {
 
     struct transientGameState {
         std::unordered_map<Entity *,nlohmann::json> transient_data_per_entity;
-        std::unordered_map<EntityId::entityId,IdentifiedEntity *> identified_entities;
+        std::unordered_map<EntityId::entityId,IIdentifiedEntity *> identified_entities;
 
         transientGameState() = default;
 

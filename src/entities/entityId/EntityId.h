@@ -9,8 +9,8 @@
 #include "json.hpp"
 
 
-class IdentifiedEntity;
-class Toggleable;
+class IIdentifiedEntity;
+class IToggleable;
 class Vehicle;
 class Humanoid;
 class Entity;

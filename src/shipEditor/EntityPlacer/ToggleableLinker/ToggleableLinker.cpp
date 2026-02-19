@@ -5,20 +5,20 @@
 #include "ToggleableLinker.h"
 
 #include "entities/toggleableActivators/scripts/ToggleableActivator.h"
-#include "entities/toggleables/scripts/Toggleable.h"
+#include "entities/toggleables/scripts/IToggleable.h"
 #include "game/Rendering.h"
 #include "game/Update.h"
 #include "gameEvent/MousePositionType.h"
 
 constexpr float SHORTEST_DISTANCE_PX = 256;
 
-Toggleable *ToggleableLinker::getClosestToggleable(Vector2Int world_mouse_position) const {
+IToggleable *ToggleableLinker::getClosestToggleable(Vector2Int world_mouse_position) const {
     float smallest_distance = std::numeric_limits<float>::max();
 
-    Toggleable *closest = nullptr;
+    IToggleable *closest = nullptr;
 
     for (auto e: *entities) {
-        auto t = dynamic_cast<Toggleable *>(e);
+        auto t = dynamic_cast<IToggleable *>(e);
 
         if (t == nullptr) continue;
 
@@ -152,7 +152,7 @@ void ToggleableLinker::update(const UpdateContext &context) {
     }
 }
 
-void ToggleableLinker::done(ToggleableActivator *toggleable_activator, Toggleable *toggleable) {
+void ToggleableLinker::done(ToggleableActivator *toggleable_activator, IToggleable *toggleable) {
     toggleable_activator->setLinkedEntity(toggleable);
 }
 
