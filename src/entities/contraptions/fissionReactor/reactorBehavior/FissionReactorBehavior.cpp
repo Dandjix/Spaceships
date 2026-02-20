@@ -11,18 +11,28 @@ using FissionReactorBehavior = Contraptions::FissionReactor::FissionReactorBehav
 constexpr float TOLERANCE = 10;
 
 void FissionReactorBehavior::update(const UpdateContext &context, Reactor *reactor) {
+    switch (behavior_mode) {
+        case WORKING: {
+            float output = reactor->getOutput();
+            if (output > target_output + TOLERANCE) {
+                working_mode_state_machine.setMode(Behavior::StateMachine::LOWER);
+            } else if (output < target_output - TOLERANCE) {
+                working_mode_state_machine.setMode(Behavior::StateMachine::RAISE);
+            } else {
+                working_mode_state_machine.setMode(Behavior::StateMachine::IDLE);
+            }
 
-    float output = reactor->getOutput();
-
-    if (output > target_output + TOLERANCE) {
-        state_machine.setMode(Behavior::StateMachine::LOWER);
+            working_mode_state_machine.update(context, reactor);
+            return;
+        }
+        case EMERGENCY_SHUTDOWN: {
+            working_mode_state_machine.setMode(Behavior::StateMachine::LOWER);
+            working_mode_state_machine.update(context, reactor);
+            return;
+        }
+        case POWERED_OFF: {
+            //nothing happens when the reactor is powered off
+            return;
+        }
     }
-    else if (output < target_output - TOLERANCE) {
-        state_machine.setMode(Behavior::StateMachine::RAISE);
-    }
-    else {
-        state_machine.setMode(Behavior::StateMachine::IDLE);
-    }
-
-    state_machine.update(context, reactor);
 }

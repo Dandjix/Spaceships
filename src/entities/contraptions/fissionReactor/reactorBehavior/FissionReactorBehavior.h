@@ -12,19 +12,31 @@ namespace Contraptions::FissionReactor {
     class ControlRod;
 
     class FissionReactorBehavior {
+    public:
+        enum ReactorBehaviorMode {
+            WORKING,
+            EMERGENCY_SHUTDOWN,
+            POWERED_OFF
+        };
     protected:
+
         float target_output;
-        Behavior::StateMachine state_machine;
+        Behavior::StateMachine working_mode_state_machine;
+        ReactorBehaviorMode behavior_mode;
 
     public:
-        explicit FissionReactorBehavior(float target_throughput)
+        explicit FissionReactorBehavior(float target_throughput, ReactorBehaviorMode behavior_mode)
             : target_output(target_throughput),
-              state_machine(Behavior::StateMachine::ModeEnum::IDLE) {
+              working_mode_state_machine(Behavior::StateMachine::ModeEnum::IDLE), behavior_mode(behavior_mode) {
         }
 
         void set_target_throughput(float target_throughput_param) { target_output = target_throughput_param; }
 
 
         void update(const UpdateContext &context, Reactor *reactor);
+
+        nlohmann::json getBehaviorMode() {
+            return behavior_mode;
+        }
     };
 }

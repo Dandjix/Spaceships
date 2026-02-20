@@ -47,13 +47,19 @@ std::filesystem::path NewGame::ConstructNewGame() {
         auto right = Contraptions::FissionReactor::Reactor::ControlRodInfo::symmetricRange(12, 120, 240, 0.5f);
 
         info.reserve(right.size() + left.size());
-        for (const auto &control_rod_info: left)     info.push_back(control_rod_info);
-        for (const auto &control_rod_info: right)  info.push_back(control_rod_info);
+        for (const auto &control_rod_info: left) info.push_back(control_rod_info);
+        for (const auto &control_rod_info: right) info.push_back(control_rod_info);
     }
 
 
     Vector2Int reactor_pos = blueprint->hooks->getPoint("reactor")->position;
-    auto reactor = new Contraptions::FissionReactor::Reactor(reactor_pos, 0, info, 1000);
+    auto reactor = new Contraptions::FissionReactor::Reactor(
+        reactor_pos,
+        0,
+        info,
+        1000,
+        Contraptions::FissionReactor::FissionReactorBehavior::EMERGENCY_SHUTDOWN
+    );
 
     std::vector<Entity *> entities = {
         player,

@@ -60,7 +60,13 @@ namespace Contraptions::FissionReactor {
 
         [[nodiscard]] float getOutput() const;
 
-        Reactor(Vector2Int position, float angle, const std::vector<ControlRodInfo> &control_rod_info, float nominal_output);
+        Reactor(
+            Vector2Int position,
+            float angle,
+            const std::vector<ControlRodInfo> &control_rod_info,
+            float nominal_output,
+            FissionReactorBehavior::ReactorBehaviorMode behavior_mode);
+
 
         Entity *initializeRendering(const EntityRendering::Context &context) override { return this; }
 
@@ -82,7 +88,7 @@ namespace Contraptions::FissionReactor {
         [[nodiscard]] bool interacts(PhysicsEntity *other) override;
 
         void update(const UpdateContext &context) override {
-            behavior.update(context,this);
+            behavior.update(context, this);
         }
     };
 }

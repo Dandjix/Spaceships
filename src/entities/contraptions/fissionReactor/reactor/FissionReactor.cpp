@@ -64,14 +64,13 @@ void Contraptions::FissionReactor::Reactor::constructControlRods(const std::vect
 }
 
 float Contraptions::FissionReactor::Reactor::getOutput() const {
-
     float total_rod_progress = 0.0f;
 
     for (ControlRod *rod: control_rods) {
         total_rod_progress += rod->getProgress();
     }
 
-    float rod_progress_percentage = total_rod_progress  / static_cast<float>(control_rods.size());
+    float rod_progress_percentage = total_rod_progress / static_cast<float>(control_rods.size());
 
     float output = (nominal_output * 2) * (1 - rod_progress_percentage);
 
@@ -83,11 +82,12 @@ Contraptions::FissionReactor::Reactor::Reactor
     Vector2Int position,
     float angle,
     const std::vector<ControlRodInfo> &control_rod_info,
-    float nominal_output) : PhysicsEntity(
-                        position,
-                        angle,
-                        new RoundStaticPhysicsShape(this, REACTOR_RADIUS)), behavior(1000),
-                    nominal_output(nominal_output) {
+    float nominal_output,
+    FissionReactorBehavior::ReactorBehaviorMode behavior_mode)
+
+    : PhysicsEntity(position, angle, new RoundStaticPhysicsShape(this, REACTOR_RADIUS)),
+      behavior(1000, behavior_mode),
+      nominal_output(nominal_output) {
     constructControlRods(control_rod_info);
 }
 
@@ -131,6 +131,7 @@ nlohmann::json Contraptions::FissionReactor::Reactor::toJson() {
     nlohmann::json json = PhysicsEntity::toJson();
 
     json["rod_info"] = ControlRodInfo::vectorToJson(generate_rod_info());
+    json["behavior_mode"] = behavior.getBehaviorMode();
     json["nominal_output"] = nominal_output;
 
     return json;
@@ -140,8 +141,8 @@ FROM_JSON_DEFINITION(Contraptions::FissionReactor::Reactor) {
     return new Reactor(
         Vector2Int::fromJson(json["position"]),
         json["angle"],
-
         ControlRodInfo::vectorFromJson(json["rod_info"]),
-        json["nominal_output"]
+        json["nominal_output"],
+        json["behavior_mode"]
     );
 }
