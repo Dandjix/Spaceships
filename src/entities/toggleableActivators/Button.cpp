@@ -88,8 +88,8 @@ Entity *Button::finalizeRendering(const EntityRendering::Context &context) {
 }
 
 EDITOR_PLACE_DEFINITION(Button) {
-    Vector2Int position = context->interface->getPosition();
-    float angle = context->interface->getAngle();
+    Vector2Int position = context->interface->getPlacementPosition();
+    float angle = context->interface->getPlacementAngle();
 
     return std::async(std::launch::async,[position,angle]()-> Entity * {
         return new Button(position,angle,nullptr);

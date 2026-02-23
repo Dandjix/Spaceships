@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include "EntityPlacementContext.h"
-#include "Interface.h"
+#include "interface/Interface.h"
 #include "entities/scripts/Entity.h"
 //
 // Created by timon on 2/9/26.

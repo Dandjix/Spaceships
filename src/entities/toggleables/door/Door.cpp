@@ -237,8 +237,8 @@ int round(int x, int quotient) {
 }
 
 EDITOR_PLACE_DEFINITION(Door) {
-    float angle = context->interface->getAngle();
-    Vector2Int position = context->interface->getPosition();
+    float angle = context->interface->getPlacementAngle();
+    Vector2Int position = context->interface->getPlacementPosition();
 
     float rounded_angle = round(angle,90);
     Vector2Int rounded_position = round_position(position, rounded_angle);
