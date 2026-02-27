@@ -4,6 +4,7 @@
 #include "physics/shapes/RectPhysicsShape.h"
 #include "rendering/util/RenderTexture.h"
 #include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/interface/Interface.h"
 #include "textures/TextureSet.h"
 #include "textures/UsageMap.h"
 

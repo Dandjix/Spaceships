@@ -4,6 +4,7 @@
 
 #include "EntityPlacer.h"
 
+#include "EntityPlacement/interface/Interface.h"
 #include "game/Rendering.h"
 #include "gameEvent/GameEvent.h"
 

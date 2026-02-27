@@ -6,6 +6,7 @@
 
 #include "loadGame/GameState.h"
 #include "rendering/util/RenderTexture.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/interface/Interface.h"
 #include "textures/TextureSet.h"
 
 constexpr float button_radius_px = 22.0f;

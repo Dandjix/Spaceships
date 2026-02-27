@@ -25,6 +25,7 @@
 #include "game/ElementContainer.h"
 #include "loadGame/GameState.h"
 #include "EntityPlacer/EntityPlacement/EntityPlacement.h"
+#include "EntityPlacer/EntityPlacement/interface/Interface.h"
 
 void ResizeGrid(Vector2Int newSize) {
     std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
@@ -100,9 +101,9 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     BlueprintEditorAppearance appearance(blueprint);
     activeEntities.add(&appearance);
 
-    auto *entity_placement_interface = new EntityPlacement::Interface();
+    auto entity_placement_interface = EntityPlacement::Interface();
 
-    EntityPlacement::Context entity_placement_context = {entity_placement_interface};
+    EntityPlacement::Context entity_placement_context = {&entity_placement_interface};
 
     ShipEditorModes::CommonEditorObjects common = {
         blueprint,
@@ -111,7 +112,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         &blueprint->tiles,
         &blueprint->entities,
         &entity_rendering_context,
-        entity_placement_interface
+        &entity_placement_context
     };
 
     ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(

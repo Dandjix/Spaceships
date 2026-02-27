@@ -17,7 +17,7 @@ void ShipEditorModes::ModeEntityPainter::enter() {
     auto entity_painter = new EntityPlacement::EntityPlacer(
         state_machine->common->placed_entities,
         EntityPlacement::EntityFactory::getInstance(),
-        state_machine->common->entity_placement_interface,
+        state_machine->common->entity_placement_context->interface,
         state_machine->common->entity_rendering_context,
         EntityPlacement::Center,
         true

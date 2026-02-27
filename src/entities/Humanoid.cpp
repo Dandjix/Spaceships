@@ -8,6 +8,7 @@
 #include "physics/shapes/RectPhysicsShape.h"
 #include "physics/shapes/RoundPhysicsShape.h"
 #include "rendering/util/RenderTexture.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/interface/Interface.h"
 
 Humanoid::Humanoid(Vector2Int position, std::optional<float> angle, Behavior *behavior)
     : BehavioredEntity(

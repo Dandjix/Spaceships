@@ -20,6 +20,6 @@ namespace ShipEditorModes {
         std::vector<std::vector<Tile>> * tiles;
         std::vector<Entity *> * placed_entities;
         EntityRendering::Context * entity_rendering_context;
-        EntityPlacement::Interface * entity_placement_interface;
+        EntityPlacement::Context * entity_placement_context;
     };
 }

@@ -10,6 +10,7 @@
 #include "physics/shapes/RectStaticPhysicsShape.h"
 #include "rendering/util/RenderTexture.h"
 #include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/interface/Interface.h"
 
 RectStaticPhysicsShape *Door::getDoorLeftShape() {
     return dynamic_cast<RectStaticPhysicsShape *>(door_left->shape);
