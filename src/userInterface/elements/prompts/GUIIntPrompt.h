@@ -3,7 +3,8 @@
 //
 
 #pragma once
-#include "GUITextPrompt.h"
+#include "scripts/GUIStringPrompt.h"
+#include "scripts/IGUIValuePrompt.h"
 
 
 class GUIIntPrompt : public GUIStringPrompt, public IGUIValuePrompt<int> {
