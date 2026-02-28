@@ -1,7 +1,5 @@
 #pragma once
 
-#include <optional>
-#include <SDL3/SDL.h>
 
 #include "GUI.h"
 #include "../math/Vectors.h"

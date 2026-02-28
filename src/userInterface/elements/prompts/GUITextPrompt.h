@@ -1,70 +1,18 @@
-//
-// Created by timon on 11/27/25.
-//
-
-#pragma once
-#include <utility>
-
-#include "userInterface/GUIRect.h"
 
 
-class GUITextPrompt : public GUIRect{
-private:
-    int frames_until_active = 0;
+#include "scripts/GUIStringPrompt.h"
+#include "scripts/IGUIValuePrompt.h"
 
+class GUITextPrompt : public GUIStringPrompt , public virtual IGUIValuePrompt<std::string> {
 public:
-
-
-    std::string placeholder;
-    SDL_Window * window;
-    std::string value;
-    bool focused;
-    bool shown;
-
-    Event<std::string> on_confirm;
-    Event<bool> on_focused_change;
-
-    GUITextPrompt(
-        Anchor anchor,
-        const Vector2Int &offset,
-        int width,
-        int height,
-        SDL_Window * window,
-        bool shown,
-        std::string value = "",
-        std::string placeholder = "Type here ...",
-        bool element_is_focused = true
-    )
-        :
-    GUIRect(anchor, offset, width, height),
-        window(window),
-        placeholder(std::move(placeholder)),
-        value(std::move(value)),
-        shown(shown)
-    {
-        setFocused(element_is_focused);
+    GUITextPrompt(Anchor anchor, const Vector2Int &offset, int width, int height, SDL_Window *window, bool shown,
+        const std::string &value = "", const std::string &placeholder = "", bool element_is_focused = true)
+        : GUIStringPrompt(anchor, offset, width, height, window, shown, value, placeholder, element_is_focused) {
     }
 
-    void setFocused(bool new_focused);
+    std::string getValue() override {return value;}
 
-    void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
+    void setValue(std::string new_value) override {value = new_value;}
 
-    bool is_inside(Vector2Float position) override {
-        if (!shown)
-            return false;
-
-        return GUIRect::is_inside(position);
-    }
-
-    void show();
-
-    void hide();
-
-    void render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const override;
-
-    QueueOrder::Value getQueueOrder() override {
-        return QueueOrder::FIRST;
-    }
-
-    void update(const GUI_UpdateContext &context) override;
+    bool inputIsValid() override {return true;} // string validation is done here
 };

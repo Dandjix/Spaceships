@@ -2,13 +2,13 @@
 // Created by timon on 11/27/25.
 //
 
-#include "GUITextPrompt.h"
+#include "GUIStringPrompt.h"
 
 #include "userInterface/fonts.h"
 
 #include <SDL3_ttf/SDL_ttf.h>
 
-void GUITextPrompt::setFocused(bool new_focused) {
+void GUIStringPrompt::setFocused(bool new_focused) {
     if (new_focused != focused) {
         if (new_focused) {
             SDL_StartTextInput(window);
@@ -21,7 +21,7 @@ void GUITextPrompt::setFocused(bool new_focused) {
     focused = new_focused;
 }
 
-void GUITextPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
+void GUIStringPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
     if (frames_until_active > 0) {
         return;
     }
@@ -56,18 +56,18 @@ void GUITextPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEve
     }
 }
 
-void GUITextPrompt::show() {
+void GUIStringPrompt::show() {
     shown = true;
     frames_until_active = 1;
 }
 
-void GUITextPrompt::hide() {
+void GUIStringPrompt::hide() {
     shown = false;
     focused = false;
     value = "";
 }
 
-void GUITextPrompt::render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const {
+void GUIStringPrompt::render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const {
     if (!shown)
         return;
 
@@ -109,7 +109,7 @@ void GUITextPrompt::render(SDL_Renderer *renderer, const GUI_RenderingContext &c
     }
 }
 
-void GUITextPrompt::update(const GUI_UpdateContext &context) {
+void GUIStringPrompt::update(const GUI_UpdateContext &context) {
     GUIRect::update(context);
 
     frames_until_active = frames_until_active -1;
