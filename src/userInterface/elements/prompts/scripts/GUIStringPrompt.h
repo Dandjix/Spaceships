@@ -1,6 +1,5 @@
 //
 // Created by timon on 11/27/25.
-//
 
 #pragma once
 #include <utility>
@@ -8,6 +7,9 @@
 #include "userInterface/GUIRect.h"
 
 
+/**
+ * This is the base class for all types of prompts.
+ */
 class GUIStringPrompt : public GUIRect {
 private:
     int frames_until_active = 0;
@@ -30,9 +32,9 @@ public:
         int height,
         SDL_Window *window,
         bool shown,
-        std::string value = "",
-        std::string placeholder = "Type here ...",
-        bool element_is_focused = true
+        std::string value, // = "",
+        std::string placeholder, // = "Type here ...",
+        bool element_is_focused // = true
     )
         : GUIRect(anchor, offset, width, height),
           window(window),
