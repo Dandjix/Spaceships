@@ -1,0 +1,81 @@
+//
+// Created by timon on 2/28/26.
+//
+
+#pragma once
+#include "scripts/GUIStringPrompt.h"
+#include "scripts/IValuePrompt.h"
+
+namespace GUI::Prompts {
+    class Vector2IntPrompt : public StringPrompt, public virtual IValuePrompt<Vector2Int> {
+    public:
+        Vector2IntPrompt(
+            Anchor anchor,
+            const Vector2Int &offset,
+            int width,
+            int height,
+            SDL_Window *window,
+            bool shown = true,
+            const Vector2Int value = {0, 0},
+            const std::string &placeholder = "(0,0)",
+            bool element_is_focused = true
+        )
+            : StringPrompt(anchor, offset, width, height, window, shown, serializeValue(value), placeholder,
+                              element_is_focused) {
+        }
+
+        static std::string serializeValue(const Vector2Int value) {
+            return std::format("({},{})", value.x, value.y);
+        }
+
+        static int parseVectorComponent(std::string component) {
+            // removing all the characters we don't want
+            std::string chars = "[]{}() ";
+            for (char i: chars) {
+                std::erase(component, i);
+            }
+            return std::stoi(component);
+        }
+
+        static Vector2Int parseVector(std::string value) {
+            if (std::count(value.begin(), value.end(), ',') != 1)
+                throw std::invalid_argument(
+                    std::format("{} cannot be converted to Vector2Int (there are not 1 ',')", value));
+
+            std::size_t comma_pos = value.find(',');
+
+            std::string x_string = value.substr(0, comma_pos + std::string(",").length());
+            std::string y_string = value.substr(comma_pos + std::string(",").length(), value.length());
+
+            try {
+                return {parseVectorComponent(x_string), parseVectorComponent(y_string)};
+            } catch (const std::invalid_argument) {
+                throw std::invalid_argument(std::format(
+                    "{} cannot be converted to Vector2Int invalid argument for parsing of components (invalid argument)",
+                    value));
+            } catch (const std::out_of_range) {
+                throw std::invalid_argument(std::format(
+                    "{} cannot be converted to Vector2Int invalid argument for parsing of components (out of range)",
+                    value));
+            }
+        }
+
+        [[nodiscard]] Vector2<int> getValue() const override {
+            Vector2Int parsed = parseVector(value);
+            return parsed;
+        }
+
+        [[nodiscard]] [[nodiscard]] bool inputIsValid() const override {
+            try {
+                parseVector(value);
+            } catch (const std::invalid_argument &) {
+                return false;
+            }
+            return true;
+        }
+
+        void setValue(Vector2<int> new_value) override {
+            value = serializeValue(new_value);
+        }
+    };
+}

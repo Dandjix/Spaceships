@@ -6,64 +6,83 @@
 
 #include "userInterface/GUIRect.h"
 
+namespace GUI::Prompts {
+    /**
+     * This is the base class for all types of prompts.
+     */
+    class StringPrompt : public GUIRect {
+    private:
+        int frames_until_active = 0;
 
-/**
- * This is the base class for all types of prompts.
- */
-class GUIStringPrompt : public GUIRect {
-private:
-    int frames_until_active = 0;
+    protected:
+        std::string value;
 
-protected:
-    std::string value;
-public:
-    std::string placeholder;
-    SDL_Window *window;
-    bool focused;
-    bool shown;
+    public:
+        std::string placeholder;
+        SDL_Window *window;
+        bool focused;
+        bool shown;
 
-    Event<std::string> on_confirm;
-    Event<bool> on_focused_change;
+        Event<std::string> on_confirm;
+        Event<bool> on_focused_change;
 
-    GUIStringPrompt(
-        Anchor anchor,
-        const Vector2Int &offset,
-        int width,
-        int height,
-        SDL_Window *window,
-        bool shown,
-        std::string value, // = "",
-        std::string placeholder, // = "Type here ...",
-        bool element_is_focused // = true
-    )
-        : GUIRect(anchor, offset, width, height),
-          window(window),
-          placeholder(std::move(placeholder)),
-          value(std::move(value)),
-          shown(shown) {
-        setFocused(element_is_focused);
-    }
+        /**
+         * sets the raw string value of this prompt to :
+         * @param new_raw_value a new value
+         */
+        void setRawValue(const std::string &new_raw_value) {
+            value = new_raw_value;
+        }
 
-    void setFocused(bool new_focused);
 
-    void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
+        /**
+         * gets the raw string value of this prompt
+         * @return the value (what is currently displayed)
+         */
+        std::string getRawValue() {
+            return value;
+        }
 
-    bool is_inside(Vector2Float position) override {
-        if (!shown)
-            return false;
+        StringPrompt(
+            Anchor anchor,
+            const Vector2Int &offset,
+            int width,
+            int height,
+            SDL_Window *window,
+            bool shown,
+            std::string value, // = "",
+            std::string placeholder, // = "Type here ...",
+            bool element_is_focused // = true
+        )
+            : GUIRect(anchor, offset, width, height),
+              window(window),
+              placeholder(std::move(placeholder)),
+              value(std::move(value)),
+              shown(shown) {
+            setFocused(element_is_focused);
+        }
 
-        return GUIRect::is_inside(position);
-    }
+        void setFocused(bool new_focused);
 
-    void show();
+        void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
 
-    void hide();
+        bool is_inside(Vector2Float position) override {
+            if (!shown)
+                return false;
 
-    void render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const override;
+            return GUIRect::is_inside(position);
+        }
 
-    QueueOrder::Value getQueueOrder() override {
-        return QueueOrder::FIRST;
-    }
+        void show();
 
-    void update(const GUI_UpdateContext &context) override;
-};
+        void hide();
+
+        void render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const override;
+
+        QueueOrder::Value getQueueOrder() override {
+            return QueueOrder::FIRST;
+        }
+
+        void update(const GUI_UpdateContext &context) override;
+    };
+}

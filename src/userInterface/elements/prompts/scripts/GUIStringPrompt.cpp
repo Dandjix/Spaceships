@@ -8,7 +8,7 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
-void GUIStringPrompt::setFocused(bool new_focused) {
+void GUI::Prompts::StringPrompt::setFocused(bool new_focused) {
     if (new_focused != focused) {
         if (new_focused) {
             SDL_StartTextInput(window);
@@ -21,7 +21,7 @@ void GUIStringPrompt::setFocused(bool new_focused) {
     focused = new_focused;
 }
 
-void GUIStringPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
+void GUI::Prompts::StringPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
     if (frames_until_active > 0) {
         return;
     }
@@ -56,18 +56,18 @@ void GUIStringPrompt::handleEvent(const SDL_Event &event, const GameEvent::GameE
     }
 }
 
-void GUIStringPrompt::show() {
+void GUI::Prompts::StringPrompt::show() {
     shown = true;
     frames_until_active = 1;
 }
 
-void GUIStringPrompt::hide() {
+void GUI::Prompts::StringPrompt::hide() {
     shown = false;
     focused = false;
     value = "";
 }
 
-void GUIStringPrompt::render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const {
+void GUI::Prompts::StringPrompt::render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const {
     if (!shown)
         return;
 
@@ -109,7 +109,7 @@ void GUIStringPrompt::render(SDL_Renderer *renderer, const GUI_RenderingContext 
     }
 }
 
-void GUIStringPrompt::update(const GUI_UpdateContext &context) {
+void GUI::Prompts::StringPrompt::update(const GUI_UpdateContext &context) {
     GUIRect::update(context);
 
     frames_until_active = frames_until_active -1;
