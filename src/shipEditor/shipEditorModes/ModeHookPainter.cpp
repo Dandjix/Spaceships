@@ -14,14 +14,14 @@
 #include "spaceships/Hooks/HookRegion.h"
 #include "spaceships/Hooks/HookPoint.h"
 #include "userInterface/elements/GUI/GUIList.h"
-#include "userInterface/elements/prompts/GUITextPrompt.h"
+#include "userInterface/elements/prompts/TextPrompt.h"
 
 void ShipEditorModes::ModeHookPainter::enter() {
 
     addedActiveEntities = {};
     addedEditorGUIElements = {};
 
-    auto hook_name_dialog = new GUITextPrompt(Anchor::Center,{0,0},400,100,state_machine->window,false);
+    auto hook_name_dialog = new GUI::Prompts::TextPrompt(Anchor::Center,{0,0},400,100,state_machine->window,false);
     addedEditorGUIElements.push_back(hook_name_dialog);
 
     hook_name_dialog->on_focused_change.subscribe([hook_name_dialog](bool focused) {

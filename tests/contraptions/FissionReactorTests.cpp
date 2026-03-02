@@ -15,7 +15,7 @@ TEST(FissionReactorTestSuite, FissionReactorSerialTest) {
         {0, 0.5f},
         {45, 0.5f}
     };
-    Reactor reactor = Reactor({0, 0}, 0, info, 1000);
+    Reactor reactor = Reactor({0, 0}, 0, info, 1000,Contraptions::FissionReactor::FissionReactorBehavior::WORKING);
     {
         auto back_to_info = reactor.generate_rod_info();
 

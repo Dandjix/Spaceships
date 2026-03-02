@@ -8,7 +8,7 @@
 #include "shipEditor/AirlockPainter/AirlockDeleter.h"
 #include "shipEditor/AirlockPainter/AirlockPainterManager.h"
 #include "shipEditor/AirlockPainter/OrientationChanger.h"
-#include "userInterface/elements/prompts/GUITextPrompt.h"
+#include "userInterface/elements/prompts/TextPrompt.h"
 
 #include "shipEditor/AirlockPainter/PainterStates/Painter.h"
 #include "shipEditor/HookPainter/HookAppearance.h"
@@ -21,7 +21,7 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
     addedActiveEntities = {};
     addedEditorGUIElements = {};
 
-    auto airlock_name_dialog = new GUITextPrompt(Anchor::Center, {0, 0}, 400, 100, state_machine->window, false);
+    auto airlock_name_dialog = new GUI::Prompts::TextPrompt(Anchor::Center, {0, 0}, 400, 100, state_machine->window, false);
     addedEditorGUIElements.push_back(airlock_name_dialog);
 
     airlock_name_dialog->on_focused_change.subscribe([airlock_name_dialog](bool focused) {
