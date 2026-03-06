@@ -49,17 +49,17 @@ namespace ShipEditorModes {
         explicit ShipEditorStateMachine(
             CommonEditorObjects *common,
             ElementContainer<Entity *> *active,
-            ElementContainer<Entity *> *activeEntitiesDeletionQueue,
+            ElementContainer<Entity *> *active_deletion_queue,
             ElementContainer<GUIRect *> *GUIElements,
-            ElementContainer<GUIRect *> *editorGUIElementsDeletionQueue,
+            ElementContainer<GUIRect *> *GUIElements_deletion_queue,
             Mode initial,
             SDL_Window *window)
             : common(common),
               current_mode_label(initial),
               activeEntities(active),
-              activeEntitiesDeletionQueue(activeEntitiesDeletionQueue),
+              activeEntitiesDeletionQueue(active_deletion_queue),
+              editorGUIElementsDeletionQueue(GUIElements_deletion_queue),
               editorGUIElements(GUIElements),
-              editorGUIElementsDeletionQueue(editorGUIElementsDeletionQueue),
               window(window) {
             tile_painter_mode = new ModeTilePainter(this);
             hook_painter_mode = new ModeHookPainter(this);

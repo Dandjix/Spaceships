@@ -25,7 +25,7 @@ namespace EntityPlacement {
                     getInstance()
                     .insert(
                         class_name,
-                        [](EntityPlacement::Context * context)-> std::future<Entity * >{
+                        [](EntityPlacement::Context * context)-> void{
                             return T::_editor_place(context);
                         });
         }
@@ -37,7 +37,7 @@ namespace EntityPlacement {
 private:\
 inline static const EntityPlacement::RegisterEntity<ClassName> _editor_placement_registration_##ClassName = EntityPlacement::RegisterEntity<ClassName>{classId}; \
 public: \
-static std::future<Entity *> _editor_place(EntityPlacement::Context * context)
+static void _editor_place(EntityPlacement::Context * context)
 
 #define EDITOR_PLACE_DEFINITION(ClassName)\
-std::future<Entity *> ClassName::_editor_place(EntityPlacement::Context * context)
+void ClassName::_editor_place(EntityPlacement::Context * context)

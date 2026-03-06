@@ -4,6 +4,7 @@
 
 #pragma once
 #include "entities/scripts/ShortLivedEntity.h"
+#include "game/ElementContainer.h"
 
 
 class ToggleableActivator;

@@ -335,9 +335,11 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                 camera->getPosition(),
                 camera->getAngle(),
                 screenDimensions,
-                camera->getScale()
+                camera->getScale(),
             },
-            deltaTime
+            deltaTime,
+            &gui_elements,
+            window
         };
         guiUpdateHandling(gui_elements, gui_elements_deletion_queue, gui_update_context, paused);
 

@@ -57,7 +57,7 @@ void Button::render(SDL_Renderer *renderer, const RenderingContext &context) {
         getPosition(),
         getAngle(),
         texture,
-        Vector2Float{button_radius_px*2, button_radius_px*2});
+        Vector2Float{button_radius_px * 2, button_radius_px * 2});
 }
 
 void Button::interact(Humanoid *activator, const GameEvent::GameEventContext &context) {
@@ -91,8 +91,5 @@ Entity *Button::finalizeRendering(const EntityRendering::Context &context) {
 EDITOR_PLACE_DEFINITION(Button) {
     Vector2Int position = context->interface->getPlacementPosition();
     float angle = context->interface->getPlacementAngle();
-
-    return std::async(std::launch::async,[position,angle]()-> Entity * {
-        return new Button(position,angle,nullptr);
-    });
+    context->interface->placeImmediately(new Button(position, angle, nullptr));
 }

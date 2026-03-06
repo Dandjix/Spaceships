@@ -57,19 +57,18 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     // #================================================================================================================
     Tiles::loadAll(renderer);
 
-    ElementContainer<Entity *> activeEntities = {};
-    ElementContainer<Entity *> activeEntitiesDeletionQueue = {};
+    ElementContainer<Entity *> active_entities = {};
+    ElementContainer<Entity *> active_entities_deletion_queue = {};
 
-    // std::vector<Entity*> inactiveEntities = {};
 
-    ElementContainer<GUIRect *> editorGUIElements = {};
-    ElementContainer<GUIRect *> editorGUIElementsDeletionQueue = {};
+    ElementContainer<GUIRect *> editor_GUI_elements = {};
+    ElementContainer<GUIRect *> editor_GUI_elements_deletion_queue = {};
 
     auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures", renderer);
     EntityRendering::Context entity_rendering_context = {texture_usage_map};
 
     auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1, 600);
-    activeEntities.add(camera);
+    active_entities.add(camera);
 
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -87,6 +86,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         {},
         new SpaceshipHooks({}, {}, {})
     );
+    std::vector<Entity *> * placed_entities = &blueprint->entities;
 
     ShipBuildingGrid grid(
         initialDimensions,
@@ -96,12 +96,12 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             blueprint->resize(newDimensions);
         }
     );
-    activeEntities.add(&grid);
+    active_entities.add(&grid);
 
     BlueprintEditorAppearance appearance(blueprint);
-    activeEntities.add(&appearance);
+    active_entities.add(&appearance);
 
-    auto entity_placement_interface = EntityPlacement::Interface();
+    auto entity_placement_interface = EntityPlacement::Interface(&editor_GUI_elements, window,placed_entities,entity_rendering_context);
 
     EntityPlacement::Context entity_placement_context = {&entity_placement_interface};
 
@@ -110,17 +110,17 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         &grid,
         &appearance,
         &blueprint->tiles,
-        &blueprint->entities,
+        placed_entities,
         &entity_rendering_context,
         &entity_placement_context
     };
 
     ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(
         &common,
-        &activeEntities,
-        &activeEntitiesDeletionQueue,
-        &editorGUIElements,
-        &editorGUIElementsDeletionQueue,
+        &active_entities,
+        &active_entities_deletion_queue,
+        &editor_GUI_elements,
+        &editor_GUI_elements_deletion_queue,
         ShipEditorModes::TilePainter,
         window);
 
@@ -142,7 +142,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             "Edit entities",
             "Link toggleables"
         },
-        [&entity_rendering_context,&destination,&grid,&blueprint,&state_machine,&blueprint_name](
+        [&entity_rendering_context,&destination,&grid,blueprint,&state_machine,&blueprint_name](
     const std::string &option) {
             if (option == "Resize") {
                 grid.startResizing();
@@ -164,7 +164,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
 
                 blueprint_name = path;
                 *blueprint = *loaded;
-                Vector2Int dimensions = Vector2Int(blueprint->tiles.size(), blueprint->tiles[0].size());
+                Vector2Int dimensions = Vector2Int(static_cast<int>(blueprint->tiles.size()),
+                                                   static_cast<int>(blueprint->tiles[0].size()));
                 grid.setDimensions(dimensions);
             } else if (option == "Exit") {
                 destination = MenuNavigation::MainMenu;
@@ -181,7 +182,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             }
         }
     );
-    editorGUIElements.add(&actionsList);
+    editor_GUI_elements.add(&actionsList);
 
 
     // #================================================================================================================
@@ -200,7 +201,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         float mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
 
-        auto mouse_position_type = GameEvent::getMousePositionType(editorGUIElements.get(), {mouse_x, mouse_y});
+        auto mouse_position_type = GameEvent::getMousePositionType(editor_GUI_elements.get(), {mouse_x, mouse_y});
 
         GameEvent::GameEventContext event_context = {
             {
@@ -220,10 +221,10 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             if (event.type == SDL_EVENT_QUIT) {
                 destination = MenuNavigation::Quit;
             }
-            for (Entity *entity: activeEntities.get()) {
+            for (Entity *entity: active_entities.get()) {
                 entity->handleEvent(event, event_context);
             }
-            for (GUIRect *element: editorGUIElements.get()) {
+            for (GUIRect *element: editor_GUI_elements.get()) {
                 element->handleEvent(event, event_context);
             }
         }
@@ -248,7 +249,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         };
 
         // update
-        for (Entity *entity: activeEntities.get()) {
+        for (Entity *entity: active_entities.get()) {
             entity->update(updateContext);
         }
 
@@ -260,11 +261,13 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 screenDimensions,
                 camera->getScale()
             },
-            deltaTime
+            deltaTime,
+            &editor_GUI_elements,
+            window
         };
 
         //GUI update
-        for (GUIRect *element: editorGUIElements.get()) {
+        for (GUIRect *element: editor_GUI_elements.get()) {
             element->update(gui_updateContext);
         }
 
@@ -282,7 +285,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         SDL_RenderClear(renderer);
 
         //Entities Rendering ------------------------------------------------------------------------------------
-        std::vector<Entity *> all_entities = activeEntities.get();
+        std::vector<Entity *> all_entities = active_entities.get();
         all_entities.insert(all_entities.begin(), blueprint->entities.begin(), blueprint->entities.end());
 
         std::ranges::stable_sort(all_entities, [](Entity *a, Entity *b) {
@@ -309,17 +312,16 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             });
 
         //GUI render
-        for (GUIRect *element: editorGUIElements.get()) {
+        for (GUIRect *element: editor_GUI_elements.get()) {
             element->render(renderer, GUI_renderingContext);
         }
-
         SDL_RenderPresent(renderer);
 
-        activeEntities.removeAndDelete(activeEntitiesDeletionQueue.get());
-        activeEntitiesDeletionQueue.clear();
+        active_entities.removeAndDelete(active_entities_deletion_queue.get());
+        active_entities_deletion_queue.clear();
 
-        editorGUIElements.removeAndDelete(editorGUIElementsDeletionQueue.get());
-        editorGUIElementsDeletionQueue.clear();
+        editor_GUI_elements.removeAndDelete(editor_GUI_elements_deletion_queue.get());
+        editor_GUI_elements_deletion_queue.clear();
     }
 
     delete blueprint;

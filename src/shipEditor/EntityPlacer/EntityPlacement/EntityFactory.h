@@ -20,7 +20,7 @@ namespace EntityPlacement {
     private:
         std::unordered_map<
             std::string,
-            std::function<std::future<Entity *>(EntityPlacement::Context * entity_placement_context)>
+            std::function<void(EntityPlacement::Context * entity_placement_context)>
         >
         factories;
 
@@ -31,7 +31,7 @@ namespace EntityPlacement {
         }
 
         void insert(const std::string &key,
-                    const std::function<std::future<Entity *>(EntityPlacement::Context * context)> &value) {
+                    const std::function<void(EntityPlacement::Context * context)> &value) {
             auto [_,success] = factories.insert({key, value});
 
             if (!success)
@@ -55,11 +55,11 @@ namespace EntityPlacement {
         // Type aliases for iterator support
         using const_iterator = std::unordered_map<
             std::string,
-            std::function<std::future<Entity *>(EntityPlacement::Context * context)>
+            std::function<void(EntityPlacement::Context * context)>
         >::const_iterator;
         using size_type = std::unordered_map<
             std::string,
-            std::function<std::future<Entity *>(EntityPlacement::Context * context)>
+            std::function<void(EntityPlacement::Context * context)>
         >::size_type;
 
         // Iterators
@@ -69,7 +69,7 @@ namespace EntityPlacement {
 
         size_type size() { return factories.size(); }
 
-        [[nodiscard]] const std::function<std::future<Entity *>(EntityPlacement::Context * context)> &at(
+        [[nodiscard]] const std::function<void(EntityPlacement::Context * context)> &at(
             const std::string &key) const {
             if (!contains(key)) {
                 print();

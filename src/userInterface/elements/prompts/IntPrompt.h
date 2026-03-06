@@ -15,16 +15,22 @@ namespace GUI::Prompts {
 
     public:
         IntPrompt(Anchor anchor,
-                  const GUIVector2Int &offset,
+                  const Vector2Int &offset,
                   int width,
                   int height,
                   SDL_Window *window,
                   bool shown,
-                  int value,
+                  const std::string &raw_value = "",
                   const std::string &placeholder = "42",
-                  bool element_is_focused = true)
-            : StringPrompt(anchor, offset, width, height, window, shown,
-                           valueToString(value), placeholder,
+                  bool element_is_focused = false)
+            : StringPrompt(anchor,
+                           offset,
+                           width,
+                           height,
+                           window,
+                           shown,
+                           raw_value,
+                           placeholder,
                            element_is_focused) {
         }
 
@@ -41,5 +47,7 @@ namespace GUI::Prompts {
             }
             return true;
         }
+
+        [[nodiscard]] GUIRect *asGUIRect() override { return this; }
     };
 }

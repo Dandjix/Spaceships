@@ -1,8 +1,11 @@
 #pragma once
-#include <utility>
 
-#include "../math/Vectors.h"
+#include <SDL3/SDL.h>
 #include "game/CameraTransformations.h"
+#include "game/ElementContainer.h"
+
+
+class GUIRect;
 
 enum class Anchor
 {
@@ -31,4 +34,6 @@ struct GUI_UpdateContext
 {
 	CameraTransformations::CameraInfo camera_info;
 	const float deltaTime;
+	ElementContainer<GUIRect *> * gui_elements;
+	SDL_Window * window;
 };

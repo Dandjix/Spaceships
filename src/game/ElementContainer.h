@@ -34,6 +34,14 @@ public:
         elements.clear();
     }
 
+    using iterator = std::vector<T>::iterator;
+    iterator begin() { return elements.begin(); }
+    iterator end() { return elements.end(); }
+
+    using const_iterator = std::vector<T>::const_iterator;
+    const_iterator begin() const { return elements.begin(); }
+    const_iterator end() const { return elements.end(); }
+
     explicit ElementContainer(std::vector<T> elements) : elements(elements) {
     }
 

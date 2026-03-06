@@ -4,6 +4,7 @@
 #include "GUI.h"
 #include "../math/Vectors.h"
 #include "../entities/scripts/Entity.h"
+#include "game/ElementContainer.h"
 
 class GUIRect {
 protected :
@@ -49,6 +50,15 @@ public:
 	virtual QueueOrder::Value getQueueOrder() {
 		return QueueOrder::MIDDLE;
 	}
+
+	/**
+	 * similar to entity's kill, but frick events
+	 * @param rect_container
+	 */
+	void kill(ElementContainer<GUIRect*> * rect_container) {
+		rect_container->removeAndDelete(this);
+	}
+
 };
 
 

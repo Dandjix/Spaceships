@@ -11,7 +11,7 @@ inline void ModeToggleableLinker::enter() {
     added_entities = {};
     added_ui_elements = {};
 
-    ToggleableLinker * linker = new ToggleableLinker(ToggleableLinker::PickingActivator,state_machine->common->placed_entities);
+    auto * linker = new ToggleableLinker(ToggleableLinker::PickingActivator,state_machine->common->placed_entities);
 
     added_entities.push_back(linker);
 

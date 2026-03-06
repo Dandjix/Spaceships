@@ -20,11 +20,11 @@ namespace GUI::Prompts {
                      int height,
                      SDL_Window *window,
                      bool shown,
-                     int value,
+                     const std::string & raw_value = "",
                      const std::string &placeholder = "42",
-                     bool element_is_focused = true)
+                     bool element_is_focused = false)
             : StringPrompt(anchor, offset, width, height, window, shown,
-                              valueToString(value), placeholder,
+                              raw_value, placeholder,
                               element_is_focused) {
         }
 
@@ -41,5 +41,7 @@ namespace GUI::Prompts {
             }
             return true;
         }
+
+        [[nodiscard]] GUIRect * asGUIRect() override {return this;}
     };
 }

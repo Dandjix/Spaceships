@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include "userInterface/GUIRect.h"
+
 namespace GUI::Prompts {
     template<typename T>
     class IValuePrompt {
@@ -14,5 +16,7 @@ namespace GUI::Prompts {
         virtual void setValue(T value) = 0;
 
         [[nodiscard]] [[nodiscard]] virtual bool inputIsValid() const = 0;
+
+        [[nodiscard]] virtual GUIRect * asGUIRect() = 0;
     };
 }

@@ -13,20 +13,16 @@ void EntityPlacement::EntityPlacer::placeEntity(
     float angle,
     const std::string &to_place_key
 ) {
-    auto spawner = EntityPlacement::EntityFactory::getInstance().at(to_place_key);
+    auto spawner = EntityFactory::getInstance().at(to_place_key);
 
     entity_placement_interface->setPositionToPlace(world_position);
     entity_placement_interface->setAngleToPlace(angle);
 
-    auto entity_placement_context = EntityPlacement::Context(
+    auto entity_placement_context = Context(
         entity_placement_interface
     );
 
-    auto future_entity = spawner(&entity_placement_context);
-    auto entity = future_entity.get();
-    if (entity_rendering_context != nullptr)
-        entity->initializeRendering(*entity_rendering_context);
-    placed_entities->push_back(entity);
+   spawner(&entity_placement_context);
 }
 
 void EntityPlacement::EntityPlacer::setPrecision(Precision value) {

@@ -246,7 +246,6 @@ EDITOR_PLACE_DEFINITION(Door) {
 
     std::cout << "rounded to : " << rounded_angle << "," << rounded_position << std::endl;
 
-    return std::async(std::launch::async, [rounded_position, rounded_angle]()-> Entity * {
-        return new Door(rounded_position, rounded_angle, 0, 0, 1234);
-    });
+    context->interface->placeImmediately(new Door(rounded_position, rounded_angle, 0, 0, 1234));
+
 }

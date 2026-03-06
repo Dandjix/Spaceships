@@ -39,7 +39,7 @@ void CargoContainer::render(SDL_Renderer *renderer, const RenderingContext &cont
     Vector2Float size = Vectors::toVector2Float(scale.scaleToScreenPosition());
 
     // Render the texture
-    Rendering::Util::renderTexture(renderer, context,getPosition(),getAngle(), texture, size);
+    Rendering::Util::renderTexture(renderer, context, getPosition(), getAngle(), texture, size);
 }
 
 FROM_JSON_DEFINITION(CargoContainer) {
@@ -54,8 +54,30 @@ EDITOR_PLACE_DEFINITION(CargoContainer) {
     Vector2Int position = context->interface->getPlacementPosition();
     float angle = context->interface->getPlacementAngle();
 
-    return std::async(std::launch::async, [position, angle]()-> Entity * {
-        return new CargoContainer(position, angle);
+    auto form_request = EntityPlacement::InterfaceForm::FormRequest{
+        "Cargo Container",
+        {},
+        {
+            {"variation", {"blank", "EMA"}}
+        }
+    };
+
+    EntityPlacement::Interface *interface = context->interface;
+    context->interface->askForForm(form_request,[position,angle](const EntityPlacement::InterfaceForm::FormResult & form_result) {
+
+        std::string variation_string = form_result.results_string.at("variation");
+        Variation variation;
+        if (variation_string == "blank") {
+            variation = Variation::blank;
+        }
+        else if (variation_string == "EMA") {
+            variation = Variation::EMA;
+        }
+        else {
+            throw std::logic_error(std::format("variation : {} not handled.",variation_string));
+        }
+
+        return new CargoContainer(position, angle,variation);
     });
 }
 

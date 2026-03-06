@@ -16,11 +16,11 @@ namespace GUI::Prompts {
             int height,
             SDL_Window *window,
             bool shown = true,
-            const Vector2Float value = {0, 0},
+            const std::string &raw_value = "",
             const std::string &placeholder = "(0,0)",
-            bool element_is_focused = true
+            bool element_is_focused = false
         )
-            : StringPrompt(anchor, offset, width, height, window, shown, serializeValue(value), placeholder,
+            : StringPrompt(anchor, offset, width, height, window, shown, raw_value, placeholder,
                            element_is_focused) {
         }
 
@@ -77,5 +77,7 @@ namespace GUI::Prompts {
         void setValue(Vector2Float new_value) override {
             value = serializeValue(new_value);
         }
+
+        [[nodiscard]] GUIRect *asGUIRect() override { return this; }
     };
 }

@@ -28,8 +28,8 @@ void Humanoid::render(SDL_Renderer *renderer, const RenderingContext &context) {
         getAngle(),
         texture,
         Vector2Float(
-            radius*2,
-            radius*2
+            radius * 2,
+            radius * 2
         )
     );
 }
@@ -60,8 +60,5 @@ FROM_JSON_DEFINITION(Humanoid) {
 EDITOR_PLACE_DEFINITION(Humanoid) {
     Vector2Int position = context->interface->getPlacementPosition();
     float angle = context->interface->getPlacementAngle();
-
-    return std::async(std::launch::async, [position, angle]()-> Entity * {
-        return new Humanoid(position, angle, nullptr);
-    });
+    context->interface->placeImmediately(new Humanoid(position, angle, nullptr));
 }
