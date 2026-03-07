@@ -20,11 +20,12 @@ namespace GUI::Prompts {
                      int height,
                      SDL_Window *window,
                      bool shown,
-                     const std::string & raw_value = "",
+                     const std::string &raw_value = "",
                      const std::string &placeholder = "42",
+                     const std::string &annotation = "[float]",
                      bool element_is_focused = false)
             : StringPrompt(anchor, offset, width, height, window, shown,
-                              raw_value, placeholder,
+                              raw_value, placeholder,annotation,
                               element_is_focused) {
         }
 

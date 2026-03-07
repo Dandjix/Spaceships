@@ -16,6 +16,7 @@ namespace GUI::Prompts {
 
     protected:
         std::string value;
+        std::string annotation;
 
     public:
         std::string placeholder;
@@ -52,12 +53,14 @@ namespace GUI::Prompts {
             bool shown,
             std::string value, // = "",
             std::string placeholder, // = "Type here ...",
+            std::string annotation, // = "[Vector2Int] some_variable"
             bool element_is_focused // = true
         )
             : GUIRect(anchor, offset, width, height),
-              window(window),
-              placeholder(std::move(placeholder)),
               value(std::move(value)),
+              annotation(std::move(annotation)),
+              placeholder(std::move(placeholder)),
+              window(window),
               shown(shown) {
             setFocused(element_is_focused);
         }

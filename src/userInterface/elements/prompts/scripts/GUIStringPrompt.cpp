@@ -12,8 +12,7 @@ void GUI::Prompts::StringPrompt::setFocused(bool new_focused) {
     if (new_focused != focused) {
         if (new_focused) {
             SDL_StartTextInput(window);
-        }
-        else {
+        } else {
             SDL_StopTextInput(window);
         }
         on_focused_change.emit(new_focused);
@@ -27,15 +26,15 @@ void GUI::Prompts::StringPrompt::handleEvent(const SDL_Event &event, const GameE
     }
 
     if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-        float mouse_x,mouse_y;
-        SDL_GetMouseState(&mouse_x,&mouse_y);
+        float mouse_x, mouse_y;
+        SDL_GetMouseState(&mouse_x, &mouse_y);
 
-        auto new_focused =  is_inside({mouse_x,mouse_y});
+        auto new_focused = is_inside({mouse_x, mouse_y});
 
         setFocused(new_focused);
     }
 
-    if (!shown ) {
+    if (!shown) {
         return;
     }
 
@@ -43,7 +42,8 @@ void GUI::Prompts::StringPrompt::handleEvent(const SDL_Event &event, const GameE
         if (event.type == SDL_EVENT_TEXT_INPUT) {
             value.append(event.text.text);
         }
-        if ((event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_BACKSPACE || event.key.key == SDLK_DELETE) && !value.empty()) {
+        if ((event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_BACKSPACE || event.key.key == SDLK_DELETE) && !
+            value.empty()) {
             value.pop_back();
         }
         if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_RETURN) {
@@ -72,48 +72,57 @@ void GUI::Prompts::StringPrompt::render(SDL_Renderer *renderer, const GUI_Render
         return;
 
     auto rect = SDL_FRect{
-        static_cast<float>(screenPosition.x),static_cast<float>(screenPosition.y),
-        static_cast<float>(dimensions.x),static_cast<float>(dimensions.y)
+        static_cast<float>(screenPosition.x), static_cast<float>(screenPosition.y),
+        static_cast<float>(dimensions.x), static_cast<float>(dimensions.y)
     };
 
-    if (focused) {
-        SDL_SetRenderDrawColor(renderer,125,125,125,255);
+    if (focused) SDL_SetRenderDrawColor(renderer, 125, 125, 125, 255);
+    else SDL_SetRenderDrawColor(renderer, 55, 55, 55, 255);
+
+    SDL_RenderFillRect(renderer, &rect);
+    {
+        SDL_Color annotation_color = SDL_Color(200, 100, 100, 255);
+
+        if (SDL_Surface *surface = TTF_RenderText_Solid(fonts["sm"], annotation.c_str(), annotation.length(),
+                                                        annotation_color)) {
+            SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+            SDL_FRect annotationRect;
+            annotationRect.w = static_cast<float>(surface->w);
+            annotationRect.h = static_cast<float>(surface->h);
+            annotationRect.x = screenPosition.x; // top left
+            annotationRect.y = screenPosition.y; // top left
+
+            SDL_RenderTexture(renderer, texture, nullptr, &annotationRect);
+
+            SDL_DestroyTexture(texture);
+            SDL_DestroySurface(surface);
+        }
     }
-    else {
-        SDL_SetRenderDrawColor(renderer,55,55,55,255);
-    }
+    {
+        SDL_Color text_color = SDL_Color(focused ? 255 : 200, 255, 255, 255);
 
-    SDL_RenderFillRect(renderer,&rect);
+        if (SDL_Surface *surface = TTF_RenderText_Solid(fonts["md"], value.c_str(), value.length(), text_color)) {
+            SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-    SDL_Color text_color;
-    if (focused) {
-        text_color = SDL_Color(255,255,255,255);
-    }else {
-        text_color = SDL_Color(200,255,255,255);
-    }
+            SDL_FRect textRect;
+            textRect.w = static_cast<float>(surface->w);
+            textRect.h = static_cast<float>(surface->h);
+            textRect.x = screenPosition.x + (dimensions.x - textRect.w) / 2; // center horizontally
+            textRect.y = screenPosition.y + (dimensions.y - textRect.h) / 2; // center vertically
 
-    SDL_Surface* surface = TTF_RenderText_Solid(fonts["md"], value.c_str(), value.length(), text_color);
-    if (surface) {
-        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+            SDL_RenderTexture(renderer, texture, nullptr, &textRect);
 
-        SDL_FRect textRect;
-        textRect.w = static_cast<float>(surface->w);
-        textRect.h = static_cast<float>(surface->h);
-        textRect.x = screenPosition.x + (dimensions.x - textRect.w) / 2; // center horizontally
-        textRect.y = screenPosition.y + (dimensions.y - textRect.h) / 2; // center vertically
-
-        SDL_RenderTexture(renderer, texture, nullptr, &textRect);
-
-        SDL_DestroyTexture(texture);
-        SDL_DestroySurface(surface);
+            SDL_DestroyTexture(texture);
+            SDL_DestroySurface(surface);
+        }
     }
 }
 
 void GUI::Prompts::StringPrompt::update(const GUI_UpdateContext &context) {
     GUIRect::update(context);
 
-    frames_until_active = frames_until_active -1;
+    frames_until_active = frames_until_active - 1;
     if (frames_until_active < 0)
         frames_until_active = 0;
-
 }

@@ -17,7 +17,7 @@
 constexpr int FIELD_HEIGHT_PX = 50;
 constexpr int FIELD_WIDTH_PX = 250;
 
-std::vector<std::pair<std::string, GUI::Prompts::IPrompt *> > EntityPlacement::Interface::get_all_prompts() {
+std::vector<std::pair<std::string, GUI::Prompts::IPrompt *> > EntityPlacement::Interface::get_all_prompts() const {
     std::vector<std::pair<std::string, GUI::Prompts::IPrompt *> > all = {};
     all.reserve(
         int_prompts.size() +
@@ -214,7 +214,8 @@ void EntityPlacement::Interface::clearPrompts() {
 }
 
 bool EntityPlacement::Interface::promptsAreValid() const {
-    //TODO finish this
+    for (auto p: get_all_prompts())
+        if (!p.second->inputIsValid()) return false;
     return true;
 }
 

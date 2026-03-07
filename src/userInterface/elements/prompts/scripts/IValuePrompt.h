@@ -11,7 +11,7 @@ namespace GUI::Prompts {
     public:
         virtual ~IPrompt() = default;
 
-        [[nodiscard]] [[nodiscard]] virtual bool inputIsValid() const = 0;
+        [[nodiscard]] virtual bool inputIsValid() const = 0;
 
         [[nodiscard]] virtual GUIRect * asGUIRect() = 0;
     };

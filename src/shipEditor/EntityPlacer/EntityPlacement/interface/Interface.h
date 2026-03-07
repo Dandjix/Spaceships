@@ -47,7 +47,7 @@ namespace EntityPlacement {
         /** groups both text and select prompts, so beware of name collisions */
         std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<std::string> *> > string_prompts;
 
-        std::vector<std::pair<std::string, GUI::Prompts::IPrompt *>> get_all_prompts();
+        [[nodiscard]] std::vector<std::pair<std::string, GUI::Prompts::IPrompt *>> get_all_prompts() const;
 
         GUI::TextButton *send_button;
 

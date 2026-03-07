@@ -18,9 +18,18 @@ namespace GUI::Prompts {
             bool shown = true,
             const std::string &raw_value = "",
             const std::string &placeholder = "(0,0)",
+            const std::string &annotation = "[Vector2Float]",
             bool element_is_focused = false
         )
-            : StringPrompt(anchor, offset, width, height, window, shown, raw_value, placeholder,
+            : StringPrompt(anchor,
+                           offset,
+                           width,
+                           height,
+                           window,
+                           shown,
+                           raw_value,
+                           placeholder,
+                           annotation,
                            element_is_focused) {
         }
 

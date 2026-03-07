@@ -41,9 +41,13 @@ void GUI::TextButton::render(SDL_Renderer *renderer, const GUI_RenderingContext 
 }
 
 void GUI::TextButton::update(const GUI_UpdateContext &context) {
-    if (!is_clickable())return;
-
     GUIRect::update(context);
+
+    if (!is_clickable()) {
+        highlighted = false;
+        return;
+    }
+
     float mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
     highlighted = context.element_under_mouse == this
@@ -52,7 +56,7 @@ void GUI::TextButton::update(const GUI_UpdateContext &context) {
 }
 
 void GUI::TextButton::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
-    if (event.type != SDL_EVENT_MOUSE_BUTTON_DOWN || context.element_under_mouse != this)
+    if (event.type != SDL_EVENT_MOUSE_BUTTON_DOWN || context.element_under_mouse != this || !is_clickable())
         return;
 
     float mouse_x, mouse_y;

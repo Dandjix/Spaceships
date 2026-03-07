@@ -22,6 +22,8 @@ namespace GUI::Prompts {
                   bool shown,
                   const std::string &raw_value = "",
                   const std::string &placeholder = "42",
+                     const std::string &annotation = "[int]",
+
                   bool element_is_focused = false)
             : StringPrompt(anchor,
                            offset,
@@ -31,6 +33,7 @@ namespace GUI::Prompts {
                            shown,
                            raw_value,
                            placeholder,
+                           annotation,
                            element_is_focused) {
         }
 
