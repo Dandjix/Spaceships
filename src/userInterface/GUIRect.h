@@ -4,7 +4,6 @@
 #include "GUI.h"
 #include "../math/Vectors.h"
 #include "../entities/scripts/Entity.h"
-#include "game/ElementContainer.h"
 #include "spaceships/entityContainer/ElementContainerDQ.h"
 
 class GUIRect {

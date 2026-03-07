@@ -3,9 +3,8 @@
 //
 
 #pragma once
-#include "game/ElementContainer.h"
 #include "userInterface/GUIRect.h"
-
+#include "spaceships/entityContainer/ElementContainerDQ.h"
 #include "userInterface/elements/GUI/GUIFramedLabel.h"
 
 namespace GUI {
@@ -18,8 +17,7 @@ namespace GUI {
 
     protected:
         std::vector<message> messages = {};
-        ElementContainer<GUIRect *> *gui_elements;
-        ElementContainer<GUIRect *> *gui_elements_deletion_queue;
+        ElementContainerDQ<GUIRect *> *gui_elements;
         float message_padding_px;
         QueueOrder::Value queue_order;
 
@@ -35,16 +33,14 @@ namespace GUI {
                 ms_to_live,
                 label
             });
-            gui_elements->add(label);
+            gui_elements->insert(label);
         }
 
-        explicit Snackbar(ElementContainer<GUIRect *> *gui_elements,
-                          ElementContainer<GUIRect *> *gui_elements_deletion_queue, Anchor anchor = Anchor::BottomCenter,
+        explicit Snackbar(ElementContainerDQ<GUIRect *> *gui_elements,Anchor anchor = Anchor::BottomCenter,
                           Vector2Int offset = {0, 0},
                           int width = GUI_Fill, int height = GUI_Fill,
                           QueueOrder::Value queue_order = QueueOrder::MIDDLE, float message_padding_px = 5)
-            : GUIRect(anchor, offset, width, height), gui_elements(gui_elements),
-              gui_elements_deletion_queue(gui_elements_deletion_queue), queue_order(queue_order),
+            : GUIRect(anchor, offset, width, height), gui_elements(gui_elements), queue_order(queue_order),
               message_padding_px(message_padding_px) {
         }
 
@@ -61,7 +57,7 @@ namespace GUI {
             }
 
             for (message msg: toDelete) {
-                gui_elements_deletion_queue->add(msg.label);
+                gui_elements->add_to_erasing_queue(msg.label);
                 auto msg_position = std::find_if(messages.begin(), messages.end(), [&msg](const message &current) {
                     return msg.label == current.label;
                 });

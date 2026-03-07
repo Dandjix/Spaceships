@@ -8,7 +8,6 @@
 #include "../../entities/scripts/Entity.h"
 #include "../../entities/scripts/ShortLivedEntity.h"
 #include "EntityPlacement/EntityPlacement.h"
-#include "game/ElementContainer.h"
 
 
 namespace EntityPlacement {

@@ -2,7 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include "game/CameraTransformations.h"
-#include "game/ElementContainer.h"
+#include "spaceships/entityContainer/ElementContainerDQ.h"
 
 
 class GUIRect;
@@ -34,7 +34,7 @@ struct GUI_UpdateContext
 {
 	CameraTransformations::CameraInfo camera_info;
 	const float deltaTime;
-	ElementContainer<GUIRect *> * gui_elements;
+	ElementContainerDQ<GUIRect *> * gui_elements;
 	SDL_Window * window;
 	GUIRect * element_under_mouse;
 };

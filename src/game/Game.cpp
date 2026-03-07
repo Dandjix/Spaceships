@@ -1,7 +1,6 @@
 #include <SDL3/SDL.h>
 #include <utility>
 
-#include "ElementContainer.h"
 #include "PauseManager.h"
 #include "debug/CollisionInfo.h"
 #include "entityRendering/RenderingInitialization.h"
@@ -31,7 +30,6 @@
 #include "../entities/Sphere.h"
 #include "../debug/DebugGrid.h"
 #include "../spaceships/SpaceShip.h"
-#include "game/ElementContainer.h"
 #include "../parallax/ParallaxObject.h"
 
 void renderSpaceBackground() {
@@ -122,14 +120,12 @@ void RenderingHandle(SDL_Renderer *renderer, std::vector<SpaceShip *> space_ship
 }
 
 
-void guiUpdateHandling(ElementContainer<GUIRect *> &gui_elements,
-                       ElementContainer<GUIRect *> &gui_elements_deletion_queue,
+void guiUpdateHandling(ElementContainerDQ<GUIRect *> &gui_elements,
                        const GUI_UpdateContext &gui_update_context, bool paused) {
-    for (auto gui_element: gui_elements.get()) {
+    for (auto gui_element: gui_elements) {
         gui_element->update(gui_update_context);
     }
-    gui_elements.removeAndDelete(gui_elements_deletion_queue.get());
-    gui_elements_deletion_queue.clear();
+    gui_elements.process_deletion_queue();
 }
 
 enum GameNavigation {
@@ -175,14 +171,13 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     camera->setPlayer(player);
 
     // GUI elements ----------------------------------------------------------------------------------------------------
-    ElementContainer<GUIRect *> gui_elements;
-    ElementContainer<GUIRect *> gui_elements_deletion_queue;
+    ElementContainerDQ<GUIRect *> gui_elements;
     auto tooltip = new GUITooltip({0, 0}, false);
-    gui_elements.add(tooltip);
+    gui_elements.insert(tooltip);
 
-    auto snackbar = new GUI::Snackbar(&gui_elements, &gui_elements_deletion_queue, Anchor::BottomCenter, {0, 0},
+    auto snackbar = new GUI::Snackbar(&gui_elements, Anchor::BottomCenter, {0, 0},
                                       GUI_Fill, 55, QueueOrder::FIRST);
-    gui_elements.add(snackbar);
+    gui_elements.insert(snackbar);
 
     // Short lived entities --------------------------------------------------------------------------------------------
     Player::PlayerVehicleTracker *vehicle_tracker = (new Player::PlayerVehicleTracker(player))->initializeRendering(
@@ -281,8 +276,8 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             screenDimensions,
             camera->getScale(),
         };
-        auto mouse_position_type = GameEvent::getMousePositionType(gui_elements.getReversed(), {mouse_x, mouse_y});
-        auto element_under_mouse = GameEvent::getElementUnderMouse(gui_elements, {mouse_x, mouse_y});
+        auto mouse_position_type = GameEvent::getMousePositionType(gui_elements.get(), {mouse_x, mouse_y});
+        auto element_under_mouse = GameEvent::getElementUnderMouse(gui_elements.get(), {mouse_x, mouse_y});
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -345,7 +340,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             window,
             element_under_mouse
         };
-        guiUpdateHandling(gui_elements, gui_elements_deletion_queue, gui_update_context, paused);
+        guiUpdateHandling(gui_elements, gui_update_context, paused);
 
         // RENDERING ---------------------------------------------------------------------------------------------------
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
@@ -366,7 +361,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         gui_elements.sort([](GUIRect *first, GUIRect *second) {
             return first->getQueueOrder() < second->getQueueOrder();
         });
-        for (auto gui_element: gui_elements.getReversed()) {
+        for (auto gui_element: gui_elements) {
             gui_element->render(renderer, gui_rendering_context);
         }
 

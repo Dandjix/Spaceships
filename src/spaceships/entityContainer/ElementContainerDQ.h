@@ -18,6 +18,8 @@ public:
     explicit ElementContainerDQ(std::vector<T> values) : container(values), deletion_queue({}) {
     }
 
+    [[nodiscard]] std::vector<T> get() const { return container; }
+
     // Type aliases for iterator support
     using iterator = std::vector<T>::iterator;
     using const_iterator = std::vector<T>::const_iterator;
@@ -37,8 +39,18 @@ public:
         container.push_back(value);
     }
 
-    void add_to_erasing_queue(T key, bool delete_when_done = false) {
-        deletion_queue.push_back({key, delete_when_done});
+    void insert(const std::vector<T> & values) {
+        for (T v: values)
+            container.push_back(v);
+    }
+
+    void add_to_erasing_queue(T value, bool delete_when_done = false) {
+        deletion_queue.push_back({value, delete_when_done});
+    }
+
+    void add_to_erasing_queue(const std::vector<T> & values, bool delete_when_done = false) {
+        for (T v: values)
+            deletion_queue.push_back({v, delete_when_done});
     }
 
     void process_deletion_queue() {
@@ -77,5 +89,9 @@ public:
 
     size_type size() const {
         return container.size();
+    }
+
+    void sort(std::invocable<T, T> auto compare) {
+        std::sort(container.begin(), container.end(), compare);
     }
 };

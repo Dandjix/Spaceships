@@ -22,7 +22,6 @@
 #include "../userInterface/elements/GUI/GUICheckbox.h"
 #include "entities/CargoContainer.h"
 #include "entityRendering/RenderingInitialization.h"
-#include "game/ElementContainer.h"
 #include "loadGame/GameState.h"
 #include "EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "EntityPlacer/EntityPlacement/interface/Interface.h"
@@ -201,7 +200,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             return first->getQueueOrder() < second->getQueueOrder();
         });
 
-        auto element_under_mouse = GameEvent::getElementUnderMouse(editor_GUI_elements, {mouse_x, mouse_y});
+        auto element_under_mouse = GameEvent::getElementUnderMouse(editor_GUI_elements.get(), {mouse_x, mouse_y});
 
         GameEvent::GameEventContext event_context = {
             {
@@ -222,10 +221,10 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             if (event.type == SDL_EVENT_QUIT) {
                 destination = MenuNavigation::Quit;
             }
-            for (Entity *entity: active_entities.get()) {
+            for (Entity *entity: active_entities) {
                 entity->handleEvent(event, event_context);
             }
-            for (GUIRect *element: editor_GUI_elements.get()) {
+            for (GUIRect *element: editor_GUI_elements) {
                 element->handleEvent(event, event_context);
             }
         }
@@ -250,7 +249,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         };
 
         // update
-        for (Entity *entity: active_entities.get()) {
+        for (Entity *entity: active_entities) {
             entity->update(updateContext);
         }
 
@@ -269,7 +268,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         };
 
         //GUI update
-        for (GUIRect *element: editor_GUI_elements.get()) {
+        for (GUIRect *element: editor_GUI_elements) {
             element->update(gui_updateContext);
         }
 
@@ -295,10 +294,6 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         });
 
         for (Entity *entity: all_entities) {
-            // if (dynamic_cast<CargoContainer * >(entity) != nullptr) {
-            //     std::cout << "rendering a container ! " << std::endl;
-            // }
-
             entity->render(renderer, renderingContext);
         }
         for (Entity *entity: all_entities) {
@@ -314,16 +309,13 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             });
 
         //GUI render
-        for (GUIRect *element: editor_GUI_elements.get()) {
+        for (GUIRect *element: editor_GUI_elements) {
             element->render(renderer, GUI_renderingContext);
         }
         SDL_RenderPresent(renderer);
 
-        active_entities.removeAndDelete(active_entities_deletion_queue.get());
-        active_entities_deletion_queue.clear();
-
-        editor_GUI_elements.removeAndDelete(editor_GUI_elements_deletion_queue.get());
-        editor_GUI_elements_deletion_queue.clear();
+        active_entities.process_deletion_queue();
+        editor_GUI_elements.process_deletion_queue();
     }
 
     delete blueprint;
