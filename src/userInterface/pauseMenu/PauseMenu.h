@@ -9,7 +9,7 @@
 #include "userInterface/GUIRect.h"
 #include "userInterface/elements/GUI/GUIList.h"
 #include <algorithm>
-#include "spaceships/entityContainer/ElementContainerDQ.h"
+#include "../../structures/ElementContainerDQ.h"
 
 
 class PauseMenu {

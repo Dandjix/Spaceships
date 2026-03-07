@@ -4,7 +4,7 @@
 #include "GUI.h"
 #include "../math/Vectors.h"
 #include "../entities/scripts/Entity.h"
-#include "spaceships/entityContainer/ElementContainerDQ.h"
+#include "../structures/ElementContainerDQ.h"
 
 class GUIRect {
 protected :

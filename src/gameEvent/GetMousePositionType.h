@@ -7,7 +7,7 @@
 
 #include "MousePositionType.h"
 #include "math/Vectors.h"
-#include "spaceships/entityContainer/ElementContainerDQ.h"
+#include "../structures/ElementContainerDQ.h"
 
 
 class GUIRect;

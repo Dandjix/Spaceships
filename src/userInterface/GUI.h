@@ -2,7 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include "game/CameraTransformations.h"
-#include "spaceships/entityContainer/ElementContainerDQ.h"
+#include "../structures/ElementContainerDQ.h"
 
 
 class GUIRect;

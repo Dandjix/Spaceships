@@ -4,7 +4,7 @@
 
 #pragma once
 #include "userInterface/GUIRect.h"
-#include "spaceships/entityContainer/ElementContainerDQ.h"
+#include "../../../structures/ElementContainerDQ.h"
 #include "userInterface/elements/GUI/GUIFramedLabel.h"
 
 namespace GUI {
