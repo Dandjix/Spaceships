@@ -94,7 +94,10 @@ void EntityPlacement::Interface::createPrompts(
                                                     FIELD_WIDTH_PX,
                                                     FIELD_HEIGHT_PX,
                                                     window,
-                                                    true)
+                                                    true,
+                                                    "",
+                                                    "42",
+                                                    std::format("[int] {}",field_name))
                     }
                 );
                 break;
@@ -106,7 +109,11 @@ void EntityPlacement::Interface::createPrompts(
                                                   FIELD_WIDTH_PX,
                                                   FIELD_HEIGHT_PX,
                                                   window,
-                                                  true)
+                                                  true,
+                                                  "",
+                                                  "42",
+                                                  std::format("[int] {}",field_name))
+
                 });
 
                 break;
@@ -117,7 +124,8 @@ void EntityPlacement::Interface::createPrompts(
                                              prompt_offset,
                                              FIELD_WIDTH_PX,
                                              FIELD_HEIGHT_PX,
-                                             true)
+                                             false,
+                                             field_name)
                 });
                 break;
             case InterfaceForm::VECTOR2INT:
