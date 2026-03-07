@@ -71,6 +71,9 @@ int EntityPlacement::Interface::computeFormHeight(const InterfaceForm::FormReque
 
 void EntityPlacement::Interface::createPrompts(
     const InterfaceForm::FormRequest &request) {
+    if (displayed)
+        throw std::runtime_error("Tried to clear prompts while the interface was displayed");
+
     int height = computeFormHeight(request);
 
     Anchor anchor = Anchor::Center;
@@ -97,7 +100,7 @@ void EntityPlacement::Interface::createPrompts(
                                                     true,
                                                     "",
                                                     "42",
-                                                    std::format("[int] {}",field_name))
+                                                    std::format("[int] {}", field_name))
                     }
                 );
                 break;
@@ -112,7 +115,7 @@ void EntityPlacement::Interface::createPrompts(
                                                   true,
                                                   "",
                                                   "42",
-                                                  std::format("[int] {}",field_name))
+                                                  std::format("[float] {}", field_name))
 
                 });
 
@@ -125,7 +128,8 @@ void EntityPlacement::Interface::createPrompts(
                                              FIELD_WIDTH_PX,
                                              FIELD_HEIGHT_PX,
                                              false,
-                                             field_name)
+                                             std::format("[bool] {}", field_name))
+
                 });
                 break;
             case InterfaceForm::VECTOR2INT:
@@ -169,20 +173,10 @@ void EntityPlacement::Interface::createPrompts(
     }
 
     // activate (place in the ui)
-    for (auto prompt: int_prompts | std::views::values)
-        gui_elements->insert(prompt->asGUIRect());
-    for (auto prompt: float_prompts | std::views::values)
-        gui_elements->insert(prompt->asGUIRect());
-    for (auto prompt: Vector2Int_prompts | std::views::values)
-        gui_elements->insert(prompt->asGUIRect());
-    for (auto prompt: Vector2Float_prompts | std::views::values)
-        gui_elements->insert(prompt->asGUIRect());
-    for (auto prompt: string_prompts | std::views::values)
+    for (auto [field_name,prompt]: get_all_prompts())
         gui_elements->insert(prompt->asGUIRect());
 
     //it is safer to delete the send button and create it each time since it avoids a possible memory leak
-
-
     send_button = new GUI::TextButton(
         anchor,
         prompt_offset,
@@ -198,31 +192,31 @@ void EntityPlacement::Interface::createPrompts(
         sendForm();
     });
     gui_elements->insert(send_button);
+
+    displayed = true;
 }
 
 void EntityPlacement::Interface::clearPrompts() {
-    for (auto prompt: int_prompts | std::views::values)
-        prompt->asGUIRect()->kill(gui_elements);
-    for (auto prompt: float_prompts | std::views::values)
-        prompt->asGUIRect()->kill(gui_elements);
-    for (auto prompt: Vector2Int_prompts | std::views::values)
-        prompt->asGUIRect()->kill(gui_elements);
-    for (auto prompt: Vector2Float_prompts | std::views::values)
-        prompt->asGUIRect()->kill(gui_elements);
-    for (auto prompt: string_prompts | std::views::values)
+    if (!displayed)
+        throw std::runtime_error("Tried to clear prompts while the interface was not displayed");
+
+    for (auto [field_name,prompt]: get_all_prompts())
         prompt->asGUIRect()->kill(gui_elements);
 
     send_button->kill(gui_elements);
 
     int_prompts = {};
     float_prompts = {};
+    bool_prompts = {};
     Vector2Int_prompts = {};
     Vector2Float_prompts = {};
     string_prompts = {};
+
+    displayed = false;
 }
 
 bool EntityPlacement::Interface::promptsAreValid() const {
-    for (auto p: get_all_prompts())
+    for (const auto & p: get_all_prompts())
         if (!p.second->inputIsValid()) return false;
     return true;
 }
@@ -260,6 +254,8 @@ void EntityPlacement::Interface::askForForm(
     const InterfaceForm::FormRequest &form_request_param,
     std::function<Entity *(const InterfaceForm::FormResult &)> place_entity
 ) {
+    if (displayed)clearPrompts();
+
     createPrompts(form_request_param);
     on_form_submitted = std::move(place_entity);
 }
@@ -274,4 +270,11 @@ void EntityPlacement::Interface::sendForm() {
 void EntityPlacement::Interface::placeImmediately(Entity *new_entity) {
     new_entity->initializeRendering(entity_rendering_context);
     world_entities->push_back(new_entity);
+}
+
+void EntityPlacement::Interface::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
+    if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
+        context.mouse_position_type == GameEvent::Game &&
+        displayed)
+        clearPrompts();
 }

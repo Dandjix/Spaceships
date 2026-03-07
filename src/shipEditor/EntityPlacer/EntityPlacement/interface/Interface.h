@@ -1,9 +1,10 @@
 #pragma once
-#include <future>
 
 #include "EntityPlacementForm.h"
 #include "entities/scripts/ShortLivedEntity.h"
 #include "entities/toggleables/door/Door.h"
+#include "game/Game.h"
+#include "gameEvent/GameEvent.h"
 #include "userInterface/elements/GUI/TextButton.h"
 #include "userInterface/elements/prompts/scripts/IValuePrompt.h"
 //
@@ -47,6 +48,8 @@ namespace EntityPlacement {
         /** groups both text and select prompts, so beware of name collisions */
         std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<std::string> *> > string_prompts;
 
+        bool displayed = false;
+
         [[nodiscard]] std::vector<std::pair<std::string, GUI::Prompts::IPrompt *>> get_all_prompts() const;
 
         GUI::TextButton *send_button;
@@ -70,6 +73,11 @@ namespace EntityPlacement {
         [[nodiscard]] bool promptsAreValid() const;
 
     public:
+        /**
+         * @return true iff the interface is displayed (an entity is being placed)
+         */
+        [[nodiscard]] bool is_displayed() const {return displayed;}
+
         [[nodiscard]] Vector2Int getPlacementPosition() const { return position_to_place; }
 
         [[nodiscard]] float getPlacementAngle() const {
@@ -100,5 +108,8 @@ namespace EntityPlacement {
         void sendForm();
 
         void placeImmediately(Entity *new_entity);
+
+        //closes the dialog if the user clicks on something else than UI
+        void handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) override;
     };
 };

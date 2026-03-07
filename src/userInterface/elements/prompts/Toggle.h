@@ -31,6 +31,7 @@ namespace GUI::Prompts {
               value(value), annotation(std::move(annotation)) {
             on_pressed.subscribe([this]() {
                 this->value = !this->value;
+                this->text = computeLabel(this->value);
             });
         }
 

@@ -35,11 +35,13 @@ inline void EntityPlacement::EntityPlacer::update(const UpdateContext &context) 
 }
 
 void EntityPlacement::EntityPlacer::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
-    if (event.type == SDL_EVENT_MOUSE_WHEEL && SDL_GetModState() && SDL_KMOD_ALT) {
+    if (event.type == SDL_EVENT_MOUSE_WHEEL && SDL_GetModState() && SDL_KMOD_ALT)
         angle_to_place_at += event.wheel.y * 10.0f;
-    }
 
     if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && context.mouse_position_type == GameEvent::Game) {
+
+        if (entity_placement_interface->is_displayed())return;
+
         float mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
 
