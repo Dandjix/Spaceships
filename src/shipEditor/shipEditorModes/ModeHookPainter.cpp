@@ -24,6 +24,7 @@ void ShipEditorModes::ModeHookPainter::enter() {
     auto hook_name_dialog = new GUI::Prompts::TextPrompt(Anchor::Center,{0,0},400,100,state_machine->window,false);
     addedEditorGUIElements.push_back(hook_name_dialog);
 
+    //hide the dialog if it leaves focus
     hook_name_dialog->on_focused_change.subscribe([hook_name_dialog](bool focused) {
         if (!focused) {
             hook_name_dialog->hide();
@@ -35,6 +36,12 @@ void ShipEditorModes::ModeHookPainter::enter() {
     hook_painter->promptForName = [hook_name_dialog,hook_painter](){
 
         hook_name_dialog->on_confirm.clear();
+
+        //hide the dialog if it is confirmed
+        hook_name_dialog->on_confirm.subscribe([hook_name_dialog](const std::string& _) {
+            hook_name_dialog->hide();
+        });
+
         hook_name_dialog->on_confirm.subscribe([hook_painter](const std::string &name) {
             hook_painter->confirmPlacement(name);
         });

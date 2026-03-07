@@ -27,6 +27,7 @@ EDITOR_PLACE_DEFINITION(Sphere) {
             {"C", EntityPlacement::InterfaceForm::BOOL},
             {"D", EntityPlacement::InterfaceForm::VECTOR2INT},
             {"E", EntityPlacement::InterfaceForm::VECTOR2FLOAT},
+            {"F", EntityPlacement::InterfaceForm::STRING},
         },
         {
             {"Z",{"A","B","C"}}

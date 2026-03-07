@@ -8,6 +8,8 @@
 
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include "gameEvent/GameEvent.h"
+
 void GUI::Prompts::StringPrompt::setFocused(bool new_focused) {
     if (new_focused != focused) {
         if (new_focused) {
@@ -29,7 +31,7 @@ void GUI::Prompts::StringPrompt::handleEvent(const SDL_Event &event, const GameE
         float mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
 
-        auto new_focused = is_inside({mouse_x, mouse_y});
+        auto new_focused = context.element_under_mouse == this;
 
         setFocused(new_focused);
     }
@@ -42,13 +44,14 @@ void GUI::Prompts::StringPrompt::handleEvent(const SDL_Event &event, const GameE
         if (event.type == SDL_EVENT_TEXT_INPUT) {
             value.append(event.text.text);
         }
-        if ((event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_BACKSPACE || event.key.key == SDLK_DELETE) && !
-            value.empty()) {
+        if (
+            (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_BACKSPACE || event.key.key == SDLK_DELETE)
+            && !value.empty()
+        ) {
             value.pop_back();
         }
         if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_RETURN) {
             on_confirm.emit(value);
-            hide();
         }
         if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE) {
             setFocused(false);

@@ -24,6 +24,7 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
     auto airlock_name_dialog = new GUI::Prompts::TextPrompt(Anchor::Center, {0, 0}, 400, 100, state_machine->window, false);
     addedEditorGUIElements.push_back(airlock_name_dialog);
 
+    // hide dialog if it leaves focus
     airlock_name_dialog->on_focused_change.subscribe([airlock_name_dialog](bool focused) {
         if (!focused) {
             airlock_name_dialog->hide();
@@ -35,6 +36,11 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
 
     airlock_painter->promptForName = [airlock_name_dialog,airlock_painter]() {
         airlock_name_dialog->on_confirm.clear();
+
+        //hide the dialog if it is confirmed
+        airlock_name_dialog->on_confirm.subscribe([airlock_name_dialog](const std::string& _) {
+            airlock_name_dialog->hide();
+        });
         airlock_name_dialog->on_confirm.subscribe([airlock_painter](const std::string &name) {
             airlock_painter->confirmPlacement(name);
         });

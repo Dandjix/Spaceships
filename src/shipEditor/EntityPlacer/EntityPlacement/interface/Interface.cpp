@@ -77,7 +77,7 @@ void EntityPlacement::Interface::createPrompts(
     int height = computeFormHeight(request);
 
     Anchor anchor = Anchor::Center;
-    Vector2Int prompt_offset = {0, height / 2};
+    Vector2Int prompt_offset = {0, -height / 2};
 
     for (const auto &[field_name,choices]: request.choices) {
         string_prompts.push_back({
