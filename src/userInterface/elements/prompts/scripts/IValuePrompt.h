@@ -6,17 +6,24 @@
 #include "userInterface/GUIRect.h"
 
 namespace GUI::Prompts {
-    template<typename T>
-    class IValuePrompt {
+
+    class IPrompt {
     public:
-        virtual ~IValuePrompt() = default;
-
-        [[nodiscard]] virtual T getValue() const = 0;
-
-        virtual void setValue(T value) = 0;
+        virtual ~IPrompt() = default;
 
         [[nodiscard]] [[nodiscard]] virtual bool inputIsValid() const = 0;
 
         [[nodiscard]] virtual GUIRect * asGUIRect() = 0;
+    };
+
+
+    template<typename T>
+    class IValuePrompt : public IPrompt{
+    public:
+        [[nodiscard]] virtual T getValue() const = 0;
+
+        virtual void setValue(T value) = 0;
+
+
     };
 }

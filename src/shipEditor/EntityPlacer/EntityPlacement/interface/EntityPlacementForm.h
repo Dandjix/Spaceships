@@ -11,6 +11,7 @@ namespace EntityPlacement::InterfaceForm {
     enum SupportedType {
         INT,
         FLOAT,
+        BOOL,
         VECTOR2INT,
         VECTOR2FLOAT,
         STRING
@@ -35,6 +36,7 @@ namespace EntityPlacement::InterfaceForm {
     struct FormResult {
         std::unordered_map<std::string, int> results_int;
         std::unordered_map<std::string, float> results_float;
+        std::unordered_map<std::string, bool> results_bool;
         std::unordered_map<std::string, Vector2Int> results_Vector2Int;
         std::unordered_map<std::string, Vector2Float> results_Vector2Float;
         std::unordered_map<std::string, std::string> results_string;

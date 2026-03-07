@@ -10,11 +10,39 @@
 #include "userInterface/elements/prompts/IntPrompt.h"
 #include "userInterface/elements/prompts/Select.h"
 #include "userInterface/elements/prompts/TextPrompt.h"
+#include "userInterface/elements/prompts/Toggle.h"
 #include "userInterface/elements/prompts/Vector2FloatPrompt.h"
 #include "userInterface/elements/prompts/Vector2IntPrompt.h"
 
 constexpr int FIELD_HEIGHT_PX = 50;
 constexpr int FIELD_WIDTH_PX = 250;
+
+std::vector<std::pair<std::string, GUI::Prompts::IPrompt *> > EntityPlacement::Interface::get_all_prompts() {
+    std::vector<std::pair<std::string, GUI::Prompts::IPrompt *> > all = {};
+    all.reserve(
+        int_prompts.size() +
+        float_prompts.size() +
+        bool_prompts.size() +
+        Vector2Int_prompts.size() +
+        Vector2Float_prompts.size() +
+        string_prompts.size()
+    );
+
+    for (const auto &[field_name, prompt]: int_prompts)
+        all.push_back({field_name, prompt});
+    for (const auto &[field_name, prompt]: float_prompts)
+        all.push_back({field_name, prompt});
+    for (const auto &[field_name, prompt]: bool_prompts)
+        all.push_back({field_name, prompt});
+    for (const auto &[field_name, prompt]: Vector2Int_prompts)
+        all.push_back({field_name, prompt});
+    for (const auto &[field_name, prompt]: Vector2Float_prompts)
+        all.push_back({field_name, prompt});
+    for (const auto &[field_name, prompt]: string_prompts)
+        all.push_back({field_name, prompt});
+
+    return all;
+}
 
 EntityPlacement::InterfaceForm::FormResult EntityPlacement::Interface::gatherResults() {
     InterfaceForm::FormResult result = {};
@@ -23,6 +51,8 @@ EntityPlacement::InterfaceForm::FormResult EntityPlacement::Interface::gatherRes
         result.results_int.insert({field_name, prompt->getValue()});
     for (const auto &[field_name, prompt]: float_prompts)
         result.results_float.insert({field_name, prompt->getValue()});
+    for (const auto &[field_name, prompt]: bool_prompts)
+        result.results_bool.insert({field_name, prompt->getValue()});
     for (const auto &[field_name, prompt]: Vector2Int_prompts)
         result.results_Vector2Int.insert({field_name, prompt->getValue()});
     for (const auto &[field_name, prompt]: Vector2Float_prompts)
@@ -79,6 +109,16 @@ void EntityPlacement::Interface::createPrompts(
                                                   true)
                 });
 
+                break;
+            case InterfaceForm::BOOL:
+                bool_prompts.push_back({
+                    field_name,
+                    new GUI::Prompts::Toggle(anchor,
+                                             prompt_offset,
+                                             FIELD_WIDTH_PX,
+                                             FIELD_HEIGHT_PX,
+                                             true)
+                });
                 break;
             case InterfaceForm::VECTOR2INT:
                 Vector2Int_prompts.push_back({

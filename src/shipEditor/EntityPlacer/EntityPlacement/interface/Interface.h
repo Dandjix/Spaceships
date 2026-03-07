@@ -41,10 +41,14 @@ namespace EntityPlacement {
          * even though a description likely contains the field name */
         std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<int> *> > int_prompts = {};
         std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<float> *> > float_prompts = {};
+        std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<bool> *> > bool_prompts = {};
         std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<Vector2Int> *> > Vector2Int_prompts = {};
         std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<Vector2Float> *> > Vector2Float_prompts = {};
         /** groups both text and select prompts, so beware of name collisions */
         std::vector<std::pair<std::string, GUI::Prompts::IValuePrompt<std::string> *> > string_prompts;
+
+        std::vector<std::pair<std::string, GUI::Prompts::IPrompt *>> get_all_prompts();
+
         GUI::TextButton *send_button;
 
         //needed for prompt init/showing/hiding

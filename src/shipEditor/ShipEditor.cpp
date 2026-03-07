@@ -83,7 +83,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         {},
         new SpaceshipHooks({}, {}, {})
     );
-    std::vector<Entity *> * placed_entities = &blueprint->entities;
+    std::vector<Entity *> *placed_entities = &blueprint->entities;
 
     ShipBuildingGrid grid(
         initialDimensions,
@@ -98,7 +98,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     BlueprintEditorAppearance appearance(blueprint);
     active_entities.insert(&appearance);
 
-    auto entity_placement_interface = EntityPlacement::Interface(&editor_GUI_elements, window,placed_entities,entity_rendering_context);
+    auto entity_placement_interface = EntityPlacement::Interface(&editor_GUI_elements, window, placed_entities,
+                                                                 entity_rendering_context);
 
     EntityPlacement::Context entity_placement_context = {&entity_placement_interface};
 

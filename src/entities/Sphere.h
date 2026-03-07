@@ -1,5 +1,6 @@
 #pragma once
 #include "../physics/scripts/PhysicsEntity.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "spaceships/EntityData/EntityLoading.h"
 
 
@@ -27,6 +28,8 @@ public:
     void update(const UpdateContext &context) override;
 
     FROM_JSON_DECLARATION(Sphere,"sphere");
+
+    EDITOR_PLACE_DECLARATION(Sphere,"sphere");
 
     nlohmann::json toJson() override {
         auto json = Entity::toJson();
