@@ -6,6 +6,7 @@
 #include "MenuNavigation.h"
 #include "fonts.h"
 #include "elements/GUI/GUIList.h"
+#include "gameEvent/GetMousePositionType.h"
 #include "loadGame/AutoSave.h"
 
 
@@ -68,7 +69,8 @@ MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *windo
                 0,
                 {win_x, win_y}
             },
-            delta_time
+            delta_time,
+            nullptr
         };
 
         SDL_Event event;
@@ -81,6 +83,7 @@ MenuNavigation::Navigation RunMainMenu(SDL_Renderer *renderer, SDL_Window *windo
             },
             nullptr,
             GameEvent::UI,
+            nullptr, //beware : this could cause bugs
             window
         };
 

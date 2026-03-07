@@ -5,7 +5,7 @@
 #include <unordered_set>
 
 #include "entities/scripts/Entity.h"
-#include "entityContainer/EntityContainer.h"
+#include "entityContainer/ElementContainerDQ.h"
 #include "exterior/SpaceShipExterior.h"
 #include "hashProximityList/HashProximityMap.h"
 #include "Hooks/SpaceshipHooks.h"

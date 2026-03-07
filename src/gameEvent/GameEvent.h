@@ -11,6 +11,7 @@
 #include "game/CameraTransformations.h"
 
 
+class GUIRect;
 class SpaceShip;
 
 namespace GameEvent {
@@ -18,6 +19,7 @@ namespace GameEvent {
         const CameraTransformations::CameraInfo camera_info;
 	    SpaceShip* spaceShip;
         MousePositionType mouse_position_type = Game;
+        GUIRect * element_under_mouse;
         SDL_Window * window;
     };
 }

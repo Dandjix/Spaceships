@@ -122,15 +122,15 @@ void EntityPlacement::Interface::createPrompts(
 
     // activate (place in the ui)
     for (auto prompt: int_prompts | std::views::values)
-        gui_elements->add(prompt->asGUIRect());
+        gui_elements->insert(prompt->asGUIRect());
     for (auto prompt: float_prompts | std::views::values)
-        gui_elements->add(prompt->asGUIRect());
+        gui_elements->insert(prompt->asGUIRect());
     for (auto prompt: Vector2Int_prompts | std::views::values)
-        gui_elements->add(prompt->asGUIRect());
+        gui_elements->insert(prompt->asGUIRect());
     for (auto prompt: Vector2Float_prompts | std::views::values)
-        gui_elements->add(prompt->asGUIRect());
+        gui_elements->insert(prompt->asGUIRect());
     for (auto prompt: string_prompts | std::views::values)
-        gui_elements->add(prompt->asGUIRect());
+        gui_elements->insert(prompt->asGUIRect());
 
     //it is safer to delete the send button and create it each time since it avoids a possible memory leak
 
@@ -149,7 +149,7 @@ void EntityPlacement::Interface::createPrompts(
     send_button->on_pressed.subscribe([this]() {
         sendForm();
     });
-    gui_elements->add(send_button);
+    gui_elements->insert(send_button);
 }
 
 void EntityPlacement::Interface::clearPrompts() {
@@ -179,7 +179,7 @@ bool EntityPlacement::Interface::promptsAreValid() const {
 }
 
 EntityPlacement::Interface::Interface(
-    ElementContainer<GUIRect *> *gui_elements,
+    ElementContainerDQ<GUIRect *> *gui_elements,
     SDL_Window *window,
     std::vector<Entity *> *world_entities,
     const EntityRendering::Context &entity_rendering_context

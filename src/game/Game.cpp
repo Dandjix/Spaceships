@@ -281,7 +281,8 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             screenDimensions,
             camera->getScale(),
         };
-        auto mouse_position_type = GameEvent::getMousePositionType(gui_elements.get(), {mouse_x, mouse_y});
+        auto mouse_position_type = GameEvent::getMousePositionType(gui_elements.getReversed(), {mouse_x, mouse_y});
+        auto element_under_mouse = GameEvent::getElementUnderMouse(gui_elements, {mouse_x, mouse_y});
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -294,6 +295,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                     camera_info,
                     space_ship,
                     mouse_position_type,
+                    element_under_mouse,
                     window
                 };
                 space_ship->instance->eventHandling(event, event_context, paused);
@@ -304,6 +306,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
                     camera_info,
                     nullptr,
                     mouse_position_type,
+                    element_under_mouse,
                     window
                 };
                 gui_element->handleEvent(event, event_context);
@@ -339,7 +342,8 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
             },
             deltaTime,
             &gui_elements,
-            window
+            window,
+            element_under_mouse
         };
         guiUpdateHandling(gui_elements, gui_elements_deletion_queue, gui_update_context, paused);
 
@@ -360,9 +364,9 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
         };
 
         gui_elements.sort([](GUIRect *first, GUIRect *second) {
-            return first->getQueueOrder() > second->getQueueOrder();
+            return first->getQueueOrder() < second->getQueueOrder();
         });
-        for (auto gui_element: gui_elements.get()) {
+        for (auto gui_element: gui_elements.getReversed()) {
             gui_element->render(renderer, gui_rendering_context);
         }
 

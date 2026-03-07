@@ -2,7 +2,7 @@
 #include "entities/scripts/Entity.h"
 #include "gameEvent/MousePositionType.h"
 #include "Rooms/SpaceshipRooms.h"
-#include "spaceships/entityContainer/EntityContainer.h"
+#include "spaceships/entityContainer/ElementContainerDQ.h"
 #include "spaceships/EntityData/EntityLoading.h"
 #include "spaceships/hashProximityList/HashProximityMap.h"
 #include "spaceships/spaceshipTiles/SpaceshipTiles.h"
@@ -35,11 +35,11 @@ namespace Instances {
 
         SpaceShip *space_ship;
 
-        EntityContainer<Entity *> entities;
-        EntityContainer<PhysicsEntity *> physics_entities;
-        EntityContainer<LateUpdateEntity *> late_update_entities;
-        EntityContainer<ActiveWhenPausedEntity *> active_when_paused_entities;
-        EntityContainer<Camera *> cameras;
+        ElementContainerDQ<Entity *> entities;
+        ElementContainerDQ<PhysicsEntity *> physics_entities;
+        ElementContainerDQ<LateUpdateEntity *> late_update_entities;
+        ElementContainerDQ<ActiveWhenPausedEntity *> active_when_paused_entities;
+        ElementContainerDQ<Camera *> cameras;
 
         Instance(
             SpaceShip *space_ship,

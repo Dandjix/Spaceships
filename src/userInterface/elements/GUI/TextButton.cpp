@@ -7,6 +7,7 @@
 #include <iostream>
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include "gameEvent/GameEvent.h"
 #include "userInterface/fonts.h"
 
 void GUI::TextButton::render(SDL_Renderer *renderer, const GUI_RenderingContext &context) const {
@@ -45,13 +46,13 @@ void GUI::TextButton::update(const GUI_UpdateContext &context) {
     GUIRect::update(context);
     float mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
-    highlighted = (mouse_x >= screenPosition.x && mouse_x <= screenPosition.x + dimensions.x)
-                  &&
-                  (mouse_y >= screenPosition.y && mouse_y <= screenPosition.y + dimensions.y);
+    highlighted = context.element_under_mouse == this
+                  && (mouse_x >= screenPosition.x && mouse_x <= screenPosition.x + dimensions.x)
+                  && (mouse_y >= screenPosition.y && mouse_y <= screenPosition.y + dimensions.y);
 }
 
 void GUI::TextButton::handleEvent(const SDL_Event &event, const GameEvent::GameEventContext &context) {
-    if (event.type != SDL_EVENT_MOUSE_BUTTON_DOWN)
+    if (event.type != SDL_EVENT_MOUSE_BUTTON_DOWN || context.element_under_mouse != this)
         return;
 
     float mouse_x, mouse_y;

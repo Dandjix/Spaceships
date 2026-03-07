@@ -48,7 +48,7 @@ namespace EntityPlacement {
         GUI::TextButton *send_button;
 
         //needed for prompt init/showing/hiding
-        ElementContainer<GUIRect *> *gui_elements;
+        ElementContainerDQ<GUIRect *> *gui_elements;
         SDL_Window *window;
         //needed for placing the entities in the world
         std::vector<Entity *> *world_entities;
@@ -78,7 +78,7 @@ namespace EntityPlacement {
 
 
         Interface(
-            ElementContainer<GUIRect *> *gui_elements,
+            ElementContainerDQ<GUIRect *> *gui_elements,
             SDL_Window *window, std::vector<Entity *> *world_entities,
             const EntityRendering::Context &entity_rendering_context
         );

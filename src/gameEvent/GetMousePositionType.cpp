@@ -13,3 +13,11 @@ GameEvent::MousePositionType GameEvent::getMousePositionType(const std::vector<G
     }
     return Game;
 }
+
+GUIRect * GameEvent::getElementUnderMouse(const ElementContainer<GUIRect*> &elements, Vector2Float mouse_position) {
+    for (auto element: elements.getReversed()) {
+        if (element->is_inside(mouse_position))
+            return element;
+    }
+    return nullptr;
+}

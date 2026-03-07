@@ -57,18 +57,16 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     // #================================================================================================================
     Tiles::loadAll(renderer);
 
-    ElementContainer<Entity *> active_entities = {};
-    ElementContainer<Entity *> active_entities_deletion_queue = {};
+    ElementContainerDQ<Entity *> active_entities = {};
 
 
-    ElementContainer<GUIRect *> editor_GUI_elements = {};
-    ElementContainer<GUIRect *> editor_GUI_elements_deletion_queue = {};
+    ElementContainerDQ<GUIRect *> editor_GUI_elements = {};
 
     auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures", renderer);
     EntityRendering::Context entity_rendering_context = {texture_usage_map};
 
     auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1, 600);
-    active_entities.add(camera);
+    active_entities.insert(camera);
 
     Uint64 now = SDL_GetTicks();
     Uint64 last = 0;
@@ -96,10 +94,10 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             blueprint->resize(newDimensions);
         }
     );
-    active_entities.add(&grid);
+    active_entities.insert(&grid);
 
     BlueprintEditorAppearance appearance(blueprint);
-    active_entities.add(&appearance);
+    active_entities.insert(&appearance);
 
     auto entity_placement_interface = EntityPlacement::Interface(&editor_GUI_elements, window,placed_entities,entity_rendering_context);
 
@@ -118,9 +116,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
     ShipEditorModes::ShipEditorStateMachine state_machine = ShipEditorModes::ShipEditorStateMachine(
         &common,
         &active_entities,
-        &active_entities_deletion_queue,
         &editor_GUI_elements,
-        &editor_GUI_elements_deletion_queue,
         ShipEditorModes::TilePainter,
         window);
 
@@ -182,7 +178,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             }
         }
     );
-    editor_GUI_elements.add(&actionsList);
+    editor_GUI_elements.insert(&actionsList);
 
 
     // #================================================================================================================
@@ -201,7 +197,11 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
         float mouse_x, mouse_y;
         SDL_GetMouseState(&mouse_x, &mouse_y);
 
-        auto mouse_position_type = GameEvent::getMousePositionType(editor_GUI_elements.get(), {mouse_x, mouse_y});
+        editor_GUI_elements.sort([](GUIRect *first, GUIRect *second) {
+            return first->getQueueOrder() < second->getQueueOrder();
+        });
+
+        auto element_under_mouse = GameEvent::getElementUnderMouse(editor_GUI_elements, {mouse_x, mouse_y});
 
         GameEvent::GameEventContext event_context = {
             {
@@ -211,8 +211,9 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
                 camera->getScale()
             },
             nullptr,
-            mouse_position_type,
-            window
+            GameEvent::getMousePositionType(editor_GUI_elements.get(), {mouse_x, mouse_y}),
+            element_under_mouse,
+            window,
         };
 
         //handling events
@@ -245,7 +246,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             },
             deltaTime,
             nullptr,
-            mouse_position_type
+            GameEvent::getMousePositionType(editor_GUI_elements.get(), {mouse_x, mouse_y}),
         };
 
         // update
@@ -263,7 +264,8 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
             },
             deltaTime,
             &editor_GUI_elements,
-            window
+            window,
+            element_under_mouse
         };
 
         //GUI update

@@ -7,15 +7,15 @@
 #include <vector>
 
 template<class T>
-class EntityContainer {
+class ElementContainerDQ {
 private:
     std::vector<T> container;
     std::vector<std::pair<T, bool> > deletion_queue;
 
 public:
-    EntityContainer() = default;
+    ElementContainerDQ() = default;
 
-    explicit EntityContainer(std::vector<T> values) : container(values), deletion_queue({}) {
+    explicit ElementContainerDQ(std::vector<T> values) : container(values), deletion_queue({}) {
     }
 
     // Type aliases for iterator support

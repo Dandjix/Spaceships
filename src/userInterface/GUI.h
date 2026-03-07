@@ -36,4 +36,5 @@ struct GUI_UpdateContext
 	const float deltaTime;
 	ElementContainer<GUIRect *> * gui_elements;
 	SDL_Window * window;
+	GUIRect * element_under_mouse;
 };

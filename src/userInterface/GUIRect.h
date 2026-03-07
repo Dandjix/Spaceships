@@ -5,6 +5,7 @@
 #include "../math/Vectors.h"
 #include "../entities/scripts/Entity.h"
 #include "game/ElementContainer.h"
+#include "spaceships/entityContainer/ElementContainerDQ.h"
 
 class GUIRect {
 protected :
@@ -55,8 +56,8 @@ public:
 	 * similar to entity's kill, but frick events
 	 * @param rect_container
 	 */
-	void kill(ElementContainer<GUIRect*> * rect_container) {
-		rect_container->removeAndDelete(this);
+	void kill(ElementContainerDQ<GUIRect*> * rect_container) {
+		rect_container->add_to_erasing_queue(this);
 	}
 
 };

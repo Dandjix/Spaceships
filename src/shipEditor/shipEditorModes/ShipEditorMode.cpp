@@ -6,17 +6,21 @@
 #include "ShipEditorStateMachine.h"
 
 void ShipEditorModes::ShipEditorMode::addActiveEntities(const std::vector<Entity *> &to_add) const {
-    state_machine->activeEntities->add(to_add);
+    for (auto e: to_add)
+        state_machine->activeEntities->insert(e);
 }
 
 void ShipEditorModes::ShipEditorMode::removeActiveEntities(const std::vector<Entity *> &to_remove) const {
-    state_machine->activeEntitiesDeletionQueue->add(to_remove);
+    for (auto e: to_remove)
+        state_machine->activeEntities->add_to_erasing_queue(e);
 }
 
 void ShipEditorModes::ShipEditorMode::addGUIElements(const std::vector<GUIRect *> &to_add) const {
-    state_machine->editorGUIElements->add(to_add);
+    for (auto e: to_add)
+        state_machine->editorGUIElements->insert(e);
 }
 
 void ShipEditorModes::ShipEditorMode::removeGUIElements(const std::vector<GUIRect *> &to_remove) const {
-    state_machine->editorGUIElementsDeletionQueue->add(to_remove);
+    for (auto e: to_remove)
+        state_machine->editorGUIElements->add_to_erasing_queue(e);
 }

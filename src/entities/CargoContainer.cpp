@@ -58,7 +58,7 @@ EDITOR_PLACE_DEFINITION(CargoContainer) {
         "Cargo Container",
         {},
         {
-            {"variation", {"blank", "EMA"}}
+            {"variation", {"blank", "EMA","SN","SL"}}
         }
     };
 
@@ -72,6 +72,12 @@ EDITOR_PLACE_DEFINITION(CargoContainer) {
         }
         else if (variation_string == "EMA") {
             variation = Variation::EMA;
+        }
+        else if (variation_string == "SN") {
+            variation = Variation::SN;
+        }
+        else if (variation_string == "SL") {
+            variation = Variation::SL;
         }
         else {
             throw std::logic_error(std::format("variation : {} not handled.",variation_string));

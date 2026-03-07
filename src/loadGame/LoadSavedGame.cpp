@@ -81,6 +81,7 @@ MenuNavigation::Navigation LoadSavedGame::SavePickerPage(SDL_Renderer *renderer,
             },
             nullptr,
             GameEvent::UI,
+            nullptr,
             window
         };
 

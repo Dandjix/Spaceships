@@ -9,7 +9,6 @@
 #include "ModeHookPainter.h"
 #include "ModeTilePainter.h"
 #include "ModeToggleableLinker.h"
-#include "game/ElementContainer.h"
 
 class GUIRect;
 class Entity;
@@ -40,25 +39,19 @@ namespace ShipEditorModes {
 
         CommonEditorObjects *common;
 
-        ElementContainer<Entity *> *activeEntities;
-        ElementContainer<Entity *> *activeEntitiesDeletionQueue;
+        ElementContainerDQ<Entity *> *activeEntities;
 
-        ElementContainer<GUIRect *> *editorGUIElements;
-        ElementContainer<GUIRect *> *editorGUIElementsDeletionQueue;
+        ElementContainerDQ<GUIRect *> *editorGUIElements;
 
         explicit ShipEditorStateMachine(
             CommonEditorObjects *common,
-            ElementContainer<Entity *> *active,
-            ElementContainer<Entity *> *active_deletion_queue,
-            ElementContainer<GUIRect *> *GUIElements,
-            ElementContainer<GUIRect *> *GUIElements_deletion_queue,
+            ElementContainerDQ<Entity *> *active,
+            ElementContainerDQ<GUIRect *> *GUIElements,
             Mode initial,
             SDL_Window *window)
             : common(common),
               current_mode_label(initial),
               activeEntities(active),
-              activeEntitiesDeletionQueue(active_deletion_queue),
-              editorGUIElementsDeletionQueue(GUIElements_deletion_queue),
               editorGUIElements(GUIElements),
               window(window) {
             tile_painter_mode = new ModeTilePainter(this);

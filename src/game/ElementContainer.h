@@ -15,6 +15,7 @@ protected:
 
 public:
     [[nodiscard]] std::vector<T> get() const;
+    [[nodiscard]] std::vector<T> getReversed() const;
 
     void add(std::vector<T> to_add);
 
@@ -52,6 +53,18 @@ public:
 template<typename T>
 std::vector<T> ElementContainer<T>::get() const {
     return elements;
+}
+
+template<typename T>
+std::vector<T> ElementContainer<T>::getReversed() const {
+
+    std::vector<T> reversed = {};
+    reversed.reserve(elements.size());
+
+    for (int i = 0; i < elements.size(); ++i)
+        reversed.push_back(elements[elements.size() - i - 1]);
+
+    return reversed;
 }
 
 template<typename T>
