@@ -21,7 +21,7 @@ namespace ShipEditorModes {
 
         void addActiveEntities(const std::vector<Entity * > &to_add) const;
 
-        void eraseActiveEntities(const std::vector<Entity * > &to_remove) const;
+        void fakeKillActiveEntities(const std::vector<Entity * > &to_remove) const;
 
 
         void addGUIElements(const std::vector<GUIRect * > &to_add) const;
@@ -38,5 +38,6 @@ namespace ShipEditorModes {
         void leave();
 
         virtual void createEntitiesAndElements() = 0;
+        virtual void afterLeave() {};
     };
 }

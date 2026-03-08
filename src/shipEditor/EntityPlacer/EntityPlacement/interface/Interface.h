@@ -88,6 +88,14 @@ namespace EntityPlacement {
 
         void setAngleToPlace(float angle_to_place_param) { angle_to_place = angle_to_place_param; }
 
+        /**
+         * Force closes the interface if it is open, else do nothing
+         */
+        void close() {
+            if (displayed)
+                clearPrompts();
+        }
+
 
         Interface(
             ElementContainerDQ<GUIRect *> *gui_elements,
@@ -101,6 +109,11 @@ namespace EntityPlacement {
 
         void render(SDL_Renderer *renderer, const RenderingContext &context) override;
 
+
+        /**
+         * @param form_request_param the form that the interface will display
+         * @param place_entity a callback that will place the entity when the form is filled and sent
+         */
         void askForForm(const InterfaceForm::FormRequest &form_request_param,
                         std::function<Entity *(const InterfaceForm::FormResult &)>
                         place_entity);

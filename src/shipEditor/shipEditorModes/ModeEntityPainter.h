@@ -9,12 +9,12 @@ namespace ShipEditorModes {
     class ModeEntityPainter : public ShipEditorMode {
 
     public:
-        explicit ModeEntityPainter(ShipEditorStateMachine *state_machine)
-            : ShipEditorMode(state_machine) {
-        }
+        explicit ModeEntityPainter(ShipEditorStateMachine *state_machine);
 
 
         void createEntitiesAndElements() override;
+
+        void afterLeave() override;
     };
 
 }

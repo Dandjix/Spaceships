@@ -4,15 +4,18 @@
 
 #include "ShipEditorMode.h"
 #include "ShipEditorStateMachine.h"
+#include "shipEditor/EntityPlacer/EntityPlacement/interface/Interface.h"
 
 void ShipEditorModes::ShipEditorMode::addActiveEntities(const std::vector<Entity *> &to_add) const {
     for (auto e: to_add)
         state_machine->activeEntities->insert(e);
 }
 
-void ShipEditorModes::ShipEditorMode::eraseActiveEntities(const std::vector<Entity *> &to_remove) const {
-    for (auto e: to_remove)
+void ShipEditorModes::ShipEditorMode::fakeKillActiveEntities(const std::vector<Entity *> &to_remove) const {
+    for (auto e: to_remove) {
         state_machine->activeEntities->add_to_erasing_queue(e);
+        e->on_killed.emit(nullptr);
+    }
 }
 
 void ShipEditorModes::ShipEditorMode::addGUIElements(const std::vector<GUIRect *> &to_add) const {
@@ -36,9 +39,11 @@ void ShipEditorModes::ShipEditorMode::enter() {
 }
 
 void ShipEditorModes::ShipEditorMode::leave() {
-    eraseActiveEntities(added_entities);
+    fakeKillActiveEntities(added_entities);
     killGUIElements(added_ui_elements);
 
     added_entities = {};
     added_ui_elements = {};
+
+    afterLeave();
 }

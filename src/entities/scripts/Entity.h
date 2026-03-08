@@ -51,7 +51,8 @@ public:
      */
     Event<> on_destroyed;
     /**
-     * called when kill() is called
+     * called when kill() is called.
+     * In the editor, kill() is never called, but this event is called with a nullptr argument
      */
     Event<Instances::Instance *> on_killed;
 
