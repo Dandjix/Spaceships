@@ -16,13 +16,9 @@
 #include "userInterface/elements/GUI/GUIList.h"
 #include "userInterface/elements/prompts/TextPrompt.h"
 
-void ShipEditorModes::ModeHookPainter::enter() {
-
-    addedActiveEntities = {};
-    addedEditorGUIElements = {};
-
+void ShipEditorModes::ModeHookPainter::createEntitiesAndElements() {
     auto hook_name_dialog = new GUI::Prompts::TextPrompt(Anchor::Center,{0,0},400,100,state_machine->window,false);
-    addedEditorGUIElements.push_back(hook_name_dialog);
+    added_ui_elements.push_back(hook_name_dialog);
 
     //hide the dialog if it leaves focus
     hook_name_dialog->on_focused_change.subscribe([hook_name_dialog](bool focused) {
@@ -60,12 +56,12 @@ void ShipEditorModes::ModeHookPainter::enter() {
         state_machine->common->blueprint->hooks->addPoint(name,new HookPoint(position));
     });
 
-    addedActiveEntities.push_back(hook_painter);
+    added_entities.push_back(hook_painter);
 
     auto region_deleter = new HookDeleter::RegionDeleter(state_machine->common->blueprint->hooks,false);
-    addedActiveEntities.push_back(region_deleter);
+    added_entities.push_back(region_deleter);
     auto point_deleter = new HookDeleter::PointDeleter(state_machine->common->blueprint->hooks,false);
-    addedActiveEntities.push_back(point_deleter);
+    added_entities.push_back(point_deleter);
 
     auto action_list = new GUIList(Anchor::TL,{100,0},160,GUI_Fill,std::vector<std::string>{
         "Snap Center",
@@ -77,7 +73,7 @@ void ShipEditorModes::ModeHookPainter::enter() {
         "Delete Regions",
         "Delete Points"
     },
-        [hook_painter,region_deleter,point_deleter](auto option) {
+        [hook_painter,region_deleter,point_deleter](const auto& option) {
             if (option == "Snap Center") {
                 hook_painter->setPrecision(HookPainter::Precision::Center);
             }
@@ -113,17 +109,10 @@ void ShipEditorModes::ModeHookPainter::enter() {
         }
     );
 
-    addedEditorGUIElements.push_back(action_list);
+    added_ui_elements.push_back(action_list);
 
     auto appearance = new HookAppearance(state_machine->common->blueprint->hooks);
 
-    addedActiveEntities.push_back(appearance);
+    added_entities.push_back(appearance);
 
-    addActiveEntities(addedActiveEntities);
-    addGUIElements(addedEditorGUIElements);
-}
-
-void ShipEditorModes::ModeHookPainter::leave() {
-    removeActiveEntities(addedActiveEntities);
-    removeGUIElements(addedEditorGUIElements);
 }

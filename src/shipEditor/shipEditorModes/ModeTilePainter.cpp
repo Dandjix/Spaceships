@@ -10,10 +10,7 @@
 #include "../../userInterface/elements/GUI/GUIList.h"
 #include "ShipEditorStateMachine.h"
 
-void ShipEditorModes::ModeTilePainter::enter() {
-
-    addedActiveEntities = {};
-    addedEditorGUIElements = {};
+void ShipEditorModes::ModeTilePainter::createEntitiesAndElements() {
 
     auto common = state_machine->common;
 
@@ -22,7 +19,7 @@ void ShipEditorModes::ModeTilePainter::enter() {
 
 
     auto tile_painter = new BlueprintTilePainter(blueprint, grid, Tile::Wall,false);
-    addedActiveEntities.push_back(tile_painter);
+    added_entities.push_back(tile_painter);
     
 
     std::vector<std::string>tileOptions =
@@ -44,13 +41,13 @@ void ShipEditorModes::ModeTilePainter::enter() {
         },
         true
     );
-    addedEditorGUIElements.push_back(tilesList);
+    added_ui_elements.push_back(tilesList);
 
 
 
 
     auto fill_label = new GUILabel(Anchor::TL,{200,0},50,25,"Fill",{255,255,255},fonts["sm"]);
-    addedEditorGUIElements.push_back(fill_label);
+    added_ui_elements.push_back(fill_label);
 
     auto fillCheckbox = new GUICheckbox(
         Anchor::TL,
@@ -60,16 +57,5 @@ void ShipEditorModes::ModeTilePainter::enter() {
         },
         tile_painter->fill
     );
-    addedEditorGUIElements.push_back(fillCheckbox);
-
-
-
-
-    addActiveEntities(addedActiveEntities);
-    addGUIElements(addedEditorGUIElements);
-}
-
-void ShipEditorModes::ModeTilePainter::leave() {
-    removeActiveEntities(addedActiveEntities);
-    removeGUIElements(addedEditorGUIElements);
+    added_ui_elements.push_back(fillCheckbox);
 }

@@ -9,17 +9,13 @@
 namespace ShipEditorModes {
 
     class ModeHookPainter : public ShipEditorMode {
-    private:
-        std::vector<Entity * > addedActiveEntities;
-        std::vector<GUIRect * > addedEditorGUIElements;
+
     public:
         explicit ModeHookPainter(ShipEditorStateMachine *state_machine)
             : ShipEditorMode(state_machine) {
         }
 
-        void enter() override;
-
-        void leave() override;
+        void createEntitiesAndElements() override;
     };
 
 }

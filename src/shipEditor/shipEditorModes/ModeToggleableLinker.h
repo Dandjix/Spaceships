@@ -15,8 +15,6 @@ public:
         : ShipEditorMode(state_machine) {
     }
 
-    void enter() override;
-
-    void leave() override;
+    void createEntitiesAndElements() override;
 };
 

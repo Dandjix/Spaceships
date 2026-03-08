@@ -9,11 +9,7 @@
 #include "userInterface/elements/GUI/GUIList.h"
 
 
-void ShipEditorModes::ModeEntityPainter::enter() {
-    addedActiveEntities = {};
-    addedEditorGUIElements = {};
-
-
+void ShipEditorModes::ModeEntityPainter::createEntitiesAndElements() {
     auto entity_painter = new EntityPlacement::EntityPlacer(
         state_machine->common->placed_entities,
         EntityPlacement::EntityFactory::getInstance(),
@@ -57,17 +53,9 @@ void ShipEditorModes::ModeEntityPainter::enter() {
                                           entity_painter->setPrecision(p);
                                       });
 
-    addedActiveEntities.push_back(
+    added_entities.push_back(
         entity_painter
     );
-    addedEditorGUIElements.push_back(registry_options);
-    addedEditorGUIElements.push_back(precision_list);
-
-    addActiveEntities(addedActiveEntities);
-    addGUIElements(addedEditorGUIElements);
-}
-
-void ShipEditorModes::ModeEntityPainter::leave() {
-    removeActiveEntities(addedActiveEntities);
-    removeGUIElements(addedEditorGUIElements);
+    added_ui_elements.push_back(registry_options);
+    added_ui_elements.push_back(precision_list);
 }

@@ -17,12 +17,9 @@
 #include "userInterface/elements/GUI/GUILabel.h"
 #include "userInterface/elements/GUI/GUIList.h"
 
-void ShipEditorModes::ModeAirlockPainter::enter() {
-    addedActiveEntities = {};
-    addedEditorGUIElements = {};
-
+void ShipEditorModes::ModeAirlockPainter::createEntitiesAndElements() {
     auto airlock_name_dialog = new GUI::Prompts::TextPrompt(Anchor::Center, {0, 0}, 400, 100, state_machine->window, false);
-    addedEditorGUIElements.push_back(airlock_name_dialog);
+    added_ui_elements.push_back(airlock_name_dialog);
 
     // hide dialog if it leaves focus
     airlock_name_dialog->on_focused_change.subscribe([airlock_name_dialog](bool focused) {
@@ -56,10 +53,10 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
             state_machine->common->blueprint->hooks->addAirlock(name, new Airlock(TL, dimensions, orientation));
         });
 
-    addedActiveEntities.push_back(airlock_painter);
+    added_entities.push_back(airlock_painter);
 
     auto airlock_deleter = new AirlockDeleter::AirlockDeleter(state_machine->common->blueprint->hooks, false);
-    addedActiveEntities.push_back(airlock_deleter);
+    added_entities.push_back(airlock_deleter);
 
     auto action_list = new GUIList(Anchor::TL, {100, 0}, 160, GUI_Fill, std::vector<std::string>{
                                        "Snap Center",
@@ -87,15 +84,15 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
                                    }
     );
 
-    addedEditorGUIElements.push_back(action_list);
+    added_ui_elements.push_back(action_list);
 
     auto appearance = new HookAppearance(state_machine->common->blueprint->hooks);
-    addedActiveEntities.push_back(appearance);
+    added_entities.push_back(appearance);
 
     auto orientationLabel = new GUILabel(Anchor::TR, {0, 0}, 100, 25, "", {0, 0, 255, 255}, fonts["sm"],
                                          QueueOrder::LAST);
 
-    addedEditorGUIElements.push_back(orientationLabel);
+    added_ui_elements.push_back(orientationLabel);
     {
         auto orientationLabelBackward =
                 std::function<std::string(Airlock::Orientation)>(
@@ -122,14 +119,5 @@ void ShipEditorModes::ModeAirlockPainter::enter() {
     }
 
     auto orientation_changer = new AirlockPainter::OrientationChanger(airlock_painter);
-    addedActiveEntities.push_back(orientation_changer);
-
-    addActiveEntities(addedActiveEntities);
-    addGUIElements(addedEditorGUIElements);
-}
-
-
-void ShipEditorModes::ModeAirlockPainter::leave() {
-    removeActiveEntities(addedActiveEntities);
-    removeGUIElements(addedEditorGUIElements);
+    added_entities.push_back(orientation_changer);
 }
