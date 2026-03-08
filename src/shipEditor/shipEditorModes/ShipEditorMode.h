@@ -13,25 +13,30 @@ namespace ShipEditorModes {
     class ShipEditorStateMachine;
 
     class ShipEditorMode {
+    public:
+        ShipEditorStateMachine * state_machine;
     protected:
+        std::vector<Entity *> added_entities;
+        std::vector<GUIRect *> added_ui_elements;
 
         void addActiveEntities(const std::vector<Entity * > &to_add) const;
 
-        void removeActiveEntities(const std::vector<Entity * > &to_remove) const;
+        void eraseActiveEntities(const std::vector<Entity * > &to_remove) const;
 
 
         void addGUIElements(const std::vector<GUIRect * > &to_add) const;
 
-        void removeGUIElements(const std::vector<GUIRect * > &to_remove) const;
+        void killGUIElements(const std::vector<GUIRect * > &to_remove) const;
 
     public:
         virtual ~ShipEditorMode() = default;
 
-        ShipEditorStateMachine * state_machine;
 
         explicit ShipEditorMode(ShipEditorStateMachine * state_machine) : state_machine(state_machine){}
 
-        virtual void enter() = 0;
-        virtual void leave() = 0;
+        void enter();
+        void leave();
+
+        virtual void createEntitiesAndElements() = 0;
     };
 }

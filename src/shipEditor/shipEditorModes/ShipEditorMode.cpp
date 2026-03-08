@@ -10,7 +10,7 @@ void ShipEditorModes::ShipEditorMode::addActiveEntities(const std::vector<Entity
         state_machine->activeEntities->insert(e);
 }
 
-void ShipEditorModes::ShipEditorMode::removeActiveEntities(const std::vector<Entity *> &to_remove) const {
+void ShipEditorModes::ShipEditorMode::eraseActiveEntities(const std::vector<Entity *> &to_remove) const {
     for (auto e: to_remove)
         state_machine->activeEntities->add_to_erasing_queue(e);
 }
@@ -20,7 +20,25 @@ void ShipEditorModes::ShipEditorMode::addGUIElements(const std::vector<GUIRect *
         state_machine->editorGUIElements->insert(e);
 }
 
-void ShipEditorModes::ShipEditorMode::removeGUIElements(const std::vector<GUIRect *> &to_remove) const {
+void ShipEditorModes::ShipEditorMode::killGUIElements(const std::vector<GUIRect *> &to_remove) const {
     for (auto e: to_remove)
-        state_machine->editorGUIElements->add_to_erasing_queue(e);
+        e->kill(state_machine->editorGUIElements);
+}
+
+void ShipEditorModes::ShipEditorMode::enter() {
+    added_entities = {};
+    added_ui_elements = {};
+
+    createEntitiesAndElements();
+
+    addActiveEntities(added_entities);
+    addGUIElements(added_ui_elements);
+}
+
+void ShipEditorModes::ShipEditorMode::leave() {
+    eraseActiveEntities(added_entities);
+    killGUIElements(added_ui_elements);
+
+    added_entities = {};
+    added_ui_elements = {};
 }
