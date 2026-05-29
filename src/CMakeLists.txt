@@ -1,16 +1,31 @@
-
 # FetchContent is used to download SDL3 if it's not installed locally
 include(FetchContent)
 
-# Fetch SDL3 if not found locally
-find_package(SDL3 QUIET CONFIG REQUIRED)
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.17.0
+)
 
+FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        GIT_TAG        release-3.4.8
+)
 
-find_package(SDL3_image QUIET CONFIG REQUIRED)
+FetchContent_Declare(
+        SDL3_image
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+        GIT_TAG        release-3.2.4
+)
 
+FetchContent_Declare(
+        SDL3_ttf
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+        GIT_TAG        release-3.2.2
+)
 
-find_package(SDL3_ttf QUIET CONFIG REQUIRED)
-
+FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf googletest)
 
 # Include headers
 include_directories(
@@ -48,7 +63,7 @@ target_link_libraries(${PROJECT_NAME}
         SDL3_ttf::SDL3_ttf
 )
 target_link_libraries(SpaceshipsLib
-        PRIVATE
+        PUBLIC
         SDL3::SDL3
         SDL3_image::SDL3_image
         SDL3_ttf::SDL3_ttf
@@ -72,4 +87,8 @@ target_compile_definitions(Spaceships PRIVATE
 
 target_compile_definitions(SpaceshipsLib INTERFACE
         ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
