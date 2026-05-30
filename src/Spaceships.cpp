@@ -12,12 +12,18 @@
 #include "shipEditor/ShipEditor.h"
 #include "userInterface/fonts.h"
 #include "userInterface/elements/GUI/GUIList.h"
+#include "utility/filesystem/Directories.h"
 
 void main_menu() {
 }
 
 int main(int argc, char *argv[]) {
 
+    const std::filesystem::path path_to_executable = argv[0];
+    const std::filesystem::path path_to_saves_folder = "~/games/spaceships/saves";
+
+    Directories::initialize(new Directories(path_to_executable,path_to_saves_folder));
+    Directories::get()->print();
     // EntityPlacement::EntityFactory::getInstance().print();
 
     if (!std::filesystem::is_directory(ENV_PROJECT_ROOT"saves")) {
