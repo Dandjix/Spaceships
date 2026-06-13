@@ -1,12 +1,14 @@
 #include "fonts.h"
 
+#include "utility/filesystem/Directories.h"
+
 // Define the actual storage here
 std::unordered_map<std::string, TTF_Font*> fonts;
 
 bool LoadFonts() {
-    fonts["sm"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/open-sans/OpenSans-Bold.ttf", 16);
-    fonts["md"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/open-sans/OpenSans-Bold.ttf", 24);
-    fonts["lg"] = TTF_OpenFont(ENV_PROJECT_ROOT"assets/fonts/open-sans/OpenSans-Bold.ttf", 32);
+    fonts["sm"] = TTF_OpenFont((Directories::get()->assets() /"fonts/open-sans/OpenSans-Bold.ttf").c_str(), 16);
+    fonts["md"] = TTF_OpenFont((Directories::get()->assets() /"fonts/open-sans/OpenSans-Bold.ttf").c_str(), 24);
+    fonts["lg"] = TTF_OpenFont((Directories::get()->assets() /"fonts/open-sans/OpenSans-Bold.ttf").c_str(), 32);
 
     for (auto& [key, font] : fonts) {
         if (!font) {

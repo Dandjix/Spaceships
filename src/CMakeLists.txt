@@ -44,10 +44,6 @@ file(GLOB_RECURSE SOURCES
 # library for unit tests
 add_library(SpaceshipsLib ${SOURCES})
 
-target_compile_definitions(SpaceshipsLib PRIVATE
-        ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
-)
-
 # Create the executable from all your sources
 add_executable(${PROJECT_NAME} ${SOURCES}
 
@@ -81,14 +77,10 @@ if(WIN32)
     )
 endif()
 
-target_compile_definitions(Spaceships PRIVATE
-        ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
-)
-
-target_compile_definitions(SpaceshipsLib INTERFACE
-        ENV_PROJECT_ROOT="${CMAKE_SOURCE_DIR}/"
-)
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets/)

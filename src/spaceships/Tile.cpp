@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <stdexcept>
 
+#include "utility/filesystem/Directories.h"
+
 const std::unordered_map<Tile, std::string> Tiles::filenames{
 	//{ Tile::Void,  "void" },
 	{ Tile::Wall,  "wall" },
@@ -42,7 +44,7 @@ void Tiles::loadAll(SDL_Renderer* renderer)
 
 void Tiles::loadTileTexture(SDL_Renderer * renderer, Tile tile)
 {
-	SDL_Texture* texture = IMG_LoadTexture(renderer, (std::string(ENV_PROJECT_ROOT "assets/textures/tiles/") + filename(tile)).c_str());
+	SDL_Texture* texture = IMG_LoadTexture(renderer, (std::string(Directories::get()->assets()/ "/textures/tiles/") + filename(tile)).c_str());
 
 	manifest.emplace(tile, texture);
 }

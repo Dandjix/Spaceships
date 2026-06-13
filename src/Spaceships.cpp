@@ -22,12 +22,14 @@ int main(int argc, char *argv[]) {
     const std::filesystem::path path_to_executable = argv[0];
     const std::filesystem::path path_to_saves_folder = "~/games/spaceships/saves";
 
+    std::cout << "saves : " << path_to_saves_folder << std::endl;
+
     Directories::initialize(new Directories(path_to_executable,path_to_saves_folder));
     Directories::get()->print();
     // EntityPlacement::EntityFactory::getInstance().print();
 
-    if (!std::filesystem::is_directory(ENV_PROJECT_ROOT"saves")) {
-        std::filesystem::create_directory(ENV_PROJECT_ROOT"saves");
+    if (!std::filesystem::is_directory(Directories::get()->savesRoot())) {
+        std::filesystem::create_directory(Directories::get()->savesRoot());
     }
 
     if (!TTF_Init()) {

@@ -4,6 +4,7 @@
 
 #pragma once
 #include <filesystem>
+#include <format>
 #include <iostream>
 #include <ranges>
 #include <string>
@@ -27,6 +28,8 @@ namespace Textures {
                 return false;
             }
         }
+
+        std::string debug_name;
 
     protected:
         static std::unordered_map<std::string, SDL_Texture *> load(SDL_Renderer *renderer, const std::filesystem::path &path) {
@@ -58,13 +61,20 @@ namespace Textures {
          * @return a pointer to the texture
          */
         virtual SDL_Texture * at(const std::string & texture_key) {
-            return textures.at(texture_key);
+            try {
+                return textures.at(texture_key);
+            }
+            catch (const std::out_of_range& e) {
+                throw std::out_of_range(
+                    std::format("Texture key [{}] not present in texture set [{}]",texture_key,debug_name)
+                );
+            }
         }
 
-        TextureSet(SDL_Renderer * renderer, const std::filesystem::path &path,unsigned int user_count = 1)
+        TextureSet(SDL_Renderer *renderer, const std::filesystem::path &path, unsigned int user_count = 1)
             : user_count(user_count),
-              textures(std::move(load(renderer, path)))
-        {
+              textures(std::move(load(renderer, path))),
+              debug_name(path) {
         }
 
         virtual ~TextureSet() {

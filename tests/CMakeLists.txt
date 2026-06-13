@@ -55,7 +55,6 @@ target_link_libraries(
         GTest::GTest
 )
 
-# Enable CLion / CTest integration
-#include(CTest)
-#include(Catch)
-#catch_discover_tests(SpaceshipsTests)
+add_custom_command(TARGET SpaceshipsTests PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:SpaceshipsTests>/assets/)

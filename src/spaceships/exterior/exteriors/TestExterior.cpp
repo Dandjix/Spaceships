@@ -4,13 +4,15 @@
 
 #include "TestExterior.h"
 
+#include "utility/filesystem/Directories.h"
+
 SDL_Texture* SpaceShipResources::TestExterior::albedo = nullptr;
 
 void SpaceShipResources::TestExterior::loadAssets(SDL_Renderer *renderer) {
     if (albedo) {
         return;
     }
-    albedo = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/spaceships/test.png");
+    albedo = IMG_LoadTexture(renderer,(Directories::get()->assets() /"spaceships/test.png").c_str());
 }
 
 void SpaceShipResources::TestExterior::render(SDL_Renderer *renderer, const ExteriorRenderingContext &context, const SpaceShip *space_ship) {

@@ -17,11 +17,6 @@
 #include "userInterface/elements/GUI/GUILabel.h"
 #include "userInterface/elements/notification/Snackbar.h"
 #include "userInterface/pauseMenu/PauseMenu.h"
-
-#ifndef ENV_PROJECT_ROOT
-#define ENV_PROJECT_ROOT ""
-#endif
-
 #include "../userInterface/MenuNavigation.h"
 
 #include "../player/Camera.h"
@@ -31,6 +26,7 @@
 #include "../debug/DebugGrid.h"
 #include "../spaceships/SpaceShip.h"
 #include "../parallax/ParallaxObject.h"
+#include "utility/filesystem/Directories.h"
 
 void renderSpaceBackground() {
 }
@@ -55,7 +51,7 @@ void quickSave(const GameState::GameState &game_state, std::string *save_name = 
 }
 
 std::vector<ParallaxObject> generateParallaxObjects(SDL_Renderer *renderer, Vector2Int base_origin) {
-    auto roid_texture = IMG_LoadTexture(renderer,ENV_PROJECT_ROOT"assets/environment/parallax/roid.png");
+    auto roid_texture = IMG_LoadTexture(renderer,(Directories::get()->assets() /"environment/parallax/roid.png").c_str());
 
     auto object_1 = ParallaxObject(base_origin, 0, 0, roid_texture, 5);
 
@@ -148,7 +144,7 @@ MenuNavigation::Navigation RunGame(SDL_Renderer *renderer, SDL_Window *window,
     GameNavigation destination = Game;
 
     // Entity rendering setup ------------------------------------------------------------------------------------------
-    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures", renderer);
+    auto texture_usage_map = Textures::UsageMap(Directories::get()->assets() /"textures", renderer);
     EntityRendering::Context entity_loading_context = {texture_usage_map};
 
     // Texture Setup ---------------------------------------------------------------------------------------------------

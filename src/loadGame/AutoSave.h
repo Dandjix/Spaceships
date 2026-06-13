@@ -7,12 +7,7 @@
 #include <vector>
 #include <SDL3/SDL_log.h>
 
-//to compile for tests
-#ifndef ENV_PROJECT_ROOT
-#define ENV_PROJECT_ROOT ""
-#endif
-
-
+#include "utility/filesystem/Directories.h"
 
 
 namespace Saves {
@@ -30,7 +25,7 @@ namespace Saves {
     unsigned long getNextAutosaveNumber(const std::filesystem::path  &saves_folder);
 
     inline std::filesystem::path getSavesPath() {
-        return ENV_PROJECT_ROOT"saves";
+        return Directories::get()->savesRoot();
     }
 
     [[nodiscard]] std::filesystem::path getNewAutosavePath(const std::filesystem::path &saves_folder = getSavesPath());

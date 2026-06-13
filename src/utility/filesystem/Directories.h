@@ -38,10 +38,7 @@ public:
     Directories(
         const std::filesystem::path & relative_path_to_executable,
         std::filesystem::path saves_root
-    )
-    :
-    relative_path_to_project_root(relative_path_to_executable.parent_path()),
-    saves_root(std::move(saves_root)) {}
+    );
 
     [[nodiscard]] std::filesystem::path savesRoot() const {
         return saves_root;
@@ -55,9 +52,7 @@ public:
         return relative_path_to_project_root / "assets";
     }
 
-    void print() const {
-        std::cout << "saves path is : " << saves_root << ", assets is at : " << assets() << "(" << relative_path_to_project_root << ")" << std::endl;
-    }
+    void print() const;
 
     static void initialize(Directories * directories);
 };

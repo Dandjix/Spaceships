@@ -12,16 +12,16 @@
 #include "player/Camera.h"
 #include "spaceships/SpaceShipBlueprint.h"
 #include "spaceships/Hooks/HookPoint.h"
+#include "utility/filesystem/Directories.h"
 #include "vehicles/combatOutfit/CombatOutfit.h"
 #include "vehicles/spaceship/PilotSeat.h"
-
 std::filesystem::path NewGame::ConstructNewGame() {
     EntityId::Manager::getInstance().reset();
 
     GameState::transientGameState transient_game_state = {};
     SpaceShipBlueprint *blueprint =
             SpaceShipBlueprint::load(
-                ENV_PROJECT_ROOT"assets/spaceships/battleship.json",
+                Directories::get()->assets()/"spaceships/battleship.json",
                 transient_game_state,
                 EntityId::Manager::getInstance(),
                 nullptr,
@@ -84,7 +84,7 @@ std::filesystem::path NewGame::ConstructNewGame() {
         EntityId::Manager::getInstance().getNextEntityId()
     };
 
-    std::filesystem::path path = ENV_PROJECT_ROOT"assets/newGame/newGame.save.json";
+    std::filesystem::path path = std::filesystem::temp_directory_path() /"ssNewGame.save.json";
 
     GameState::dumpGameState(game_state, path);
 

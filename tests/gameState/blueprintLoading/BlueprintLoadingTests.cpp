@@ -11,8 +11,6 @@ TEST(BlueprintLoadingTestSuite, BlueprintLoadingTest) {
 
     EntityId::Manager manager = EntityId::Manager();
 
-    std::cout << ENV_PROJECT_ROOT << std::endl;
-
     SpaceShipBlueprint * blueprint = SpaceShipBlueprint::load(
         "/home/timon/Projects/Spaceships/tests/gameState/blueprintLoading/working_example.json",
         transient_game_state,

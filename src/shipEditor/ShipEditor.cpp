@@ -25,6 +25,7 @@
 #include "loadGame/GameState.h"
 #include "EntityPlacer/EntityPlacement/EntityPlacement.h"
 #include "EntityPlacer/EntityPlacement/interface/Interface.h"
+#include "utility/filesystem/Directories.h"
 
 void ResizeGrid(Vector2Int newSize) {
     std::cout << "resizing to " << newSize.x << newSize.y << std::endl;
@@ -61,7 +62,7 @@ MenuNavigation::Navigation RunShipEditor(SDL_Renderer *renderer, SDL_Window *win
 
     ElementContainerDQ<GUIRect *> editor_GUI_elements = {};
 
-    auto texture_usage_map = Textures::UsageMap(ENV_PROJECT_ROOT"assets/textures", renderer);
+    auto texture_usage_map = Textures::UsageMap(Directories::get()->assets() /"textures", renderer);
     EntityRendering::Context entity_rendering_context = {texture_usage_map};
 
     auto camera = new FreeCamera(Vector2Int(0, 0), 0, 1, 600);

@@ -10,13 +10,14 @@
 #include "gameEvent/GameEvent.h"
 #include "userInterface/GUI.h"
 #include "userInterface/elements/GUI/GUIList.h"
+#include "utility/filesystem/Directories.h"
 
 
 MenuNavigation::Navigation LoadSavedGame::SavePickerPage(SDL_Renderer *renderer, SDL_Window *window, std::filesystem::path *save_to_load) {
 
     MenuNavigation::Navigation navigation = MenuNavigation::LoadGame;
 
-    auto saves = GetSaves(ENV_PROJECT_ROOT"saves");
+    auto saves = GetSaves(Directories::get()->savesRoot());
 
     std::map<std::string,std::string> option_map = {
 
