@@ -1,4 +1,6 @@
 #include "Tile.h"
+
+#include <format>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <string>
@@ -41,10 +43,17 @@ void Tiles::loadAll(SDL_Renderer* renderer)
 }
 
 
+void Tiles::loadTileTexture(SDL_Renderer *renderer, Tile tile) {
+	SDL_Texture *texture = IMG_LoadTexture(
+		renderer, (std::string(Directories::get()->assets() / "textures/tiles/") + filename(tile)).c_str());
 
-void Tiles::loadTileTexture(SDL_Renderer * renderer, Tile tile)
-{
-	SDL_Texture* texture = IMG_LoadTexture(renderer, (std::string(Directories::get()->assets()/ "/textures/tiles/") + filename(tile)).c_str());
+	if (texture == nullptr)
+		throw std::runtime_error(
+			std::format("The tile texture : [{}] could not be loaded (path is {})",
+			            filename(tile),
+			            std::string(Directories::get()->assets() / "textures/tiles/") + filename(
+				            tile)
+			));
 
 	manifest.emplace(tile, texture);
 }
